@@ -1,0 +1,39 @@
+<div class="multi-select">
+  <!-- Ô chọn -->
+  <div class="selected-box" (click)="toggleDropdown()">
+    <span *ngIf="selectedItems.length === 0" class="placeholder"
+      >Chọn phương tiện</span
+    >
+    <span *ngIf="selectedItems.length > 0">{{ selectedItems.length }}</span>
+    <span class="arrow-down">&#9660;</span>
+  </div>
+
+  <!-- Danh sách dropdown -->
+  <div class="dropdown-content" [class.show]="dropdownOpen">
+    <ul>
+      <!-- Chọn tất cả -->
+      <li style="border-bottom: 1px">
+        <label>
+          <input
+            type="checkbox"
+            [checked]="isAllSelected()"
+            (change)="toggleSelectAll($event)"
+          />
+          Tất cả ({{ items.length }})
+        </label>
+      </li>
+      <!-- Danh sách item -->
+      <li *ngFor="let item of items">
+        <label>
+          <input
+            type="checkbox"
+            [placeholder]=""
+            [checked]="isSelected(item)"
+            (change)="toggleItem(item)"
+          />
+          {{ item.code }}
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>

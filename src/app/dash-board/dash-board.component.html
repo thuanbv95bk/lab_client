@@ -1,0 +1,48 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      <app-multi-select
+        [items]="itemList"
+        (selectedChange)="onSelectedChange($event)"
+      ></app-multi-select>
+    </div>
+    <div class="col-md-6">
+      <app-set-width-wiget
+        [items]="listWidthWiget[0].children"
+        (selectionChange)="onSelectionChange($event)"
+      >
+      </app-set-width-wiget>
+    </div>
+  </div>
+</div>
+
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <canvas
+            baseChart
+            [datasets]="chartData"
+            [labels]="chartLabels"
+            [options]="chartOptions"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body">
+          <canvas
+            baseChart
+            [datasets]="pieChartData"
+            [labels]="pieChartLabels"
+            [options]="chartOptions"
+          >
+          </canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

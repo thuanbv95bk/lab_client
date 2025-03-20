@@ -1,0 +1,17 @@
+<!-- Nút 3 chấm -->
+<button class="btn btn-light" (click)="toggleDropdown()">⋮</button>
+<!-- Dropdown chính -->
+<ul class="dropdown-menu" [class.show]="dropdownOpen">
+  <li class="dropdown-item">Độ rộng ▸</li>
+
+  <!-- Sub-menu -->
+  <ul class="dropdown-menu sub-menu" *ngIf="subMenuOpen">
+    <li
+      *ngFor="let item of items"
+      class="dropdown-item"
+      (click)="selectItem(item)"
+    >
+      {{ item.name }} <span *ngIf="selectedItem?.id === item.id">✔</span>
+    </li>
+  </ul>
+</ul>
