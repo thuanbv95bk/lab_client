@@ -74,6 +74,100 @@ export class DashboardDoughnutComponent {
     ctx.fillText('phương tiện', centerX, centerY + 15);
   }
 
+  textAroundDoughnut = {
+    id: 'textAroundDoughnut',
+    beforeDatasetsDraw(chart: any) {
+      const { ctx, data } = chart;
+
+      const xCenter = chart.getDatasetMeta(0).data[0].x;
+      const yCenter = chart.getDatasetMeta(0).data[0].y;
+      const sum = 6;
+
+      ctx.save();
+      // ctx.font = 'bold 14px sans-serif';
+      // ctx.fillStyle = 'black';
+      // ctx.textAlign = 'center';
+      // ctx.fillText('Objective', xCenter, 0 + 30);
+
+      // ctx.font = '18px sans-serif';
+      // ctx.fillStyle = 'gray';
+      // ctx.textAlign = 'center';
+      // ctx.fillText(`Total: `, xCenter, 0 + 60);
+      // const textWidth = ctx.measureText('').width;
+
+      // ctx.font = '18px sans-serif';
+      // ctx.fillStyle = 'gray';
+      // ctx.textAlign = 'center';
+      // ctx.fillText(sum, xCenter + textWidth / 2, 0 + 60);
+
+      const total = data.datasets[0].data[0] + data.datasets[0].data[1];
+
+      ctx.translate(xCenter, yCenter);
+
+      ctx.font = 'bold 27px Arial';
+      ctx.fillStyle = 'gray';
+      ctx.textBaseline = 'bottom';
+      ctx.textAlign = 'center';
+      ctx.fillText(`${total}`, 0, 0);
+
+      const fontSize = 14;
+      ctx.font = `bold ${fontSize}px Arial`;
+      ctx.fillStyle = 'red';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'center';
+      ctx.fillText('phương tiện', 0, 0);
+
+      // right text
+      const angle = Math.PI / 180;
+      const outerRadius = chart.getDatasetMeta(0).data[0].outerRadius + 30;
+      //Right
+      const xRight = Math.cos(angle * 30) * outerRadius;
+      const yRight = Math.sin(angle * 30) * outerRadius;
+
+      ctx.font = 'bold 10px Arial';
+      ctx.fillStyle = 'margin-right: 5px; red';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'center';
+      const percentage1 = (data.datasets[0].data[0] / total) * 100;
+
+      ctx.fillText(
+        `${data.datasets[0].data[0]} phương tiện(${percentage1.toFixed(1)}%)`,
+        xRight + 10,
+        yRight
+      );
+      //Left
+      const xLeft = Math.cos(angle * 150) * outerRadius;
+      const yLeft = Math.sin(angle * 150) * outerRadius;
+
+      ctx.font = 'bold 10px sans-serif';
+      ctx.fillStyle = 'red';
+      ctx.textBaseline = 'top';
+      ctx.textAlign = 'center';
+      const percentage2 = (data.datasets[0].data[1] / total) * 100;
+      ctx.fillText(
+        `${data.datasets[0].data[0]} phương tiện(${percentage2.toFixed(1)}%)`,
+        xLeft - 10,
+        yLeft
+      );
+
+      // ctx.font = 'bold 20px sans-serif';
+      // ctx.fillStyle = 'gray';
+      // ctx.textBaseline = 'top';
+      // ctx.textAlign = 'center';
+      // ctx.fillText('Completed', xLeft, yLeft + 50);
+
+      // ctx.font = 'bold 20px sans-serif';
+      // ctx.fillStyle = 'gray';
+      // ctx.textBaseline = 'top';
+      // ctx.textAlign = 'center';
+      // const x2 = `phương tiện ${fontSize}px Arial`;
+      // ctx.font = `bold ${fontSize}px Arial`;
+      // ctx.fillText('phương tiện ', xRight, yRight + 50);
+
+      ctx.restore();
+    },
+  };
+
   renderChart() {
     const ctx = this.chartRef.nativeElement as HTMLCanvasElement;
     new Chart(ctx, {
@@ -93,11 +187,16 @@ export class DashboardDoughnutComponent {
       },
       options: {
         responsive: true,
+        layout: {
+          padding: 20,
+        },
         animation: { animateRotate: true, animateScale: true },
         maintainAspectRatio: false, // Cho phép co giãn theo container
-        cutout: '70%', // 🛠 Tăng vòng tròn trong,
+        aspectRatio: 1, // Change Size of Doughnut Chart
+        cutout: '70%', //
         plugins: {
           legend: {
+            display: true,
             position: 'bottom',
             labels: {
               usePointStyle: true,
@@ -115,81 +214,54 @@ export class DashboardDoughnutComponent {
       },
 
       plugins: [
+        this.textAroundDoughnut,
         {
-          id: 'centerText',
-          beforeDraw: (chart: any) => {
-            const { width, height, ctx } = chart;
-            ctx.restore();
-            const fontSize = (height / 8).toFixed(2);
-            ctx.font = `bold ${fontSize}px Arial`;
-            ctx.textBaseline = 'middle';
-            ctx.textAlign = 'center';
-            /**
-             * Charts before draw
-             * @param centerX  Căn lấy điểm giữa trục X
-             * @param centerY, Căn lấy điểm giữa trục Y
-             */
-            const centerX = width / 2;
-            const centerY = height / 2;
-
-            // Vẽ số lượng phương tiện ở giữa
-            ctx.fillStyle = '#113b92';
-            ctx.fillText(this.totalVehicles.toString(), centerX, centerY - 15); //Dịch chữ số lượng phương tiện lên trên một chút để không bị đè lên dòng chữ "phương tiện".
-
-            // Vẽ chữ "phương tiện" bên dưới
-            ctx.font = `bold ${(height / 32).toFixed(2)}px Arial`;
-            ctx.fillText('phương tiện', centerX, centerY + 15); // Đẩy chữ xuống thấp.
-            ctx.save();
-          },
-        },
-        {
-          id: 'customLabels',
+          id: 'doughnutLabelsLine',
           afterDraw(chart) {
-            const ctx = chart.ctx;
-            ctx.font = 'bold 14px Arial';
-            ctx.fillStyle = '#333';
-            ctx.textAlign = 'left';
-            ctx.textBaseline = 'middle';
-
-            const centerX = (chart.chartArea.left + chart.chartArea.right) / 2;
-            const centerY = (chart.chartArea.top + chart.chartArea.bottom) / 2;
+            const {
+              ctx,
+              chartArea: { top, bottom, left, right, width, height },
+            } = chart;
 
             chart.data.datasets.forEach((dataset, i) => {
-              const meta = chart.getDatasetMeta(i);
-              meta.data.forEach((arcElement, index) => {
-                if (!arcElement) return;
+              chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
+                // console.log(dataset)
+                const { x, y } = datapoint.tooltipPosition(true);
 
-                const model = arcElement.tooltipPosition(true); // Lấy vị trí trung tâm lát cắt
-                const label = dataset.label;
-                const value = dataset.data[index];
+                // ctx.fillStyle = dataset.borderColor[index];
+                // ctx.fill();
+                // ctx.fillRect(x, y, 10, 10);
 
-                // ✅ **Lấy bán kính chính xác**
-                let radius = (chart.chartArea.right - chart.chartArea.left) / 2;
+                console.log(x);
 
-                // ✅ **Tính góc**
-                const dx = model.x - centerX;
-                const dy = model.y - centerY;
-                const angle = Math.atan2(dy, dx);
+                // draw line
+                const halfwidth = width / 2;
+                const halfheight = height / 2;
 
-                // ✅ **Xác định vị trí đường chỉ dẫn**
-                const xOffset = Math.cos(angle) * (radius + 10);
-                const yOffset = Math.sin(angle) * (radius + 10);
-                const startX = model.x;
-                const startY = model.y;
-                const endX = centerX + xOffset;
-                const endY = centerY + yOffset;
+                const xLine = x >= halfwidth ? x + 15 : x - 15;
+                const yLine = y >= halfheight ? y + 15 : y - 15;
+                const extraLine = x >= halfwidth ? 15 : -15;
 
-                // ✅ **Vẽ đường chỉ dẫn**
+                // line
                 ctx.beginPath();
-                ctx.moveTo(startX, startY);
-                ctx.lineTo(endX, endY);
-                ctx.strokeStyle = '#666';
+                ctx.moveTo(x, y);
+                ctx.lineTo(xLine, yLine);
+                ctx.lineTo(xLine + extraLine, yLine);
+                // ctx.strokeStyle = dataset.data[index];
                 ctx.stroke();
 
-                // ✅ **Hiển thị text**
-                const textX = endX + (endX > centerX ? 10 : -10);
-                ctx.textAlign = endX > centerX ? 'left' : 'right';
-                ctx.fillText(`${value} ${label}`, textX, endY);
+                // text
+                const textWidth = ctx.measureText('sss').width;
+                console.log(textWidth);
+                ctx.font = '12px Arial';
+
+                // control the position
+                const textXPosition = x >= halfwidth ? 'left' : 'right';
+                const plusFivePx = x >= halfwidth ? 5 : -5;
+                ctx.textAlign = textXPosition;
+                ctx.textBaseline = 'middle';
+                // ctx.fillStyle = dataset.borderColor[index];
+                ctx.fillText('111111', xLine + extraLine + plusFivePx, yLine);
               });
             });
           },
