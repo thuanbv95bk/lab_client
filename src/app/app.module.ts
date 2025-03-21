@@ -7,14 +7,18 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { MultiSelectComponent } from './common/multi-select/multi-select.component';
-import { SetWidthWigetComponent } from './common/set-width-wiget/set-width-wiget.component';
+import { SetWidthWidgetComponent } from './common/set-width-widget/set-width-widget.component';
+import { VehicleWidgetComponent } from './common/widget-item/vehicle-widget/vehicle-widget.component';
+import { DashboardDoughnutComponent } from './common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashBoardComponent,
-    SetWidthWigetComponent,
     MultiSelectComponent,
+    SetWidthWidgetComponent,
+    VehicleWidgetComponent,
+    DashboardDoughnutComponent,
+    DashBoardComponent,
   ],
   imports: [
     HttpClientModule,

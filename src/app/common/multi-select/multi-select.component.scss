@@ -1,21 +1,23 @@
 .multi-select {
   position: relative;
-  width: 250px;
+  width: max-content;
 }
 
 .selected-box {
   border: 1px solid #ccc;
-  padding: 8px;
-  cursor: pointer;
+  // padding: 3px;
+  // cursor: ;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background: white;
   border-radius: 4px;
+  text-align: center;
+  align-items: center;
 }
 
 .placeholder {
-  color: #aaa;
+  color: #ffffff;
 }
 
 .arrow-down {

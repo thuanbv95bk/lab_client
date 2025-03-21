@@ -1,0 +1,13 @@
+<div class="card h-100" [ngStyle]="{ 'background-color': backgroundColor }">
+  <div class="card-body">
+    <p class="title">{{ title }}</p>
+
+    <div class="card-text count-container">
+      <h1 class="count">{{ totalVehicles }}</h1>
+      <p class="label">Phương tiện</p>
+    </div>
+    <p class="card-text" *ngIf="isDisplayFooter">
+      <small> {{ percentage }}% / Tổng phương tiện</small>
+    </p>
+  </div>
+</div>

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-dash-board',
@@ -18,7 +19,7 @@ export class DashBoardComponent {
     { id: 4, code: 'A04', name: 'Hải Phòng' },
   ];
 
-  listWidthWiget = [
+  listWidthWidget = [
     {
       id: 1,
       name: 'Độ rộng',
@@ -35,11 +36,22 @@ export class DashBoardComponent {
     console.log('Đã chọn:', selectedItem);
   }
 
-  // onSelectedChange(items: any[]) {
-  //   this.selectedItems = items;
-  //   console.log('Đã chọn:', items);
-  // }
+  @ViewChild('chart1') chart1!: ElementRef;
+  @ViewChild('chart2') chart2!: ElementRef;
+  @ViewChild('chart3') chart3!: ElementRef;
+  @ViewChild('chart4') chart4!: ElementRef;
   constructor() {}
+
+  ngAfterViewInit(): void {
+    // this.createChart(this.chart1.nativeElement);
+    // this.createChart(this.chart2.nativeElement);
+    // this.createChart(this.chart3.nativeElement);
+    // this.createChart(this.chart4.nativeElement, 'bar');
+  }
+
+  createChart(canvas: HTMLCanvasElement, type: string = 'doughnut') {
+    // new Chart();
+  }
 
   // Biểu đồ cột
   chartData = [{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Doanh thu' }];

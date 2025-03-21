@@ -1,48 +1,182 @@
-<div class="container mt-4">
+<div class="container-fluid dash-board-header sticky-top">
   <div class="row">
-    <div class="col-md-6">
-      <app-multi-select
-        [items]="itemList"
-        (selectedChange)="onSelectedChange($event)"
-      ></app-multi-select>
-    </div>
-    <div class="col-md-6">
-      <app-set-width-wiget
-        [items]="listWidthWiget[0].children"
-        (selectionChange)="onSelectionChange($event)"
-      >
-      </app-set-width-wiget>
+    <div class="col-12">
+      <div class="widget">
+        <div
+          class="d-flex justify-content-between text-center align-items-center"
+        >
+          <span class="fs-14 text-primary fw-bold">TỔNG QUAN CHUYẾN HÀNG</span>
+          <div class="d-flex justify-content-between">
+            <span class="fs-12 fw-bold">XEM THEO</span>
+            <app-multi-select class="mx-2"></app-multi-select>
+            <button class="btn btn-primary btn-sm" title="Làm mới">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="container mt-4">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <canvas
-            baseChart
-            [datasets]="chartData"
-            [labels]="chartLabels"
-            [options]="chartOptions"
+<div class="container-fluid p-3">
+  <div class="widget-city">
+    <div class="row">
+      <div class="col-12">
+        <div class="widget">
+          <div
+            class="d-flex justify-content-between text-center align-items-center"
           >
-          </canvas>
+            <span class="fs-12 text-primary fw-bold">TỔNG QUAN CÔNG TY</span>
+            <div class="d-flex">
+              <button class="btn btn-dark btn-sm border-0" title="Làm mới">
+                <i class="fa-solid fa-caret-down"></i>
+              </button>
+              <button class="btn btn-dark btn-sm mx-2 border-0" title="Làm mới">
+                <i class="fa-solid fa-rotate-right"></i>
+              </button>
+              <app-set-width-widget></app-set-width-widget>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <canvas
-            baseChart
-            [datasets]="pieChartData"
-            [labels]="pieChartLabels"
-            [options]="chartOptions"
-          >
-          </canvas>
+  </div>
+
+  <div class="row g-3">
+    <!-- Tổng quan công ty -->
+    <div class="col-12">
+      <div class="widget card-deck">
+        <div class="row">
+          <div class="col-md-4">
+            <!-- <div class="p-3 bg-primary text-white rounded">85 Phương tiện</div> -->
+            <app-vehicle-widget
+              [title]="'Phương tiện của công ty'"
+              [backgroundColor]="'#006ADC'"
+              [totalVehicles]="85"
+              [percentage]="0"
+              [isDisplayFooter]="false"
+            ></app-vehicle-widget>
+          </div>
+          <div class="col-md-4">
+            <app-vehicle-widget
+              [title]="'Phương tiện có hàng'"
+              [backgroundColor]="'#509447'"
+              [totalVehicles]="0"
+              [percentage]="0"
+              [isDisplayFooter]="true"
+            ></app-vehicle-widget>
+          </div>
+          <div class="col-md-4">
+            <app-vehicle-widget
+              [title]="'Phương tiện không hàng'"
+              [backgroundColor]="'#E2803C'"
+              [totalVehicles]="85"
+              [percentage]="100"
+              [isDisplayFooter]="true"
+            ></app-vehicle-widget>
+          </div>
         </div>
       </div>
+    </div>
+
+    <!-- Biểu đồ: Phương tiện tại cửa khẩu -->
+    <div class="col-md-6 col-lg-4">
+      <div class="widget">
+        <div
+          class="d-flex justify-content-between text-center align-items-center"
+        >
+          <span class="fs-12 text-primary fw-bold"
+            >PHƯƠNG TIỆN TẠI CỦA KHẨU</span
+          >
+          <div class="d-flex">
+            <button class="btn btn-dark btn-sm border-0" title="Làm mới">
+              <i class="fa-solid fa-caret-down"></i>
+            </button>
+            <button class="btn btn-dark btn-sm mx-2 border-0" title="Làm mới">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <app-set-width-widget></app-set-width-widget>
+          </div>
+        </div>
+      </div>
+
+      <div class="widget">
+        <div class="text-center align-items-center">
+          <app-dashboard-doughnut
+            [totalVehicles]="120"
+            [loadedVehicles]="0"
+          ></app-dashboard-doughnut>
+        </div>
+      </div>
+    </div>
+
+    <!-- Biểu đồ: Phương tiện đang trên đường -->
+    <div class="col-md-6 col-lg-4">
+      <div class="widget">
+        <div
+          class="d-flex justify-content-between text-center align-items-center"
+        >
+          <span class="fs-12 text-primary fw-bold"
+            >PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG</span
+          >
+          <div class="d-flex">
+            <button class="btn btn-dark btn-sm border-0" title="Làm mới">
+              <i class="fa-solid fa-caret-down"></i>
+            </button>
+            <button class="btn btn-dark btn-sm mx-2 border-0" title="Làm mới">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <app-set-width-widget></app-set-width-widget>
+          </div>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="text-center align-items-center">
+          <app-dashboard-doughnut
+            [totalVehicles]="120"
+            [loadedVehicles]="50"
+          ></app-dashboard-doughnut>
+        </div>
+      </div>
+    </div>
+
+    <!-- Biểu đồ: Phương tiện tại nhà máy -->
+    <div class="col-md-6 col-lg-4">
+      <div class="widget">
+        <div
+          class="d-flex justify-content-between text-center align-items-center"
+        >
+          <span class="fs-12 text-primary fw-bold"
+            >PHƯƠNG TIỆN TẠI NHÀ MÁY</span
+          >
+          <div class="d-flex">
+            <button class="btn btn-dark btn-sm border-0" title="Làm mới">
+              <i class="fa-solid fa-caret-down"></i>
+            </button>
+            <button class="btn btn-dark btn-sm mx-2 border-0" title="Làm mới">
+              <i class="fa-solid fa-rotate-right"></i>
+            </button>
+            <app-set-width-widget></app-set-width-widget>
+          </div>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="text-center align-items-center">
+          <app-dashboard-doughnut
+            [totalVehicles]="120"
+            [loadedVehicles]="50"
+          ></app-dashboard-doughnut>
+        </div>
+      </div>
+    </div>
+
+    <!-- Biểu đồ nhiều cột (có thanh cuộn ngang) -->
+    <div class="col-12">
+      <!-- <div class="widget scrollable">
+        <h4>PHƯƠNG TIỆN TẠI CẢNG</h4>
+        <canvas #chart4></canvas>
+      </div> -->
     </div>
   </div>
 </div>

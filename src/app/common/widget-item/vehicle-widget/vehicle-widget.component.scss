@@ -1,0 +1,35 @@
+.card {
+  color: white;
+}
+
+/* Tiêu đề */
+.title {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Chứa số phương tiện và chữ "Phương tiện" trên cùng một hàng */
+.count-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Số lượng phương tiện to và nằm giữa */
+.count {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0;
+}
+
+/* Chữ "Phương tiện" nhỏ hơn */
+.label {
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Phần trăm phía dưới */
+.percentage {
+  font-size: 14px;
+  opacity: 0.8;
+}

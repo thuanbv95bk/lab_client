@@ -7,11 +7,11 @@ interface DropdownItem {
 }
 
 @Component({
-  selector: 'app-set-width-wiget',
-  templateUrl: './set-width-wiget.component.html',
-  styleUrls: ['./set-width-wiget.component.scss'],
+  selector: 'app-set-width-widget',
+  templateUrl: './set-width-widget.component.html',
+  styleUrls: ['./set-width-widget.component.scss'],
 })
-export class SetWidthWigetComponent {
+export class SetWidthWidgetComponent {
   @Input() items: DropdownItem[] = [];
   @Output() selectionChange = new EventEmitter<DropdownItem>();
 
@@ -24,10 +24,10 @@ export class SetWidthWigetComponent {
     this.subMenuOpen = !this.subMenuOpen;
   }
 
-  toggleSubMenu(event: Event) {
-    event.stopPropagation(); // Ngăn đóng menu cha
-    this.subMenuOpen = !this.subMenuOpen;
-  }
+  // toggleSubMenu(event: Event) {
+  //   event.stopPropagation(); // Ngăn đóng menu cha
+  //   this.subMenuOpen = !this.subMenuOpen;
+  // }
 
   selectItem(item: DropdownItem) {
     this.selectedItem = item;
