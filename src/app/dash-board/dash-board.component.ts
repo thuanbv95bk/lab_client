@@ -32,6 +32,13 @@ export class DashBoardComponent {
     },
   ];
 
+  chartValues = [
+    { label: 'Cty Sedovina (trang thiết bị trường học)', value: 2 },
+    { label: 'Keyhinge Hòa Cầm', value: 1 },
+    { label: 'Sợi Phú Nam', value: 1 },
+    { label: 'Sợi Thiên phú', value: 3 },
+  ];
+
   onSelectionChange(selectedItem: any) {
     console.log('Đã chọn:', selectedItem);
   }
@@ -40,6 +47,7 @@ export class DashBoardComponent {
   @ViewChild('chart2') chart2!: ElementRef;
   @ViewChild('chart3') chart3!: ElementRef;
   @ViewChild('chart4') chart4!: ElementRef;
+  isVisible: boolean = true;
   constructor() {}
 
   ngAfterViewInit(): void {
@@ -82,5 +90,8 @@ export class DashBoardComponent {
 
   onSelectedChange(selectedItems: any) {
     console.log('Mục đã chọn:', selectedItems);
+  }
+  toggleContent() {
+    this.isVisible = !this.isVisible;
   }
 }

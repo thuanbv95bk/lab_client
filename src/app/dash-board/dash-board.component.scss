@@ -16,6 +16,8 @@
   display: flex;
   flex-direction: column;
   height: auto;
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
 }
 .scrollable {
   overflow-x: auto;
@@ -28,4 +30,10 @@
   .text-select {
     font-size: 12px;
   }
+}
+/* Ẩn nội dung */
+.hidden {
+  max-height: 0;
+  padding: 0;
+  margin-top: 0;
 }

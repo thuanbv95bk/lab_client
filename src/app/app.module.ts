@@ -10,6 +10,7 @@ import { MultiSelectComponent } from './common/multi-select/multi-select.compone
 import { SetWidthWidgetComponent } from './common/set-width-widget/set-width-widget.component';
 import { VehicleWidgetComponent } from './common/widget-item/vehicle-widget/vehicle-widget.component';
 import { DashboardDoughnutComponent } from './common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
+import { BarChartComponent } from './common/widget-item/bar-chart/bar-chart.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +19,7 @@ import { DashboardDoughnutComponent } from './common/widget-item/dashboard-dough
     SetWidthWidgetComponent,
     VehicleWidgetComponent,
     DashboardDoughnutComponent,
+    BarChartComponent,
     DashBoardComponent,
   ],
   imports: [
