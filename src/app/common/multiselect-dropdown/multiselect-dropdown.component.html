@@ -1,0 +1,52 @@
+<div class="multiselect-dropdown">
+  <!-- Phần hiển thị khi chưa click vào dropdown -->
+  <div class="selected-items" (click)="toggleDropdown()">
+    <input
+      *ngIf="!isOpen"
+      type="text"
+      class="placeholder-input"
+      [value]="getDisplayText()"
+      [placeholder]="placeholder"
+      readonly
+    />
+    <!-- Ô search khi dropdown mở ra -->
+    <input
+      *ngIf="isOpen && search"
+      #searchInput
+      type="text"
+      class="search-input"
+      [(ngModel)]="searchQuery"
+      (input)="filterOptions()"
+      placeholder="Search..."
+    />
+    <span class="dropdown-icon">▼</span>
+    <!-- Icon bên phải -->
+  </div>
+
+  <!-- Dropdown menu -->
+  <div class="dropdown-list" [class.show]="isOpen">
+    <!-- Tùy chọn "Select All" -->
+    <div class="select-all" *ngIf="selectAll">
+      <input
+        type="checkbox"
+        [(ngModel)]="allSelected"
+        (change)="toggleSelectAll()"
+      />
+      <label>Tất cả ({{ options.length }})</label>
+      <!-- Hiển thị tổng số item -->
+    </div>
+
+    <!-- Danh sách các tùy chọn -->
+    <div class="options">
+      <div
+        *ngFor="let option of filteredOptions"
+        class="option"
+        [class.checked]="isSelected(option)"
+        (click)="toggleOption(option)"
+      >
+        <input type="checkbox" [checked]="isSelected(option)" />
+        <label>{{ option }}</label>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,3 +1,9 @@
+.btn {
+  background-color: darkgrey;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+}
 .dropdown-menu {
   position: absolute;
   min-width: max-content;
@@ -11,9 +17,7 @@
   min-width: max-content;
   display: block;
 }
-.btn-dark {
-  background-color: darkgrey;
-}
+
 button {
   border: none;
 }

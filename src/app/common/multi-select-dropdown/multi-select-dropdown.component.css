@@ -1,0 +1,89 @@
+.multi-select-container {
+  position: relative;
+  /* width: 100%; */
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 5px 5px;
+  background: white;
+  cursor: pointer;
+  justify-content: space-between; /* Đưa icon về phía bên phải */
+}
+
+.input-group input {
+  border: none;
+  outline: none;
+  flex: 1;
+  padding: 0;
+  cursor: pointer;
+  font-size: 14px;
+  /* background: transparent; */
+}
+
+.input-group-text {
+  font-size: 12px; /* Giảm kích thước icon */
+  color: #0a0a0a; /* Màu xám nhẹ */
+  border: none;
+  border-radius: none;
+}
+
+.dropdown-menu {
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+  max-height: 200px; /* Giới hạn chiều cao */
+  overflow-y: auto; /* Chỉ cho phép cuộn dọc */
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+}
+
+/* Chỉ có 1 thanh cuộn dọc */
+.dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.list-group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.list-group-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  white-space: nowrap; /* Ngăn xuống dòng */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+.list-group-item input {
+  margin-right: 8px;
+}

@@ -4,36 +4,36 @@
 .fs-12 {
   font-size: 12px;
 }
-.btn-dark {
-  background-color: darkgrey;
-}
-
-.widget {
-  background: white;
-  border-radius: 2px;
-  padding: 10px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  overflow: hidden;
-  transition: max-height 0.5s ease-in-out;
-}
 .scrollable {
   overflow-x: auto;
 }
 
-.dash-board-header {
-  .text-title {
-    font-size: 14px;
+.dash-board {
+  .widget {
+    background: white;
+    border-radius: 2px;
+    padding: 5px;
+    margin-top: 5px;
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    height: min-content;
+    // overflow: hidden;
+    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    .widget-title {
+      height: min-content;
+    }
+    .btn {
+      background-color: darkgrey;
+      width: 25px;
+      height: 25px;
+      padding: 0;
+    }
   }
-  .text-select {
-    font-size: 12px;
+  /* Ẩn nội dung */
+  .hidden {
+    max-height: 0;
+    padding: 0;
+    margin-top: 0;
   }
-}
-/* Ẩn nội dung */
-.hidden {
-  max-height: 0;
-  padding: 0;
-  margin-top: 0;
 }

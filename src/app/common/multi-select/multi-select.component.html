@@ -1,39 +1,64 @@
-<div class="multi-select">
-  <!-- Ô chọn -->
-  <div class="selected-box" (click)="toggleDropdown()">
-    <span *ngIf="selectedItems.length === 0" class="placeholder"
-      >Chọn phương tiện</span
-    >
-    <span *ngIf="selectedItems.length > 0">{{ selectedItems.length }}</span>
-    <span class="arrow-down">&#9660;</span>
+<div class="multiselect-dropdown position-relative">
+  <!-- Phần hiển thị khi chưa click vào dropdown -->
+  <div
+    class="selected-items d-flex align-items-center border rounded p-2 bg-white"
+    (click)="toggleDropdown()"
+  >
+    <input
+      *ngIf="!isOpen"
+      type="text"
+      class="form-control border-0 p-0 bg-transparent"
+      [value]="getDisplayText()"
+      [placeholder]="placeholder"
+      readonly
+    />
+    <!-- Ô search khi dropdown mở ra -->
+    <input
+      *ngIf="isOpen && search"
+      #searchInput
+      type="text"
+      class="form-control border-0 p-0 bg-transparent"
+      [(ngModel)]="searchQuery"
+      (input)="filterOptions()"
+      placeholder="Search..."
+    />
+    <span class="dropdown-icon ms-auto">▼</span>
+    <!-- Icon bên phải -->
   </div>
 
-  <!-- Danh sách dropdown -->
-  <div class="dropdown-content" [class.show]="dropdownOpen">
-    <ul>
-      <!-- Chọn tất cả -->
-      <li style="border-bottom: 1px">
-        <label>
-          <input
-            type="checkbox"
-            [checked]="isAllSelected()"
-            (change)="toggleSelectAll($event)"
-          />
-          Tất cả ({{ items.length }})
-        </label>
-      </li>
-      <!-- Danh sách item -->
-      <li *ngFor="let item of items">
-        <label>
-          <input
-            type="checkbox"
-            [placeholder]=""
-            [checked]="isSelected(item)"
-            (change)="toggleItem(item)"
-          />
-          {{ item.code }}
-        </label>
-      </li>
-    </ul>
+  <!-- Dropdown menu -->
+  <div
+    class="dropdown-list position-absolute w-100 bg-white border rounded shadow mt-1"
+    [class.d-block]="isOpen"
+  >
+    <!-- Tùy chọn "Select All" -->
+    <div class="select-all p-2 border-bottom" *ngIf="selectAll">
+      <input
+        type="checkbox"
+        class="form-check-input"
+        [(ngModel)]="allSelected"
+        (change)="toggleSelectAll()"
+      />
+      <label class="form-check-label fw-bold ms-2"
+        >Tất cả ({{ options.length }})</label
+      >
+    </div>
+
+    <!-- Danh sách các tùy chọn -->
+    <div class="options" style="max-height: 15rem; overflow-y: auto">
+      <div
+        *ngFor="let option of filteredOptions"
+        class="option d-flex align-items-center p-2 border-bottom"
+        [class.bg-light]="isSelected(option)"
+        (click)="toggleOption(option)"
+      >
+        <input
+          type="checkbox"
+          class="form-check-input me-2"
+          [checked]="isSelected(option)"
+        />
+        <label class="form-check-label">{{ option }}</label>
+      </div>
+    </div>
   </div>
 </div>

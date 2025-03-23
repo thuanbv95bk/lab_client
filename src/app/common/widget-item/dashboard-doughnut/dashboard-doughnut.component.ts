@@ -10,7 +10,6 @@ export class DashboardDoughnutComponent {
   @Input() emptyVehicles: number = 40; // Phương tiện không hàng
   @Input() loadedVehicles: number = 0; // Phương tiện có hàng
   @Input() width: string = '100%'; // Độ rộng có thể là '50%', '80%', '300px'...
-  @Input() isVisible: boolean = false; // Độ rộng có thể là '50%', '80%', '300px'...
   totalVehicles: number = this.emptyVehicles + this.loadedVehicles;
   @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
   ngAfterViewInit(): void {

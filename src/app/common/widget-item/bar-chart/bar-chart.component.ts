@@ -6,12 +6,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import {
-  ChartConfiguration,
-  ChartOptions,
-  ChartType,
-  ChartData,
-} from 'chart.js';
+import { ChartOptions, ChartType, ChartData } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 

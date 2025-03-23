@@ -9,18 +9,12 @@ import {
   AfterViewInit,
 } from '@angular/core';
 
-interface SelectItem {
-  id: number;
-  code: string;
-  name: string;
-}
-
 @Component({
-  selector: 'app-multi-select',
-  templateUrl: './multi-select.component.html',
-  styleUrls: ['./multi-select.component.scss'],
+  selector: 'app-multiselect-dropdown',
+  templateUrl: './multiselect-dropdown.component.html',
+  styleUrls: ['./multiselect-dropdown.component.scss'],
 })
-export class MultiSelectComponent {
+export class MultiselectDropdownComponent implements AfterViewInit {
   @Input() options: string[] = [];
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
@@ -108,9 +102,9 @@ export class MultiSelectComponent {
 
   getDisplayText(): string {
     if (this.allSelected) {
-      return `Tất cả (${this.options.length})`; // Hiển thị "Tất cả (số lượng item)"
+      return `Tất cả (${this.options.length})`; // Hiển thị "Tất cả (tổng số item)"
     } else if (this.selectedItems.length > 0) {
-      return `${this.selectedItems.length} selected`; // Hiển thị số lượng item được chọn
+      return this.selectedItems.join(', '); // Hiển thị các item cách nhau bằng dấu phẩy
     } else {
       return ''; // Hiển thị placeholder nếu không có item nào được chọn
     }

@@ -7,10 +7,13 @@ import Chart from 'chart.js/auto';
   styleUrl: './dash-board.component.scss',
 })
 export class DashBoardComponent {
-  itemList1 = [
-    { id: 1, code: '43C01338_C' },
-    { id: 2, code: '43C01339_C' },
-    { id: 3, code: '43C01340_C' },
+  vehicleList = [
+    '43C01338_C',
+    '43C01339_C',
+    '43C01340_C',
+    '43C03402_C',
+    '43C03880_C',
+    '43C05815_C',
   ];
   itemList = [
     { id: 1, code: 'A01', name: 'Hà Nội' },
@@ -43,55 +46,62 @@ export class DashBoardComponent {
     console.log('Đã chọn:', selectedItem);
   }
 
-  @ViewChild('chart1') chart1!: ElementRef;
-  @ViewChild('chart2') chart2!: ElementRef;
-  @ViewChild('chart3') chart3!: ElementRef;
-  @ViewChild('chart4') chart4!: ElementRef;
-  isVisible: boolean = true;
+  /**
+   * Determines whether visible overview is
+   *@description Ẩn hiện widget TỔNG QUAN CÔNG TY
+   *@value true: hiện
+   *@value false: Ẩn đi
+   */
+  isVisibleOverView: boolean = true;
+  /**
+   * Determines whether visible overview is
+   *@description Ẩn hiện widget TỔNG QUAN CÔNG TY
+   *@value True: hiện
+   *@value false: Ẩn đi
+   */
+
+  /**
+   * Determines whether visible border gate is
+   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
+   * true: hiện
+   * false: Ẩn đi
+   */
+  isVisibleBorderGate: boolean = true;
+
+  /**
+   * Determines whether visible on the road is
+   * @description Ẩn hiện widget PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG
+   * @value true: hiện
+   * @value false: Ẩn đi
+   */
+  isVisibleOnTheRoad: boolean = true;
+  /**
+   * Determines whether visible at the factory
+   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI NHÀ MÁY
+   * @value true: hiện
+   * @value false: Ẩn đi
+   */
+  isVisibleAtTheFactory: boolean = true;
+
+  /**
+   * Determines whether visible at the port is
+   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CẢNG
+   * @value true: hiện
+   * @value false: Ẩn đi
+   */
+  isVisibleAtThePort: boolean = true;
+
   constructor() {}
 
-  ngAfterViewInit(): void {
-    // this.createChart(this.chart1.nativeElement);
-    // this.createChart(this.chart2.nativeElement);
-    // this.createChart(this.chart3.nativeElement);
-    // this.createChart(this.chart4.nativeElement, 'bar');
-  }
+  ngAfterViewInit(): void {}
 
-  createChart(canvas: HTMLCanvasElement, type: string = 'doughnut') {
-    // new Chart();
-  }
-
-  // Biểu đồ cột
-  chartData = [{ data: [65, 59, 80, 81, 56, 55, 40], label: 'Doanh thu' }];
-  chartLabels = [
-    'Tháng 1',
-    'Tháng 2',
-    'Tháng 3',
-    'Tháng 4',
-    'Tháng 5',
-    'Tháng 6',
-    'Tháng 7',
-  ];
-
-  // Biểu đồ tròn
-  pieChartData = [
-    {
-      data: [300, 500, 100],
-      backgroundColor: ['#FF7360', '#6FC8CE', '#FAFFF2'],
-    },
-  ];
-  pieChartLabels = ['Sản phẩm A', 'Sản phẩm B', 'Sản phẩm C'];
-
-  // Cấu hình chung
-  chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-  };
+  createChart(canvas: HTMLCanvasElement, type: string = 'doughnut') {}
 
   onSelectedChange(selectedItems: any) {
     console.log('Mục đã chọn:', selectedItems);
   }
-  toggleContent() {
-    this.isVisible = !this.isVisible;
+
+  onSelectedChangex(selectedItems: string[]) {
+    console.log('Selected Items:', selectedItems);
   }
 }
