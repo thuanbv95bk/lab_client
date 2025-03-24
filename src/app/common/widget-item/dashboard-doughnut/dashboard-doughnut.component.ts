@@ -34,14 +34,14 @@ export class DashboardDoughnutComponent {
       const total = data.datasets[0].data[0] + data.datasets[0].data[1]; // lấy ra tổng
       ctx.translate(xCenter, yCenter);
       ctx.font = 'bold 27px Arial';
-      ctx.fillStyle = '#1E0CFE';
+      ctx.fillStyle = '#0D2D6C';
       ctx.textBaseline = 'bottom';
       ctx.textAlign = 'center';
       ctx.fillText(`${total}`, 0, 0);
 
       const fontSize = 14;
       ctx.font = `bold ${fontSize}px Arial`;
-      ctx.fillStyle = '#0D6EFD';
+      ctx.fillStyle = '#0052A3';
       ctx.textBaseline = 'top';
       ctx.textAlign = 'center';
       ctx.fillText('phương tiện', 0, 0);

@@ -1,13 +1,13 @@
-<div class="multiselect-dropdown position-relative">
+<div class="multiselect-dropdown position-relative mx-1 w-100">
   <!-- Phần hiển thị khi chưa click vào dropdown -->
   <div
-    class="selected-items d-flex align-items-center border rounded p-2 bg-white"
+    class="selected-items d-flex align-items-center border bg-white"
     (click)="toggleDropdown()"
   >
     <input
       *ngIf="!isOpen"
       type="text"
-      class="form-control border-0 p-0 bg-transparent"
+      class="w-100 p-0 border-0 placeholder-input"
       [value]="getDisplayText()"
       [placeholder]="placeholder"
       readonly
@@ -17,18 +17,22 @@
       *ngIf="isOpen && search"
       #searchInput
       type="text"
-      class="form-control border-0 p-0 bg-transparent"
+      class="w-100 border-0 p-0 search-input"
       [(ngModel)]="searchQuery"
       (input)="filterOptions()"
-      placeholder="Search..."
+      placeholder="Chọn phương tiện..."
     />
-    <span class="dropdown-icon ms-auto">▼</span>
+    <!-- <span class="dropdown-icon ms-auto">▼</span> -->
+    <i
+      class="dropdown-icon ms-auto"
+      [ngClass]="!isOpen ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"
+    ></i>
     <!-- Icon bên phải -->
   </div>
 
   <!-- Dropdown menu -->
   <div
-    class="dropdown-list position-absolute w-100 bg-white border rounded shadow mt-1"
+    class="dropdown-list position-absolute w-100 bg-white border shadow"
     [class.d-block]="isOpen"
   >
     <!-- Tùy chọn "Select All" -->
@@ -39,9 +43,7 @@
         [(ngModel)]="allSelected"
         (change)="toggleSelectAll()"
       />
-      <label class="form-check-label fw-bold ms-2"
-        >Tất cả ({{ options.length }})</label
-      >
+      <label class="form-check-label ms-2">Tất cả ({{ options.length }})</label>
     </div>
 
     <!-- Danh sách các tùy chọn -->

@@ -5,12 +5,15 @@
   </button>
   <!-- Dropdown chính -->
   <ul class="dropdown-menu" [class.show]="dropdownOpen">
-    <li class="dropdown-item">Độ rộng ▸</li>
+    <li class="dropdown-item">
+      Độ rộng
+      <i class="fa fa-angle-right"></i>
+    </li>
 
     <!-- Sub-menu -->
     <ul class="dropdown-menu sub-menu" *ngIf="subMenuOpen">
       <li
-        *ngFor="let item of items"
+        *ngFor="let item of listWidthWidget[0].children"
         class="dropdown-item"
         (click)="selectItem(item)"
       >

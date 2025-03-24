@@ -24,16 +24,16 @@
       height: min-content;
     }
     .btn {
-      background-color: darkgrey;
+      background-color: #d2d2d2;
       width: 25px;
       height: 25px;
       padding: 0;
+      margin-left: 10px;
     }
   }
+
   /* Ẩn nội dung */
   .hidden {
-    max-height: 0;
-    padding: 0;
-    margin-top: 0;
+    display: none;
   }
 }

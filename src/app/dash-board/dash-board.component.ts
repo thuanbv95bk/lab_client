@@ -15,25 +15,6 @@ export class DashBoardComponent {
     '43C03880_C',
     '43C05815_C',
   ];
-  itemList = [
-    { id: 1, code: 'A01', name: 'Hà Nội' },
-    { id: 2, code: 'A02', name: 'Hồ Chí Minh' },
-    { id: 3, code: 'A03', name: 'Đà Nẵng' },
-    { id: 4, code: 'A04', name: 'Hải Phòng' },
-  ];
-
-  listWidthWidget = [
-    {
-      id: 1,
-      name: 'Độ rộng',
-      children: [
-        { id: 2, name: 'Tự động' },
-        { id: 3, name: 'Nhỏ' },
-        { id: 4, name: 'Trung bình' },
-        { id: 5, name: 'Lớn' },
-      ],
-    },
-  ];
 
   chartValues = [
     { label: 'Cty Sedovina (trang thiết bị trường học)', value: 2 },
@@ -91,15 +72,16 @@ export class DashBoardComponent {
    */
   isVisibleAtThePort: boolean = true;
 
+  widthSelected: string = '';
+
   constructor() {}
 
   ngAfterViewInit(): void {}
 
-  createChart(canvas: HTMLCanvasElement, type: string = 'doughnut') {}
-
   onSelectedChange(selectedItems: any) {
     console.log('Mục đã chọn:', selectedItems);
   }
+  change(x: string) {}
 
   onSelectedChangex(selectedItems: string[]) {
     console.log('Selected Items:', selectedItems);

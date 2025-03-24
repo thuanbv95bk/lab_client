@@ -12,16 +12,14 @@ import { VehicleWidgetComponent } from './common/widget-item/vehicle-widget/vehi
 import { DashboardDoughnutComponent } from './common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 import { BarChartComponent } from './common/widget-item/bar-chart/bar-chart.component';
 import { BtnExtendComponent } from './common/btn-extend/btn-extend.component';
-import { MultiSelectDropdownComponent } from './common/multi-select-dropdown/multi-select-dropdown.component';
-import { MultiselectDropdownComponent } from './common/multiselect-dropdown/multiselect-dropdown.component';
+import { WidthWidgetComponent } from './common/width-widget/width-widget.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MultiSelectComponent,
-    MultiSelectDropdownComponent,
-    MultiselectDropdownComponent,
     SetWidthWidgetComponent,
+    WidthWidgetComponent,
     BtnExtendComponent,
     VehicleWidgetComponent,
     DashboardDoughnutComponent,

@@ -15,6 +15,19 @@ export class SetWidthWidgetComponent {
   @Input() items: DropdownItem[] = [];
   @Output() selectionChange = new EventEmitter<DropdownItem>();
 
+  listWidthWidget = [
+    {
+      id: 1,
+      name: 'Độ rộng',
+      children: [
+        { id: 2, name: 'Tự động' },
+        { id: 3, name: 'Nhỏ' },
+        { id: 4, name: 'Trung bình' },
+        { id: 5, name: 'Lớn' },
+      ],
+    },
+  ];
+
   dropdownOpen: boolean = false;
   subMenuOpen: boolean = false;
   selectedItem: DropdownItem | null = null;
@@ -24,10 +37,10 @@ export class SetWidthWidgetComponent {
     this.subMenuOpen = !this.subMenuOpen;
   }
 
-  // toggleSubMenu(event: Event) {
-  //   event.stopPropagation(); // Ngăn đóng menu cha
-  //   this.subMenuOpen = !this.subMenuOpen;
-  // }
+  toggleSubMenu(event: Event) {
+    event.stopPropagation(); // Ngăn đóng menu cha
+    this.subMenuOpen = !this.subMenuOpen;
+  }
 
   selectItem(item: DropdownItem) {
     this.selectedItem = item;
