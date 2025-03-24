@@ -1,0 +1,9 @@
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto; /* Tùy chỉnh chiều cao */
+  overflow-x: auto; /* Tự động hiển thị thanh cuộn khi cần */
+  white-space: nowrap; /* Đảm bảo các phần tử không bị xuống dòng */
+  width: 100%;
+}

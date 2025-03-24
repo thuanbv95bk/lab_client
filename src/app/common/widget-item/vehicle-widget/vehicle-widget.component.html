@@ -1,0 +1,13 @@
+<div class="card h-100" [ngStyle]="{ 'background-color': backgroundColor }">
+  <div class="card-body container-fluid">
+    <div class="card-title">{{ title }}</div>
+
+    <div class="card-content container d-flex align-items-center text-center">
+      <div class="vehicle-count">{{ totalVehicles }}</div>
+      <div class="vehicle-label">Phương tiện</div>
+    </div>
+  </div>
+  <div class="card-footer shadow-none" *ngIf="isDisplayFooter">
+    <span> {{ percentage }}% / Tổng phương tiện</span>
+  </div>
+</div>

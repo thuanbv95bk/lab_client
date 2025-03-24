@@ -1,0 +1,35 @@
+.btn {
+  background-color: #d2d2d2;
+  width: 25px;
+  height: 25px;
+  padding: 0;
+}
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: max-content;
+  z-index: 1;
+  padding: 5px 5px;
+  .sub-menu {
+    position: absolute;
+    left: 100%;
+    top: 0;
+    min-width: max-content;
+    display: block;
+  }
+  .dropdown-item {
+    font-size: 1rem;
+    padding: 5px 10px;
+  }
+
+  .active {
+    color: black;
+  }
+  .check {
+    color: green;
+  }
+}
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
