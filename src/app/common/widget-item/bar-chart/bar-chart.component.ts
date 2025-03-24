@@ -28,6 +28,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   chart!: Chart;
   public chartOptions: ChartOptions = {
     responsive: true,
+    // maintainAspectRatio: false,
     maintainAspectRatio: false,
     aspectRatio: 1,
 
@@ -58,7 +59,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         ticks: {
           maxRotation: 0, // Không cho xoay chữ
           minRotation: 0, // Giữ cố định
-          autoSkip: true, // Hiển thị đầy đủ
+          autoSkip: false, // Hiển thị đầy đủ
           align: 'center',
           font: {
             size: 10,
@@ -120,10 +121,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         {
           data: this.data.map((item) => item.value),
           backgroundColor: this.barColor,
-          barPercentage: 1, // Cột chiếm 80% trong nhóm
+          barPercentage: 0.5, // Cột chiếm 80% trong nhóm
           categoryPercentage: 0.2, // Nhóm cột chiếm 20% trục X
-          borderWidth: 1,
-          minBarLength: 20, // Độ rộng cố định của cột
+          // borderWidth: 1,
+          barThickness: 10, // Độ rộng cố định của cột
         },
       ],
     };

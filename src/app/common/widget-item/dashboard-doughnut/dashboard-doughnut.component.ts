@@ -9,7 +9,7 @@ import { Chart } from 'chart.js';
 export class DashboardDoughnutComponent {
   @Input() emptyVehicles: number = 40; // Phương tiện không hàng
   @Input() loadedVehicles: number = 0; // Phương tiện có hàng
-  @Input() width: string = '100%'; // Độ rộng có thể là '50%', '80%', '300px'...
+  @Input() width: string = ''; // Độ rộng có thể là '50%', '80%', '300px'...
   @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
   ngAfterViewInit(): void {
     this.renderChart();
@@ -75,13 +75,9 @@ export class DashboardDoughnutComponent {
       },
       options: {
         responsive: true,
-        // layout: {
-        //   padding: {
-        //     top: 10,
-        //     left: 20,
-        //     right: 20,
-        //   },
-        // },
+        layout: {
+          padding: 20,
+        },
         animation: { animateRotate: true, animateScale: true },
         maintainAspectRatio: false, // Cho phép co giãn theo container
         aspectRatio: 1, // Change Size of Doughnut Chart
