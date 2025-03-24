@@ -5,8 +5,9 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
+  ElementRef,
 } from '@angular/core';
-import { ChartOptions, ChartType, ChartData } from 'chart.js';
+import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 
@@ -16,21 +17,23 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
   styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent implements AfterViewInit, OnChanges {
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  // @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
 
   @Input() data: { label: string; value: number }[] = [];
   @Input() width: string = '100%'; // có thể set từ ngoài
   @Input() height: string = '300px';
   @Input() barColor: string = '#d90429';
-
+  @ViewChild('chartCanvas', { static: true })
+  chartCanvas!: ElementRef<HTMLCanvasElement>;
+  chart!: Chart;
   public chartOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     aspectRatio: 1,
+
     layout: {
       padding: {
         top: 10,
-        left: 80,
       },
     },
     scales: {
@@ -38,22 +41,29 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         beginAtZero: true,
         min: 0,
         max: 10,
-
         ticks: {
           stepSize: 1,
-          // maxTicksLimit: 1,
+
+          callback: function (value, index) {
+            let maxY = this.chart.scales['y'].max; // Lấy giá trị max của trục Y
+            if (Number(this.getLabelForValue(value as number)) == maxY)
+              return 'Số phương tiện';
+            return this.getLabelForValue(value as number);
+          },
         },
+
         title: { display: false }, // Ẩn tiêu đề mặc định của Chart.js
       },
       x: {
         ticks: {
           maxRotation: 0, // Không cho xoay chữ
           minRotation: 0, // Giữ cố định
-          autoSkip: false, // Hiển thị đầy đủ
+          autoSkip: true, // Hiển thị đầy đủ
           align: 'center',
           font: {
             size: 10,
           },
+
           callback: function (value) {
             let label = this.getLabelForValue(value as number);
             let maxCharsPerLine = 20; //  Số ký tự tối đa mỗi dòng
@@ -112,6 +122,8 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           backgroundColor: this.barColor,
           barPercentage: 1, // Cột chiếm 80% trong nhóm
           categoryPercentage: 0.2, // Nhóm cột chiếm 20% trục X
+          borderWidth: 1,
+          minBarLength: 20, // Độ rộng cố định của cột
         },
       ],
     };
@@ -142,5 +154,5 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
     },
   };
 
-  public chartPlugins = [ChartDataLabels, this.yScaleLabelPlugin];
+  public chartPlugins = [ChartDataLabels];
 }

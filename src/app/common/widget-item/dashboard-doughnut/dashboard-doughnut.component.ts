@@ -10,7 +10,6 @@ export class DashboardDoughnutComponent {
   @Input() emptyVehicles: number = 40; // Phương tiện không hàng
   @Input() loadedVehicles: number = 0; // Phương tiện có hàng
   @Input() width: string = '100%'; // Độ rộng có thể là '50%', '80%', '300px'...
-  totalVehicles: number = this.emptyVehicles + this.loadedVehicles;
   @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
   ngAfterViewInit(): void {
     this.renderChart();
@@ -24,23 +23,28 @@ export class DashboardDoughnutComponent {
   textAroundDoughnut = {
     id: 'textAroundDoughnut',
 
-    beforeDatasetsDraw(chart: any) {
-      const { ctx, data } = chart;
-
+    afterDraw(chart: any) {
+      const ctx = chart.ctx;
+      const { width, data } = chart; // Lấy kích thước biểu đồ
       const xCenter = chart.getDatasetMeta(0).data[0].x;
       const yCenter = chart.getDatasetMeta(0).data[0].y;
 
       ctx.save();
       const total = data.datasets[0].data[0] + data.datasets[0].data[1]; // lấy ra tổng
       ctx.translate(xCenter, yCenter);
-      ctx.font = 'bold 27px Arial';
+      // const fontSize = 14;
+      let fontSize = Math.min(25, width / 15);
+      console.log(fontSize);
+
+      ctx.font = `bold ${fontSize}px Arial`;
+      // ctx.font = 'bold 27px Arial';
       ctx.fillStyle = '#0D2D6C';
       ctx.textBaseline = 'bottom';
       ctx.textAlign = 'center';
       ctx.fillText(`${total}`, 0, 0);
 
-      const fontSize = 14;
-      ctx.font = `bold ${fontSize}px Arial`;
+      fontSize = Math.max(12, width / 30);
+      ctx.font = `bold 12px Arial`;
       ctx.fillStyle = '#0052A3';
       ctx.textBaseline = 'top';
       ctx.textAlign = 'center';
@@ -71,9 +75,13 @@ export class DashboardDoughnutComponent {
       },
       options: {
         responsive: true,
-        layout: {
-          padding: 20,
-        },
+        // layout: {
+        //   padding: {
+        //     top: 10,
+        //     left: 20,
+        //     right: 20,
+        //   },
+        // },
         animation: { animateRotate: true, animateScale: true },
         maintainAspectRatio: false, // Cho phép co giãn theo container
         aspectRatio: 1, // Change Size of Doughnut Chart
@@ -86,7 +94,7 @@ export class DashboardDoughnutComponent {
               usePointStyle: true,
               pointStyle: 'circle',
               padding: 20,
-              font: { size: 10 }, // Kích thước chữ
+              font: { size: 12 }, // Kích thước chữ
               textAlign: 'center', // Căn giữa nội dung Legend
             },
           },
@@ -105,7 +113,7 @@ export class DashboardDoughnutComponent {
             const {
               ctx,
               data,
-              chartArea: { top, bottom, left, right, width, height },
+              chartArea: { width, height },
             } = chart;
 
             const total = Object.values(data.datasets[0].data).reduce(
@@ -125,9 +133,9 @@ export class DashboardDoughnutComponent {
                 const halfWidth = width / 2; // lấy ra 1/2 chiều rộng
                 const halfHeight = height / 2; // lấy ra 1/2 chiều cao
 
-                const xLine = x >= halfWidth ? x + 15 : x - 15;
-                const yLine = y >= halfHeight ? y + 15 : y - 15;
-                const extraLine = x >= halfWidth ? 15 : -15;
+                const xLine = x >= halfWidth ? x + 20 : x - 20;
+                const yLine = y >= halfHeight ? y + 20 : y - 20;
+                const extraLine = x >= halfWidth ? 20 : -20;
 
                 // line
                 ctx.beginPath();
@@ -142,7 +150,7 @@ export class DashboardDoughnutComponent {
                   data.datasets[0].data[i - 1]
                 } phương tiện( ${percentage.toFixed(0)}%)`;
                 const textWidth = ctx.measureText(textDisplay).width;
-                ctx.font = '10px Arial';
+                ctx.font = '12px Arial';
 
                 // control the position
                 const textXPosition = x >= halfWidth ? 'left' : 'right';

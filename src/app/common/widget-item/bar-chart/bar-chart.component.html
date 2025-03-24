@@ -10,6 +10,7 @@
 
 <div class="chart-container" [ngStyle]="{ width: width }">
   <canvas
+    #chartCanvas
     baseChart
     [data]="chartData"
     [type]="chartType"

@@ -103,7 +103,7 @@
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cửa khẩu -->
-      <div class="col-md-6 col-lg-4">
+      <div class="col-12 col-lg-4">
         <!-- setting option -->
         <div class="widget">
           <div class="d-flex justify-content-between align-items-center">
@@ -124,7 +124,7 @@
         </div>
         <!-- dash board -->
         <div class="widget" [ngClass]="{ hidden: !isVisibleBorderGate }">
-          <div class="text-center align-items-center">
+          <div class="text-center align-items-center w-100 container h-auto">
             <app-dashboard-doughnut
               [emptyVehicles]="120"
               [loadedVehicles]="0"
@@ -134,7 +134,7 @@
       </div>
 
       <!-- Biểu đồ: Phương tiện đang trên đường -->
-      <div class="col-md-6 col-lg-4">
+      <div class="col-12 col-lg-4">
         <!-- setting option -->
         <div class="widget">
           <div class="d-flex justify-content-between align-items-center">
@@ -164,7 +164,7 @@
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
-      <div class="col-md-6 col-lg-4">
+      <div class="col-12 col-lg-4">
         <!-- setting option -->
         <div class="widget">
           <div class="d-flex justify-content-between align-items-center">

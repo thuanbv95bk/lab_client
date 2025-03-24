@@ -21,6 +21,9 @@ export class DashBoardComponent {
     { label: 'Keyhinge Hòa Cầm', value: 1 },
     { label: 'Sợi Phú Nam', value: 1 },
     { label: 'Sợi Thiên phú', value: 3 },
+    { label: 'Vinaco next', value: 4 },
+    { label: 'Window', value: 3 },
+    { label: 'Appple', value: 3 },
   ];
 
   onSelectionChange(selectedItem: any) {
