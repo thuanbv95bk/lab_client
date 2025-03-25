@@ -11,6 +11,6 @@ export class BtnExtendComponent {
 
   toggle() {
     this.isVisible = !this.isVisible;
-    this.isVisibleChange.emit(this.isVisible); // Phát sự kiện ra ngoài
+    this.isVisibleChange.emit(this.isVisible);
   }
 }

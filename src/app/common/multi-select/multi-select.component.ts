@@ -6,14 +6,13 @@ import {
   ElementRef,
   HostListener,
   ViewChild,
-  AfterViewInit,
 } from '@angular/core';
 
-interface SelectItem {
-  id: number;
-  code: string;
-  name: string;
-}
+// interface SelectItem {
+//   id: number;
+//   code: string;
+//   name: string;
+// }
 
 @Component({
   selector: 'app-multi-select',
@@ -107,12 +106,14 @@ export class MultiSelectComponent {
   }
 
   getDisplayText(): string {
-    if (this.allSelected) {
+    if (!this.selectedItems.length || !this.allSelected) return '';
+
+    if (this.allSelected == true) {
       return `Tất cả (${this.options.length})`; // Hiển thị "Tất cả (số lượng item)"
-    } else if (this.selectedItems.length > 0) {
-      return `${this.selectedItems.length} selected`; // Hiển thị số lượng item được chọn
-    } else {
-      return ''; // Hiển thị placeholder nếu không có item nào được chọn
     }
+    if (this.selectedItems.length > 0) {
+      return `${this.selectedItems.length} được chọn`;
+    }
+    return '';
   }
 }
