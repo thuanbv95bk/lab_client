@@ -1,59 +1,107 @@
-// legend-alignment.service.ts
 import { Injectable } from '@angular/core';
 import { Chart, Plugin } from 'chart.js';
 
-@Injectable({ providedIn: 'root' })
-export class LegendAlignmentService {
-  getPlugin(): Plugin {
+@Injectable({
+  providedIn: 'root',
+})
+export class LegendService {
+  getCustomLegendPlugin(
+    circleSize: number = 12,
+    textOffset: number = 10,
+    paddingBottom: number = 10
+  ): Plugin {
     return {
-      id: 'bottomLegendPlugin',
-      beforeInit: (chart) => this.configureLegend(chart),
-      beforeUpdate: (chart) => this.configureLegend(chart),
-      afterDraw: (chart) => this.drawBottomLegend(chart),
+      id: 'customLegend',
+      afterDraw: (chart: Chart) => {
+        const ctx = chart.ctx;
+        const { width, height } = chart;
+        const labels = chart.data.labels as string[];
+        const colors = chart.data.datasets[0].backgroundColor as string[];
+
+        if (!labels || !colors) return;
+
+        ctx.save();
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+
+        const itemSpacing = 30; // Khoảng cách giữa các mục legend
+        const maxRowWidth = width - 40; // Giới hạn chiều rộng legend
+
+        let legendY = height - paddingBottom; // Sát mép dưới
+        let items = labels.map((label, index) => ({
+          color: colors[index],
+          label,
+          width:
+            ctx.measureText(label).width +
+            circleSize +
+            textOffset +
+            itemSpacing,
+        }));
+
+        let row1: typeof items = [];
+        let row2: typeof items = [];
+        let rowWidth = 0;
+        let splitIndex = -1;
+
+        // Chia thành 2 dòng nếu cần
+        for (let i = 0; i < items.length; i++) {
+          if (rowWidth + items[i].width > maxRowWidth && row1.length > 0) {
+            splitIndex = i;
+            break;
+          }
+          row1.push(items[i]);
+          rowWidth += items[i].width;
+        }
+        row2 = splitIndex !== -1 ? items.slice(splitIndex) : [];
+
+        // Xác định dòng dài nhất
+        const row1Width = row1.reduce((sum, item) => sum + item.width, 0);
+        const row2Width = row2.reduce((sum, item) => sum + item.width, 0);
+        const maxWidth = Math.max(row1Width, row2Width);
+
+        // Căn chỉnh theo dòng dài nhất
+        const startX = (width - maxWidth) / 2;
+
+        // Vẽ dòng 1
+        this.drawLegendRow(ctx, row1, startX, legendY, circleSize, textOffset);
+
+        if (row2.length > 0) {
+          legendY -= 25; // Cách đều nhau
+          this.drawLegendRow(
+            ctx,
+            row2,
+            startX,
+            legendY,
+            circleSize,
+            textOffset
+          );
+        }
+
+        ctx.restore();
+      },
     };
   }
 
-  private configureLegend(chart: Chart) {
-    if (!chart.legend) return;
+  private drawLegendRow(
+    ctx: CanvasRenderingContext2D,
+    items: { color: string; label: string; width: number }[],
+    startX: number,
+    y: number,
+    circleSize: number,
+    textOffset: number
+  ) {
+    let x = startX;
+    items.forEach(({ color, label }) => {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, circleSize / 2, 0, 2 * Math.PI);
+      ctx.fill();
 
-    chart.legend.options = {
-      ...chart.legend.options,
-      display: false, // Tắt legend mặc định
-    };
-  }
+      ctx.fillStyle = '#000';
+      ctx.fillText(label, x + circleSize + textOffset, y);
 
-  private drawBottomLegend(chart: Chart) {
-    const ctx = chart.ctx;
-    const chartArea = chart.chartArea;
-    const datasets = chart.data.datasets;
-
-    if (!datasets?.length) return;
-
-    // Tính toán font size
-    const fontSize = Math.min(14, chart.width * 0.02);
-    const padding = 20;
-    const boxWidth = 15;
-    const lineHeight = fontSize + padding;
-
-    // Vị trí bắt đầu (dưới cùng)
-    let xPos = chartArea.left;
-    const yPos = chart.height - padding; // Sát đáy chart
-
-    // Vẽ từng item
-    datasets.forEach((dataset) => {
-      if (!dataset.label) return;
-
-      // Vẽ ô màu
-      ctx.fillStyle = dataset.backgroundColor as string;
-      ctx.fillRect(xPos, yPos - fontSize, boxWidth, boxWidth);
-
-      // Vẽ text
-      ctx.fillStyle = '#666';
-      ctx.font = `${fontSize}px Arial`;
-      ctx.fillText(dataset.label, xPos + boxWidth + 5, yPos);
-
-      // Tính toán vị trí tiếp theo
-      xPos += ctx.measureText(dataset.label).width + boxWidth + 25;
+      x += circleSize + textOffset + ctx.measureText(label).width + 30; // Giữ khoảng cách đều
     });
   }
 }

@@ -40,24 +40,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       },
     },
     scales: {
-      y: {
-        beginAtZero: true,
-        min: 0,
-        max: 10,
-
-        ticks: {
-          stepSize: 1,
-          callback: function (value, index) {
-            let maxY = this.chart.scales['y'].max; // Lấy giá trị max của trục Y
-            if (Number(this.getLabelForValue(value as number)) == maxY)
-              return 'Số phương tiện';
-            return this.getLabelForValue(value as number);
-          },
-        },
-
-        title: { display: false }, // Ẩn tiêu đề mặc định của Chart.js
-      },
-
       x: {
         // type: 'category',
         offset: true, // Thêm khoảng trống ở 2 đầu
@@ -66,12 +48,13 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         },
 
         ticks: {
-          autoSkipPadding: 100, // Khoảng cách tối thiểu giữa các tick (px)
+          autoSkip: false, // Không bỏ qua tick nào
+          autoSkipPadding: 80, // Khoảng cách tối thiểu giữa các tick
+          stepSize: 2, // Hiển thị mỗi tick cách nhau 2 đơn vị
           maxRotation: 0, // Không cho xoay chữ
           minRotation: 0, // Giữ cố định
-          autoSkip: false, // Hiển thị đầy đủ
-          align: 'center',
-          padding: 50,
+          padding: 50, // Tăng khoảng cách giữa các tick
+          align: 'center', // Căn giữa tick
 
           // padding: 100, // Khoảng cách giữa các tick (px)
           font: {
@@ -80,7 +63,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
 
           callback: function (value) {
             let label = this.getLabelForValue(value as number);
-            let maxCharsPerLine = 20; //  Số ký tự tối đa mỗi dòng
+            let maxCharsPerLine = 30; //  Số ký tự tối đa mỗi dòng
             let words = label.split(' '); // Tách theo khoảng trắng
             let lines: string[] = [];
             let currentLine = '';
@@ -97,6 +80,24 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
             return lines; // Trả về mảng
           },
         },
+      },
+
+      y: {
+        beginAtZero: true,
+        min: 0,
+        max: 10,
+
+        ticks: {
+          stepSize: 1,
+          callback: function (value, index) {
+            let maxY = this.chart.scales['y'].max; // Lấy giá trị max của trục Y
+            if (Number(this.getLabelForValue(value as number)) == maxY)
+              return 'Số phương tiện';
+            return this.getLabelForValue(value as number);
+          },
+        },
+
+        title: { display: false }, // Ẩn tiêu đề mặc định của Chart.js
       },
     },
     plugins: {

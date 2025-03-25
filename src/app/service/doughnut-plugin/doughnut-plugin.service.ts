@@ -8,20 +8,23 @@ export class DoughnutPluginService {
   getDoughnutLabelPlugin(config?: any) {
     const defaultConfig = {
       lineColor: '#999',
-      lineWidth: 1.5, // Độ dày của đường kết nối (1.5px)
+      lineWidth: 1.5,
       textFont: '12px Arial',
       textColor: '#333',
-      textPadding: 2, // Khoảng cách giữa đường kết nối và chữ (1px)
-      // lineExtension: 10, // Chiều dài đoạn ngang của đường kết nối (40px)
-      minPercentageToShow: 1, // Phần trăm tối thiểu để hiển thị nhãn (1%)
-      horizontalExtension: 10, // Chiều dài đoạn ngang của đường kết nối (40px)
 
-      maxTextWidth: null,
-      lineHeight: 1.1, // Hệ số nhân chiều cao giữa các dòng (1.2 lần font size)
-      forceFullDisplay: true, // Thêm option mới để luôn hiển thị đầy đủ
+      // Tỷ lệ tối thiểu để hiển thị line
+      minPercentageToShow: 1,
 
-      minLineExtension: 10, // Giá trị tối thiểu
-      maxLineExtension: 20, // Giá trị tối đa
+      // Độ dài line tính theo tỉ lệ chartSize
+      lineExtensionRatio: 0.05,
+      minLineExtension: 15,
+      maxLineExtension: 25,
+
+      // Né góc ranh giới (0, π/2, π, 3π/2, 2π)
+      boundaryOffset: 0.001,
+
+      // Biên an toàn tránh cắt text
+      margin: 10,
     };
 
     const mergedConfig = { ...defaultConfig, ...config };
@@ -34,105 +37,150 @@ export class DoughnutPluginService {
           data,
           chartArea: { width, height, left, right, top, bottom },
         } = chart;
-
         if (!data?.datasets?.[0]?.data) return;
 
-        // Tính toán lineExtension dựa trên kích thước biểu đồ
-        const chartSize = Math.min(width, height);
-        let lineExtension = chartSize * mergedConfig.lineExtensionRatio;
+        const datasetData: any[] = data.datasets[0].data || [];
+        const total = datasetData.reduce(
+          (sum: number, val: any) => sum + (typeof val === 'number' ? val : 0),
+          0
+        );
+        if (total <= 0) return;
 
-        // Giới hạn trong khoảng min-max
+        // Tâm chart
+        const centerX = (left + right) / 2;
+        const centerY = (top + bottom) / 2;
+        const chartSize = Math.min(width, height);
+
+        // Tính độ dài line
+        let lineExtension = chartSize * mergedConfig.lineExtensionRatio;
         lineExtension = Math.max(
           mergedConfig.minLineExtension,
           Math.min(mergedConfig.maxLineExtension, lineExtension)
         );
 
-        // Tính tổng an toàn
-        const datasetData = data.datasets[0].data || [];
-        const total = Array.isArray(datasetData)
-          ? datasetData
-              .filter((val) => typeof val === 'number')
-              .reduce((sum, val) => sum + val, 0)
-          : Object.values(datasetData)
-              .filter((val) => typeof val === 'number')
-              .reduce((sum, val) => sum + val, 0);
-
-        if (total <= 0) return;
-
         chart.data.datasets.forEach((dataset: any, i: number) => {
-          chart
-            .getDatasetMeta(i)
-            .data.forEach((datapoint: any, index: number) => {
-              i = i + 1;
-              const value = data.datasets[0].data[i - 1];
-              if (value === null || value === undefined) return;
+          const meta = chart.getDatasetMeta(i);
 
-              const percentage = (value / total) * 100;
-              // if (percentage <= mergedConfig.minPercentageToShow) return;
+          meta.data.forEach((arc: any, index: number) => {
+            const value = datasetData[index];
+            if (value == null) return;
 
-              if (percentage < mergedConfig.minPercentageToShow) return; // Áp dụng minPercentageToShow
+            // Tính phần trăm
+            const percentage = (value / total) * 100;
 
-              const { x, y } = datapoint.tooltipPosition(true);
-              const halfWidth = width / 2;
-              const halfHeight = height / 2;
+            // 1) Nếu 0% -> bỏ qua
+            if (percentage <= 0) {
+              return;
+            }
 
-              const xLine = x >= halfWidth ? x + 20 : x - 20;
-              const yLine = y >= halfHeight ? y + 30 : y - 30;
-              // const extraLine =
-              //   x >= halfWidth
-              //     ? mergedConfig.lineExtension
-              //     : -mergedConfig.lineExtension;
-              const extraLine =
-                x >= halfWidth
-                  ? mergedConfig.horizontalExtension
-                  : -mergedConfig.horizontalExtension; // Áp dụng horizontalExtension
+            // Lấy startAngle, endAngle, outerRadius
+            const { startAngle, endAngle, outerRadius } = arc.getProps(
+              ['startAngle', 'endAngle', 'outerRadius'],
+              true
+            );
 
-              // Draw line
-              ctx.beginPath();
-              ctx.moveTo(x, y);
-              ctx.lineTo(xLine + extraLine, yLine);
-              ctx.strokeStyle = mergedConfig.lineColor;
-              ctx.lineWidth = mergedConfig.lineWidth;
-              ctx.stroke();
+            // Nếu cung quá nhỏ (startAngle ~ endAngle) => bỏ qua
+            if (Math.abs(endAngle - startAngle) < mergedConfig.boundaryOffset) {
+              return;
+            }
 
-              // Prepare text
-              const textDisplay = `${value} phương tiện (${percentage.toFixed(
-                0
-              )}%)`;
+            // Tính midAngle (góc giữa cung)
+            let midAngle = (startAngle + endAngle) / 2;
 
-              // Set text style
-              ctx.font = mergedConfig.textFont;
-              ctx.fillStyle = mergedConfig.textColor;
-              const textAlign = x >= halfWidth ? 'left' : 'right';
-              ctx.textAlign = textAlign;
-              ctx.textBaseline = 'middle';
+            // 2) Nếu 100% -> ép góc chéo xuống (thay vì đứng)
+            // ví dụ 7π/4 (~315°) là góc chéo xuống phải
+            if (Math.abs(percentage - 100) < mergedConfig.boundaryOffset) {
+              midAngle = (5 * Math.PI) / 4;
+            }
 
-              // Calculate text position
-              const textX =
-                xLine +
-                extraLine +
-                (x >= halfWidth
-                  ? mergedConfig.textPadding
-                  : -mergedConfig.textPadding);
+            // Né góc ranh giới (nếu không phải 100% => offset)
+            if (Math.abs(percentage - 100) > mergedConfig.boundaryOffset) {
+              const boundaryAngles = [
+                0,
+                Math.PI / 2,
+                Math.PI,
+                (3 * Math.PI) / 2,
+                2 * Math.PI,
+              ];
+              boundaryAngles.forEach((bAngle) => {
+                if (Math.abs(midAngle - bAngle) < mergedConfig.boundaryOffset) {
+                  midAngle += mergedConfig.boundaryOffset;
+                }
+              });
+            }
 
-              // Tính toán không gian hiển thị
-              const availableWidth =
-                x >= halfWidth ? right - textX - 5 : textX - left - 5;
+            // Điểm bắt đầu (mép ngoài Doughnut)
+            const xStart = centerX + Math.cos(midAngle) * outerRadius;
+            const yStart = centerY + Math.sin(midAngle) * outerRadius;
 
-              const availableHeight = bottom - top;
+            // Kéo chéo thêm lineExtension
+            const xLine = xStart + Math.cos(midAngle) * lineExtension;
+            const yLine = yStart + Math.sin(midAngle) * lineExtension;
 
-              // Hiển thị text đầy đủ không cắt bớt
-              this.drawFullText(
-                ctx,
-                textDisplay,
-                textX,
-                yLine,
-                availableWidth + 5,
-                availableHeight,
-                textAlign,
-                mergedConfig.lineHeight
-              );
-            });
+            // Vẽ 1 đoạn chéo
+            ctx.beginPath();
+            ctx.moveTo(xStart, yStart);
+            ctx.lineTo(xLine, yLine);
+            ctx.strokeStyle = mergedConfig.lineColor;
+            ctx.lineWidth = mergedConfig.lineWidth;
+            ctx.stroke();
+
+            // Đuôi line = điểm bắt đầu text
+            let textX = xLine;
+            let textY = yLine;
+
+            // 3) & 4) Xác định nửa trên/dưới
+            // so sánh yLine với centerY
+            if (yLine < centerY) {
+              // Nửa trên -> chữ bám đáy (textBaseline = 'bottom')
+              ctx.textBaseline = 'bottom';
+            } else {
+              // Nửa dưới -> chữ bám đỉnh (textBaseline = 'top')
+              ctx.textBaseline = 'top';
+            }
+
+            // Style text
+            ctx.font = mergedConfig.textFont;
+            ctx.fillStyle = mergedConfig.textColor;
+            ctx.textAlign = xLine >= centerX ? 'left' : 'right';
+
+            // Kiểm tra biên
+            if (textX > right - mergedConfig.margin) {
+              textX = right - mergedConfig.margin;
+            }
+            if (textX < left + mergedConfig.margin) {
+              textX = left + mergedConfig.margin;
+            }
+            if (textY > bottom - mergedConfig.margin) {
+              textY = bottom - mergedConfig.margin;
+            }
+            if (textY < top + mergedConfig.margin) {
+              textY = top + mergedConfig.margin;
+            }
+
+            // Tạo nội dung
+            const textDisplay = `${value} Phương tiện (${percentage.toFixed(
+              0
+            )}%)`;
+
+            // Vẽ text (có hỗ trợ xuống dòng)
+            const availableWidth =
+              xLine >= centerX
+                ? right - textX - mergedConfig.margin
+                : textX - left - mergedConfig.margin;
+            const availableHeight = bottom - top;
+
+            this.drawFullText(
+              ctx,
+              textDisplay,
+              textX,
+              textY,
+              availableWidth,
+              availableHeight,
+              ctx.textAlign as 'left' | 'right',
+              1.1
+            );
+          });
         });
       },
     };
@@ -151,14 +199,12 @@ export class DoughnutPluginService {
     const words = text.split(' ');
     const lines: string[] = [];
     let currentLine = words[0];
-    const fontSize = parseInt(ctx.font);
+    const fontSize = parseInt(ctx.font, 10);
     const lineHeight = fontSize * lineHeightMultiplier;
 
-    // Tách text thành các dòng phù hợp
     for (let i = 1; i < words.length; i++) {
       const testLine = currentLine + ' ' + words[i];
       const metrics = ctx.measureText(testLine);
-
       if (metrics.width <= maxWidth) {
         currentLine = testLine;
       } else {
@@ -168,21 +214,19 @@ export class DoughnutPluginService {
     }
     lines.push(currentLine);
 
-    // Tính toán số dòng có thể hiển thị trong khoảng height cho phép
     const maxVisibleLines = Math.floor(maxHeight / lineHeight);
     const visibleLines = lines.slice(0, maxVisibleLines);
 
-    // Tính vị trí bắt đầu vẽ (căn giữa theo chiều dọc)
+    // Căn giữa theo chiều dọc (theo số dòng)
     const startY = y - ((visibleLines.length - 1) * lineHeight) / 2;
 
-    // Vẽ tất cả các dòng có thể hiển thị
     ctx.textAlign = align;
-    visibleLines.forEach((line, i) => {
-      const currentY = startY + i * lineHeight;
+    visibleLines.forEach((line, idx) => {
+      const currentY = startY + idx * lineHeight;
       ctx.fillText(line, x, currentY);
     });
 
-    // Vẽ indicator nếu có dòng bị ẩn
+    // Nếu nhiều dòng hơn khả năng hiển thị
     if (lines.length > maxVisibleLines) {
       const indicator = `(+${lines.length - maxVisibleLines} dòng)`;
       const indicatorY = startY + visibleLines.length * lineHeight;

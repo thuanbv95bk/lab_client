@@ -1,3 +1,10 @@
 <div class="chart-container" [ngStyle]="{ width: width }">
-  <canvas #doughnutChart baseChart></canvas>
+  <canvas
+    baseChart
+    [data]="chartData"
+    [type]="chartType"
+    [options]="chartOptions"
+    [plugins]="getPlugins()"
+  >
+  </canvas>
 </div>
