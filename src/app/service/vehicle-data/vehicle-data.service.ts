@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { LocationEnum } from '../../common/model/vehicle/location.enum';
 import { Vehicle } from '../../common/model/vehicle/vehicle.model';
+import {
+  VehicleCompany,
+  VehicleLoaded,
+} from '../../common/model/dashboard/dashboard.model';
 
 @Injectable({
   providedIn: 'root',
@@ -59,5 +63,50 @@ export class VehicleDataService {
 
   get(): Vehicle[] {
     return this.vehicleList;
+  }
+  getCompanySummary(data: any): any[] {
+    // kiểm tra dữ liệu đầu vào
+    const factoryVehicles = data || [];
+
+    //  trường hợp mảng rỗng
+    const companyCounts = (factoryVehicles as any[]).reduce(
+      (acc: { [key: string]: number }, vehicle) => {
+        if (vehicle?.company) {
+          //  Kiểm tra tồn tại vehicle
+          acc[vehicle.company] = (acc[vehicle.company] || 0) + 1;
+        }
+        return acc;
+      },
+      {}
+    );
+
+    return Object.entries(companyCounts).map(([company, value]) => ({
+      company,
+      value: value as number,
+    }));
+  }
+  getSummary(data: Vehicle[], locationEnum: string): VehicleLoaded[] {
+    // kiểm tra dữ liệu đầu vào
+    const Vehicles = data || [];
+    let res: VehicleLoaded[] = [];
+
+    //
+    const emptyVehicles = {
+      key: 'Phương tiện có hàng',
+      value: data.filter(
+        (x) => x.isLoaded == false && x.location == locationEnum
+      ).length,
+    };
+    const loadedVehicles = {
+      key: 'Phương tiện có hàng',
+      value: data.filter(
+        (x) => x.isLoaded == true && x.location == locationEnum
+      ).length,
+    };
+
+    res.push(emptyVehicles);
+    res.push(loadedVehicles);
+
+    return res;
   }
 }

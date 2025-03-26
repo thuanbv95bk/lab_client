@@ -15,7 +15,6 @@
                   [placeholder]="'Chọn phương tiện'"
                   [search]="true"
                   [selectAll]="true"
-                  [maxItems]="10"
                   (selectedChange)="onSelectedChangeVehicle($event)"
                 ></app-multi-select>
               </div>
@@ -43,7 +42,10 @@
               <app-btn-extend
                 [(isVisible)]="isVisibleOverView"
               ></app-btn-extend>
-              <button class="btn mx-2 border-0">
+              <button
+                class="btn btn-refresh mx-2 border-0"
+                (click)="refreshOverView()"
+              >
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
               <app-width-widget></app-width-widget>
@@ -65,8 +67,8 @@
               <app-vehicle-widget
                 [title]="'Phương tiện của công ty'"
                 [backgroundColor]="'#006ADC'"
-                [totalVehicles]="this.dashboardModel?.totalVehicles || 0"
-                [numberVehicle]="this.dashboardModel?.totalVehicles || 0"
+                [totalVehicles]="this.dashboardModel.totalVehicles"
+                [numberVehicle]="this.dashboardModel.totalVehicles"
                 [isDisplayFooter]="false"
               ></app-vehicle-widget>
             </div>
@@ -74,8 +76,8 @@
               <app-vehicle-widget
                 [title]="'Phương tiện có hàng'"
                 [backgroundColor]="'#509447'"
-                [totalVehicles]="this.dashboardModel?.totalVehicles || 0"
-                [numberVehicle]="this.dashboardModel?.loadedVehicles || 0"
+                [totalVehicles]="this.dashboardModel.totalVehicles || 0"
+                [numberVehicle]="this.dashboardModel.loadedVehicles || 0"
                 [isDisplayFooter]="true"
               ></app-vehicle-widget>
             </div>
@@ -83,8 +85,8 @@
               <app-vehicle-widget
                 [title]="'Phương tiện không hàng'"
                 [backgroundColor]="'#E2803C'"
-                [totalVehicles]="this.dashboardModel?.totalVehicles || 0"
-                [numberVehicle]="this.dashboardModel?.emptyVehicles || 0"
+                [totalVehicles]="this.dashboardModel.totalVehicles || 0"
+                [numberVehicle]="this.dashboardModel.emptyVehicles || 0"
                 [isDisplayFooter]="true"
               ></app-vehicle-widget>
             </div>
@@ -104,7 +106,7 @@
               <app-btn-extend
                 [(isVisible)]="isVisibleBorderGate"
               ></app-btn-extend>
-              <button class="btn mx-2 border-0">
+              <button class="btn mx-2 border-0" (click)="refreshBorderGate()">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
               <app-width-widget></app-width-widget>
@@ -116,9 +118,8 @@
         <div class="widget" [ngClass]="{ hidden: !isVisibleBorderGate }">
           <div class="align-items-center">
             <app-dashboard-doughnut
-              #TabDonHangComponent
-              [emptyVehicles]="this.dashboardModel?.emptyBorderGate || 0"
-              [loadedVehicles]="this.dashboardModel?.loadedBorderGate || 0"
+              #borderGate
+              [data]="this.dashboardModel.vehicleBorderGate || []"
             ></app-dashboard-doughnut>
           </div>
         </div>
@@ -136,7 +137,7 @@
               <app-btn-extend
                 [(isVisible)]="isVisibleOnTheRoad"
               ></app-btn-extend>
-              <button class="btn mx-2 border-0">
+              <button class="btn mx-2 border-0" (click)="refreshOnTheRoad()">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
               <app-width-widget></app-width-widget>
@@ -147,8 +148,8 @@
         <div class="widget" [ngClass]="{ hidden: !isVisibleOnTheRoad }">
           <div class="text-center align-items-center">
             <app-dashboard-doughnut
-              [emptyVehicles]="60"
-              [loadedVehicles]="40"
+              #onTheRoad
+              [data]="this.dashboardModel.vehicleOnTheRoad || []"
             ></app-dashboard-doughnut>
           </div>
         </div>
@@ -166,7 +167,7 @@
               <app-btn-extend
                 [(isVisible)]="isVisibleAtTheFactory"
               ></app-btn-extend>
-              <button class="btn mx-2 border-0">
+              <button class="btn mx-2 border-0" (click)="refreshAtTheFactory()">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
               <app-width-widget></app-width-widget>
@@ -177,15 +178,11 @@
         <div class="widget" [ngClass]="{ hidden: !isVisibleAtTheFactory }">
           <div class="text-center align-items-center">
             <app-bar-chart
-              [data]="chartValues"
+              [data]="this.dashboardModel.listVehicleAtTheFactory || []"
               [barColor]="'#e63946'"
+              [minLabelWidth]="100"
+              [defaultVisibleItems]="5"
             ></app-bar-chart>
-            <!-- <app-bar-chart-apex
-              [chartData]="data"
-              [barColor]="'#e63946'"
-              [columnWidth]="'20px'"
-            >
-            </app-bar-chart-apex> -->
           </div>
         </div>
       </div>
@@ -203,7 +200,7 @@
               <app-btn-extend
                 [(isVisible)]="isVisibleAtThePort"
               ></app-btn-extend>
-              <button class="btn mx-2 border-0">
+              <button class="btn mx-2 border-0" (click)="refreshAtThePort()">
                 <i class="fa-solid fa-rotate-right"></i>
               </button>
               <app-width-widget></app-width-widget>
@@ -214,8 +211,10 @@
         <div class="widget" [ngClass]="{ hidden: !isVisibleAtThePort }">
           <div class="text-center align-items-center">
             <app-bar-chart
-              [data]="chartValuesTheFactory"
+              [data]="this.dashboardModel.listVehicleAtThePort || []"
               [barColor]="'#20C997'"
+              [minLabelWidth]="100"
+              [defaultVisibleItems]="10"
             ></app-bar-chart>
           </div>
         </div>

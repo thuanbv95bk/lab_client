@@ -1,7 +1,8 @@
 .chart-container {
   position: relative;
   width: 100%;
-  height: min(400px, 80vw);
+  // height: max(160px, 21vw);
+  height: clamp(160px, 23vw, 400px);
   // aspect-ratio: 1 / 1; /* Luôn giữ tỷ lệ 1:1 */
   display: flex;
   flex-direction: column;
@@ -23,11 +24,34 @@ canvas {
 // `sm` applies to x-small devices (portrait phones, less than 576px)
 @media (max-width: 575.98px) {
   // .chart-container {
-  //   justify-content: center;
-  //   display: flex;
-  //   width: 100%;
+  //   height: max(300px, 400px);
   // }
-  // .chart-container .chart-legend {
-  //   gap: 4px; /* Giảm khoảng cách nếu là mobile */
+}
+
+// `md` applies to small devices (landscape phones, less than 768px)
+@media (max-width: 767.98px) {
+  // .chart-container {
+  //   height: max(300px, 400px);
   // }
+}
+
+// `lg` applies to medium devices (tablets, less than 992px)
+@media (max-width: 991.98px) {
+  // .chart-container {
+  //   height: max(300px, 29vw);
+  // }
+}
+
+// `xl` applies to large devices (desktops, less than 1200px)
+@media (max-width: 1199.98px) {
+  // .chart-container {
+  //   height: max(300px, 29vw);
+  // }
+}
+
+// `xxl` applies to x-large devices (large desktops, less than 1400px)
+@media (max-width: 1399.98px) {
+  .chart-container {
+    height: max(300px, 327px);
+  }
 }

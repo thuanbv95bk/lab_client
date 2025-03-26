@@ -3,6 +3,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  OnChanges,
   OnDestroy,
   OnInit,
   SimpleChanges,
@@ -14,32 +15,25 @@ import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { DoughnutPluginService } from '../../../service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from '../../../service/legend-alignment-plugin/legend-alignment-plugin.service';
 import { Vehicle } from '../../model/vehicle/vehicle.model';
+import { VehicleLoaded } from '../../model/dashboard/dashboard.model';
 
 @Component({
   selector: 'app-dashboard-doughnut',
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
-export class DashboardDoughnutComponent implements OnInit, OnDestroy {
-  @Input() emptyVehicles: number = 100; // Phương tiện không hàng
-  @Input() loadedVehicles: number = 100; // Phương tiện có hàng
-  @Input() listVehicle: Vehicle[] = []; // danh sách phương tiện
-  @Input() width: string = ''; // Độ rộng có thể là '50%', '80%', '300px'...
-  // @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
+export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
+  emptyVehicles: number = 0; // Phương tiện không hàng
+  loadedVehicles: number = 0; // Phương tiện có hàng
+  @Input() data: VehicleLoaded[] = [];
 
-  // @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
   private resizeSubscription: Subscription | undefined;
-  public chartOptions: ChartConfiguration['options'];
 
   constructor(
     private doughnutPlugin: DoughnutPluginService,
     private legendService: LegendService
   ) {
-    // this.initData();
-    this.chart?.update();
-    // Đăng ký plugin
-    // Chart.register(this.doughnutPlugin.getDoughnutLabelPlugin());
     // Kiểm tra có phải môi trường browser không
     if (typeof window !== 'undefined') {
       this.resizeSubscription = fromEvent(window, 'resize')
@@ -48,48 +42,12 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy {
           this.chart?.update();
         });
     }
-    this.chartOptions = {
-      responsive: true,
-
-      layout: {
-        padding: {
-          bottom: 60, // Sát mép dưới
-          top: 40,
-          left: 10,
-          right: 10,
-        },
-      },
-
-      maintainAspectRatio: false, // Cho phép co giãn theo container
-      aspectRatio: 1, // Change Size of Doughnut Chart
-      // cutout: '70%', //
-      plugins: {
-        legend: {
-          display: false,
-
-          position: 'bottom',
-          labels: {
-            usePointStyle: true,
-            pointStyle: 'circle',
-            boxWidth: 10,
-            padding: 20,
-
-            font: { size: 12 }, // Kích thước chữ
-            textAlign: 'center', // Căn giữa nội dung Legend
-          },
-        },
-
-        tooltip: {
-          enabled: false,
-        },
-      },
-    };
   }
-  ngOnInit(): void {
-    this.buildChart();
-  }
+
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges-du');
     if (changes['data'] && this.chart) {
+      console.log('ngOnChanges-du2');
       this.buildChart();
     }
   }
@@ -100,13 +58,48 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy {
     }
   }
   ngAfterViewInit(): void {
-    this.buildChart();
+    setTimeout(() => {
+      this.buildChart();
+    }, 200);
   }
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    // this.updateLegend();
-  }
+
   public chartType: ChartType = 'doughnut';
+
+  public chartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+
+    layout: {
+      padding: {
+        bottom: 60, // Sát mép dưới
+        top: 40,
+        left: 10,
+        right: 10,
+      },
+    },
+
+    maintainAspectRatio: false, // Cho phép co giãn theo container
+    aspectRatio: 1, // Change Size of Doughnut Chart
+    plugins: {
+      legend: {
+        display: false,
+
+        position: 'bottom',
+        labels: {
+          usePointStyle: true,
+          pointStyle: 'circle',
+          boxWidth: 10,
+          padding: 20,
+
+          font: { size: 12 }, // Kích thước chữ
+          textAlign: 'center', // Căn giữa nội dung Legend
+        },
+      },
+
+      tooltip: {
+        enabled: false,
+      },
+    },
+  };
 
   public chartData = {
     labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
@@ -115,30 +108,11 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy {
         data: [this.loadedVehicles, this.emptyVehicles],
         backgroundColor: ['#28a745', '#e87d3e'],
         borderWidth: 0,
-        cutout: '70%', // Áp dụng cho từng dataset
-        // animation: { animateRotate: false, animateScale: false },
+        cutout: '70%',
       },
     ],
   };
 
-  initData() {
-    if (!this.listVehicle || this.listVehicle.length == 0) {
-      this.emptyVehicles = 0;
-      this.loadedVehicles = 0;
-
-      return;
-    }
-
-    this.emptyVehicles = this.listVehicle.filter((x) => {
-      x.isLoaded == false;
-    }).length;
-
-    this.loadedVehicles = this.listVehicle.filter((x) => {
-      x.isLoaded == true;
-    }).length;
-
-    console.log(this.listVehicle);
-  }
   /**
    * viết chữ to ở giữa biểu đồ hình tròn
    * id = textAroundDoughnut
@@ -175,12 +149,6 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy {
     },
   };
 
-  // private updateLegend(): void {
-  //   console.log('updateLegend');
-  //   if (this.chart?.chart) {
-  //     // this.legendService.adjustLegend(this.chart.chart);
-  //   }
-  // }
   /**
    * Chart plugins of bar chart component
    * @description Danh sách các Plugins custom do người dùng thêm
@@ -198,16 +166,17 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy {
    * @author thuan.bv
    * @description Builds chart
    */
-  buildChart(): void {
+  public buildChart(): void {
+    console.log('buildChart');
+
     this.chartData = {
-      labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
+      labels: this.data.map((item) => item.key),
       datasets: [
         {
-          data: [this.loadedVehicles, this.emptyVehicles],
+          data: this.data.map((item) => item.value),
           backgroundColor: ['#28a745', '#e87d3e'],
           borderWidth: 0,
-          cutout: '70%', // Áp dụng cho từng dataset
-          // animation: { animateRotate: false, animateScale: false },
+          cutout: '70%',
         },
       ],
     };

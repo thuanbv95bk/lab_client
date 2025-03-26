@@ -14,43 +14,9 @@ import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doug
 export class DashBoardComponent implements OnInit {
   vehicles: Vehicle[] = [];
   totalVehicles: number = 0;
-  // dashboardModel: Dashboard | undefined;
-  public dashboardModel: Dashboard | undefined;
-
+  dashboardModel = new Dashboard();
   locationEnum = LocationEnum;
-
-  chartValues = [
-    { label: 'Cty Sedovina (trang thiết bị trường học)', value: 2 },
-    { label: 'Keyhinge Hòa Cầm', value: 1 },
-    { label: 'Sợi Phú Nam', value: 1 },
-    { label: 'Sợi Thiên phú', value: 3 },
-    { label: 'Vinaco next', value: 13 },
-    // { label: 'Window', value: 3 },
-    // { label: 'samsung', value: 3 },
-    // { label: 'Nokia', value: 3 },
-    // { label: 'oppo', value: 3 },
-  ];
-  chartValuesTheFactory = [
-    { label: '504', value: 40 },
-    { label: 'Anh Minh', value: 40 },
-    { label: 'Anh Bữu, Đại đồng, Đại Lộc', value: 40 },
-    { label: 'Anh Lợi Tĩnh', value: 40 },
-    { label: 'An Phú Tải', value: 50 },
-    { label: 'Anh Bữu (giác trầm, làm hương)', value: 40 },
-    { label: 'Anh Bữu, Đại đồng, Đại Lộc', value: 40 },
-    { label: 'Bãi 1/4 VSC Quy nhơn', value: 20 },
-    { label: 'Bãi contemner chân thật', value: 10 },
-
-    { label: 'Bãi contemner Công ty Hoàng Bão Anh', value: 30 },
-    { label: 'Bãi contemner Hoàng Bão Anh', value: 60 },
-    { label: 'Bãi contemner Hoàng Bão Anh (KCN BPA)', value: 40 },
-    { label: 'Bãi dăm bạch đàn', value: 30 },
-    { label: 'Bãi X50', value: 30 },
-    { label: 'Bãi xe 223 Trường Chính (trả hàng)', value: 40 },
-  ];
-  onSelectionChange(selectedItem: any) {
-    console.log('Đã chọn:', selectedItem);
-  }
+  filteredVehicles: Vehicle[] = [];
 
   /**
    * Determines whether visible overview is
@@ -98,6 +64,11 @@ export class DashBoardComponent implements OnInit {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
+  @ViewChild(DashboardDoughnutComponent, { static: false })
+  borderGate!: DashboardDoughnutComponent;
+
+  @ViewChild(DashboardDoughnutComponent, { static: false })
+  onTheRoad!: DashboardDoughnutComponent;
 
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
@@ -105,38 +76,86 @@ export class DashBoardComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.vehicles = await this.vehicleService.getVehicles();
-    this.initData();
-    // this.filteredVehicles = [...this.vehicles];
+    this.filteredVehicles = [...this.vehicles];
+    this.getDataToDashBoard(this.filteredVehicles);
   }
-
-  ngAfterViewInit(): void {}
-
-  onSelectedChange(selectedItems: any) {
-    console.log('Mục đã chọn:', selectedItems);
-  }
-  change(x: string) {}
 
   onSelectedChangeVehicle(selectedItems: Vehicle[]) {
-    console.log('Selected Items:');
-    console.log('Selected Items:', selectedItems);
+    this.getDataToDashBoard(selectedItems);
   }
 
-  initData() {
+  getDataToDashBoard(listVehicles: Vehicle[]) {
     this.dashboardModel = {
-      totalVehicles: this.vehicles.length,
-      emptyVehicles: this.vehicles.filter((x) => x.isLoaded == false).length,
-
-      loadedVehicles: this.vehicles.filter((x) => x.isLoaded == true).length,
-
-      emptyBorderGate: this.vehicles.filter(
-        (x) => x.isLoaded == false && x.location == this.locationEnum.CuaKhau
-      ).length,
-
-      loadedBorderGate: this.vehicles.filter(
-        (x) => x.isLoaded == true && x.location == this.locationEnum.CuaKhau
-      ).length,
+      totalVehicles: 0,
+      emptyVehicles: 0,
+      loadedVehicles: 0,
+      vehicleBorderGate: [],
+      vehicleOnTheRoad: [],
+      listVehicleAtTheFactory: [],
+      listVehicleAtThePort: [],
     };
-    // this._TabDonHangComponent.ngOnChanges();
+
+    this.dashboardModel = {
+      totalVehicles: listVehicles.length,
+      emptyVehicles: listVehicles.filter((x) => x.isLoaded == false).length,
+
+      loadedVehicles: listVehicles.filter((x) => x.isLoaded == true).length,
+
+      vehicleBorderGate: this.vehicleService.getSummary(
+        listVehicles,
+        this.locationEnum.CuaKhau
+      ),
+      vehicleOnTheRoad: this.vehicleService.getSummary(
+        listVehicles,
+        this.locationEnum.TrenDuong
+      ),
+
+      listVehicleAtTheFactory: this.vehicleService.getCompanySummary(
+        listVehicles.filter((x) => x.location == this.locationEnum.NhaMay)
+      ),
+      listVehicleAtThePort: this.vehicleService.getCompanySummary(
+        listVehicles.filter((x) => x.location == this.locationEnum.TaiCang)
+      ),
+    };
     console.log(this.dashboardModel);
+  }
+
+  refreshOverView() {
+    this.dashboardModel.totalVehicles = this.filteredVehicles.length;
+    this.dashboardModel.emptyVehicles = this.filteredVehicles.filter(
+      (x) => x.isLoaded == false
+    ).length;
+    this.dashboardModel.loadedVehicles = this.filteredVehicles.filter(
+      (x) => x.isLoaded == true
+    ).length;
+  }
+
+  refreshBorderGate() {
+    this.dashboardModel.vehicleBorderGate = this.vehicleService.getSummary(
+      this.filteredVehicles,
+      this.locationEnum.CuaKhau
+    );
+  }
+  refreshOnTheRoad() {
+    this.dashboardModel.vehicleOnTheRoad = this.vehicleService.getSummary(
+      this.filteredVehicles,
+      this.locationEnum.TrenDuong
+    );
+  }
+  refreshAtTheFactory() {
+    this.dashboardModel.listVehicleAtTheFactory =
+      this.vehicleService.getCompanySummary(
+        this.filteredVehicles.filter(
+          (x) => x.location == this.locationEnum.NhaMay
+        )
+      );
+  }
+  refreshAtThePort() {
+    this.dashboardModel.listVehicleAtThePort =
+      this.vehicleService.getCompanySummary(
+        this.filteredVehicles.filter(
+          (x) => x.location == this.locationEnum.TaiCang
+        )
+      );
   }
 }
