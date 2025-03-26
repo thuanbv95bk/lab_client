@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-interface DropdownItem {
+interface WidthWidget {
   id: number;
   name: string;
-  children?: DropdownItem[]; // Nếu có danh sách con
+  children?: WidthWidget[]; // Nếu có danh sách con
 }
 
 @Component({
@@ -12,10 +12,10 @@ interface DropdownItem {
   styleUrls: ['./set-width-widget.component.scss'],
 })
 export class SetWidthWidgetComponent {
-  @Input() items: DropdownItem[] = [];
-  @Output() selectionChange = new EventEmitter<DropdownItem>();
+  @Input() items: WidthWidget[] = [];
+  @Output() selectionChange = new EventEmitter<WidthWidget>();
 
-  listWidthWidget = [
+  listWidthWidget: WidthWidget[] = [
     {
       id: 1,
       name: 'Độ rộng',
@@ -30,7 +30,7 @@ export class SetWidthWidgetComponent {
 
   dropdownOpen: boolean = false;
   subMenuOpen: boolean = false;
-  selectedItem: DropdownItem | null = null;
+  selectedItem: WidthWidget | null = null;
 
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
@@ -42,7 +42,7 @@ export class SetWidthWidgetComponent {
     this.subMenuOpen = !this.subMenuOpen;
   }
 
-  selectItem(item: DropdownItem) {
+  selectItem(item: WidthWidget) {
     this.selectedItem = item;
     this.selectionChange.emit(item);
     this.dropdownOpen = false;

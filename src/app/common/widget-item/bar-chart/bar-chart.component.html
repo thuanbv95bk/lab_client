@@ -1,19 +1,40 @@
-<!-- <div class="chart-wrapper" [ngStyle]="{ width: width, height: height }">
-  <canvas
-    baseChart
-    [data]="chartData"
-    [type]="chartType"
-    [options]="chartOptions"
-    [plugins]="chartPlugins"
-  ></canvas>
+<!-- <div class="chart-wrapper">
+  <div class="chart-container">
+    <canvas
+      baseChart
+      [data]="chartData"
+      [type]="chartType"
+      [options]="chartOptions"
+      [plugins]="chartPlugins"
+    >
+    </canvas>
+  </div>
 </div> -->
 
-<div class="chart-container" [ngStyle]="{ width: width }">
-  <canvas
-    baseChart
-    [data]="chartData"
-    [type]="chartType"
-    [options]="chartOptions"
-    [plugins]="chartPlugins"
-  ></canvas>
+<div class="chart-card">
+  <div class="chart-container" #chartContainer>
+    <div class="container-body custom-scrollbar">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [type]="chartType"
+        [options]="chartOptions"
+        [plugins]="getPlugins()"
+      >
+      </canvas>
+    </div>
+  </div>
 </div>
+
+<!-- <div class="chart-container" #chartContainer>
+  <div class="container-body">
+    <canvas
+      baseChart
+      [data]="chartData"
+      [type]="chartType"
+      [options]="chartOptions"
+      [plugins]="getPlugins()"
+    >
+    </canvas>
+  </div>
+</div> -->

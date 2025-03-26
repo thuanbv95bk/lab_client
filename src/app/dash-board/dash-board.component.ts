@@ -21,6 +21,17 @@ export class DashBoardComponent {
     { label: 'Keyhinge Hòa Cầm', value: 1 },
     { label: 'Sợi Phú Nam', value: 1 },
     { label: 'Sợi Thiên phú', value: 3 },
+    { label: 'Vinaco next', value: 13 },
+    // { label: 'Window', value: 3 },
+    // { label: 'samsung', value: 3 },
+    // { label: 'Nokia', value: 3 },
+    // { label: 'oppo', value: 3 },
+  ];
+
+  data = [
+    { name: 'Cty Sedovina (trang thiết bị trường học)', value: 2 },
+    { name: 'Keyhinge Hòa Cầm', value: 1 },
+    { name: 'Sợi Phú Nam', value: 1 },
   ];
 
   onSelectionChange(selectedItem: any) {

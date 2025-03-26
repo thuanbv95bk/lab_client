@@ -1,20 +1,18 @@
 .card {
   color: white;
-  /* Tiêu đề */
+  .card-body {
+    padding: 8px 8px;
+  }
   .card-title {
     font-size: 14px;
-    // font-weight: bold;
   }
-  /* Chứa số phương tiện và chữ "Phương tiện" trên cùng một hàng */
   .card-content {
     gap: 5px;
-    /* Số lượng phương tiện to và nằm giữa */
     .vehicle-count {
       font-size: 40px;
       font-weight: bold;
       margin: 0;
     }
-    /* Chữ "Phương tiện" nhỏ hơn */
     .vehicle-label {
       font-size: 14px;
       margin: 0;

@@ -1,21 +1,117 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
-import { Chart } from 'chart.js';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnDestroy,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { Chart, ChartConfiguration, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { debounceTime, fromEvent, Subscription } from 'rxjs';
+import { DoughnutPluginService } from '../../../service/doughnut-plugin/doughnut-plugin.service';
+import { LegendService } from '../../../service/legend-alignment-plugin/legend-alignment-plugin.service';
 
 @Component({
   selector: 'app-dashboard-doughnut',
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
-export class DashboardDoughnutComponent {
-  @Input() emptyVehicles: number = 40; // Phương tiện không hàng
-  @Input() loadedVehicles: number = 0; // Phương tiện có hàng
-  @Input() width: string = '100%'; // Độ rộng có thể là '50%', '80%', '300px'...
-  totalVehicles: number = this.emptyVehicles + this.loadedVehicles;
-  @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
-  ngAfterViewInit(): void {
-    this.renderChart();
+export class DashboardDoughnutComponent implements OnDestroy {
+  @Input() emptyVehicles: number = 100; // Phương tiện không hàng
+  @Input() loadedVehicles: number = 100; // Phương tiện có hàng
+  @Input() width: string = ''; // Độ rộng có thể là '50%', '80%', '300px'...
+  // @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
+
+  // @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
+  private resizeSubscription: Subscription | undefined;
+  public chartOptions: ChartConfiguration['options'];
+  constructor(
+    private doughnutPlugin: DoughnutPluginService,
+    private legendService: LegendService
+  ) {
+    this.chart?.update();
+    // Đăng ký plugin
+    // Chart.register(this.doughnutPlugin.getDoughnutLabelPlugin());
+    // Kiểm tra có phải môi trường browser không
+    if (typeof window !== 'undefined') {
+      this.resizeSubscription = fromEvent(window, 'resize')
+        .pipe(debounceTime(100))
+        .subscribe(() => {
+          this.chart?.update();
+        });
+    }
+    this.chartOptions = {
+      responsive: true,
+
+      layout: {
+        padding: {
+          bottom: 60, // Sát mép dưới
+          top: 40,
+          left: 10,
+          right: 10,
+        },
+      },
+
+      maintainAspectRatio: false, // Cho phép co giãn theo container
+      aspectRatio: 1, // Change Size of Doughnut Chart
+      // cutout: '70%', //
+      plugins: {
+        legend: {
+          display: false,
+
+          position: 'bottom',
+          labels: {
+            usePointStyle: true,
+            pointStyle: 'circle',
+            boxWidth: 10,
+            padding: 20,
+
+            font: { size: 12 }, // Kích thước chữ
+            textAlign: 'center', // Căn giữa nội dung Legend
+          },
+        },
+
+        tooltip: {
+          enabled: false,
+        },
+      },
+    };
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.chart) {
+      this.buildChart();
+    }
   }
 
+  ngOnDestroy() {
+    if (this.resizeSubscription) {
+      this.resizeSubscription.unsubscribe();
+    }
+  }
+  ngAfterViewInit(): void {
+    this.buildChart();
+  }
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    // this.updateLegend();
+  }
+  public chartType: ChartType = 'doughnut';
+
+  public chartData = {
+    labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
+    datasets: [
+      {
+        data: [this.loadedVehicles, this.emptyVehicles],
+        backgroundColor: ['#28a745', '#e87d3e'],
+        borderWidth: 0,
+        cutout: '70%', // Áp dụng cho từng dataset
+        // animation: { animateRotate: false, animateScale: false },
+      },
+    ],
+  };
   /**
    * viết chữ to ở giữa biểu đồ hình tròn
    * id = textAroundDoughnut
@@ -24,22 +120,25 @@ export class DashboardDoughnutComponent {
   textAroundDoughnut = {
     id: 'textAroundDoughnut',
 
-    beforeDatasetsDraw(chart: any) {
-      const { ctx, data } = chart;
-
+    afterDraw(chart: any) {
+      const ctx = chart.ctx;
+      const { width, height, data } = chart; // Lấy kích thước biểu đồ
       const xCenter = chart.getDatasetMeta(0).data[0].x;
       const yCenter = chart.getDatasetMeta(0).data[0].y;
 
       ctx.save();
       const total = data.datasets[0].data[0] + data.datasets[0].data[1]; // lấy ra tổng
       ctx.translate(xCenter, yCenter);
-      ctx.font = 'bold 27px Arial';
+
+      let fontSize = (Math.min(width, height) / 10).toFixed(2);
+
+      ctx.font = `bold ${fontSize}px Arial`;
       ctx.fillStyle = '#0D2D6C';
       ctx.textBaseline = 'bottom';
       ctx.textAlign = 'center';
       ctx.fillText(`${total}`, 0, 0);
 
-      const fontSize = 14;
+      fontSize = (Math.min(width, height) / 20).toFixed(2);
       ctx.font = `bold ${fontSize}px Arial`;
       ctx.fillStyle = '#0052A3';
       ctx.textBaseline = 'top';
@@ -49,116 +148,43 @@ export class DashboardDoughnutComponent {
     },
   };
 
+  // private updateLegend(): void {
+  //   console.log('updateLegend');
+  //   if (this.chart?.chart) {
+  //     // this.legendService.adjustLegend(this.chart.chart);
+  //   }
+  // }
   /**
-   * Renders chart
-   * tạo biểu đồ hình tròn
-   * Với hiển thị tổng ở giữa biểu đồ
-   * @author thuan.bv
+   * Chart plugins of bar chart component
+   * @description Danh sách các Plugins custom do người dùng thêm
    */
-  renderChart() {
-    const ctx = this.chartRef.nativeElement as HTMLCanvasElement;
-    new Chart(ctx, {
-      type: 'doughnut',
-      data: {
-        labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
-        datasets: [
-          {
-            data: [this.loadedVehicles, this.emptyVehicles],
-            backgroundColor: ['#28a745', '#e87d3e'],
-            borderWidth: 2,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        layout: {
-          padding: 20,
-        },
-        animation: { animateRotate: true, animateScale: true },
-        maintainAspectRatio: false, // Cho phép co giãn theo container
-        aspectRatio: 1, // Change Size of Doughnut Chart
-        cutout: '70%', //
-        plugins: {
-          legend: {
-            display: true,
-            position: 'bottom',
-            labels: {
-              usePointStyle: true,
-              pointStyle: 'circle',
-              padding: 20,
-              font: { size: 10 }, // Kích thước chữ
-              textAlign: 'center', // Căn giữa nội dung Legend
-            },
-          },
+  getPlugins() {
+    return [
+      this.doughnutPlugin.getDoughnutLabelPlugin(),
+      this.textAroundDoughnut,
+      this.legendService.getCustomLegendPlugin(10, 0, 10),
+    ];
+  }
 
-          tooltip: {
-            enabled: false,
-          },
-        },
-      },
-
-      plugins: [
-        this.textAroundDoughnut,
+  /**
+   * Builds chart
+   * @author thuan.bv
+   * @description Builds chart
+   */
+  buildChart(): void {
+    this.chartData = {
+      labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
+      datasets: [
         {
-          id: 'doughnutLabelsLine',
-          afterDraw(chart) {
-            const {
-              ctx,
-              data,
-              chartArea: { top, bottom, left, right, width, height },
-            } = chart;
-
-            const total = Object.values(data.datasets[0].data).reduce(
-              (a, b) => a + b,
-              0
-            ); // lấy ra tổng
-
-            chart.data.datasets.forEach((dataset, i) => {
-              chart.getDatasetMeta(i).data.forEach((datapoint, index) => {
-                i = i + 1;
-                const percentage = (data.datasets[0].data[i - 1] / total) * 100; // tính phần trăm
-                if (percentage == 0) return;
-
-                const { x, y } = datapoint.tooltipPosition(true);
-
-                // draw line
-                const halfWidth = width / 2; // lấy ra 1/2 chiều rộng
-                const halfHeight = height / 2; // lấy ra 1/2 chiều cao
-
-                const xLine = x >= halfWidth ? x + 15 : x - 15;
-                const yLine = y >= halfHeight ? y + 15 : y - 15;
-                const extraLine = x >= halfWidth ? 15 : -15;
-
-                // line
-                ctx.beginPath();
-                ctx.moveTo(x, y);
-                ctx.lineTo(xLine, yLine);
-                ctx.lineTo(xLine + extraLine, yLine);
-                ctx.stroke();
-
-                // text
-
-                const textDisplay = `${
-                  data.datasets[0].data[i - 1]
-                } phương tiện( ${percentage.toFixed(0)}%)`;
-                const textWidth = ctx.measureText(textDisplay).width;
-                ctx.font = '10px Arial';
-
-                // control the position
-                const textXPosition = x >= halfWidth ? 'left' : 'right';
-                const plusFivePx = x >= halfWidth ? 5 : -5;
-                ctx.textAlign = textXPosition;
-                ctx.textBaseline = 'middle';
-                ctx.fillText(
-                  textDisplay,
-                  xLine + extraLine + plusFivePx,
-                  yLine
-                );
-              });
-            });
-          },
+          data: [this.loadedVehicles, this.emptyVehicles],
+          backgroundColor: ['#28a745', '#e87d3e'],
+          borderWidth: 0,
+          cutout: '70%', // Áp dụng cho từng dataset
+          // animation: { animateRotate: false, animateScale: false },
         },
       ],
-    });
+    };
+
+    this.chart?.update();
   }
 }

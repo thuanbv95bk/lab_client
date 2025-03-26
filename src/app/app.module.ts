@@ -13,6 +13,11 @@ import { DashboardDoughnutComponent } from './common/widget-item/dashboard-dough
 import { BarChartComponent } from './common/widget-item/bar-chart/bar-chart.component';
 import { BtnExtendComponent } from './common/btn-extend/btn-extend.component';
 import { WidthWidgetComponent } from './common/width-widget/width-widget.component';
+import { BarChartApexComponent } from './common/widget-item/bar-chart-apex/bar-chart-apex.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
+import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
+import { LegendService } from './service/legend-alignment-plugin/legend-alignment-plugin.service';
+import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
 
 @NgModule({
   declarations: [
@@ -24,6 +29,7 @@ import { WidthWidgetComponent } from './common/width-widget/width-widget.compone
     VehicleWidgetComponent,
     DashboardDoughnutComponent,
     BarChartComponent,
+    BarChartApexComponent,
     DashBoardComponent,
   ],
   imports: [
@@ -32,8 +38,9 @@ import { WidthWidgetComponent } from './common/width-widget/width-widget.compone
     AppRoutingModule,
     FormsModule,
     NgChartsModule,
+    NgApexchartsModule,
   ],
-  providers: [],
+  providers: [DoughnutPluginService, LegendService, ChartScrollService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
