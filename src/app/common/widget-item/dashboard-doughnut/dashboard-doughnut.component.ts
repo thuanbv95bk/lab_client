@@ -4,6 +4,7 @@ import {
   HostListener,
   Input,
   OnDestroy,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { Chart, ChartConfiguration, ChartType } from 'chart.js';
@@ -79,6 +80,11 @@ export class DashboardDoughnutComponent implements OnDestroy {
       },
     };
   }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.chart) {
+      this.buildChart();
+    }
+  }
 
   ngOnDestroy() {
     if (this.resizeSubscription) {
@@ -86,13 +92,11 @@ export class DashboardDoughnutComponent implements OnDestroy {
     }
   }
   ngAfterViewInit(): void {
-    if (this.chart?.chart) {
-      // this.legendService.adjustLegend(this.chart.chart);
-    }
+    this.buildChart();
   }
   @HostListener('window:resize', ['$event'])
   onResize() {
-    this.updateLegend();
+    // this.updateLegend();
   }
   public chartType: ChartType = 'doughnut';
 
@@ -144,12 +148,12 @@ export class DashboardDoughnutComponent implements OnDestroy {
     },
   };
 
-  private updateLegend(): void {
-    console.log('updateLegend');
-    if (this.chart?.chart) {
-      // this.legendService.adjustLegend(this.chart.chart);
-    }
-  }
+  // private updateLegend(): void {
+  //   console.log('updateLegend');
+  //   if (this.chart?.chart) {
+  //     // this.legendService.adjustLegend(this.chart.chart);
+  //   }
+  // }
   /**
    * Chart plugins of bar chart component
    * @description Danh sách các Plugins custom do người dùng thêm
@@ -160,5 +164,27 @@ export class DashboardDoughnutComponent implements OnDestroy {
       this.textAroundDoughnut,
       this.legendService.getCustomLegendPlugin(10, 0, 10),
     ];
+  }
+
+  /**
+   * Builds chart
+   * @author thuan.bv
+   * @description Builds chart
+   */
+  buildChart(): void {
+    this.chartData = {
+      labels: ['Phương tiện có hàng', 'Phương tiện không hàng'],
+      datasets: [
+        {
+          data: [this.loadedVehicles, this.emptyVehicles],
+          backgroundColor: ['#28a745', '#e87d3e'],
+          borderWidth: 0,
+          cutout: '70%', // Áp dụng cho từng dataset
+          // animation: { animateRotate: false, animateScale: false },
+        },
+      ],
+    };
+
+    this.chart?.update();
   }
 }

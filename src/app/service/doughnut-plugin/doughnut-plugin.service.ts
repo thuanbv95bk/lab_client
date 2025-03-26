@@ -159,7 +159,7 @@ export class DoughnutPluginService {
             }
 
             // Tạo nội dung
-            const textDisplay = `${value} Phương tiện (${percentage.toFixed(
+            const textDisplay = `${value} phương tiện (${percentage.toFixed(
               0
             )}%)`;
 

@@ -1,4 +1,4 @@
-<div class="chart-wrapper">
+<!-- <div class="chart-wrapper">
   <div class="chart-container">
     <canvas
       baseChart
@@ -9,4 +9,32 @@
     >
     </canvas>
   </div>
+</div> -->
+
+<div class="chart-card">
+  <div class="chart-container" #chartContainer>
+    <div class="container-body custom-scrollbar">
+      <canvas
+        baseChart
+        [data]="chartData"
+        [type]="chartType"
+        [options]="chartOptions"
+        [plugins]="getPlugins()"
+      >
+      </canvas>
+    </div>
+  </div>
 </div>
+
+<!-- <div class="chart-container" #chartContainer>
+  <div class="container-body">
+    <canvas
+      baseChart
+      [data]="chartData"
+      [type]="chartType"
+      [options]="chartOptions"
+      [plugins]="getPlugins()"
+    >
+    </canvas>
+  </div>
+</div> -->

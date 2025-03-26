@@ -17,6 +17,7 @@ import { BarChartApexComponent } from './common/widget-item/bar-chart-apex/bar-c
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from './service/legend-alignment-plugin/legend-alignment-plugin.service';
+import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,7 @@ import { LegendService } from './service/legend-alignment-plugin/legend-alignmen
     NgChartsModule,
     NgApexchartsModule,
   ],
-  providers: [DoughnutPluginService, LegendService],
+  providers: [DoughnutPluginService, LegendService, ChartScrollService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

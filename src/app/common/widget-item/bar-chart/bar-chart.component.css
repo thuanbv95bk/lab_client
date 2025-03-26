@@ -1,4 +1,4 @@
-.chart-wrapper {
+/* .chart-wrapper {
   width: 100%;
   overflow-x: auto;
 
@@ -6,4 +6,70 @@
     min-width: 800px;
     height: min(400px, 80vw);
   }
+}
+
+.chart-card {
+  width: 100%;
+  height: calc(100%);
+   display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+.chart-box {
+  width: 100%;
+
+}
+
+.chart-container {
+  width: 800px;
+  max-width: 800px;
+  overflow-x: hidden;
+}
+.container-body {
+  height: 300px;
+} */
+
+.chart-card {
+  width: 100%;
+  max-width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.chart-container {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.container-body {
+  height: 400px;
+  transition: width 0.3s ease;
+}
+/* Áp dụng cho phần tử có thanh cuộn */
+.custom-scrollbar {
+  overflow: auto;
+  scrollbar-width: thin; /* Dành cho Firefox */
+  scrollbar-color: #007bff #f0f0f0; /* Thanh cuộn + nền */
+}
+
+/* Scrollbar ngang & dọc */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px; /* Độ rộng thanh cuộn dọc */
+  height: 5px; /* Độ cao thanh cuộn ngang */
+}
+
+/* Nền của scrollbar */
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 5px;
+}
+
+/* Thanh cuộn chính */
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #007bff;
+  border-radius: 5px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #0056b3;
 }
