@@ -19,7 +19,7 @@
       type="text"
       class="w-100 border-0 p-0 search-input"
       [(ngModel)]="searchQuery"
-      (input)="filterOptions()"
+      (input)="filterList()"
       placeholder="Chọn phương tiện..."
     />
     <!-- <span class="dropdown-icon ms-auto">▼</span> -->
@@ -43,23 +43,25 @@
         [(ngModel)]="allSelected"
         (change)="toggleSelectAll()"
       />
-      <label class="form-check-label ms-2">Tất cả ({{ options.length }})</label>
+      <label class="form-check-label ms-2"
+        >Tất cả ({{ vehicles.length }})</label
+      >
     </div>
 
     <!-- Danh sách các tùy chọn -->
     <div class="options" style="max-height: 15rem; overflow-y: auto">
       <div
-        *ngFor="let option of filteredOptions"
+        *ngFor="let option of filteredItems"
         class="option d-flex align-items-center p-2 border-bottom"
         [class.bg-light]="isSelected(option)"
-        (click)="toggleOption(option)"
+        (click)="toggleList(option)"
       >
         <input
           type="checkbox"
           class="form-check-input me-2"
           [checked]="isSelected(option)"
         />
-        <label class="form-check-label">{{ option }}</label>
+        <label class="form-check-label">{{ option.code }}</label>
       </div>
     </div>
   </div>

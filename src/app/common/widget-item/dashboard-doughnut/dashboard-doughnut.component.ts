@@ -4,6 +4,7 @@ import {
   HostListener,
   Input,
   OnDestroy,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -12,15 +13,17 @@ import { BaseChartDirective } from 'ng2-charts';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { DoughnutPluginService } from '../../../service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from '../../../service/legend-alignment-plugin/legend-alignment-plugin.service';
+import { Vehicle } from '../../model/vehicle/vehicle.model';
 
 @Component({
   selector: 'app-dashboard-doughnut',
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
-export class DashboardDoughnutComponent implements OnDestroy {
+export class DashboardDoughnutComponent implements OnInit, OnDestroy {
   @Input() emptyVehicles: number = 100; // Phương tiện không hàng
   @Input() loadedVehicles: number = 100; // Phương tiện có hàng
+  @Input() listVehicle: Vehicle[] = []; // danh sách phương tiện
   @Input() width: string = ''; // Độ rộng có thể là '50%', '80%', '300px'...
   // @ViewChild('doughnutChart', { static: true }) chartRef!: ElementRef;
 
@@ -28,10 +31,12 @@ export class DashboardDoughnutComponent implements OnDestroy {
   @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
   private resizeSubscription: Subscription | undefined;
   public chartOptions: ChartConfiguration['options'];
+
   constructor(
     private doughnutPlugin: DoughnutPluginService,
     private legendService: LegendService
   ) {
+    // this.initData();
     this.chart?.update();
     // Đăng ký plugin
     // Chart.register(this.doughnutPlugin.getDoughnutLabelPlugin());
@@ -80,6 +85,9 @@ export class DashboardDoughnutComponent implements OnDestroy {
       },
     };
   }
+  ngOnInit(): void {
+    this.buildChart();
+  }
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.chart) {
       this.buildChart();
@@ -112,6 +120,25 @@ export class DashboardDoughnutComponent implements OnDestroy {
       },
     ],
   };
+
+  initData() {
+    if (!this.listVehicle || this.listVehicle.length == 0) {
+      this.emptyVehicles = 0;
+      this.loadedVehicles = 0;
+
+      return;
+    }
+
+    this.emptyVehicles = this.listVehicle.filter((x) => {
+      x.isLoaded == false;
+    }).length;
+
+    this.loadedVehicles = this.listVehicle.filter((x) => {
+      x.isLoaded == true;
+    }).length;
+
+    console.log(this.listVehicle);
+  }
   /**
    * viết chữ to ở giữa biểu đồ hình tròn
    * id = textAroundDoughnut

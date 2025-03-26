@@ -2,13 +2,12 @@
  * Languages loading danh sách các ngôn ngữ
  * @author thuan.bv
  */
-export class languages {
+export class vehicle {
+  id: number;
   code: string;
-  name: string;
-  flag: string;
-  constructor(obj?: Partial<languages>) {
+
+  constructor(obj?: Partial<vehicle>) {
+    this.id = obj?.id || 0;
     this.code = obj?.code || '';
-    this.name = obj?.name || '';
-    this.flag = obj?.flag || '';
   }
 }

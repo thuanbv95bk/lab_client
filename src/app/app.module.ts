@@ -18,6 +18,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from './service/legend-alignment-plugin/legend-alignment-plugin.service';
 import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
+import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
+import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.
     BarChartComponent,
     BarChartApexComponent,
     DashBoardComponent,
+    VehicleListComponent,
   ],
   imports: [
     HttpClientModule,
@@ -40,7 +43,12 @@ import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.
     NgChartsModule,
     NgApexchartsModule,
   ],
-  providers: [DoughnutPluginService, LegendService, ChartScrollService],
+  providers: [
+    DoughnutPluginService,
+    LegendService,
+    ChartScrollService,
+    VehicleDataService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

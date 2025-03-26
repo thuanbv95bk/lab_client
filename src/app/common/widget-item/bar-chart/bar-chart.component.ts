@@ -94,7 +94,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         beginAtZero: true,
         min: 0,
         // max: 10,
-        grace: '5%',
+        grace: '10%',
 
         ticks: {
           stepSize: 1,
@@ -173,7 +173,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   getPlugins() {
     return [
       ChartDataLabels,
-      this.chartScrollService.getHorizontalScrollPlugin(120, 4),
+      this.chartScrollService.getHorizontalScrollPlugin(120, 10),
     ];
   }
 }
