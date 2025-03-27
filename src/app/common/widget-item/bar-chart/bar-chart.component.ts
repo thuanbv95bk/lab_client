@@ -45,6 +45,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       padding: {
         top: 10,
         right: 5,
+        left: 5,
       },
     },
     scales: {
@@ -98,7 +99,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         beginAtZero: true,
         min: 0,
         // max: 10,
-        grace: '10%',
+        grace: '5%',
 
         ticks: {
           stepSize: 1,

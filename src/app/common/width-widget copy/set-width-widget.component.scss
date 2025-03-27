@@ -1,0 +1,27 @@
+.btn-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  min-width: 150px;
+}
+
+.sub-menu {
+  position: absolute;
+  top: 0;
+  left: 100%; /* Hiển thị bên phải */
+  background: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+  display: block;
+}
+
+.sub-menu li {
+  padding: 5px 10px;
+}
+
+.sub-menu li:hover {
+  background: #f1f1f1;
+}

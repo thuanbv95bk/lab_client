@@ -1,4 +1,5 @@
 export enum LocationEnum {
+  TongQuan = 'OverView',
   CuaKhau = 'borderGate',
   TrenDuong = 'onTheRoad',
   NhaMay = 'atTheFactory',

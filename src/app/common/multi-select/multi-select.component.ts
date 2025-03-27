@@ -28,7 +28,7 @@ export class MultiSelectComponent implements OnInit {
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
   @Input() maxItems: number = 3;
-
+  @Input() allSelected: boolean = false;
   @Output() selectedChange = new EventEmitter<Vehicle[]>();
 
   @ViewChild('searchInput') searchInput!: ElementRef;
@@ -37,11 +37,14 @@ export class MultiSelectComponent implements OnInit {
   filteredItems: Vehicle[] = [];
   searchQuery: string = '';
   isOpen: boolean = false;
-  allSelected: boolean = false;
 
   constructor(private elementRef: ElementRef) {}
   ngOnInit(): void {
-    this.filteredItems = this.vehicles;
+    if (this.allSelected == true) {
+      this.toggleSelectAll();
+    } else {
+      this.filteredItems = this.vehicles;
+    }
   }
 
   ngAfterViewInit() {

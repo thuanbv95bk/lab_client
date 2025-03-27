@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import Chart from 'chart.js/auto';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import { Dashboard } from '../common/model/dashboard/dashboard.model';
@@ -13,11 +6,11 @@ import { LocationEnum } from '../common/model/vehicle/location.enum';
 import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 
 @Component({
-  selector: 'app-dash-board',
-  templateUrl: './dash-board.component.html',
-  styleUrl: './dash-board.component.scss',
+  selector: 'app-dash-board-grid',
+  templateUrl: './dash-board-grid.component.html',
+  styleUrl: './dash-board-grid.component.scss',
 })
-export class DashBoardComponent implements OnInit, OnDestroy {
+export class DashBoardGridComponent implements OnInit, OnDestroy {
   vehicles: Vehicle[] = [];
   totalVehicles: number = 0;
   dashboardModel = new Dashboard();
@@ -46,6 +39,14 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    *@value false: Ẩn đi
    */
 
+  /**
+   * @description biến lưu giá trị width của widget  TỔNG QUAN CÔNG TY
+   * @value mặc định :0-> chế độ tự động
+   * @value mặc định :1-> 1/3 chiều rộng màn hình
+   * @value mặc định :2-> 2/3 chiều rộng màn hình
+   * @value mặc định :3-> 3/3 chiều rộng màn hình
+   */
+  widthSelectedOverView: number = 0;
   /**
    * Determines whether visible border gate is
    * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
@@ -120,6 +121,8 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   }
 
   getDataToDashBoard(listVehicles: Vehicle[]) {
+    // this.dashboardModel = new Dashboard();
+    this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
     this.dashboardModel.totalVehicles = listVehicles.length;
 
     this.dashboardModel.emptyVehicles = listVehicles.filter(
@@ -150,6 +153,11 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   }
 
   refreshOverView() {
+    this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
+    this.dashboardModel.totalVehicles = 0;
+    this.dashboardModel.emptyVehicles = 0;
+    this.dashboardModel.loadedVehicles = 0;
+
     this.dashboardModel.totalVehicles = this.filteredVehicles.length;
     this.dashboardModel.emptyVehicles = this.filteredVehicles.filter(
       (x) => x.isLoaded == false
@@ -186,5 +194,11 @@ export class DashBoardComponent implements OnInit, OnDestroy {
           (x) => x.location == this.locationEnum.TaiCang
         )
       );
+  }
+
+  changeWidthSelected(selectWidth: number, locationEnum: string) {
+    this.widthSelectedOverView = selectWidth;
+    console.log(selectWidth);
+    console.log(locationEnum);
   }
 }
