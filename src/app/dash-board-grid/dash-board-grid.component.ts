@@ -1,13 +1,11 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import {
-  ClassCol,
   Dashboard,
   DashboardClassCol,
 } from '../common/model/dashboard/dashboard.model';
 import { LocationEnum } from '../common/model/vehicle/location.enum';
-import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 
 @Component({
   selector: 'app-dash-board-grid',
@@ -15,17 +13,65 @@ import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doug
   styleUrl: './dash-board-grid.component.scss',
 })
 export class DashBoardGridComponent implements OnInit, OnDestroy {
-  vehicles: Vehicle[] = [];
+  vehicles: Vehicle[] = []; // Danh sách xe
   totalVehicles: number = 0;
   dashboardModel = new Dashboard();
   locationEnum = LocationEnum;
   filteredVehicles: Vehicle[] = [];
   isAllSelectedVehicles: boolean = false;
 
-  myClass = 'col-4';
-
   arrCol = new DashboardClassCol();
+  setOverViewClass = 'col-12 col-sm-4';
 
+  // Cấu hình class cho từng widget
+  sizeConfig: {
+    [key in LocationEnum]: {
+      auto: string;
+      small: string;
+      medium: string;
+      large: string;
+    };
+  } = {
+    [LocationEnum.TongQuan]: {
+      auto: 'col-12 flex-grow-1',
+      small: 'col-12 col-md-4 ',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.CuaKhau]: {
+      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.TrenDuong]: {
+      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.NhaMay]: {
+      auto: 'col-12 col-md-12 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.TaiCang]: {
+      auto: 'col-12 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+  };
+  currentSize: {
+    [key in LocationEnum]: 'auto' | 'small' | 'medium' | 'large';
+  } = {
+    [LocationEnum.TongQuan]: 'auto',
+    [LocationEnum.CuaKhau]: 'auto',
+    [LocationEnum.TrenDuong]: 'auto',
+    [LocationEnum.NhaMay]: 'auto',
+    [LocationEnum.TaiCang]: 'auto',
+  };
   /**
    * Interval refresh of dash board component
    * @description Thời gian để tải lại dữ liệu
@@ -54,7 +100,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    * @value mặc định :2-> 2/3 chiều rộng màn hình
    * @value mặc định :3-> 3/3 chiều rộng màn hình
    */
-  widthSelectedOverView: number = 0;
+  widthSelectedOverView: 'auto' | 'small' | 'medium' | 'large' = 'auto';
   /**
    * Determines whether visible border gate is
    * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
@@ -87,21 +133,17 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
-
+  observer!: ResizeObserver;
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
-    this.arrCol.setUp();
-    this.setupCol();
   }
 
   async ngOnInit(): Promise<void> {
     await this.initData();
     this.getDataToDashBoard(this.filteredVehicles);
     this.startInterval();
-    // this.arrCol.setUp();
-    console.log('this.arrCol');
-    console.log(this.arrCol);
   }
+
   ngOnDestroy() {
     this.stopInterval();
   }
@@ -256,36 +298,15 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    * @param selectWidth
    * @param locationEnum vị trí tương ứng định nghĩa ở enum location
    */
-  changeWidthSelected(selectWidth: number, locationEnum: string) {
-    this.widthSelectedOverView = selectWidth;
-    console.log(selectWidth);
-    console.log(locationEnum);
 
-    if (
-      this.widthSelectedOverView == 1 &&
-      locationEnum == this.locationEnum.TongQuan
-    ) {
-      this.myClass = this.arrCol.A.small;
-      console.log(this.myClass);
-    } else if (
-      this.widthSelectedOverView == 0 &&
-      locationEnum == this.locationEnum.TongQuan
-    ) {
-      this.myClass = this.arrCol.A.auto;
-    } else if (
-      this.widthSelectedOverView == 2 &&
-      locationEnum == this.locationEnum.TongQuan
-    ) {
-      this.myClass = this.arrCol.A.medium;
-    } else if (
-      this.widthSelectedOverView == 3 &&
-      locationEnum == this.locationEnum.TongQuan
-    ) {
-      this.myClass = this.arrCol.A.big;
-    }
+  changeWidthSelected(
+    size: 'auto' | 'small' | 'medium' | 'large',
+    location: LocationEnum
+  ) {
+    this.currentSize[location] = size;
   }
 
-  setupCol() {
-    this.myClass = this.arrCol.A.auto;
+  getWidgetClass(location: LocationEnum): string {
+    return this.sizeConfig[location][this.currentSize[location]];
   }
 }

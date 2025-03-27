@@ -79,12 +79,18 @@ export class DashboardClassCol {
     this.A.big = 'col-12';
 
     this.B.auto = 'col-12 col-sm-6 col-lg-4';
-    this.C.auto = 'col-12 col-sm-6 col-lg-4';
-    this.D.auto = 'col-12 col-md-12 col-lg-4';
+    this.B.small = 'col-4';
+    this.B.medium = 'col-8';
+    this.B.big = 'col-12';
 
-    this.A.small = 'col-4';
-    this.B.auto = 'col-12 col-sm-6 col-lg-4';
-    this.C.auto = 'col-12 col-sm-6 col-lg-4';
-    this.D.auto = 'col-12 col-md-12 col-lg-4';
+    this.C.auto = 'col-12 col-md-12 col-lg-4';
+    this.C.small = 'col-4';
+    this.C.medium = 'col-8';
+    this.C.big = 'col-12';
+
+    this.D.auto = 'col-12';
+    this.D.small = 'col-4';
+    this.D.medium = 'col-8';
+    this.D.big = 'col-12';
   }
 }

@@ -3,11 +3,17 @@
     <div class="card-title">{{ title }}</div>
 
     <div class="card-content container d-flex align-items-center text-center">
-      <div class="vehicle-count">{{ numberVehicle }}</div>
-      <div class="vehicle-label">Phương tiện</div>
+      <div class="container row d-flex text-center align-items-center">
+        <div class="col-auto">
+          <div class="vehicle-count">{{ numberVehicle }}</div>
+        </div>
+        <div class="col-auto text-start p-0">
+          <div class="vehicle-label">Phương tiện</div>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="card-footer shadow-none" *ngIf="isDisplayFooter">
+  <div class="card-footer shadow-none py-0" *ngIf="isDisplayFooter">
     <span> {{ this.percentage }} % / Tổng phương tiện</span>
   </div>
 </div>
