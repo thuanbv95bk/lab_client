@@ -11,6 +11,7 @@ import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartScrollService } from '../../../service/chart-bar-scroll/chart-bar-scroll.service';
+import { VehicleCompany } from '../../model/dashboard/dashboard.model';
 
 @Component({
   selector: 'app-bar-chart',
@@ -20,10 +21,13 @@ import { ChartScrollService } from '../../../service/chart-bar-scroll/chart-bar-
 export class BarChartComponent implements AfterViewInit, OnChanges {
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
   @ViewChild('chartContainer') chartContainer!: ElementRef;
-  @Input() data: { label: string; value: number }[] = [];
-  @Input() width: string = '100%'; // có thể set từ ngoài
-  @Input() height: string = '300px';
+  @Input() data: VehicleCompany[] = [];
+  // @Input() width: string = '100%'; // có thể set từ ngoài
+  // @Input() height: string = '300px';
   @Input() barColor: string = '#d90429';
+
+  @Input() minLabelWidth: number = 100;
+  @Input() defaultVisibleItems: number = 5;
   // chartPlugins = this.chartScrollService.getHorizontalScrollPlugin(800, 90);
   constructor(private chartScrollService: ChartScrollService) {}
   /**
@@ -41,6 +45,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       padding: {
         top: 10,
         right: 5,
+        left: 5,
       },
     },
     scales: {
@@ -100,7 +105,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           stepSize: 1,
           callback: function (value, index) {
             let maxY = this.chart.scales['y'].max; // Lấy giá trị max của trục Y
-            console.log(maxY);
 
             if (Number(this.getLabelForValue(value as number)) == maxY)
               return 'Số phương tiện';
@@ -137,7 +141,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log('ngOnChanges-bar');
+
     if (changes['data'] && this.chart) {
+      console.log('ngOnChanges-ba2');
       this.buildChart();
     }
   }
@@ -149,7 +156,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
    */
   buildChart(): void {
     this.chartData = {
-      labels: this.data.map((item) => item.label),
+      labels: this.data.map((item) => item.company),
       datasets: [
         {
           data: this.data.map((item) => item.value),
@@ -173,7 +180,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   getPlugins() {
     return [
       ChartDataLabels,
-      this.chartScrollService.getHorizontalScrollPlugin(120, 4),
+      this.chartScrollService.getHorizontalScrollPlugin(
+        this.minLabelWidth,
+        this.defaultVisibleItems
+      ),
     ];
   }
 }

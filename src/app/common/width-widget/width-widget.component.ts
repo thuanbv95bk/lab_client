@@ -21,13 +21,15 @@ interface DropdownItem {
   styleUrls: ['./width-widget.component.scss'],
 })
 export class WidthWidgetComponent {
+  @Input() selectedItem: number = 0;
   @Output() widthSelected = new EventEmitter<number>();
   @ViewChild('dropdownMenu')
   dropdownMenu!: ElementRef;
   @ViewChild('dropdownWidth')
   dropdownWidth!: ElementRef;
   isSubMenuLeft: boolean = false;
-  selectedItem: number = 0;
+
+  isMenuOpen = false; // Trạng thái menu mở / đóng
   listWidthWidget: DropdownItem[] = [
     {
       id: 1,
@@ -48,9 +50,9 @@ export class WidthWidgetComponent {
     this.widthSelected.emit(this.selectedItem);
   }
 
-  // Sử dụng 'mouseenter' để xử lý hover
+  // Khi hover vào nút thì mở menu
   @HostListener('mouseenter')
-  onHover() {
+  click() {
     this.adjustMenuPosition();
   }
 

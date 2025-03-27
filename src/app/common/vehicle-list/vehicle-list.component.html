@@ -1,0 +1,51 @@
+<div style="background-color: white; padding: 10px">
+  <div
+    class="container-fluid d-flex justify-content-between text-center sticky-top bg-light"
+  >
+    <h2>
+      Danh sách xe: <span>Tổng phương tiện : {{ this.numberVehicle }}</span>
+    </h2>
+    <div>
+      <div style="margin-bottom: 10px; display: flex; gap: 10px">
+        <select
+          [(ngModel)]="selectedLocation"
+          (ngModelChange)="filterVehicles()"
+        >
+          <option value="">Tất cả địa điểm</option>
+          <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+        </select>
+        <select
+          [(ngModel)]="selectedIsLoaded"
+          (ngModelChange)="filterVehicles()"
+        >
+          <option value="">Tất cả</option>
+          <option [value]="true">Có hàng</option>
+          <option [value]="false">Không hàng</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <table border="1" width="100%">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Code</th>
+          <th>Is Loaded</th>
+          <th>Location</th>
+          <th>Company</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of filteredVehicles">
+          <td>{{ vehicle.id }}</td>
+          <td>{{ vehicle.code }}</td>
+          <td>{{ vehicle.isLoaded ? "Có hàng" : "Không hàng" }}</td>
+          <td>{{ vehicle.location }}</td>
+          <td>{{ vehicle.company }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

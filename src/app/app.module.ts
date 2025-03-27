@@ -7,30 +7,32 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { MultiSelectComponent } from './common/multi-select/multi-select.component';
-import { SetWidthWidgetComponent } from './common/set-width-widget/set-width-widget.component';
 import { VehicleWidgetComponent } from './common/widget-item/vehicle-widget/vehicle-widget.component';
 import { DashboardDoughnutComponent } from './common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 import { BarChartComponent } from './common/widget-item/bar-chart/bar-chart.component';
 import { BtnExtendComponent } from './common/btn-extend/btn-extend.component';
 import { WidthWidgetComponent } from './common/width-widget/width-widget.component';
-import { BarChartApexComponent } from './common/widget-item/bar-chart-apex/bar-chart-apex.component';
-import { NgApexchartsModule } from 'ng-apexcharts';
 import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from './service/legend-alignment-plugin/legend-alignment-plugin.service';
 import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
+import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
+import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
+import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.component';
+import { SetWidthWidgetComponent } from './common/width-widget copy/set-width-widget.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MultiSelectComponent,
-    SetWidthWidgetComponent,
     WidthWidgetComponent,
     BtnExtendComponent,
     VehicleWidgetComponent,
     DashboardDoughnutComponent,
     BarChartComponent,
-    BarChartApexComponent,
     DashBoardComponent,
+    VehicleListComponent,
+    DashBoardGridComponent,
+    SetWidthWidgetComponent,
   ],
   imports: [
     HttpClientModule,
@@ -38,9 +40,13 @@ import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.
     AppRoutingModule,
     FormsModule,
     NgChartsModule,
-    NgApexchartsModule,
   ],
-  providers: [DoughnutPluginService, LegendService, ChartScrollService],
+  providers: [
+    DoughnutPluginService,
+    LegendService,
+    ChartScrollService,
+    VehicleDataService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

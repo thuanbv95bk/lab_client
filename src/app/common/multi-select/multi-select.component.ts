@@ -6,7 +6,9 @@ import {
   ElementRef,
   HostListener,
   ViewChild,
+  OnInit,
 } from '@angular/core';
+import { Vehicle } from '../model/vehicle/vehicle.model';
 
 // interface SelectItem {
 //   id: number;
@@ -19,24 +21,31 @@ import {
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
 })
-export class MultiSelectComponent {
-  @Input() options: string[] = [];
+export class MultiSelectComponent implements OnInit {
+  // @Input() options: string[] = [];
+  @Input() vehicles: Vehicle[] = [];
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
   @Input() maxItems: number = 3;
-
-  @Output() selectedChange = new EventEmitter<string[]>();
+  @Input() allSelected: boolean = false;
+  @Output() selectedChange = new EventEmitter<Vehicle[]>();
 
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  selectedItems: string[] = [];
-  filteredOptions: string[] = [];
+  selectedItems: Vehicle[] = [];
+  filteredItems: Vehicle[] = [];
   searchQuery: string = '';
   isOpen: boolean = false;
-  allSelected: boolean = false;
 
   constructor(private elementRef: ElementRef) {}
+  ngOnInit(): void {
+    if (this.allSelected == true) {
+      this.toggleSelectAll();
+    } else {
+      this.filteredItems = this.vehicles;
+    }
+  }
 
   ngAfterViewInit() {
     if (this.searchInput) {
@@ -47,7 +56,7 @@ export class MultiSelectComponent {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      this.filterOptions();
+      this.filterList();
       setTimeout(() => {
         if (this.searchInput) {
           this.searchInput.nativeElement.focus();
@@ -64,56 +73,52 @@ export class MultiSelectComponent {
     }
   }
 
-  filterOptions() {
-    this.filteredOptions = this.options.filter((option) =>
-      option.toLowerCase().includes(this.searchQuery.toLowerCase())
+  filterList() {
+    this.filteredItems = this.vehicles.filter((item) =>
+      item.code.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
   }
 
-  toggleOption(option: string) {
-    const index = this.selectedItems.indexOf(option);
+  toggleList(item: Vehicle) {
+    const index = this.selectedItems.indexOf(item);
     if (index === -1) {
       if (this.selectedItems.length < this.maxItems) {
-        this.selectedItems.push(option);
+        this.selectedItems.push(item);
       }
     } else {
       this.selectedItems.splice(index, 1);
     }
     this.selectedChange.emit(this.selectedItems);
-    this.allSelected = this.selectedItems.length === this.options.length;
+    this.allSelected = this.selectedItems.length === this.vehicles.length;
   }
 
-  removeItem(item: string) {
+  removeItem(item: Vehicle) {
     const index = this.selectedItems.indexOf(item);
     if (index !== -1) {
       this.selectedItems.splice(index, 1);
       this.selectedChange.emit(this.selectedItems);
     }
-    this.allSelected = this.selectedItems.length === this.options.length;
+    this.allSelected = this.selectedItems.length === this.vehicles.length;
   }
 
   toggleSelectAll() {
     if (this.allSelected) {
-      this.selectedItems = [...this.options];
+      this.selectedItems = [...this.vehicles];
     } else {
       this.selectedItems = [];
     }
     this.selectedChange.emit(this.selectedItems);
   }
 
-  isSelected(option: string): boolean {
-    return this.selectedItems.includes(option);
+  isSelected(item: Vehicle): boolean {
+    return this.selectedItems.includes(item);
   }
 
   getDisplayText(): string {
-    if (!this.selectedItems.length || !this.allSelected) return '';
-
     if (this.allSelected == true) {
-      return `Tất cả (${this.options.length})`; // Hiển thị "Tất cả (số lượng item)"
+      return `Tất cả (${this.vehicles.length})`;
     }
-    if (this.selectedItems.length > 0) {
-      return `${this.selectedItems.length} được chọn`;
-    }
-    return '';
+    if (this.selectedItems.length == 0) return '';
+    return `${this.selectedItems.length} xe được chọn`;
   }
 }
