@@ -1,3 +1,7 @@
+/**
+ * Location enum
+ * enum các vị trí của xe
+ */
 export enum LocationEnum {
   TongQuan = 'OverView',
   CuaKhau = 'borderGate',

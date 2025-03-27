@@ -1,17 +1,13 @@
 import { LocationEnum } from './location.enum';
 
+/**
+ * Vehicle
+ * @description các thuộc tính của xe
+ */
 export interface Vehicle {
   id: number;
   code: string;
-  isLoaded: boolean;
-  location: string | LocationEnum;
-  company: string;
-
-  // constructor(obj?: Partial<Vehicle>) {
-  //   this.id = obj?.id || 0;
-  //   this.code = obj?.code || '';
-  //   this.isLoaded = obj?.isLoaded || false;
-  //   this.location = obj?.location || '';
-  //   this.company = obj?.company || '';
-  // }
+  isLoaded: boolean; // có hàng hay không có hàng : true-> có hàng
+  location: string | LocationEnum; // vị trí
+  company: string; //
 }

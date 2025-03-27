@@ -6,6 +6,10 @@ import {
   VehicleLoaded,
 } from '../../common/model/dashboard/dashboard.model';
 
+/**
+ * Injectable Sinh dữ liệu xe, theo radom,
+ * số lương xe sinh ra bằng tổng value của companyList
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -41,7 +45,7 @@ export class VehicleDataService {
     this.generateVehicles();
   }
 
-  private generateVehicles(): void {
+  public generateVehicles(): void {
     for (const company of this.companyList) {
       for (let i = 0; i < company.value; i++) {
         const vehicle = {
@@ -57,13 +61,22 @@ export class VehicleDataService {
     }
   }
 
+  /**
+   * Gets vehicles
+   * @returns vehicles danh sách xe
+   */
   getVehicles(): Vehicle[] {
+    this.vehicleList = [];
+    this.generateVehicles();
     return this.vehicleList;
   }
 
-  get(): Vehicle[] {
-    return this.vehicleList;
-  }
+  /**
+   * Gets company summary
+   * @description Tính toán, tổng hợp số lượng xe dựa trên địa điểm công ty của nó
+   * @param data
+   * @returns company summary
+   */
   getCompanySummary(data: any): any[] {
     // kiểm tra dữ liệu đầu vào
     const factoryVehicles = data || [];
@@ -85,6 +98,14 @@ export class VehicleDataService {
       value: value as number,
     }));
   }
+
+  /**
+   * Gets summary
+   * @description tính toán số lượng xe: có hàng, không có hàng, theo tiêu chí vị trí
+   * @param data
+   * @param locationEnum
+   * @returns summary VehicleLoaded[]
+   */
   getSummary(data: Vehicle[], locationEnum: string): VehicleLoaded[] {
     // kiểm tra dữ liệu đầu vào
     const Vehicles = data || [];

@@ -51,7 +51,11 @@ export class WidthWidgetComponent {
   }
 
   // Khi hover vào nút thì mở menu
-  @HostListener('mouseenter')
+  // @HostListener('mouseenter')
+  // click() {
+  //   this.adjustMenuPosition();
+  // }
+  @HostListener('click')
   click() {
     this.adjustMenuPosition();
   }

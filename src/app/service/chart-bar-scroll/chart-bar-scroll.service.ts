@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * Injectable
+ *  @description Service tính toán sụ xuất hiện
+ * của thanh cuộn ở dashboard bar
+ * Là 1 Plugin có id
+ * @author thuan.bv
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +28,13 @@ export class ChartScrollService {
     };
   }
 
+  /**
+   * Adjusts chart layout
+   * @param chart
+   * @param minLabelWidth độ rộng tối thiểu của 1 tick-x: đơn vị px
+   * @param defaultVisibleItems số lượng tối thiểu của item để xuất hiện thanh cuộn:
+   * @returns
+   */
   private adjustChartLayout(
     chart: any,
     minLabelWidth: number,
@@ -74,6 +88,12 @@ export class ChartScrollService {
     chart.resize(); // Yêu cầu chart vẽ lại với kích thước mới
   }
 
+  /**
+   * Gets scrollbar height
+   * @description tính toán chiều cao của thanh cuộn
+   * từ đó để căn chỉnh chiều cao khớp với chiều cao của các char cùng 1 hàng
+   * @returns scrollbar height
+   */
   getScrollbarHeight(): number {
     // Tạo một thẻ div ẩn để đo scrollbar
     const div = document.createElement('div');

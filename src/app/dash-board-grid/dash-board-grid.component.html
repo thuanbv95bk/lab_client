@@ -37,7 +37,7 @@
   <div class="container-fluid pt-2">
     <div class="row g-2 d-flex align-items-stretch h-100">
       <!-- Tổng quan công ty -->
-      <div class="col-12">
+      <div class="" [ngClass]="myClass">
         <div class="widget-header">
           <div
             class="d-flex justify-content-between text-center align-items-center"
@@ -54,8 +54,6 @@
                   <i class="fa-solid fa-rotate-right"></i>
                 </button>
               </div>
-              <!-- <app-set-width-widget></app-set-width-widget> -->
-
               <app-width-widget
                 [selectedItem]="this.widthSelectedOverView"
                 (widthSelected)="
@@ -187,7 +185,7 @@
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
-      <div class="col-12 col-md-12 col-lg-4 d-flex flex-column">
+      <div [classList]="" class="d-flex flex-column" class="col-auto">
         <!-- setting option -->
         <div class="widget-header">
           <div class="d-flex justify-content-between align-items-center">
@@ -268,62 +266,5 @@
         </div>
       </div>
     </div>
-
-    <!-- <div class="row">
-      <div class="col-12 d-flex flex-column">
-        <div class="widget-header">
-          <div
-            class="d-flex justify-content-between text-center align-items-center"
-          >
-            <span class="widget-title fs-12 text-primary fw-bold text-uppercase"
-              >PHƯƠNG TIỆN TẠI CẢNG</span
-            >
-            <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleAtThePort"
-              ></app-btn-extend>
-
-              <div class="btn-refresh">
-                <button class="btn mx-2 border-0" (click)="refreshAtThePort()">
-                  <i class="fa-solid fa-rotate-right"></i>
-                </button>
-              </div>
-
-              <app-width-widget></app-width-widget>
-            </div>
-          </div>
-        </div>
- 
-        <div class="widget" [ngClass]="{ hidden: !isVisibleAtThePort }">
-          <div class="text-center align-items-center">
-            <app-bar-chart
-              [data]="this.dashboardModel.listVehicleAtThePort || []"
-              [barColor]="'#20C997'"
-              [minLabelWidth]="100"
-              [defaultVisibleItems]="10"
-            ></app-bar-chart>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
-
-  <!-- <div class="container-fluid py-1">
-    <div class="widget-header">
-      <div
-        class="d-flex justify-content-between text-center align-items-center"
-      >
-        <span class="widget-title fs-12 text-primary fw-bold text-uppercase"
-          >PHƯƠNG TIỆN TẠI CẢNG</span
-        >
-        <div class="d-flex ms-auto align-items-center">
-          <app-btn-extend [(isVisible)]="isVisibleAtThePort"></app-btn-extend>
-          <button class="btn mx-2 border-0">
-            <i class="fa-solid fa-rotate-right"></i>
-          </button>
-          <app-width-widget></app-width-widget>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </div>

@@ -10,19 +10,12 @@ import {
 } from '@angular/core';
 import { Vehicle } from '../model/vehicle/vehicle.model';
 
-// interface SelectItem {
-//   id: number;
-//   code: string;
-//   name: string;
-// }
-
 @Component({
   selector: 'app-multi-select',
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
 })
 export class MultiSelectComponent implements OnInit {
-  // @Input() options: string[] = [];
   @Input() vehicles: Vehicle[] = [];
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
