@@ -300,6 +300,14 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     location: LocationEnum
   ) {
     this.currentSize[location] = size;
+    if (
+      location == this.locationEnum.TongQuan &&
+      (size == 'small' || size == 'medium')
+    ) {
+      this.setOverViewClass = 'col-12 ';
+    } else {
+      this.setOverViewClass = 'col-12 col-sm-4';
+    }
   }
 
   /**

@@ -12,13 +12,13 @@
 }
 
 .dash-board {
-  overflow-x: hidden !important;
   .widget-container {
     .widget-header {
       background: white;
       border-radius: 2px;
       padding: 5px;
       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      min-height: 100%;
       .widget-title {
         height: auto;
       }
@@ -39,14 +39,14 @@
       border-radius: 2px;
       padding: 2px;
       margin-top: 2px;
-      width: auto;
-      height: auto;
-      flex-grow: 1;
-      flex-basis: 0;
-      min-width: 200px; // Giới hạn kích thước tối thiểu
-      // min-height: 100%;
+
+      // width: auto;
+      // height: auto;
+      // flex-grow: 1;
+      // flex-basis: 0;
+      // min-width: 200px; // Giới hạn kích thước tối thiểu
+      min-height: 100%;
       // overflow: hidden;
-      transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
     }
 
     /* Ẩn nội dung */
