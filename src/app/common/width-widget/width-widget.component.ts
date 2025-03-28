@@ -51,20 +51,12 @@ export class WidthWidgetComponent {
   selectWidth(child: DropdownItem) {
     this.selectedItem = child.id as 'auto' | 'small' | 'medium' | 'large';
     this.widthSelected.emit(this.selectedItem);
-    this.closeMenu();
   }
 
-  @HostListener('click')
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
-    if (this.isMenuOpen) {
-      this.adjustMenuPosition();
-    }
-  }
-
-  @HostListener('mouseleave')
-  closeMenu() {
-    this.isMenuOpen = false;
+  // Khi hover vào nút thì mở menu
+  @HostListener('mouseenter')
+  click() {
+    this.adjustMenuPosition();
   }
 
   adjustMenuPosition() {

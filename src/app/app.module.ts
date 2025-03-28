@@ -18,7 +18,6 @@ import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.
 import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
 import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
 import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.component';
-import { SetWidthWidgetComponent } from './common/width-widget copy/set-width-widget.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +31,6 @@ import { SetWidthWidgetComponent } from './common/width-widget copy/set-width-wi
     DashBoardComponent,
     VehicleListComponent,
     DashBoardGridComponent,
-    SetWidthWidgetComponent,
   ],
   imports: [
     HttpClientModule,

@@ -1,10 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
-import {
-  Dashboard,
-  DashboardClassCol,
-} from '../common/model/dashboard/dashboard.model';
+import { Dashboard } from '../common/model/dashboard/dashboard.model';
 import { LocationEnum } from '../common/model/vehicle/location.enum';
 
 @Component({
@@ -20,7 +17,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   filteredVehicles: Vehicle[] = [];
   isAllSelectedVehicles: boolean = false;
 
-  arrCol = new DashboardClassCol();
   setOverViewClass = 'col-12 col-sm-4';
 
   // Cấu hình class cho từng widget
@@ -133,7 +129,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
-  observer!: ResizeObserver;
+
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
   }
@@ -306,6 +302,12 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     this.currentSize[location] = size;
   }
 
+  /**
+   * Gets widget class
+   * set class lại cho col
+   * @param location LocationEnum
+   * @returns widget class
+   */
   getWidgetClass(location: LocationEnum): string {
     return this.sizeConfig[location][this.currentSize[location]];
   }
