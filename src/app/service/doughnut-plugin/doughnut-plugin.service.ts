@@ -84,7 +84,8 @@ export class DoughnutPluginService {
             let midAngle = (startAngle + endAngle) / 2;
 
             // 2) Nếu 100% -> ép góc chéo xuống (thay vì đứng)
-            // ví dụ 7π/4 (~315°) là góc chéo xuống phải
+            //  7π/4 (~315°) là góc chéo lên phải
+            //  5π/4 (~315°) là góc chéo lên trái
             if (Math.abs(percentage - 100) < mergedConfig.boundaryOffset) {
               midAngle = (5 * Math.PI) / 4;
             }

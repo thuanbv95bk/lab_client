@@ -1,5 +1,3 @@
-import { Vehicle } from '../vehicle/vehicle.model';
-
 /**
  * Dashboard
  * @description dữ liệu để đẩy vào các widget hiển thị dữ liệu
