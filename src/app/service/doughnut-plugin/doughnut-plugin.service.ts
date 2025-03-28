@@ -12,21 +12,22 @@ export class DoughnutPluginService {
   getDoughnutLabelPlugin(config?: any) {
     const defaultConfig = {
       lineColor: '#999', // màu đường line
-      lineWidth: 1.5, // width của đường line
+      lineWidth: 1.5, // Độ dày của đường nối.
       textFont: '12px Arial', // font chữ
       textColor: '#333', // màu sắc
-      minPercentageToShow: 1, // Tỷ lệ tối thiểu để hiển thị line
-      lineExtensionRatio: 0.05, // Độ dài line tính theo tỉ lệ chartSize
-      minLineExtension: 15, // min height của đường line
-      maxLineExtension: 25, //max height của đường line
-      boundaryOffset: 0.001, // Né góc ranh giới (0, π/2, π, 3π/2, 2π)
-      margin: 10, // Biên an toàn tránh cắt text
+      minPercentageToShow: 1, //Tỷ lệ phần trăm tối thiểu của một phần dữ liệu để quyết định có vẽ đường nối hay không.
+      lineExtensionRatio: 0.05, // Tỉ lệ tính độ dài của đường nối dựa trên kích thước biểu đồ.
+      minLineExtension: 15, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
+      maxLineExtension: 25, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
+      boundaryOffset: 0.001, // Một giá trị offset để tránh vẽ nhãn trùng với các góc biên (như 0, π/2, π, 3π/2, 2π).
+      margin: 10, // Biên an toàn để đảm bảo rằng không bị cắt xén khi vẽ.
     };
 
     const mergedConfig = { ...defaultConfig, ...config };
 
     return {
       id: 'doughnutLabelsLine',
+
       afterDraw: (chart: any) => {
         const {
           ctx,
@@ -45,17 +46,24 @@ export class DoughnutPluginService {
         // Tâm chart
         const centerX = (left + right) / 2;
         const centerY = (top + bottom) / 2;
+        // Xác định kích thước của biểu đồ bằng cách lấy giá trị nhỏ nhất giữa width và height.
         const chartSize = Math.min(width, height);
 
-        // Tính độ dài line
+        /**
+         * Tính độ dài line
+         * @description Độ dài của đường nối (lineExtension) được tính dựa trên tỉ
+         * lệ lineExtensionRatio của kích thước biểu đồ.
+         * Sau đó, giá trị này được giới hạn trong khoảng giữa minLineExtension và maxLineExtension.
+         *
+         */
         let lineExtension = chartSize * mergedConfig.lineExtensionRatio;
         lineExtension = Math.max(
           mergedConfig.minLineExtension,
           Math.min(mergedConfig.maxLineExtension, lineExtension)
         );
-
+        // duyệt qua các phần của biểu đồ
         chart.data.datasets.forEach((dataset: any, i: number) => {
-          const meta = chart.getDatasetMeta(i);
+          const meta = chart.getDatasetMeta(i); //lấy thông tin meta của dataset từ Chart.js.
 
           meta.data.forEach((arc: any, index: number) => {
             const value = datasetData[index];
@@ -75,7 +83,8 @@ export class DoughnutPluginService {
               true
             );
 
-            // Nếu cung quá nhỏ (startAngle ~ endAngle) => bỏ qua
+            // Nếu góc của phần (sự chênh lệch giữa startAngle và endAngle)
+            // nhỏ hơn boundaryOffset, bỏ qua phần đó để tránh vẽ nhãn cho những phần quá nhỏ.
             if (Math.abs(endAngle - startAngle) < mergedConfig.boundaryOffset) {
               return;
             }
@@ -83,7 +92,8 @@ export class DoughnutPluginService {
             // Tính midAngle (góc giữa cung)
             let midAngle = (startAngle + endAngle) / 2;
 
-            // 2) Nếu 100% -> ép góc chéo xuống (thay vì đứng)
+            // Nếu phần chiếm gần 100% biểu đồ, ép midAngle thành một giá trị cố định (ở đây là 5π/4)
+            //  để nhãn không bị đặt theo hướng đứng.
             //  7π/4 (~315°) là góc chéo lên phải
             //  5π/4 (~315°) là góc chéo lên trái
             if (Math.abs(percentage - 100) < mergedConfig.boundaryOffset) {
@@ -99,6 +109,9 @@ export class DoughnutPluginService {
                 (3 * Math.PI) / 2,
                 2 * Math.PI,
               ];
+
+              //kiểm tra và điều chỉnh nếu midAngle quá gần với các góc biên
+              // (0, π/2, π, 3π/2, 2π) bằng cách thêm boundaryOffset.
               boundaryAngles.forEach((bAngle) => {
                 if (Math.abs(midAngle - bAngle) < mergedConfig.boundaryOffset) {
                   midAngle += mergedConfig.boundaryOffset;
@@ -107,8 +120,15 @@ export class DoughnutPluginService {
             }
 
             // Điểm bắt đầu (mép ngoài Doughnut)
+            // tính điểm bắt đầu của đường nối ngay trên biên ngoài của phần hình tròn.
+            // xStart, yStart: Tọa độ điểm bắt đầu tính từ tâm biểu đồ.
+            //outerRadius: Là bán kính bên ngoài của phần doughnut (phần hình tròn chứa dữ liệu).
+            //midAngle: Là góc trung bình (đơn vị radian) của phần đó, xác định hướng từ tâm biểu đồ đến giữa phần dữ liệu.
             const xStart = centerX + Math.cos(midAngle) * outerRadius;
             const yStart = centerY + Math.sin(midAngle) * outerRadius;
+            //Giá trị Math.cos(midAngle) cho biết tỉ lệ của chiều dài bán kính theo trục hoành (x).
+            // Khi nhân với outerRadius, ta được độ lệch trên trục x từ tâm đến biên ngoài của phần arc.
+            // Sau đó cộng với centerX để dịch chuyển về vị trí tuyệt đối trên canvas.
 
             // Kéo chéo thêm lineExtension
             const xLine = xStart + Math.cos(midAngle) * lineExtension;
@@ -126,7 +146,7 @@ export class DoughnutPluginService {
             let textX = xLine;
             let textY = yLine;
 
-            // 3) & 4) Xác định nửa trên/dưới
+            // Xác định nửa trên/dưới
             // so sánh yLine với centerY
             if (yLine < centerY) {
               // Nửa trên -> chữ bám đáy (textBaseline = 'bottom')
