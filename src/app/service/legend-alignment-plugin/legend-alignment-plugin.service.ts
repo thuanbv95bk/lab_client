@@ -1,6 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Chart, Plugin } from 'chart.js';
 
+/**
+ * Injectable
+ * @description Service vẽ lại Legend của widget (tròn)
+ * Cắn chỉnh Legend vào vị trí chính giữa màn hình
+ * khi màn hình bé thì vẽ thành 2 hàng căn giữa
+ * @param circleSize :độ lơn của hình tròn
+ * @param textOffset: offset chử cách đều nhau
+ * @param paddingBottom:  khoáng cách giữa Legend và bottom
+ */
 @Injectable({
   providedIn: 'root',
 })

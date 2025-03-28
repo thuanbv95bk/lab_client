@@ -1,30 +1,26 @@
 // doughnut-plugin.service.ts
 import { Injectable } from '@angular/core';
 
+/**
+ * Injectable
+ * @description vẽ lại thanh tooltip : đường chỉ và giá trị
+ */
 @Injectable({
   providedIn: 'root',
 })
 export class DoughnutPluginService {
   getDoughnutLabelPlugin(config?: any) {
     const defaultConfig = {
-      lineColor: '#999',
-      lineWidth: 1.5,
-      textFont: '12px Arial',
-      textColor: '#333',
-
-      // Tỷ lệ tối thiểu để hiển thị line
-      minPercentageToShow: 1,
-
-      // Độ dài line tính theo tỉ lệ chartSize
-      lineExtensionRatio: 0.05,
-      minLineExtension: 15,
-      maxLineExtension: 25,
-
-      // Né góc ranh giới (0, π/2, π, 3π/2, 2π)
-      boundaryOffset: 0.001,
-
-      // Biên an toàn tránh cắt text
-      margin: 10,
+      lineColor: '#999', // màu đường line
+      lineWidth: 1.5, // width của đường line
+      textFont: '12px Arial', // font chữ
+      textColor: '#333', // màu sắc
+      minPercentageToShow: 1, // Tỷ lệ tối thiểu để hiển thị line
+      lineExtensionRatio: 0.05, // Độ dài line tính theo tỉ lệ chartSize
+      minLineExtension: 15, // min height của đường line
+      maxLineExtension: 25, //max height của đường line
+      boundaryOffset: 0.001, // Né góc ranh giới (0, π/2, π, 3π/2, 2π)
+      margin: 10, // Biên an toàn tránh cắt text
     };
 
     const mergedConfig = { ...defaultConfig, ...config };

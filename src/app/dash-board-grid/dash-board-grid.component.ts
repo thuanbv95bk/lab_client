@@ -1,9 +1,8 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import { Dashboard } from '../common/model/dashboard/dashboard.model';
 import { LocationEnum } from '../common/model/vehicle/location.enum';
-import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 
 @Component({
   selector: 'app-dash-board-grid',
@@ -11,13 +10,64 @@ import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doug
   styleUrl: './dash-board-grid.component.scss',
 })
 export class DashBoardGridComponent implements OnInit, OnDestroy {
-  vehicles: Vehicle[] = [];
+  vehicles: Vehicle[] = []; // Danh sách xe
   totalVehicles: number = 0;
   dashboardModel = new Dashboard();
   locationEnum = LocationEnum;
   filteredVehicles: Vehicle[] = [];
   isAllSelectedVehicles: boolean = false;
 
+  setOverViewClass = 'col-12 col-sm-4';
+
+  // Cấu hình class cho từng widget
+  sizeConfig: {
+    [key in LocationEnum]: {
+      auto: string;
+      small: string;
+      medium: string;
+      large: string;
+    };
+  } = {
+    [LocationEnum.TongQuan]: {
+      auto: 'col-12 flex-grow-1',
+      small: 'col-12 col-md-4 ',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.CuaKhau]: {
+      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.TrenDuong]: {
+      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.NhaMay]: {
+      auto: 'col-12 col-md-12 col-lg-4 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+    [LocationEnum.TaiCang]: {
+      auto: 'col-12 flex-grow-1',
+      small: 'col-12 col-md-4',
+      medium: 'col-12 col-md-8',
+      large: 'col-12',
+    },
+  };
+  currentSize: {
+    [key in LocationEnum]: 'auto' | 'small' | 'medium' | 'large';
+  } = {
+    [LocationEnum.TongQuan]: 'auto',
+    [LocationEnum.CuaKhau]: 'auto',
+    [LocationEnum.TrenDuong]: 'auto',
+    [LocationEnum.NhaMay]: 'auto',
+    [LocationEnum.TaiCang]: 'auto',
+  };
   /**
    * Interval refresh of dash board component
    * @description Thời gian để tải lại dữ liệu
@@ -46,7 +96,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    * @value mặc định :2-> 2/3 chiều rộng màn hình
    * @value mặc định :3-> 3/3 chiều rộng màn hình
    */
-  widthSelectedOverView: number = 0;
+  widthSelectedOverView: 'auto' | 'small' | 'medium' | 'large' = 'auto';
   /**
    * Determines whether visible border gate is
    * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
@@ -79,11 +129,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
-  @ViewChild(DashboardDoughnutComponent, { static: false })
-  borderGate!: DashboardDoughnutComponent;
-
-  @ViewChild(DashboardDoughnutComponent, { static: false })
-  onTheRoad!: DashboardDoughnutComponent;
 
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
@@ -94,15 +139,27 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     this.getDataToDashBoard(this.filteredVehicles);
     this.startInterval();
   }
+
   ngOnDestroy() {
     this.stopInterval();
   }
+
+  /**
+   * Inits data
+   * @description Khởi tạo dữ liệu của danh sách xe
+   * @author thuan.bv
+   */
   async initData() {
     this.isAllSelectedVehicles = true;
     this.vehicles = await this.vehicleService.getVehicles();
     this.filteredVehicles = [...this.vehicles];
   }
 
+  /**
+   * Starts interval
+   * @description Bật time để cho loading dữ liệu :
+   * Theo thời gian : intervalRefresh : 5 phút
+   */
   startInterval() {
     this.intervalId = setInterval(async () => {
       await this.initData();
@@ -116,12 +173,22 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Determines whether selected change vehicle on
+   * @description event khi chọn xe từ select màn hình
+   * @param selectedItems : danh sách xe đã chọn/click ở màn hình
+   * @description Hàm này đồng thời tính toán dữ liệu để đẩy sang đồng bộ với các widget
+   */
   onSelectedChangeVehicle(selectedItems: Vehicle[]) {
     this.getDataToDashBoard(selectedItems);
   }
 
+  /**
+   * Gets data to dash board
+   * @description tính toán dữ liệu để đẩy vào widget
+   * @param listVehicles : danh sách xe đã chọn
+   */
   getDataToDashBoard(listVehicles: Vehicle[]) {
-    // this.dashboardModel = new Dashboard();
     this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
     this.dashboardModel.totalVehicles = listVehicles.length;
 
@@ -146,12 +213,17 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       this.vehicleService.getCompanySummary(
         listVehicles.filter((x) => x.location == this.locationEnum.NhaMay)
       );
+
     this.dashboardModel.listVehicleAtThePort =
       this.vehicleService.getCompanySummary(
         listVehicles.filter((x) => x.location == this.locationEnum.TaiCang)
       );
   }
 
+  /**
+   * Refresh over view
+   * @event loading dữ liệu, tính toán lại để đưa vào widget tương ứng
+   */
   refreshOverView() {
     this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
     this.dashboardModel.totalVehicles = 0;
@@ -166,6 +238,10 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       (x) => x.isLoaded == true
     ).length;
   }
+  /**
+   * Refresh over BorderGate
+   * @event loading dữ liệu, tính toán lại để đưa vào widget cửa khẩu
+   */
 
   refreshBorderGate() {
     this.dashboardModel.vehicleBorderGate = this.vehicleService.getSummary(
@@ -173,12 +249,22 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       this.locationEnum.CuaKhau
     );
   }
+
+  /**
+   * Refresh on the road
+   * @event loading dữ liệu, tính toán lại để đưa vào widget xe đang trên đường
+   */
   refreshOnTheRoad() {
     this.dashboardModel.vehicleOnTheRoad = this.vehicleService.getSummary(
       this.filteredVehicles,
       this.locationEnum.TrenDuong
     );
   }
+
+  /**
+   * Refresh at the factory
+   * @event loading dữ liệu, tính toán lại để đưa vào widget xe tại nhà máy
+   */
   refreshAtTheFactory() {
     this.dashboardModel.listVehicleAtTheFactory =
       this.vehicleService.getCompanySummary(
@@ -187,6 +273,11 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
         )
       );
   }
+
+  /**
+   * Refresh at the port
+   * @event loading dữ liệu, tính toán lại để đưa vào widget xe tại cảng
+   */
   refreshAtThePort() {
     this.dashboardModel.listVehicleAtThePort =
       this.vehicleService.getCompanySummary(
@@ -196,9 +287,28 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       );
   }
 
-  changeWidthSelected(selectWidth: number, locationEnum: string) {
-    this.widthSelectedOverView = selectWidth;
-    console.log(selectWidth);
-    console.log(locationEnum);
+  /**
+   * Changes width selected
+   * @event sự kiện click chọn option thay đỗi kích
+   * thước màn hình của các widget
+   * @param selectWidth
+   * @param locationEnum vị trí tương ứng định nghĩa ở enum location
+   */
+
+  changeWidthSelected(
+    size: 'auto' | 'small' | 'medium' | 'large',
+    location: LocationEnum
+  ) {
+    this.currentSize[location] = size;
+  }
+
+  /**
+   * Gets widget class
+   * set class lại cho col
+   * @param location LocationEnum
+   * @returns widget class
+   */
+  getWidgetClass(location: LocationEnum): string {
+    return this.sizeConfig[location][this.currentSize[location]];
   }
 }

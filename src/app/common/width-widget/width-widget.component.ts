@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 
 interface DropdownItem {
-  id: number;
+  id: string;
   name: string;
-  children?: DropdownItem[]; // Nếu có danh sách con
+  children?: DropdownItem[];
 }
 
 @Component({
@@ -21,32 +21,35 @@ interface DropdownItem {
   styleUrls: ['./width-widget.component.scss'],
 })
 export class WidthWidgetComponent {
-  @Input() selectedItem: number = 0;
-  @Output() widthSelected = new EventEmitter<number>();
-  @ViewChild('dropdownMenu')
-  dropdownMenu!: ElementRef;
-  @ViewChild('dropdownWidth')
-  dropdownWidth!: ElementRef;
-  isSubMenuLeft: boolean = false;
+  @Input() selectedItem: 'auto' | 'small' | 'medium' | 'large' =
+    'auto' as const;
+  @Output() widthSelected = new EventEmitter<
+    'auto' | 'small' | 'medium' | 'large'
+  >();
 
-  isMenuOpen = false; // Trạng thái menu mở / đóng
+  @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
+  @ViewChild('dropdownWidth') dropdownWidth!: ElementRef;
+
+  isMenuOpen = false;
+  isSubMenuLeft = false;
+
   listWidthWidget: DropdownItem[] = [
     {
-      id: 1,
+      id: 'width-options',
       name: 'Độ rộng',
-      children: ([] = [
-        { id: 0, name: 'Tự động' },
-        { id: 1, name: 'Nhỏ' },
-        { id: 2, name: 'Trung bình' },
-        { id: 3, name: 'Lớn' },
-      ]),
+      children: [
+        { id: 'auto', name: 'Tự động' },
+        { id: 'small', name: 'Nhỏ' },
+        { id: 'medium', name: 'Trung bình' },
+        { id: 'large', name: 'Lớn' },
+      ],
     },
   ];
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   selectWidth(child: DropdownItem) {
-    this.selectedItem = child.id;
+    this.selectedItem = child.id as 'auto' | 'small' | 'medium' | 'large';
     this.widthSelected.emit(this.selectedItem);
   }
 
@@ -62,7 +65,7 @@ export class WidthWidgetComponent {
       const buttonRect = this.el.nativeElement.getBoundingClientRect();
       const menuRect = dropdownMenu.getBoundingClientRect();
       const viewportWidth = window.innerWidth;
-      const offsetSubMenu = menuRect.width - 2 + 'px';
+      const offsetSubMenu = `${menuRect.width - 2}px`;
 
       if (buttonRect.left + menuRect.width > viewportWidth) {
         this.renderer.setStyle(dropdownMenu, 'left', 'auto');

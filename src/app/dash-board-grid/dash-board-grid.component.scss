@@ -13,41 +13,45 @@
 
 .dash-board {
   overflow-x: hidden !important;
-  .widget-header {
-    background: white;
-    border-radius: 2px;
-    padding: 5px;
-    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    .widget-title {
+  .widget-container {
+    .widget-header {
+      background: white;
+      border-radius: 2px;
+      padding: 5px;
+      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+      .widget-title {
+        height: auto;
+      }
+      .btn {
+        background-color: #d2d2d2;
+        width: 25px;
+        height: 25px;
+        padding: 0;
+        margin-left: 10px;
+        border-radius: 5px;
+      }
+      .btn-refresh :hover {
+        background-color: rgb(114, 112, 112);
+      }
+    }
+    .widget {
+      background: white;
+      border-radius: 2px;
+      padding: 2px;
+      margin-top: 2px;
+      width: auto;
       height: auto;
+      flex-grow: 1;
+      flex-basis: 0;
+      min-width: 200px; // Giới hạn kích thước tối thiểu
+      // min-height: 100%;
+      // overflow: hidden;
+      transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
     }
-    .btn {
-      background-color: #d2d2d2;
-      width: 25px;
-      height: 25px;
-      padding: 0;
-      margin-left: 10px;
-      border-radius: 5px;
-    }
-    .btn-refresh :hover {
-      background-color: rgb(114, 112, 112);
-    }
-  }
-  .widget {
-    background: white;
-    border-radius: 2px;
-    padding: 2px;
-    margin-top: 2px;
-    width: auto;
-    height: auto;
 
-    // min-height: 100%;
-    // overflow: hidden;
-    transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
-  }
-
-  /* Ẩn nội dung */
-  .hidden {
-    display: none;
+    /* Ẩn nội dung */
+    .hidden {
+      display: none;
+    }
   }
 }
