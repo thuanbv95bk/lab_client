@@ -35,16 +35,15 @@
   </div>
 
   <div class="container-fluid pt-2">
-    <div class="row g-2 d-flex align-items-stretch h-100">
+    <div class="row g-2">
       <!-- Tổng quan công ty -->
-
       <div
         class="widget-container"
         [ngClass]="getWidgetClass(locationEnum.TongQuan)"
       >
         <div class="widget-header">
           <div
-            class="d-flex justify-content-between text-center align-items-center"
+            class="d-flex justify-content-between text-center align-items-center mb-2"
           >
             <span class="widget-title fs-12 text-primary fw-bold text-uppercase"
               >TỔNG QUAN CÔNG TY</span
@@ -65,41 +64,41 @@
               ></app-width-widget>
             </div>
           </div>
-        </div>
-        <div
-          class="container-fluid widget card-deck"
-          [ngClass]="{ hidden: !isVisibleOverView }"
-        >
-          <div class="row g-2 w-100 h-100">
-            <div [ngClass]="setOverViewClass">
-              <app-vehicle-widget
-                [title]="'Phương tiện của công ty'"
-                [backgroundColor]="'#006ADC'"
-                [totalVehicles]="this.dashboardModel.totalVehicles"
-                [numberVehicle]="this.dashboardModel.totalVehicles"
-                [isDisplayFooter]="false"
-                [isToggleView]="this.dashboardModel.isReloadView"
-              ></app-vehicle-widget>
-            </div>
-            <div [ngClass]="setOverViewClass">
-              <app-vehicle-widget
-                [title]="'Phương tiện có hàng'"
-                [backgroundColor]="'#509447'"
-                [totalVehicles]="this.dashboardModel.totalVehicles"
-                [numberVehicle]="this.dashboardModel.loadedVehicles"
-                [isDisplayFooter]="true"
-                [isToggleView]="this.dashboardModel.isReloadView"
-              ></app-vehicle-widget>
-            </div>
-            <div [ngClass]="setOverViewClass">
-              <app-vehicle-widget
-                [title]="'Phương tiện không hàng'"
-                [backgroundColor]="'#E2803C'"
-                [totalVehicles]="this.dashboardModel.totalVehicles"
-                [numberVehicle]="this.dashboardModel.emptyVehicles"
-                [isDisplayFooter]="true"
-                [isToggleView]="this.dashboardModel.isReloadView"
-              ></app-vehicle-widget>
+          <div
+            class="container-fluid border-top border-2 p-3"
+            [ngClass]="{ hidden: !isVisibleOverView }"
+          >
+            <div class="row d-flex g-2 h-100 pt-2 justify-content-evenly">
+              <div [ngClass]="setOverViewClass">
+                <app-vehicle-widget
+                  [title]="'Phương tiện của công ty'"
+                  [backgroundColor]="'#006ADC'"
+                  [totalVehicles]="this.dashboardModel.totalVehicles"
+                  [numberVehicle]="this.dashboardModel.totalVehicles"
+                  [isDisplayFooter]="false"
+                  [isToggleView]="this.dashboardModel.isReloadView"
+                ></app-vehicle-widget>
+              </div>
+              <div [ngClass]="setOverViewClass">
+                <app-vehicle-widget
+                  [title]="'Phương tiện có hàng'"
+                  [backgroundColor]="'#509447'"
+                  [totalVehicles]="this.dashboardModel.totalVehicles"
+                  [numberVehicle]="this.dashboardModel.loadedVehicles"
+                  [isDisplayFooter]="true"
+                  [isToggleView]="this.dashboardModel.isReloadView"
+                ></app-vehicle-widget>
+              </div>
+              <div [ngClass]="setOverViewClass">
+                <app-vehicle-widget
+                  [title]="'Phương tiện không hàng'"
+                  [backgroundColor]="'#E2803C'"
+                  [totalVehicles]="this.dashboardModel.totalVehicles"
+                  [numberVehicle]="this.dashboardModel.emptyVehicles"
+                  [isDisplayFooter]="true"
+                  [isToggleView]="this.dashboardModel.isReloadView"
+                ></app-vehicle-widget>
+              </div>
             </div>
           </div>
         </div>
@@ -112,9 +111,7 @@
       >
         <!-- setting option -->
         <div class="widget-header">
-          <div
-            class="d-flex justify-content-between align-items-center flex-grow-1"
-          >
+          <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fs-12 text-primary fw-bold"
               >PHƯƠNG TIỆN TẠI CỦA KHẨU</span
             >
@@ -134,16 +131,18 @@
                 "
               ></app-width-widget>
             </div>
-            <div class="d-flex"></div>
           </div>
-        </div>
-        <!-- dash board -->
-        <div class="widget" [ngClass]="{ hidden: !isVisibleBorderGate }">
-          <div class="align-items-center xxxx">
-            <app-dashboard-doughnut
-              #borderGate
-              [data]="this.dashboardModel.vehicleBorderGate || []"
-            ></app-dashboard-doughnut>
+          <!-- dash board -->
+          <div
+            class="border-top border-2 p-3"
+            [ngClass]="{ hidden: !isVisibleBorderGate }"
+          >
+            <div class="align-items-center">
+              <app-dashboard-doughnut
+                #borderGate
+                [data]="this.dashboardModel.vehicleBorderGate || []"
+              ></app-dashboard-doughnut>
+            </div>
           </div>
         </div>
       </div>
@@ -155,7 +154,7 @@
       >
         <!-- setting option -->
         <div class="widget-header">
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center mb-2">
             <div class="fs-12 text-primary fw-bold d-flex text-break">
               PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG
             </div>
@@ -176,14 +175,17 @@
               ></app-width-widget>
             </div>
           </div>
-        </div>
-        <!-- dash board -->
-        <div class="widget" [ngClass]="{ hidden: !isVisibleOnTheRoad }">
-          <div class="text-center align-items-center">
-            <app-dashboard-doughnut
-              #onTheRoad
-              [data]="this.dashboardModel.vehicleOnTheRoad || []"
-            ></app-dashboard-doughnut>
+          <!-- dash board -->
+          <div
+            class="border-top border-2 p-3"
+            [ngClass]="{ hidden: !isVisibleOnTheRoad }"
+          >
+            <div class="text-center align-items-center">
+              <app-dashboard-doughnut
+                #onTheRoad
+                [data]="this.dashboardModel.vehicleOnTheRoad || []"
+              ></app-dashboard-doughnut>
+            </div>
           </div>
         </div>
       </div>
@@ -195,7 +197,7 @@
       >
         <!-- setting option -->
         <div class="widget-header">
-          <div class="d-flex justify-content-between align-items-center">
+          <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="fs-12 text-primary fw-bold"
               >PHƯƠNG TIỆN TẠI NHÀ MÁY</span
             >
@@ -219,28 +221,29 @@
               ></app-width-widget>
             </div>
           </div>
-        </div>
-        <!-- dash board -->
-        <div class="widget" [ngClass]="{ hidden: !isVisibleAtTheFactory }">
-          <div class="text-center align-items-center">
-            <app-bar-chart
-              [data]="this.dashboardModel.listVehicleAtTheFactory || []"
-              [barColor]="'#e63946'"
-              [minLabelWidth]="100"
-              [defaultVisibleItems]="4"
-            ></app-bar-chart>
+          <!-- dash board -->
+          <div
+            class="border-top border-2 p-3"
+            [ngClass]="{ hidden: !isVisibleAtTheFactory }"
+          >
+            <div class="text-center align-items-center">
+              <app-bar-chart
+                [data]="this.dashboardModel.listVehicleAtTheFactory || []"
+                [barColor]="'#e63946'"
+                [minLabelWidth]="100"
+                [defaultVisibleItems]="4"
+              ></app-bar-chart>
+            </div>
           </div>
         </div>
       </div>
-
+      <!-- Biểu đồ: Phương tiện tại cảng -->
       <div
         class="widget-container"
         [ngClass]="getWidgetClass(locationEnum.TaiCang)"
       >
         <div class="widget-header">
-          <div
-            class="d-flex justify-content-between text-center align-items-center"
-          >
+          <div class="d-flex justify-content-between align-items-center mb-2">
             <span class="widget-title fs-12 text-primary fw-bold text-uppercase"
               >PHƯƠNG TIỆN TẠI CẢNG</span
             >
@@ -262,16 +265,19 @@
               ></app-width-widget>
             </div>
           </div>
-        </div>
-        <!-- dash board -->
-        <div class="widget" [ngClass]="{ hidden: !isVisibleAtThePort }">
-          <div class="text-center align-items-center">
-            <app-bar-chart
-              [data]="this.dashboardModel.listVehicleAtThePort || []"
-              [barColor]="'#20C997'"
-              [minLabelWidth]="100"
-              [defaultVisibleItems]="8"
-            ></app-bar-chart>
+          <!-- dash board -->
+          <div
+            class="border-top border-2 p-3"
+            [ngClass]="{ hidden: !isVisibleAtThePort }"
+          >
+            <div class="align-items-center">
+              <app-bar-chart
+                [data]="this.dashboardModel.listVehicleAtThePort || []"
+                [barColor]="'#20C997'"
+                [minLabelWidth]="100"
+                [defaultVisibleItems]="8"
+              ></app-bar-chart>
+            </div>
           </div>
         </div>
       </div>
