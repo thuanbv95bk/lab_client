@@ -20,7 +20,6 @@ export class MultiSelectComponent implements OnInit {
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
-  @Input() maxItems: number = 3;
   @Input() allSelected: boolean = false;
   @Output() selectedChange = new EventEmitter<Vehicle[]>();
 
@@ -89,10 +88,8 @@ export class MultiSelectComponent implements OnInit {
    */
   toggleList(item: Vehicle) {
     const index = this.selectedItems.indexOf(item);
-    if (index === -1) {
-      if (this.selectedItems.length < this.maxItems) {
-        this.selectedItems.push(item);
-      }
+    if (index == -1) {
+      this.selectedItems.push(item);
     } else {
       this.selectedItems.splice(index, 1);
     }
@@ -141,6 +138,8 @@ export class MultiSelectComponent implements OnInit {
    * @returns display text
    */
   getDisplayText(): string {
+    console.log(this.selectedItems);
+
     if (this.allSelected == true) {
       return `Tất cả (${this.vehicles.length})`;
     }
