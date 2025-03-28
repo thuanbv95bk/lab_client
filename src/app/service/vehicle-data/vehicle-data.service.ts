@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import { LocationEnum } from '../../common/model/vehicle/location.enum';
 import { Vehicle } from '../../common/model/vehicle/vehicle.model';
-import {
-  VehicleCompany,
-  VehicleLoaded,
-} from '../../common/model/dashboard/dashboard.model';
+import { VehicleLoaded } from '../../common/model/dashboard/dashboard.model';
 
 /**
  * Injectable Sinh dữ liệu xe, theo radom,
@@ -108,7 +105,6 @@ export class VehicleDataService {
    */
   getSummary(data: Vehicle[], locationEnum: string): VehicleLoaded[] {
     // kiểm tra dữ liệu đầu vào
-    const Vehicles = data || [];
     let res: VehicleLoaded[] = [];
 
     //

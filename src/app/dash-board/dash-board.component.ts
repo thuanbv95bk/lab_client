@@ -1,11 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import Chart from 'chart.js/auto';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import { Dashboard } from '../common/model/dashboard/dashboard.model';

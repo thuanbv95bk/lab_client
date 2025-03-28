@@ -19,17 +19,15 @@ import { VehicleCompany } from '../../model/dashboard/dashboard.model';
   styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent implements AfterViewInit, OnChanges {
-  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  @ViewChild('chartContainer') chartContainer!: ElementRef;
   @Input() data: VehicleCompany[] = [];
-  // @Input() width: string = '100%'; // có thể set từ ngoài
-  // @Input() height: string = '300px';
   @Input() barColor: string = '#d90429';
-
   @Input() minLabelWidth: number = 100;
   @Input() defaultVisibleItems: number = 5;
-  // chartPlugins = this.chartScrollService.getHorizontalScrollPlugin(800, 90);
+
+  @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
+  @ViewChild('chartContainer') chartContainer!: ElementRef;
   constructor(private chartScrollService: ChartScrollService) {}
+
   /**
    * Chart options of bar chart component
    * @author thuan.bv
@@ -57,7 +55,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         },
         afterFit: (context) => {
           context.width += 10;
-          // context.height += 20;
         },
 
         ticks: {
@@ -69,7 +66,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           padding: 10, // Tăng khoảng cách giữa các tick
           align: 'center', // Căn giữa tick
 
-          // padding: 100, // Khoảng cách giữa các tick (px)
           font: {
             size: 12,
           },
@@ -98,8 +94,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
       y: {
         beginAtZero: true,
         min: 0,
-        // max: 10,
-        grace: '5%',
+        grace: '5%', // offset cộng thêm cho trục y
 
         ticks: {
           stepSize: 1,
@@ -135,16 +130,18 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.buildChart();
-    new ResizeObserver(() => {
-      // Kích thước container thay đổi sẽ tự động cập nhật
-    }).observe(this.chartContainer.nativeElement);
+    // new ResizeObserver(() => {
+    //   // Kích thước container thay đổi sẽ tự động cập nhật
+    // }).observe(this.chartContainer.nativeElement);
   }
 
+  /**
+   * on changes
+   * @param changes
+   * @description kiểm tra có sự thay đỗi của data để loading lại dữ liệu vào dashboard
+   */
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges-bar');
-
     if (changes['data'] && this.chart) {
-      console.log('ngOnChanges-ba2');
       this.buildChart();
     }
   }
@@ -161,10 +158,9 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         {
           data: this.data.map((item) => item.value),
           backgroundColor: this.barColor,
-          barPercentage: 0.5, // Cột chiếm 80% trong nhóm
-          categoryPercentage: 0.5, // Nhóm cột chiếm 20% trục X
+          barPercentage: 0.5, // Cột chiếm 50% trong nhóm
+          categoryPercentage: 0.5, // Nhóm cột chiếm 50% trục X
           minBarLength: 20,
-          // barThickness: 10, // Độ rộng cố định của cột
         },
       ],
     };
