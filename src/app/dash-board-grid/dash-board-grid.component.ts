@@ -12,12 +12,12 @@ import { LocationEnum } from '../common/model/vehicle/location.enum';
 export class DashBoardGridComponent implements OnInit, OnDestroy {
   vehicles: Vehicle[] = []; // Danh sách xe
   totalVehicles: number = 0;
-  dashboardModel = new Dashboard();
+  dashboardModel = new Dashboard(); // model chứa dữ liệu của các widget
   locationEnum = LocationEnum;
-  filteredVehicles: Vehicle[] = [];
+  filteredVehicles: Vehicle[] = []; // danh sách xe được chọn
   isAllSelectedVehicles: boolean = false;
 
-  setOverViewClass = 'col-12 col-sm-4';
+  setOverViewClass = 'col-12 col-sm-4'; // class mặc định cho widget tổng quan công ty
 
   // Cấu hình class cho từng widget
   sizeConfig: {
