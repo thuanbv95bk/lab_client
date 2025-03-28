@@ -13,14 +13,16 @@
 
 .dash-board {
   .widget-container {
+    // overflow-x: hidden !important;
     .widget-header {
       background: white;
       border-radius: 2px;
-      padding: 5px;
+      padding: 5px 5px;
       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
       min-height: 100%;
       .widget-title {
         height: auto;
+        padding: 0 5px;
       }
       .btn {
         background-color: #d2d2d2;
