@@ -106,8 +106,6 @@ export class VehicleDataService {
   getSummary(data: Vehicle[], locationEnum: string): VehicleLoaded[] {
     // kiểm tra dữ liệu đầu vào
     let res: VehicleLoaded[] = [];
-
-    //
     const emptyVehicles = {
       key: 'Phương tiện không hàng',
       value: data.filter(
