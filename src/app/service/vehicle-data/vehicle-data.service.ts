@@ -109,7 +109,7 @@ export class VehicleDataService {
 
     //
     const emptyVehicles = {
-      key: 'Phương tiện có hàng',
+      key: 'Phương tiện không hàng',
       value: data.filter(
         (x) => x.isLoaded == false && x.location == locationEnum
       ).length,
@@ -121,8 +121,8 @@ export class VehicleDataService {
       ).length,
     };
 
-    res.push(emptyVehicles);
     res.push(loadedVehicles);
+    res.push(emptyVehicles);
 
     return res;
   }
