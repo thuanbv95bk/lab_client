@@ -48,6 +48,11 @@ export class WidthWidgetComponent {
 
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
+  /**
+   * Selects width
+   * @description sự kiện chọn 1 item, emit sự kiện ra ngoài
+   * @param child
+   */
   selectWidth(child: DropdownItem) {
     this.selectedItem = child.id as 'auto' | 'small' | 'medium' | 'large';
     this.widthSelected.emit(this.selectedItem);
@@ -59,6 +64,11 @@ export class WidthWidgetComponent {
     this.adjustMenuPosition();
   }
 
+  /**
+   * Adjusts menu position
+   * @description tính toán vị trí xuất hiện của submenu
+   * @todo làm mượt hơn, nhanh hơn
+   */
   adjustMenuPosition() {
     if (this.dropdownMenu) {
       const dropdownMenu = this.dropdownMenu.nativeElement;

@@ -1,10 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-vehicle-widget',
@@ -34,6 +28,10 @@ export class VehicleWidgetComponent implements OnInit, OnChanges {
     return ((this.numberVehicle / this.totalVehicles) * 100).toFixed(2);
   }
 
+  /**
+   * Animations eff
+   * @description tạo hiệu ứng thay đỗi dự liệu
+   */
   animationEff() {
     const tempValue = this.numberVehicle;
     const percentage = this.getPercentage();

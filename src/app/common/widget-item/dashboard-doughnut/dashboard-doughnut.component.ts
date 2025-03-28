@@ -1,20 +1,16 @@
 import {
   Component,
-  ElementRef,
-  HostListener,
   Input,
   OnChanges,
   OnDestroy,
-  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { Chart, ChartConfiguration, ChartType } from 'chart.js';
+import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { DoughnutPluginService } from '../../../service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from '../../../service/legend-alignment-plugin/legend-alignment-plugin.service';
-import { Vehicle } from '../../model/vehicle/vehicle.model';
 import { VehicleLoaded } from '../../model/dashboard/dashboard.model';
 
 @Component({
@@ -44,10 +40,13 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
     }
   }
 
+  /**
+   * on changes
+   * @param changes
+   * @description khi có sự thay đỗi của data thì loading lại dữ liệu, cập nhật dashboard
+   */
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges-du');
     if (changes['data'] && this.chart) {
-      console.log('ngOnChanges-du2');
       this.buildChart();
     }
   }
@@ -60,7 +59,7 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.buildChart();
-    }, 200);
+    }, 100);
   }
 
   public chartType: ChartType = 'doughnut';
@@ -70,7 +69,7 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
 
     layout: {
       padding: {
-        bottom: 60, // Sát mép dưới
+        bottom: 60,
         top: 40,
         left: 10,
         right: 10,
@@ -82,7 +81,6 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
     plugins: {
       legend: {
         display: false,
-
         position: 'bottom',
         labels: {
           usePointStyle: true,
@@ -167,8 +165,6 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
    * @description Builds chart
    */
   public buildChart(): void {
-    console.log('buildChart');
-
     this.chartData = {
       labels: this.data.map((item) => item.key),
       datasets: [
@@ -180,7 +176,6 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
         },
       ],
     };
-
     this.chart?.update();
   }
 }
