@@ -72,15 +72,7 @@ export class ChartScrollService {
     containerBody.style.minWidth = `${calculatedWidth}px`;
     chartContainer.style.overflowX =
       calculatedWidth > availableWidth ? 'auto' : 'hidden';
-
-    if (getHeightMax > 0) {
-      if (chartContainer.style.overflowX == 'hidden') {
-        containerBody.style.height = `${getHeightMax}px`;
-      } else {
-        const offset = this.getScrollbarHeight();
-        containerBody.style.height = `${getHeightMax - offset}px`;
-      }
-    }
+    containerBody.style.height = `${getHeightMax}px`;
 
     // Đảm bảo chart chiếm đủ không gian
     chart.canvas.style.width = `${calculatedWidth}px`;
