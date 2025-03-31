@@ -157,8 +157,8 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
         {
           data: this.data.map((item) => item.value),
           backgroundColor: this.barColor,
-          barPercentage: 0.5, // Cột chiếm 50% trong nhóm
-          categoryPercentage: 0.5, // Nhóm cột chiếm 50% trục X
+          barPercentage: 1, // Cột chiếm 50% trong nhóm
+          categoryPercentage: 0.8, // Nhóm cột chiếm 50% trục X
           maxBarThickness: 30,
           minBarLength: 20,
         },

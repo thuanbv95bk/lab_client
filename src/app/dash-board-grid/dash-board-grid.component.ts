@@ -3,7 +3,6 @@ import {
   OnDestroy,
   OnInit,
   QueryList,
-  ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
@@ -123,15 +122,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
-
-  // @ViewChild(DashboardDoughnutComponent)
-  // borderGateChart?: DashboardDoughnutComponent;
-
-  // @ViewChild(DashboardDoughnutComponent)
-  // onTheRoadChart?: DashboardDoughnutComponent;
-
-  // @ViewChildren(DashboardDoughnutComponent)
-  // chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
 
   @ViewChildren(DashboardDoughnutComponent)
   chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
