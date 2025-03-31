@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   height: clamp(160px, 23vw, 400px);
+  overflow-x: hidden;
 }
 canvas {
   width: 100%;

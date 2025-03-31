@@ -31,13 +31,13 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
     private legendService: LegendService
   ) {
     // Kiểm tra có phải môi trường browser không
-    if (typeof window !== 'undefined') {
-      this.resizeSubscription = fromEvent(window, 'resize')
-        .pipe(debounceTime(100))
-        .subscribe(() => {
-          this.chart?.update();
-        });
-    }
+    // if (typeof window !== 'undefined') {
+    //   this.resizeSubscription = fromEvent(window, 'resize')
+    //     .pipe(debounceTime(100))
+    //     .subscribe(() => {
+    //       this.chart?.update();
+    //     });
+    // }
   }
 
   /**
