@@ -61,7 +61,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       large: 'col-12',
     },
     [LocationEnum.TaiCang]: {
-      auto: 'col-12 flex-grow-1',
+      auto: 'col-12 col-md-12 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
@@ -317,6 +317,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       this.chartsDoughnut.forEach((chart) => chart.buildChart());
     }
 
+    // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
       location == this.locationEnum.TongQuan &&
       (size == 'small' || size == 'medium')

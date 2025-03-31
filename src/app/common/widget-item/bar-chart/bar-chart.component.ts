@@ -159,6 +159,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
           backgroundColor: this.barColor,
           barPercentage: 0.5, // Cột chiếm 50% trong nhóm
           categoryPercentage: 0.5, // Nhóm cột chiếm 50% trục X
+          maxBarThickness: 30,
           minBarLength: 20,
         },
       ],
