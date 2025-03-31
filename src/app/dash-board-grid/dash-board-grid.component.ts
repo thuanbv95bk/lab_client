@@ -55,13 +55,13 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       large: 'col-12',
     },
     [LocationEnum.NhaMay]: {
-      auto: 'col-12 col-md-12 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-md-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
     [LocationEnum.TaiCang]: {
-      auto: 'col-12 col-md-12 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-md-4 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
