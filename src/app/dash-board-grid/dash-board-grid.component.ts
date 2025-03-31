@@ -1,8 +1,16 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  QueryList,
+  ViewChild,
+  ViewChildren,
+} from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import { Dashboard } from '../common/model/dashboard/dashboard.model';
 import { LocationEnum } from '../common/model/vehicle/location.enum';
+import { DashboardDoughnutComponent } from '../common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
 
 @Component({
   selector: 'app-dash-board-grid',
@@ -82,21 +90,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    *@value false: Ẩn đi
    */
   isVisibleOverView: boolean = true;
-  /**
-   * Determines whether visible overview is
-   *@description Ẩn hiện widget TỔNG QUAN CÔNG TY
-   *@value True: hiện
-   *@value false: Ẩn đi
-   */
 
-  /**
-   * @description biến lưu giá trị width của widget  TỔNG QUAN CÔNG TY
-   * @value mặc định :0-> chế độ tự động
-   * @value mặc định :1-> 1/3 chiều rộng màn hình
-   * @value mặc định :2-> 2/3 chiều rộng màn hình
-   * @value mặc định :3-> 3/3 chiều rộng màn hình
-   */
-  widthSelectedOverView: 'auto' | 'small' | 'medium' | 'large' = 'auto';
   /**
    * Determines whether visible border gate is
    * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
@@ -129,6 +123,18 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   isVisibleAtThePort: boolean = true;
 
   widthSelected: string = '';
+
+  // @ViewChild(DashboardDoughnutComponent)
+  // borderGateChart?: DashboardDoughnutComponent;
+
+  // @ViewChild(DashboardDoughnutComponent)
+  // onTheRoadChart?: DashboardDoughnutComponent;
+
+  // @ViewChildren(DashboardDoughnutComponent)
+  // chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
+
+  @ViewChildren(DashboardDoughnutComponent)
+  chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
 
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
@@ -300,6 +306,17 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     location: LocationEnum
   ) {
     this.currentSize[location] = size;
+    // xử lý khi resize với 2 biểu đồ Doughnut,
+    // fix lỗi phải click vào màn hinh mới tự đông cập nhật 2 biểu đồ về đùng vị trí
+    // => do chart.js của 2 biểu đồ này còn hạn chế
+
+    if (
+      location == this.locationEnum.CuaKhau ||
+      location == this.locationEnum.TrenDuong
+    ) {
+      this.chartsDoughnut.forEach((chart) => chart.buildChart());
+    }
+
     if (
       location == this.locationEnum.TongQuan &&
       (size == 'small' || size == 'medium')

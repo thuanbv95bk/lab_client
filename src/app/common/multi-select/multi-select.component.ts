@@ -138,7 +138,7 @@ export class MultiSelectComponent implements OnInit {
    * @returns display text
    */
   getDisplayText(): string {
-    console.log(this.selectedItems);
+    // console.log(this.selectedItems);
 
     if (this.allSelected == true) {
       return `Tất cả (${this.vehicles.length})`;

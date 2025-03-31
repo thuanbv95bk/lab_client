@@ -25,7 +25,6 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   @Input() defaultVisibleItems: number = 5;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  @ViewChild('chartContainer') chartContainer!: ElementRef;
   constructor(private chartScrollService: ChartScrollService) {}
 
   /**
