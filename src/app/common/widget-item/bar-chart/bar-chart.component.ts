@@ -5,7 +5,6 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
-  ElementRef,
 } from '@angular/core';
 import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';

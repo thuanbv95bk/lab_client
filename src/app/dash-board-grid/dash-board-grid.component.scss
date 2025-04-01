@@ -36,10 +36,10 @@
         background-color: rgb(114, 112, 112);
       }
     }
-
-    /* Ẩn nội dung */
-    .hidden {
-      display: none;
-    }
   }
+}
+/* Ẩn nội dung */
+.hidden {
+  position: absolute;
+  left: -9999px;
 }

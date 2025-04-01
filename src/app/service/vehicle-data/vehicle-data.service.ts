@@ -27,7 +27,7 @@ export class VehicleDataService {
     { label: 'Bãi contemner Hoàng Bão Anh', value: 60 },
     { label: 'Bãi contemner Hoàng Bão Anh (KCN BPA)', value: 40 },
     { label: 'Bãi dăm bạch đàn', value: 30 },
-    { label: 'Bãi X50', value: 30 },
+    { label: 'Bãi X50', value: 50 },
     { label: 'Bãi xe 223 Trường Chính (trả hàng)', value: 40 },
     { label: 'Cty Sedovina (trang thiết bị trường học)', value: 2 },
     { label: 'Keyhinge Hòa Cầm', value: 1 },
@@ -47,7 +47,7 @@ export class VehicleDataService {
       for (let i = 0; i < company.value; i++) {
         const vehicle = {
           id: this.idCounter++,
-          code: `43C${(1338 + this.idCounter).toString().padStart(5, '0')}_C`,
+          code: `43C${(0 + this.idCounter).toString().padStart(5, '0')}_C`,
           isLoaded: Math.random() < 0.6,
           location:
             this.locations[Math.floor(Math.random() * this.locations.length)],
@@ -108,12 +108,14 @@ export class VehicleDataService {
     let res: VehicleLoaded[] = [];
     const emptyVehicles = {
       key: 'Phương tiện không hàng',
+      // value: 100,
       value: data.filter(
         (x) => x.isLoaded == false && x.location == locationEnum
       ).length,
     };
     const loadedVehicles = {
       key: 'Phương tiện có hàng',
+      // value: 0,
       value: data.filter(
         (x) => x.isLoaded == true && x.location == locationEnum
       ).length,
