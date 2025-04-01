@@ -121,8 +121,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    */
   isVisibleAtThePort: boolean = true;
 
-  widthSelected: string = '';
-
   @ViewChildren(DashboardDoughnutComponent)
   chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
 
@@ -146,7 +144,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    * @author thuan.bv
    */
   async initData() {
-    this.isAllSelectedVehicles = true;
     this.vehicles = await this.vehicleService.getVehicles();
     this.filteredVehicles = [...this.vehicles];
   }
@@ -176,6 +173,9 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    * @description Hàm này đồng thời tính toán dữ liệu để đẩy sang đồng bộ với các widget
    */
   onSelectedChangeVehicle(selectedItems: Vehicle[]) {
+    if (selectedItems.length == 0) {
+      selectedItems = [...this.vehicles];
+    }
     this.getDataToDashBoard(selectedItems);
   }
 
@@ -329,5 +329,24 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    */
   getWidgetClass(location: LocationEnum): string {
     return this.sizeConfig[location][this.currentSize[location]];
+  }
+
+  /**
+   * Sets hidden
+   * @description set ẩn/ hiện các widget tương ứng
+   * @param LocationEnum
+   */
+  setHidden(LocationEnum: string) {
+    if (LocationEnum == this.locationEnum.CuaKhau) {
+      this.isVisibleBorderGate = !this.isVisibleBorderGate;
+    }
+    if (LocationEnum == this.locationEnum.TrenDuong)
+      this.isVisibleOnTheRoad = !this.isVisibleOnTheRoad;
+    if (LocationEnum == this.locationEnum.NhaMay)
+      this.isVisibleAtTheFactory = !this.isVisibleAtTheFactory;
+    if (LocationEnum == this.locationEnum.TaiCang)
+      this.isVisibleAtThePort = !this.isVisibleAtThePort;
+    if (LocationEnum == this.locationEnum.TongQuan)
+      this.isVisibleOverView = !this.isVisibleOverView;
   }
 }

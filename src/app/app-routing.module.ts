@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashBoardComponent } from './dash-board/dash-board.component';
 import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
 import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.component';
 
@@ -10,8 +9,6 @@ const routes: Routes = [
     redirectTo: 'dash-board-grid',
     pathMatch: 'full',
   },
-
-  { path: 'dash-board', component: DashBoardComponent },
   { path: 'dash-board-grid', component: DashBoardGridComponent },
   { path: 'vehicle-list', component: VehicleListComponent },
 ];

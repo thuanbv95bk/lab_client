@@ -47,9 +47,10 @@
               >TỔNG QUAN CÔNG TY</span
             >
             <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleOverView"
-              ></app-btn-extend>
+              <app-set-hidden-extend
+                [isVisible]="isVisibleOverView"
+                (click)="setHidden(this.locationEnum.TongQuan)"
+              ></app-set-hidden-extend>
               <div class="btn-refresh">
                 <button class="btn mx-2" (click)="refreshOverView()">
                   <i class="fa-solid fa-rotate-right"></i>
@@ -64,7 +65,7 @@
           </div>
           <div
             class="container-fluid border-top border-2 p-2"
-            [ngClass]="{ hidden: !isVisibleOverView }"
+            [ngClass]="{ hidden: isVisibleOverView == false }"
           >
             <div class="row d-flex g-3 justify-content-between">
               <div [ngClass]="setOverViewClass">
@@ -114,9 +115,10 @@
               >PHƯƠNG TIỆN TẠI CỦA KHẨU</span
             >
             <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleBorderGate"
-              ></app-btn-extend>
+              <app-set-hidden-extend
+                [isVisible]="isVisibleBorderGate"
+                (click)="setHidden(this.locationEnum.CuaKhau)"
+              ></app-set-hidden-extend>
               <div class="btn-refresh">
                 <button class="btn mx-2" (click)="refreshBorderGate()">
                   <i class="fa-solid fa-rotate-right"></i>
@@ -133,7 +135,7 @@
           <!-- dash board -->
           <div
             class="border-top border-2 p-2"
-            [ngClass]="{ hidden: !isVisibleBorderGate }"
+            [ngClass]="{ hidden: isVisibleBorderGate == false }"
           >
             <div class="align-items-center">
               <app-dashboard-doughnut
@@ -157,9 +159,10 @@
               PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG
             </div>
             <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleOnTheRoad"
-              ></app-btn-extend>
+              <app-set-hidden-extend
+                [isVisible]="isVisibleOnTheRoad"
+                (click)="setHidden(this.locationEnum.TrenDuong)"
+              ></app-set-hidden-extend>
               <div class="btn-refresh">
                 <button class="btn mx-2 border-0" (click)="refreshOnTheRoad()">
                   <i class="fa-solid fa-rotate-right"></i>
@@ -176,7 +179,7 @@
           <!-- dash board -->
           <div
             class="border-top border-2 p-2"
-            [ngClass]="{ hidden: !isVisibleOnTheRoad }"
+            [ngClass]="{ hidden: isVisibleOnTheRoad == false }"
           >
             <div class="text-center align-items-center">
               <app-dashboard-doughnut
@@ -200,9 +203,10 @@
               >PHƯƠNG TIỆN TẠI NHÀ MÁY</span
             >
             <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleAtTheFactory"
-              ></app-btn-extend>
+              <app-set-hidden-extend
+                [isVisible]="isVisibleAtTheFactory"
+                (click)="setHidden(this.locationEnum.NhaMay)"
+              ></app-set-hidden-extend>
               <div class="btn-refresh">
                 <button
                   class="btn mx-2 border-0"
@@ -222,7 +226,7 @@
           <!-- dash board -->
           <div
             class="border-top border-2 p-3"
-            [ngClass]="{ hidden: !isVisibleAtTheFactory }"
+            [ngClass]="{ hidden: isVisibleAtTheFactory == false }"
           >
             <div class="text-center align-items-center">
               <app-bar-chart
@@ -246,9 +250,10 @@
               >PHƯƠNG TIỆN TẠI CẢNG</span
             >
             <div class="d-flex ms-auto align-items-center">
-              <app-btn-extend
-                [(isVisible)]="isVisibleAtThePort"
-              ></app-btn-extend>
+              <app-set-hidden-extend
+                [isVisible]="isVisibleAtThePort"
+                (click)="setHidden(this.locationEnum.TaiCang)"
+              ></app-set-hidden-extend>
 
               <div class="btn-refresh">
                 <button class="btn mx-2 border-0" (click)="refreshAtThePort()">
@@ -266,7 +271,7 @@
           <!-- dash board -->
           <div
             class="border-top border-2 p-3"
-            [ngClass]="{ hidden: !isVisibleAtThePort }"
+            [ngClass]="{ hidden: isVisibleAtThePort == false }"
           >
             <div class="align-items-center">
               <app-bar-chart

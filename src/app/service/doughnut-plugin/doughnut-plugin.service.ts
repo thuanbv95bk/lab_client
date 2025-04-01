@@ -20,7 +20,7 @@ export class DoughnutPluginService {
       minLineExtension: 15, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
       maxLineExtension: 25, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
       boundaryOffset: 0.001, // Một giá trị offset để tránh vẽ nhãn trùng với các góc biên (như 0, π/2, π, 3π/2, 2π).
-      margin: 10, // Biên an toàn để đảm bảo rằng không bị cắt xén khi vẽ.
+      margin: 15, // Biên an toàn để đảm bảo rằng không bị cắt xén khi vẽ.
     };
 
     const mergedConfig = { ...defaultConfig, ...config };
@@ -94,8 +94,8 @@ export class DoughnutPluginService {
 
             // Nếu phần chiếm gần 100% biểu đồ, ép midAngle thành một giá trị cố định (ở đây là 5π/4)
             //  để nhãn không bị đặt theo hướng đứng.
-            //  7π/4 (~315°) là góc chéo lên phải
-            //  5π/4 (~315°) là góc chéo lên trái
+            //  7π/4 (~315°) là góc chéo lên trái
+            //  5π/4 (~225°) là góc chéo xuống trái
             if (Math.abs(percentage - 100) < mergedConfig.boundaryOffset) {
               midAngle = (5 * Math.PI) / 4;
             }
