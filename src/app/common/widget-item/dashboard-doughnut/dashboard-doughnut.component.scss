@@ -1,7 +1,8 @@
 .chart-doughnut-container {
   position: relative;
   width: 100%;
-  height: clamp(200px, 23vw, 400px);
+  height: clamp(200px, 30vw, 400px);
+  // min-height: 200px;
   overflow-x: hidden;
 }
 canvas {

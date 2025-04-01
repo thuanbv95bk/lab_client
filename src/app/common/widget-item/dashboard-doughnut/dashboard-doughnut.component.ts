@@ -106,7 +106,7 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
         data: [this.loadedVehicles, this.emptyVehicles],
         backgroundColor: ['#28a745', '#e87d3e'],
         borderWidth: 0,
-        cutout: '70%',
+        cutout: '60%',
       },
     ],
   };
@@ -172,7 +172,7 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
           data: this.data.map((item) => item.value),
           backgroundColor: ['#28a745', '#e87d3e'],
           borderWidth: 0,
-          cutout: '70%',
+          cutout: '50%',
         },
       ],
     };

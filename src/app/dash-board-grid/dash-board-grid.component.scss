@@ -12,7 +12,10 @@
 }
 
 .dash-board {
-  overflow-x: hidden !important;
+  background-color: #eeefff;
+
+  overflow-x: hidden;
+
   .widget-container {
     .widget-header {
       background: white;
@@ -20,6 +23,7 @@
       // padding: 5px 0px;
       box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
       min-height: 100%;
+
       .widget-title {
         height: auto;
         padding: 0 5px;
@@ -37,6 +41,9 @@
       }
     }
   }
+}
+.widget-header > div {
+  padding: 5px;
 }
 /* Ẩn nội dung */
 .hidden {
