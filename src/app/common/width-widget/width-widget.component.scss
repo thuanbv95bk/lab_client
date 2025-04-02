@@ -4,8 +4,9 @@
     width: 25px;
     height: 25px;
     padding: 0;
-    border-radius: 5px;
+    border-radius: 3px;
   }
+
   .dropdown-menu {
     display: none;
     position: absolute;
@@ -13,9 +14,11 @@
     z-index: 1000;
     padding: 5px 5px;
     min-width: max-content;
+
     &.show {
       display: block;
     }
+
     .sub-menu {
       position: absolute;
       left: 100%;
@@ -23,10 +26,12 @@
       min-width: max-content;
       display: block;
       z-index: 1001;
+
       &.show {
         display: block;
       }
     }
+
     .dropdown-item {
       font-size: 1rem;
       padding: 5px 5px;
@@ -35,10 +40,12 @@
     .active {
       color: black;
     }
+
     .check {
       color: rgb(62, 14, 238);
     }
   }
+
   .dropdown:hover .dropdown-menu {
     display: block;
   }

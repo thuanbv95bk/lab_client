@@ -1,18 +1,37 @@
-<div class="widget-item">
-  <div class="d-flex justify-content-between text-center align-items-center">
-    <span class="widget-title text-primary fw-bold text-uppercase">{{title}}</span>
+<div
+  class="widget-item"
+  [ngClass]="{
+    'widget-none': isVisible == false,
+    'widget-display': isVisible == true
+  }"
+>
+  <div
+    class="widget-header d-flex justify-content-between text-center align-items-center"
+  >
+    <span class="widget-title text-primary fw-bold text-uppercase">{{
+      title
+    }}</span>
     <div class="d-flex ms-auto align-items-center">
       <app-set-hidden-extend [(isVisible)]="isVisible"></app-set-hidden-extend>
-      <button class="btn mx-2" (click)="refreshData( this.location)">
-        <i class="fa-solid fa-rotate-right"></i>
-      </button>
-      <app-width-widget (widthSelected)="
-      changeWidthSelected($event, this.location)
-    "></app-width-widget>
+      <div>
+        <button class="btn mx-2" (click)="refreshData(this.location)">
+          <i class="fa-solid fa-rotate-right"></i>
+        </button>
+      </div>
+
+      <app-width-widget
+        (widthSelected)="changeWidthSelected($event, this.location)"
+      ></app-width-widget>
     </div>
   </div>
-  <div class="container-fluid border-top border-2 p-2" [ngClass]="{ hidden: isVisible == false }">
-    <app-dynamic-load-widget [dynamicLoadWidgetComponent]="dynamicComponentData"></app-dynamic-load-widget>
+  <div
+    class="border-top border-2 p-2"
+    [ngClass]="{ hidden: isVisible == false }"
+  >
+    <div>
+      <app-dynamic-load-widget
+        [dynamicLoadWidgetComponent]="dynamicComponentData"
+      ></app-dynamic-load-widget>
+    </div>
   </div>
-
 </div>

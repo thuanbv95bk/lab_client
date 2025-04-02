@@ -88,7 +88,8 @@ export class WidgetItemComponent implements AfterViewInit {
     size: 'auto' | 'small' | 'medium' | 'large',
     location: LocationEnum
   ) {
-    this.eventWidthSelected.emit(size);
+    console.log(size);
+
     // xử lý khi resize với 2 biểu đồ Doughnut,
     // fix lỗi phải click vào màn hinh mới tự đông cập nhật 2 biểu đồ về đùng vị trí
     // => do chart.js của 2 biểu đồ này còn hạn chế
@@ -114,6 +115,7 @@ export class WidgetItemComponent implements AfterViewInit {
       this.setClassForChild = 'col-12 col-sm-4';
       this.setDashboardToComponent();
     }
+    this.eventWidthSelected.emit(size);
   }
 
   refreshData(location: LocationEnum) {

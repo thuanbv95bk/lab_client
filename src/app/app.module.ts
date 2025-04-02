@@ -13,7 +13,6 @@ import { LegendService } from './service/legend-alignment-plugin/legend-alignmen
 import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
 import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
 import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
-import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.component';
 import { DashBoardComponent } from './dash-board/dash-board.component';
 
 import { DashboardDoughnutComponent } from './common/chart-items/dashboard-doughnut/dashboard-doughnut.component';
@@ -33,7 +32,6 @@ import { DynamicLoadWidgetComponent } from './common/chart-items/dynamic-load-wi
     BarChartComponent,
     VehicleListComponent,
     DynamicLoadWidgetComponent,
-    DashBoardGridComponent,
     DashBoardComponent,
     WidgetItemComponent,
   ],

@@ -84,14 +84,17 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @description Thời gian để tải lại dữ liệu
    * @value Mặc đinh 5 phút
    */
+
   intervalRefresh: number = 300000; //5000
   intervalId: any;
+
   /**
    * Determines whether visible overview is
    *@description Ẩn hiện widget TỔNG QUAN CÔNG TY
    *@value true: hiện
    *@value false: Ẩn đi
    */
+
   isVisibleOverView: boolean = true;
 
   /**
@@ -100,6 +103,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * true: hiện
    * false: Ẩn đi
    */
+
   isVisibleBorderGate: boolean = true;
 
   /**
@@ -108,6 +112,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @value true: hiện
    * @value false: Ẩn đi
    */
+
   isVisibleOnTheRoad: boolean = true;
   /**
    * Determines whether visible at the factory
@@ -115,6 +120,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @value true: hiện
    * @value false: Ẩn đi
    */
+
   isVisibleAtTheFactory: boolean = true;
 
   /**
@@ -123,6 +129,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @value true: hiện
    * @value false: Ẩn đi
    */
+
   isVisibleAtThePort: boolean = true;
 
   // @ViewChildren(DashboardDoughnutComponent)
@@ -192,6 +199,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @description tính toán dữ liệu để đẩy vào widget
    * @param listVehicles : danh sách xe đã chọn
    */
+
   getDataToDashBoard(listVehicles: Vehicle[]) {
     this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
     this.dashboardModel.totalVehicles = listVehicles.length;
@@ -275,6 +283,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * Refresh at the factory
    * @event loading dữ liệu, tính toán lại để đưa vào widget xe tại nhà máy
    */
+
   refreshAtTheFactory() {
     this.dashboardModel.listVehicleAtTheFactory =
       this.vehicleService.getCompanySummary(
@@ -298,7 +307,6 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Changes width selected
    * @event sự kiện click chọn option thay đỗi kích
    * thước màn hình của các widget
    * @param selectWidth
