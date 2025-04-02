@@ -21,7 +21,7 @@ import { VehicleLoaded } from '../../model/dashboard/dashboard.model';
 export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
   emptyVehicles: number = 0; // Phương tiện không hàng
   loadedVehicles: number = 0; // Phương tiện có hàng
-  @Input() data: VehicleLoaded[] = [];
+  @Input() dataModel: VehicleLoaded[] = [];
 
   @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
   private resizeSubscription: Subscription | undefined;
@@ -106,7 +106,7 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
         data: [this.loadedVehicles, this.emptyVehicles],
         backgroundColor: ['#28a745', '#e87d3e'],
         borderWidth: 0,
-        cutout: '60%',
+        cutout: '65%',
       },
     ],
   };
@@ -166,13 +166,13 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
    */
   public buildChart(): void {
     this.chartData = {
-      labels: this.data.map((item) => item.key),
+      labels: this.dataModel.map((item) => item.key),
       datasets: [
         {
-          data: this.data.map((item) => item.value),
+          data: this.dataModel.map((item) => item.value),
           backgroundColor: ['#28a745', '#e87d3e'],
           borderWidth: 0,
-          cutout: '50%',
+          cutout: '65%',
         },
       ],
     };

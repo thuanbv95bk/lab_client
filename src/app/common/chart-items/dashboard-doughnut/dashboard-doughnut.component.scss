@@ -1,10 +1,10 @@
 .chart-doughnut-container {
   position: relative;
   width: 100%;
-  height: clamp(200px, 30vw, 400px);
-  // min-height: 200px;
+  height: clamp(277px, 30vw, 400px);
   overflow-x: hidden;
 }
+
 canvas {
   width: 100%;
   justify-content: center;
@@ -15,6 +15,7 @@ canvas {
     height: 276px;
   }
 }
+
 @media only screen and (min-width: 575.98px) and (max-width: 767.98px) {
   .chart-doughnut-container {
     height: 245px;

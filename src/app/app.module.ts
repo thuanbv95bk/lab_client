@@ -6,9 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { MultiSelectComponent } from './common/multi-select/multi-select.component';
-import { VehicleWidgetComponent } from './common/widget-item/vehicle-widget/vehicle-widget.component';
-import { DashboardDoughnutComponent } from './common/widget-item/dashboard-doughnut/dashboard-doughnut.component';
-import { BarChartComponent } from './common/widget-item/bar-chart/bar-chart.component';
 import { setHiddenExtendComponent } from './common/set-hidden-extend/set-hidden-extend.component';
 import { WidthWidgetComponent } from './common/width-widget/width-widget.component';
 import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
@@ -17,6 +14,13 @@ import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.
 import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
 import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
 import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.component';
+import { DashBoardComponent } from './dash-board/dash-board.component';
+
+import { DashboardDoughnutComponent } from './common/chart-items/dashboard-doughnut/dashboard-doughnut.component';
+import { BarChartComponent } from './common/chart-items/bar-chart/bar-chart.component';
+import { VehicleWidgetComponent } from './common/chart-items/vehicle-widget/vehicle-widget.component';
+import { WidgetItemComponent } from './common/widget-item/widget-item.component';
+import { DynamicLoadWidgetComponent } from './common/chart-items/dynamic-load-widget/dynamic-load-widget.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +32,10 @@ import { DashBoardGridComponent } from './dash-board-grid/dash-board-grid.compon
     DashboardDoughnutComponent,
     BarChartComponent,
     VehicleListComponent,
+    DynamicLoadWidgetComponent,
     DashBoardGridComponent,
+    DashBoardComponent,
+    WidgetItemComponent,
   ],
   imports: [
     HttpClientModule,

@@ -8,19 +8,23 @@ import {
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/vehicle/vehicle.model';
 import { Dashboard } from '../common/model/dashboard/dashboard.model';
-import { LocationEnum } from '../common/model/vehicle/location.enum';
-import { DashboardDoughnutComponent } from '../common/chart-items/dashboard-doughnut/dashboard-doughnut.component';
+import {
+  LocationEnum,
+  TypeChartEnum,
+} from '../common/model/vehicle/location.enum';
+import { WidgetItemComponent } from '../common/widget-item/widget-item.component';
 
 @Component({
-  selector: 'app-dash-board-grid',
-  templateUrl: './dash-board-grid.component.html',
-  styleUrl: './dash-board-grid.component.scss',
+  selector: 'app-dash-board',
+  templateUrl: './dash-board.component.html',
+  styleUrl: './dash-board.component.scss',
 })
-export class DashBoardGridComponent implements OnInit, OnDestroy {
+export class DashBoardComponent implements OnInit, OnDestroy {
   vehicles: Vehicle[] = []; // Danh sách xe
   totalVehicles: number = 0;
   dashboardModel = new Dashboard(); // model chứa dữ liệu của các widget
   locationEnum = LocationEnum;
+  typeChartEnum = TypeChartEnum;
   filteredVehicles: Vehicle[] = []; // danh sách xe được chọn
   isAllSelectedVehicles: boolean = false;
 
@@ -121,8 +125,11 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    */
   isVisibleAtThePort: boolean = true;
 
-  @ViewChildren(DashboardDoughnutComponent)
-  chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
+  // @ViewChildren(DashboardDoughnutComponent)
+  // chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
+
+  @ViewChildren(WidgetItemComponent)
+  WidgetItem!: QueryList<WidgetItemComponent>;
 
   constructor(private vehicleService: VehicleDataService) {
     this.totalVehicles = this.vehicles.length;
@@ -131,6 +138,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     await this.initData();
     this.getDataToDashBoard(this.filteredVehicles);
+
     this.startInterval();
   }
 
@@ -195,6 +203,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     this.dashboardModel.loadedVehicles = listVehicles.filter(
       (x) => x.isLoaded == true
     ).length;
+    this.dashboardModel.setDataToVehicleWidget();
 
     this.dashboardModel.vehicleBorderGate = this.vehicleService.getSummary(
       listVehicles,
@@ -205,6 +214,7 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       this.locationEnum.TrenDuong
     );
 
+    this.dashboardModel.setDataToVehicleWidget();
     this.dashboardModel.listVehicleAtTheFactory =
       this.vehicleService.getCompanySummary(
         listVehicles.filter((x) => x.location == this.locationEnum.NhaMay)
@@ -214,6 +224,8 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
       this.vehicleService.getCompanySummary(
         listVehicles.filter((x) => x.location == this.locationEnum.TaiCang)
       );
+
+    this.WidgetItem.forEach((item) => item.setDashboardToComponent());
   }
 
   /**
@@ -233,6 +245,8 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     this.dashboardModel.loadedVehicles = this.filteredVehicles.filter(
       (x) => x.isLoaded == true
     ).length;
+
+    this.dashboardModel.setDataToVehicleWidget();
   }
   /**
    * Refresh over BorderGate
@@ -296,29 +310,6 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
     location: LocationEnum
   ) {
     this.currentSize[location] = size;
-    // xử lý khi resize với 2 biểu đồ Doughnut,
-    // fix lỗi phải click vào màn hinh mới tự đông cập nhật 2 biểu đồ về đùng vị trí
-    // => do chart.js của 2 biểu đồ này còn hạn chế
-
-    if (
-      location == this.locationEnum.CuaKhau ||
-      location == this.locationEnum.TrenDuong
-    ) {
-      this.chartsDoughnut.forEach((chart) => chart.buildChart());
-    }
-
-    // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
-    if (
-      location == this.locationEnum.TongQuan &&
-      (size == 'small' || size == 'medium')
-    ) {
-      this.setOverViewClass = 'col-12';
-    } else if (
-      location == this.locationEnum.TongQuan &&
-      (size == 'auto' || size == 'large')
-    ) {
-      this.setOverViewClass = 'col-12 col-sm-4';
-    }
   }
 
   /**
@@ -329,24 +320,5 @@ export class DashBoardGridComponent implements OnInit, OnDestroy {
    */
   getWidgetClass(location: LocationEnum): string {
     return this.sizeConfig[location][this.currentSize[location]];
-  }
-
-  /**
-   * Sets hidden
-   * @description set ẩn/ hiện các widget tương ứng
-   * @param LocationEnum
-   */
-  setHidden(LocationEnum: string) {
-    if (LocationEnum == this.locationEnum.CuaKhau) {
-      this.isVisibleBorderGate = !this.isVisibleBorderGate;
-    }
-    if (LocationEnum == this.locationEnum.TrenDuong)
-      this.isVisibleOnTheRoad = !this.isVisibleOnTheRoad;
-    if (LocationEnum == this.locationEnum.NhaMay)
-      this.isVisibleAtTheFactory = !this.isVisibleAtTheFactory;
-    if (LocationEnum == this.locationEnum.TaiCang)
-      this.isVisibleAtThePort = !this.isVisibleAtThePort;
-    if (LocationEnum == this.locationEnum.TongQuan)
-      this.isVisibleOverView = !this.isVisibleOverView;
   }
 }

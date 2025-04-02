@@ -1,0 +1,23 @@
+<div class="row d-flex g-3 justify-content-between">
+  <div *ngFor="let item of dataModel" [ngClass]="setClass">
+    <div class="card h-100" [ngStyle]="{ 'background-color': item.backgroundColor }">
+      <div class="card-body container-fluid py-1">
+        <div class="card-title">{{ item.title }}</div>
+
+        <div class="card-content d-flex align-items-center text-start">
+          <div class="row d-flex text-start align-items-center">
+            <div class="col-auto">
+              <div class="vehicle-count text-nowrap">{{ item.numberVehicle }}</div>
+            </div>
+            <div class="col-auto text-start p-0">
+              <div class="vehicle-label">Phương tiện</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer shadow-none py-0 mb-2" *ngIf="item.isDisplayFooter">
+        <span> {{ item.percentage }} % / Tổng phương tiện</span>
+      </div>
+    </div>
+  </div>
+</div>
