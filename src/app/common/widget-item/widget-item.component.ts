@@ -3,15 +3,15 @@ import {
   Component,
   EventEmitter,
   Input,
+  OnChanges,
+  OnInit,
   Output,
+  SimpleChanges,
 } from '@angular/core';
 import { VehicleWidgetComponent } from '../chart-items/vehicle-widget/vehicle-widget.component';
-import { LocationEnum, TypeChartEnum } from '../model/vehicle/location.enum';
+import { LocationEnum, TypeChartEnum } from '../model/enum/location.enum';
 import { DashboardDoughnutComponent } from '../chart-items/dashboard-doughnut/dashboard-doughnut.component';
-import {
-  VehicleCompany,
-  VehicleLoaded,
-} from '../model/dashboard/dashboard.model';
+import { Widget } from '../model/dashboard/dashboard.model';
 import { BarChartComponent } from '../chart-items/bar-chart/bar-chart.component';
 
 @Component({
@@ -20,13 +20,7 @@ import { BarChartComponent } from '../chart-items/bar-chart/bar-chart.component'
   styleUrl: './widget-item.component.scss',
 })
 export class WidgetItemComponent implements AfterViewInit {
-  @Input() title: string = '';
-  @Input() isVisible: boolean = true;
-  @Input() setClassForChild: string = '';
-  @Input() chartType!: TypeChartEnum;
-  @Input() location!: LocationEnum;
-  @Input() color: string = '';
-  @Input() dataModel: any;
+  @Input() widget!: Widget;
   @Output() eventWidthSelected = new EventEmitter<any>();
   @Output() eventRefreshData = new EventEmitter<any>();
   typeChartEnum = TypeChartEnum;
@@ -39,33 +33,33 @@ export class WidgetItemComponent implements AfterViewInit {
     }, 100);
   }
 
+  /**
+   * Sets dashboard to component
+   * build các component khi thiết lập giao diện
+   * đồng thời dùng để update lại dữ liệu
+   */
   setDashboardToComponent() {
-    if (this.chartType == this.typeChartEnum.vehicleWidget) {
+    if (this.widget.chartType == this.typeChartEnum.vehicleWidget) {
       this.dynamicComponentData = {
         component: VehicleWidgetComponent,
         inputs: {
-          dataModel: this.dataModel,
-          setClass: this.setClassForChild,
+          widget: this.widget,
         },
       };
-    } else if (this.chartType == this.typeChartEnum.doughnut) {
-      const data = this.dataModel as VehicleLoaded;
+    } else if (this.widget.chartType == this.typeChartEnum.doughnut) {
       this.dynamicComponentData = {
         component: DashboardDoughnutComponent,
         inputs: {
-          dataModel: data,
+          widget: this.widget,
         },
       };
-    } else if (this.chartType == this.typeChartEnum.bar) {
-      const data = this.dataModel as VehicleCompany;
-
+    } else if (this.widget.chartType == this.typeChartEnum.bar) {
       this.dynamicComponentData = {
         component: BarChartComponent,
         inputs: {
-          dataModel: data,
+          widget: this.widget,
           minLabelWidth: 100,
           defaultVisibleItems: 3,
-          barColor: this.color,
         },
       };
     }
@@ -83,37 +77,18 @@ export class WidgetItemComponent implements AfterViewInit {
     size: 'auto' | 'small' | 'medium' | 'large',
     location: LocationEnum
   ) {
-    console.log(size);
-
-    // xử lý khi resize với 2 biểu đồ Doughnut,
-    // fix lỗi phải click vào màn hinh mới tự đông cập nhật 2 biểu đồ về đùng vị trí
-    // => do chart.js của 2 biểu đồ này còn hạn chế
-
-    if (
-      location == this.locationEnum.CuaKhau ||
-      location == this.locationEnum.TrenDuong
-    ) {
-      const data = this.dataModel as VehicleLoaded;
-      this.dynamicComponentData = {
-        component: DashboardDoughnutComponent,
-        inputs: {
-          dataModel: data,
-        },
-      };
-    }
-
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
       location == this.locationEnum.TongQuan &&
       (size == 'small' || size == 'medium')
     ) {
-      this.setClassForChild = 'col-12';
+      this.widget.setClassForChild = 'col-12';
       this.setDashboardToComponent();
     } else if (
       location == this.locationEnum.TongQuan &&
       (size == 'auto' || size == 'large')
     ) {
-      this.setClassForChild = 'col-12 col-sm-4';
+      this.widget.setClassForChild = 'col-12 col-sm-4';
       this.setDashboardToComponent();
     }
     this.eventWidthSelected.emit(size);

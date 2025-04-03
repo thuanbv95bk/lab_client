@@ -5,21 +5,21 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
-import { MultiSelectComponent } from './common/multi-select/multi-select.component';
-import { setHiddenExtendComponent } from './common/set-hidden-extend/set-hidden-extend.component';
-import { WidthWidgetComponent } from './common/width-widget/width-widget.component';
+import { MultiSelectComponent } from './common/shared-component/multi-select/multi-select.component';
+import { setHiddenExtendComponent } from './common/shared-component/set-hidden-extend/set-hidden-extend.component';
+import { WidthWidgetComponent } from './common/shared-component/width-widget/width-widget.component';
 import { DoughnutPluginService } from './service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from './service/legend-alignment-plugin/legend-alignment-plugin.service';
 import { ChartScrollService } from './service/chart-bar-scroll/chart-bar-scroll.service';
-import { VehicleListComponent } from './common/vehicle-list/vehicle-list.component';
 import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
 import { DashBoardComponent } from './dash-board/dash-board.component';
-
 import { DashboardDoughnutComponent } from './common/chart-items/dashboard-doughnut/dashboard-doughnut.component';
 import { BarChartComponent } from './common/chart-items/bar-chart/bar-chart.component';
 import { VehicleWidgetComponent } from './common/chart-items/vehicle-widget/vehicle-widget.component';
 import { WidgetItemComponent } from './common/widget-item/widget-item.component';
 import { DynamicLoadWidgetComponent } from './common/chart-items/dynamic-load-widget/dynamic-load-widget.component';
+import { WidgetUpdateDataService } from './service/widget-update-data.service';
+import { VehicleListComponent } from './common/shared-component/vehicle-list/vehicle-list.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +47,7 @@ import { DynamicLoadWidgetComponent } from './common/chart-items/dynamic-load-wi
     LegendService,
     ChartScrollService,
     VehicleDataService,
+    WidgetUpdateDataService,
   ],
   bootstrap: [AppComponent],
 })

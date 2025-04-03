@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.service';
-import { Vehicle } from '../model/vehicle/vehicle.model';
-import { LocationEnum } from '../model/vehicle/location.enum';
+import { LocationEnum } from '../../model/enum/location.enum';
+import { Vehicle } from '../../model/enum/vehicle.model';
+import { VehicleDataService } from '../../../service/vehicle-data/vehicle-data.service';
 
 @Component({
   selector: 'app-vehicle-list',

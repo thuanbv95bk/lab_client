@@ -1,72 +1,48 @@
-import { CardWidgetModel } from '../vehicle/vehicle.model';
+import { Subscription } from 'rxjs';
+import { LocationEnum, TypeChartEnum } from '../enum/location.enum';
+import { Vehicle } from '../enum/vehicle.model';
+import { WidgetUpdateDataService } from '../../../service/widget-update-data.service';
 
-/**
- * Dashboard
- * @description dữ liệu để đẩy vào các widget hiển thị dữ liệu
- * @author thuan.bv
- */
-export class Dashboard {
-  totalVehicles: number | 0; // tổng xe
-  emptyVehicles: number | 0; // Phương tiện không hàng
-  loadedVehicles: number | 0; // Phương tiện có hàng
-  isReloadView: boolean; // trigger để loading lại màn hình của widget
-  listCardWidgetModel: CardWidgetModel[];
-  vehicleBorderGate: VehicleLoaded[]; // Phương tiện tại cửa khẩu không hàng
-  vehicleOnTheRoad: VehicleLoaded[]; // Phương tiện trên đường
-  listVehicleAtTheFactory: VehicleCompany[]; // danh sách phương tiện tại nhà máy
-  listVehicleAtThePort: VehicleCompany[]; // danh sách phương tiện tại cảng
+export class Widget {
+  orderValue: number = 0;
+  title: string = '';
+  color: string = '';
+  backgroundColor: string = '';
+  setClassForChild: string = '';
+  location!: LocationEnum;
+  isVisible: boolean = true;
+  chartType!: TypeChartEnum;
+  currentSize!: 'auto' | 'small' | 'medium' | 'large';
 
-  constructor(obj?: Partial<Dashboard>) {
-    this.totalVehicles = obj?.totalVehicles || 0;
-    this.emptyVehicles = obj?.emptyVehicles || 0;
-    this.loadedVehicles = obj?.loadedVehicles || 0;
-    this.isReloadView = obj?.isReloadView || false;
-    this.listCardWidgetModel = obj?.listCardWidgetModel || [];
-
-    this.vehicleBorderGate = obj?.vehicleBorderGate || [];
-    this.vehicleOnTheRoad = obj?.vehicleOnTheRoad || [];
-    this.listVehicleAtTheFactory = obj?.listVehicleAtTheFactory || [];
-    this.listVehicleAtThePort = obj?.listVehicleAtThePort || [];
+  dataModel: Vehicle[] = []; // Sử dụng Observable thay vì dữ liệu tĩnh
+  private subscription!: Subscription;
+  constructor(
+    obj?: Partial<Widget>,
+    private updateDataService?: WidgetUpdateDataService
+  ) {
+    this.orderValue = obj?.orderValue || 0;
+    this.title = obj?.title || '';
+    this.color = obj?.color || '';
+    this.backgroundColor = obj?.backgroundColor || '';
+    this.setClassForChild = obj?.setClassForChild || '';
+    this.isVisible = obj?.isVisible || true;
+    this.chartType = obj?.chartType!;
+    this.location = obj?.location!;
+    this.dataModel = obj?.dataModel || [];
+    this.currentSize = obj?.currentSize || 'auto';
+    // Nếu có vehicleService, lắng nghe filteredVehicles$
+    if (this.updateDataService) {
+      this.subscription = this.updateDataService.filteredVehicles$.subscribe(
+        (vehicles) => {
+          this.dataModel = vehicles;
+        }
+      );
+    }
   }
-
-  /**
-   * Lấy dữ liệu cho widget
-   */
-  setDataToVehicleWidget() {
-    this.listCardWidgetModel = [];
-
-    const cardWidgetModel1 = new CardWidgetModel();
-    cardWidgetModel1.backgroundColor = '#006ADC';
-    cardWidgetModel1.title = 'Phương tiện của công ty';
-    cardWidgetModel1.totalVehicles = this.totalVehicles;
-    cardWidgetModel1.numberVehicle = this.totalVehicles;
-    cardWidgetModel1.isDisplayFooter = false;
-    cardWidgetModel1.isReloadView = true;
-
-    this.listCardWidgetModel.push(cardWidgetModel1);
-    const cardWidgetMode2 = new CardWidgetModel();
-    cardWidgetMode2.backgroundColor = '#509447';
-    cardWidgetMode2.title = 'Phương tiện có hàng';
-    cardWidgetMode2.totalVehicles = this.totalVehicles;
-    cardWidgetMode2.numberVehicle = this.loadedVehicles;
-    cardWidgetMode2.isDisplayFooter = true;
-    this.listCardWidgetModel.push(cardWidgetMode2);
-
-    const cardWidgetModel3 = new CardWidgetModel();
-    cardWidgetModel3.backgroundColor = '#E2803C';
-    cardWidgetModel3.title = 'Phương tiện không hàng';
-    cardWidgetModel3.totalVehicles = this.totalVehicles;
-    cardWidgetModel3.numberVehicle = this.emptyVehicles;
-    cardWidgetModel3.isDisplayFooter = true;
-    this.listCardWidgetModel.push(cardWidgetModel3);
+  // Hủy subscribe khi widget bị xóa
+  destroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
-}
-
-export interface VehicleCompany {
-  company: string;
-  value: number;
-}
-export interface VehicleLoaded {
-  key: string;
-  value: number;
 }

@@ -10,6 +10,10 @@ export enum LocationEnum {
   TaiCang = 'atThePort',
 }
 
+/**
+ * Type chart enum
+ * enum mô tả loại chart
+ */
 export enum TypeChartEnum {
   bar = 'bar',
   doughnut = 'doughnut',
