@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-set-hidden-extend',
@@ -6,12 +6,11 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./set-hidden-extend.component.css'],
 })
 export class setHiddenExtendComponent {
-  @Input()
-  isVisible!: boolean; // true: hiển thị ;false : ẩn đi
-  // @Output() isVisibleChange = new EventEmitter<boolean>(); // Phát sự kiện ra ngoài
+  @Input() isVisible!: boolean; // true: hiển thị ;false : ẩn đi
+  @Output() isVisibleChange = new EventEmitter<boolean>(); // Phát sự kiện ra ngoài
 
-  // toggle() {
-  //   this.isVisible = !this.isVisible;
-  //   this.isVisibleChange.emit(this.isVisible);
-  // }
+  toggle() {
+    this.isVisible = !this.isVisible;
+    this.isVisibleChange.emit(this.isVisible);
+  }
 }

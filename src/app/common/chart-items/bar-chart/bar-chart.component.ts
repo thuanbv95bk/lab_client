@@ -18,7 +18,7 @@ import { VehicleCompany } from '../../model/dashboard/dashboard.model';
   styleUrls: ['./bar-chart.component.scss'],
 })
 export class BarChartComponent implements AfterViewInit, OnChanges {
-  @Input() data: VehicleCompany[] = [];
+  @Input() dataModel: VehicleCompany[] = [];
   @Input() barColor: string = '#d90429';
   @Input() minLabelWidth: number = 100;
   @Input() defaultVisibleItems: number = 5;
@@ -127,10 +127,9 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   };
 
   ngAfterViewInit(): void {
-    this.buildChart();
-    // new ResizeObserver(() => {
-    //   // Kích thước container thay đổi sẽ tự động cập nhật
-    // }).observe(this.chartContainer.nativeElement);
+    setTimeout(() => {
+      this.buildChart();
+    }, 100);
   }
 
   /**
@@ -151,10 +150,10 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
    */
   buildChart(): void {
     this.chartData = {
-      labels: this.data.map((item) => item.company),
+      labels: this.dataModel.map((item) => item.company),
       datasets: [
         {
-          data: this.data.map((item) => item.value),
+          data: this.dataModel.map((item) => item.value),
           backgroundColor: this.barColor,
           barPercentage: 1, // Cột chiếm 50% trong nhóm
           categoryPercentage: 0.8, // Nhóm cột chiếm 50% trục X

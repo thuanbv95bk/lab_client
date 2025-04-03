@@ -1,0 +1,30 @@
+.vehicle-container {
+  .card {
+    color: white;
+    padding: 8px;
+    .card-title {
+      font-size: 14px;
+    }
+    .card-body {
+      padding: 0;
+    }
+    .card-content {
+      gap: 5px;
+      .vehicle-count {
+        font-size: 40px;
+        font-weight: bold;
+        margin: 0;
+      }
+      .vehicle-label {
+        font-size: 15px;
+        font-weight: 400;
+        margin: 0;
+      }
+    }
+    .card-footer {
+      border-top: none !important;
+      background-color: transparent !important;
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,40 @@
+.widget-item {
+  background: white;
+  border-radius: 2px;
+  min-height: 100%;
+
+  .widget-header {
+    padding: 5px;
+    background: white;
+  }
+
+  .widget-title {
+    font-size: 12px;
+  }
+
+  .btn {
+    background-color: #d2d2d2;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    border-radius: 3px;
+  }
+
+  .btn-refresh :hover {
+    background-color: rgb(114, 112, 112);
+  }
+}
+
+.widget-none {
+  background-color: #eeefff;
+}
+
+.widget-display {
+  background: white;
+}
+
+/* Ẩn nội dung */
+.hidden {
+  position: absolute;
+  left: -9999px;
+}

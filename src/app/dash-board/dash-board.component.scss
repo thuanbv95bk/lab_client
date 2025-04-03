@@ -1,45 +1,42 @@
 .fs-14 {
   font-size: 14px;
 }
+
 .fs-12 {
   font-size: 12px;
 }
+
 .fs-11 {
   font-size: 11px;
 }
+
 .scrollable {
   overflow-x: auto;
 }
 
 .dash-board {
-  overflow-x: hidden !important;
+  background-color: #eeefff;
+  overflow-x: hidden;
+  height: 100vh;
+
   .widget-container {
-    .widget-header {
+    .widget-item {
       background: white;
       border-radius: 2px;
-      // padding: 5px 0px;
-      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-      min-height: 100%;
+      padding: 5px;
+
       .widget-title {
-        height: auto;
         padding: 0 5px;
       }
+
       .btn {
         background-color: #d2d2d2;
         width: 25px;
         height: 25px;
         padding: 0;
         margin-left: 10px;
-        border-radius: 5px;
-      }
-      .btn-refresh :hover {
-        background-color: rgb(114, 112, 112);
+        border-radius: 3px;
       }
     }
   }
-}
-/* Ẩn nội dung */
-.hidden {
-  position: absolute;
-  left: -9999px;
 }

@@ -1,7 +1,5 @@
 <div class="btn-container" id="idbtn">
-  <button class="btn" type="button">
-    <i
-      [ngClass]="isVisible ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"
-    ></i>
+  <button class="btn" type="button" (click)="toggle()">
+    <i [ngClass]="isVisible ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"></i>
   </button>
 </div>

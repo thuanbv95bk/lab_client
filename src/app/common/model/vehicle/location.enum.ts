@@ -10,6 +10,11 @@ export enum LocationEnum {
   TaiCang = 'atThePort',
 }
 
+export enum TypeChartEnum {
+  bar = 'bar',
+  doughnut = 'doughnut',
+  vehicleWidget = 'vehicleWidget',
+}
 export const LOCATION_OPTIONS: LocationEnum[] = Object.values(LocationEnum);
 
 export function isLocation(value: string): value is LocationEnum {
