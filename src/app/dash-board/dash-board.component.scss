@@ -23,11 +23,9 @@
     .widget-item {
       background: white;
       border-radius: 2px;
-      box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-      min-height: 100%;
+      padding: 5px;
 
       .widget-title {
-        height: auto;
         padding: 0 5px;
       }
 
@@ -37,22 +35,8 @@
         height: 25px;
         padding: 0;
         margin-left: 10px;
-        border-radius: 5px;
-      }
-
-      .btn-refresh :hover {
-        background-color: rgb(114, 112, 112);
+        border-radius: 3px;
       }
     }
   }
-}
-
-.widget-item > div {
-  padding: 5px;
-}
-
-/* Ẩn nội dung */
-.hidden {
-  position: absolute;
-  left: -9999px;
 }

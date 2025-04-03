@@ -29,8 +29,12 @@ export class Dashboard {
     this.listVehicleAtThePort = obj?.listVehicleAtThePort || [];
   }
 
+  /**
+   * Lấy dữ liệu cho widget
+   */
   setDataToVehicleWidget() {
     this.listCardWidgetModel = [];
+
     const cardWidgetModel1 = new CardWidgetModel();
     cardWidgetModel1.backgroundColor = '#006ADC';
     cardWidgetModel1.title = 'Phương tiện của công ty';
@@ -47,6 +51,7 @@ export class Dashboard {
     cardWidgetMode2.numberVehicle = this.loadedVehicles;
     cardWidgetMode2.isDisplayFooter = true;
     this.listCardWidgetModel.push(cardWidgetMode2);
+
     const cardWidgetModel3 = new CardWidgetModel();
     cardWidgetModel3.backgroundColor = '#E2803C';
     cardWidgetModel3.title = 'Phương tiện không hàng';

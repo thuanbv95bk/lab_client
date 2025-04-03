@@ -3,8 +3,6 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
-  OnInit,
   Output,
 } from '@angular/core';
 import { VehicleWidgetComponent } from '../chart-items/vehicle-widget/vehicle-widget.component';
@@ -28,14 +26,11 @@ export class WidgetItemComponent implements AfterViewInit {
   @Input() chartType!: TypeChartEnum;
   @Input() location!: LocationEnum;
   @Input() color: string = '';
+  @Input() dataModel: any;
   @Output() eventWidthSelected = new EventEmitter<any>();
   @Output() eventRefreshData = new EventEmitter<any>();
   typeChartEnum = TypeChartEnum;
-
-  @Input() dataModel: any;
-
   locationEnum = LocationEnum;
-
   dynamicComponentData: any;
 
   ngAfterViewInit(): void {
@@ -94,12 +89,18 @@ export class WidgetItemComponent implements AfterViewInit {
     // fix lỗi phải click vào màn hinh mới tự đông cập nhật 2 biểu đồ về đùng vị trí
     // => do chart.js của 2 biểu đồ này còn hạn chế
 
-    // if (
-    //   location == this.locationEnum.CuaKhau ||
-    //   location == this.locationEnum.TrenDuong
-    // ) {
-    //   this.chartsDoughnut.forEach((chart) => chart.buildChart());
-    // }
+    if (
+      location == this.locationEnum.CuaKhau ||
+      location == this.locationEnum.TrenDuong
+    ) {
+      const data = this.dataModel as VehicleLoaded;
+      this.dynamicComponentData = {
+        component: DashboardDoughnutComponent,
+        inputs: {
+          dataModel: data,
+        },
+      };
+    }
 
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
@@ -118,6 +119,10 @@ export class WidgetItemComponent implements AfterViewInit {
     this.eventWidthSelected.emit(size);
   }
 
+  /**
+   * Tải lại dữ liệu cho từng widget tương ứng
+   * @param location
+   */
   refreshData(location: LocationEnum) {
     this.eventRefreshData.emit(location);
     this.setDashboardToComponent();

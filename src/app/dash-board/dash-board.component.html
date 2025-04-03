@@ -5,25 +5,15 @@
         <div class="col-auto">
           <div class="fs-14 text-primary fw-bold">TỔNG QUAN CHUYẾN HÀNG</div>
         </div>
-        <div
-          class="col-sm-auto d-flex justify-content-between align-items-center"
-        >
+        <div class="col-sm-auto d-flex justify-content-between align-items-center">
           <div class="fs-12 fw-bold">XEM THEO</div>
           <div>
-            <app-multi-select
-              [vehicles]="vehicles"
-              [placeholder]="'Chọn phương tiện'"
-              [search]="true"
-              [selectAll]="true"
-              [allSelected]="isAllSelectedVehicles"
-              (selectedChange)="onSelectedChangeVehicle($event)"
-            ></app-multi-select>
+            <app-multi-select [vehicles]="vehicles" [placeholder]="'Chọn phương tiện'" [search]="true"
+              [selectAll]="true" [allSelected]="isAllSelectedVehicles"
+              (selectedChange)="onSelectedChangeVehicle($event)"></app-multi-select>
           </div>
           <div class="btn-contenner">
-            <button
-              class="btn btn-primary bg-primary"
-              (click)="getDataToDashBoard(this.filteredVehicles)"
-            >
+            <button class="btn btn-primary bg-primary" (click)="getDataToDashBoard(this.filteredVehicles)">
               <i class="fa-solid fa-rotate-right"></i>
             </button>
           </div>
@@ -36,80 +26,45 @@
     <div class="row g-2">
       <!-- Tổng quan công ty -->
       <div [ngClass]="getWidgetClass(locationEnum.TongQuan)">
-        <app-widget-item
-          [title]="'TỔNG QUAN CÔNG TY'"
-          [location]="locationEnum.TongQuan"
-          [isVisible]="isVisibleOverView"
-          [setClassForChild]="setOverViewClass"
-          [dataModel]="this.dashboardModel.listCardWidgetModel"
-          [chartType]="typeChartEnum.vehicleWidget"
-          (eventWidthSelected)="
-            changeWidthSelected($event, locationEnum.TongQuan)
-          "
-          (eventRefreshData)="refreshOverView()"
-        ></app-widget-item>
+        <app-widget-item [title]="'TỔNG QUAN CÔNG TY'" [location]="locationEnum.TongQuan"
+          [isVisible]="isVisibleOverView" [setClassForChild]="setOverViewClass"
+          [dataModel]="this.dashboardModel.listCardWidgetModel" [chartType]="typeChartEnum.vehicleWidget"
+          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TongQuan)"
+          (eventRefreshData)="refreshOverView()"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cửa khẩu -->
       <div [ngClass]="getWidgetClass(locationEnum.CuaKhau)">
-        <app-widget-item
-          [title]="'PHƯƠNG TIỆN TẠI CỦA KHẨU'"
-          [location]="locationEnum.CuaKhau"
-          [isVisible]="isVisibleBorderGate"
-          [dataModel]="this.dashboardModel.vehicleBorderGate"
-          [chartType]="typeChartEnum.doughnut"
-          (eventWidthSelected)="
-            changeWidthSelected($event, locationEnum.CuaKhau)
-          "
-          (eventRefreshData)="refreshBorderGate()"
-        ></app-widget-item>
+        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI CỦA KHẨU'" [location]="locationEnum.CuaKhau"
+          [isVisible]="isVisibleBorderGate" [dataModel]="this.dashboardModel.vehicleBorderGate"
+          [chartType]="typeChartEnum.doughnut" (eventWidthSelected)="changeWidthSelected($event, locationEnum.CuaKhau)"
+          (eventRefreshData)="refreshBorderGate()"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện đang trên đường -->
       <div [ngClass]="getWidgetClass(locationEnum.TrenDuong)">
-        <app-widget-item
-          [title]="'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG'"
-          [location]="locationEnum.TrenDuong"
-          [isVisible]="isVisibleOnTheRoad"
-          [dataModel]="this.dashboardModel.vehicleOnTheRoad"
+        <app-widget-item [title]="'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG'" [location]="locationEnum.TrenDuong"
+          [isVisible]="isVisibleOnTheRoad" [dataModel]="this.dashboardModel.vehicleOnTheRoad"
           [chartType]="typeChartEnum.doughnut"
-          (eventWidthSelected)="
-            changeWidthSelected($event, locationEnum.TrenDuong)
-          "
-          (eventRefreshData)="refreshOnTheRoad()"
-        ></app-widget-item>
+          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TrenDuong)"
+          (eventRefreshData)="refreshOnTheRoad()"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
       <div [ngClass]="getWidgetClass(locationEnum.NhaMay)">
-        <app-widget-item
-          [title]="'PHƯƠNG TIỆN TẠI NHÀ MÁY'"
-          [location]="locationEnum.NhaMay"
-          [isVisible]="isVisibleAtTheFactory"
-          [dataModel]="this.dashboardModel.listVehicleAtTheFactory"
-          [chartType]="typeChartEnum.bar"
-          [color]="'#e63946'"
-          (eventWidthSelected)="
-            changeWidthSelected($event, locationEnum.NhaMay)
-          "
-          (eventRefreshData)="refreshAtTheFactory()"
-        ></app-widget-item>
+        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI NHÀ MÁY'" [location]="locationEnum.NhaMay"
+          [isVisible]="isVisibleAtTheFactory" [dataModel]="this.dashboardModel.listVehicleAtTheFactory"
+          [chartType]="typeChartEnum.bar" [color]="'#e63946'"
+          (eventWidthSelected)="changeWidthSelected($event, locationEnum.NhaMay)"
+          (eventRefreshData)="refreshAtTheFactory()"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cảng -->
       <div [ngClass]="getWidgetClass(locationEnum.TaiCang)">
-        <app-widget-item
-          [title]="'PHƯƠNG TIỆN TẠI CẢNG'"
-          [location]="locationEnum.TaiCang"
-          [isVisible]="isVisibleAtThePort"
-          [dataModel]="this.dashboardModel.listVehicleAtThePort"
-          [chartType]="typeChartEnum.bar"
-          [color]="'#20C997'"
-          (eventWidthSelected)="
-            changeWidthSelected($event, locationEnum.TaiCang)
-          "
-          (refreshData)="refreshAtThePort()"
-        >
+        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI CẢNG'" [location]="locationEnum.TaiCang"
+          [isVisible]="isVisibleAtThePort" [dataModel]="this.dashboardModel.listVehicleAtThePort"
+          [chartType]="typeChartEnum.bar" [color]="'#20C997'"
+          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TaiCang)" (refreshData)="refreshAtThePort()">
         </app-widget-item>
       </div>
     </div>

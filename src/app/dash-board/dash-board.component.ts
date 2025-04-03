@@ -132,9 +132,6 @@ export class DashBoardComponent implements OnInit, OnDestroy {
 
   isVisibleAtThePort: boolean = true;
 
-  // @ViewChildren(DashboardDoughnutComponent)
-  // chartsDoughnut!: QueryList<DashboardDoughnutComponent>;
-
   @ViewChildren(WidgetItemComponent)
   WidgetItem!: QueryList<WidgetItemComponent>;
 
@@ -158,6 +155,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @description Khởi tạo dữ liệu của danh sách xe
    * @author thuan.bv
    */
+
   async initData() {
     this.vehicles = await this.vehicleService.getVehicles();
     this.filteredVehicles = [...this.vehicles];
@@ -240,6 +238,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * Refresh over view
    * @event loading dữ liệu, tính toán lại để đưa vào widget tương ứng
    */
+
   refreshOverView() {
     this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
     this.dashboardModel.totalVehicles = 0;

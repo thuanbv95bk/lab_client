@@ -1,10 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CardWidgetModel } from '../../model/vehicle/vehicle.model';
 
 @Component({
@@ -12,15 +6,10 @@ import { CardWidgetModel } from '../../model/vehicle/vehicle.model';
   templateUrl: './vehicle-widget.component.html',
   styleUrl: './vehicle-widget.component.scss',
 })
-export class VehicleWidgetComponent implements AfterViewInit {
+export class VehicleWidgetComponent {
   @Input() dataModel: CardWidgetModel[] = [];
   @Input() setClass: string = 'col-12 col-sm-4'; //mặc định;
 
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      // this.animationEff();
-    }, 70);
-  }
   /**
    * Animations eff
    * @description tạo hiệu ứng thay đỗi dự liệu
