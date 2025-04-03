@@ -3,6 +3,7 @@ import {
   Input,
   OnChanges,
   OnDestroy,
+  OnInit,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -11,24 +12,33 @@ import { BaseChartDirective } from 'ng2-charts';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
 import { DoughnutPluginService } from '../../../service/doughnut-plugin/doughnut-plugin.service';
 import { LegendService } from '../../../service/legend-alignment-plugin/legend-alignment-plugin.service';
-import { VehicleLoaded } from '../../model/dashboard/dashboard.model';
+import { Widget } from '../../model/dashboard/dashboard.model';
+import { VehicleDataService } from '../../../service/vehicle-data/vehicle-data.service';
+
+export interface DoughnutModel {
+  key: string;
+  value: number;
+}
 
 @Component({
   selector: 'app-dashboard-doughnut',
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
-export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
+export class DashboardDoughnutComponent
+  implements OnInit, OnDestroy, OnChanges
+{
   emptyVehicles: number = 0; // Phương tiện không hàng
   loadedVehicles: number = 0; // Phương tiện có hàng
-  @Input() dataModel: VehicleLoaded[] = [];
-
+  @Input() dataModel: DoughnutModel[] = [];
+  @Input() widget!: Widget;
   @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
   private resizeSubscription: Subscription | undefined;
 
   constructor(
     private doughnutPlugin: DoughnutPluginService,
-    private legendService: LegendService
+    private legendService: LegendService,
+    private vehicleService: VehicleDataService
   ) {
     // Kiểm tra có phải môi trường browser không
     if (typeof window !== 'undefined') {
@@ -39,7 +49,9 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
         });
     }
   }
-
+  ngOnInit(): void {
+    this.initData();
+  }
   /**
    * on changes
    * @param changes
@@ -60,6 +72,18 @@ export class DashboardDoughnutComponent implements OnDestroy, OnChanges {
     setTimeout(() => {
       this.buildChart();
     }, 100);
+  }
+
+  /**
+   * Tính toán và thiết lập dư liệu để đẩy vào chart
+   */
+  initData() {
+    if (this.widget) {
+      this.dataModel = this.vehicleService.getDataToDoughnut(
+        this.widget?.dataModel,
+        this.widget?.location
+      );
+    }
   }
 
   public chartType: ChartType = 'doughnut';

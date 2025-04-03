@@ -6,13 +6,14 @@ import {
   ViewChildren,
 } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
-import { Vehicle } from '../common/model/vehicle/vehicle.model';
-import { Dashboard } from '../common/model/dashboard/dashboard.model';
+import { Vehicle } from '../common/model/enum/vehicle.model';
+import { Widget } from '../common/model/dashboard/dashboard.model';
 import {
   LocationEnum,
   TypeChartEnum,
-} from '../common/model/vehicle/location.enum';
+} from '../common/model/enum/location.enum';
 import { WidgetItemComponent } from '../common/widget-item/widget-item.component';
+import { WidgetUpdateDataService } from '../service/widget-update-data.service';
 
 @Component({
   selector: 'app-dash-board',
@@ -21,14 +22,18 @@ import { WidgetItemComponent } from '../common/widget-item/widget-item.component
 })
 export class DashBoardComponent implements OnInit, OnDestroy {
   vehicles: Vehicle[] = []; // Danh sách xe
-  totalVehicles: number = 0;
-  dashboardModel = new Dashboard(); // model chứa dữ liệu của các widget
   locationEnum = LocationEnum;
   typeChartEnum = TypeChartEnum;
   filteredVehicles: Vehicle[] = []; // danh sách xe được chọn
   isAllSelectedVehicles: boolean = false;
 
   setOverViewClass = 'col-12 col-sm-4'; // class mặc định cho widget tổng quan công ty
+
+  widgetOverView!: Widget; // widget tổng quan công ty
+  widgetBorderGate!: Widget; // widget tại cửa khẩu
+  widgetOnTheRoad!: Widget; // widget trên đường
+  widgetAtTheFactory!: Widget; // widget tại nhà máy
+  widgetAtThePort!: Widget; // widget tại cảng
 
   // Cấu hình class cho từng widget
   sizeConfig: {
@@ -88,66 +93,92 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   intervalRefresh: number = 300000; //5000
   intervalId: any;
 
-  /**
-   * Determines whether visible overview is
-   *@description Ẩn hiện widget TỔNG QUAN CÔNG TY
-   *@value true: hiện
-   *@value false: Ẩn đi
-   */
-
-  isVisibleOverView: boolean = true;
-
-  /**
-   * Determines whether visible border gate is
-   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CỬA KHẨU
-   * true: hiện
-   * false: Ẩn đi
-   */
-
-  isVisibleBorderGate: boolean = true;
-
-  /**
-   * Determines whether visible on the road is
-   * @description Ẩn hiện widget PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG
-   * @value true: hiện
-   * @value false: Ẩn đi
-   */
-
-  isVisibleOnTheRoad: boolean = true;
-  /**
-   * Determines whether visible at the factory
-   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI NHÀ MÁY
-   * @value true: hiện
-   * @value false: Ẩn đi
-   */
-
-  isVisibleAtTheFactory: boolean = true;
-
-  /**
-   * Determines whether visible at the port is
-   * @description Ẩn hiện widget PHƯƠNG TIỆN TẠI CẢNG
-   * @value true: hiện
-   * @value false: Ẩn đi
-   */
-
-  isVisibleAtThePort: boolean = true;
-
   @ViewChildren(WidgetItemComponent)
   WidgetItem!: QueryList<WidgetItemComponent>;
 
-  constructor(private vehicleService: VehicleDataService) {
-    this.totalVehicles = this.vehicles.length;
+  constructor(
+    private vehicleService: VehicleDataService,
+    private widgetUpdateDataService: WidgetUpdateDataService
+  ) {
+    this.widgetOverView = new Widget(
+      {
+        orderValue: 1,
+        title: 'TỔNG QUAN CÔNG TY',
+        color: '',
+        location: LocationEnum.TongQuan,
+        isVisible: true,
+        setClassForChild: 'col-12 col-sm-4',
+        chartType: TypeChartEnum.vehicleWidget,
+      },
+      this.widgetUpdateDataService
+    );
+    this.widgetBorderGate = new Widget(
+      {
+        orderValue: 2,
+        title: 'PHƯƠNG TIỆN TẠI CỬA KHẨU',
+        color: '',
+        location: LocationEnum.CuaKhau,
+        isVisible: true,
+        setClassForChild: '',
+        chartType: TypeChartEnum.doughnut,
+      },
+      this.widgetUpdateDataService
+    );
+
+    this.widgetOnTheRoad = new Widget(
+      {
+        orderValue: 3,
+        title: 'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG',
+        color: '',
+        location: LocationEnum.TrenDuong,
+        isVisible: true,
+        setClassForChild: '',
+        chartType: TypeChartEnum.doughnut,
+        dataModel: this.filteredVehicles,
+      },
+      this.widgetUpdateDataService
+    );
+    this.widgetAtTheFactory = new Widget(
+      {
+        orderValue: 1,
+        title: 'PHƯƠNG TIỆN TẠI NHÀ MÁY',
+        color: '#e63946',
+        location: LocationEnum.NhaMay,
+        isVisible: true,
+        setClassForChild: '',
+        chartType: TypeChartEnum.bar,
+        dataModel: this.filteredVehicles,
+      },
+      this.widgetUpdateDataService
+    );
+    this.widgetAtThePort = new Widget(
+      {
+        orderValue: 1,
+        title: 'PHƯƠNG TIỆN TẠI CẢNG',
+        color: '#20C997',
+        location: LocationEnum.TaiCang,
+        isVisible: true,
+        setClassForChild: '',
+        chartType: TypeChartEnum.bar,
+        dataModel: this.filteredVehicles,
+      },
+      this.widgetUpdateDataService
+    );
   }
 
   async ngOnInit(): Promise<void> {
     await this.initData();
-    this.getDataToDashBoard(this.filteredVehicles);
-
+    this.updateFilteredVehicles(this.filteredVehicles);
     this.startInterval();
   }
 
   ngOnDestroy() {
     this.stopInterval();
+    this.widgetOverView.destroy(); // Hủy đăng ký Observable khi component bị hủy
+    this.widgetBorderGate.destroy(); // Hủy đăng ký Observable khi component bị hủy
+    this.widgetOnTheRoad.destroy(); // Hủy đăng ký Observable khi component bị hủy
+    this.widgetAtTheFactory.destroy(); // Hủy đăng ký Observable khi component bị hủy
+    this.widgetAtThePort.destroy(); // Hủy đăng ký Observable khi component bị hủy
   }
 
   /**
@@ -162,6 +193,16 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Updates filtered vehicles
+   * Cập nhật danh sách của xe để loading về cho các widget
+   * @param listVehicles  danh sách xe muốn truyền đi
+   */
+  updateFilteredVehicles(listVehicles: Vehicle[]) {
+    this.widgetUpdateDataService.updateFilteredVehicles(listVehicles);
+    this.WidgetItem.forEach((x) => x.setDashboardToComponent());
+  }
+
+  /**
    * Starts interval
    * @description Bật time để cho loading dữ liệu :
    * Theo thời gian : intervalRefresh : 5 phút
@@ -169,10 +210,14 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   startInterval() {
     this.intervalId = setInterval(async () => {
       await this.initData();
-      this.getDataToDashBoard(this.filteredVehicles);
+      this.updateFilteredVehicles(this.filteredVehicles);
     }, this.intervalRefresh);
   }
 
+  /**
+   * Stops interval
+   * Xóa interval
+   */
   stopInterval() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
@@ -189,120 +234,8 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     if (selectedItems.length == 0) {
       selectedItems = [...this.vehicles];
     }
-    this.getDataToDashBoard(selectedItems);
-  }
 
-  /**
-   * Gets data to dash board
-   * @description tính toán dữ liệu để đẩy vào widget
-   * @param listVehicles : danh sách xe đã chọn
-   */
-
-  getDataToDashBoard(listVehicles: Vehicle[]) {
-    this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
-    this.dashboardModel.totalVehicles = listVehicles.length;
-
-    this.dashboardModel.emptyVehicles = listVehicles.filter(
-      (x) => x.isLoaded == false
-    ).length;
-
-    this.dashboardModel.loadedVehicles = listVehicles.filter(
-      (x) => x.isLoaded == true
-    ).length;
-    this.dashboardModel.setDataToVehicleWidget();
-
-    this.dashboardModel.vehicleBorderGate = this.vehicleService.getSummary(
-      listVehicles,
-      this.locationEnum.CuaKhau
-    );
-    this.dashboardModel.vehicleOnTheRoad = this.vehicleService.getSummary(
-      listVehicles,
-      this.locationEnum.TrenDuong
-    );
-
-    this.dashboardModel.setDataToVehicleWidget();
-    this.dashboardModel.listVehicleAtTheFactory =
-      this.vehicleService.getCompanySummary(
-        listVehicles.filter((x) => x.location == this.locationEnum.NhaMay)
-      );
-
-    this.dashboardModel.listVehicleAtThePort =
-      this.vehicleService.getCompanySummary(
-        listVehicles.filter((x) => x.location == this.locationEnum.TaiCang)
-      );
-
-    this.WidgetItem.forEach((item) => item.setDashboardToComponent());
-  }
-
-  /**
-   * Refresh over view
-   * @event loading dữ liệu, tính toán lại để đưa vào widget tương ứng
-   */
-
-  refreshOverView() {
-    this.dashboardModel.isReloadView = !this.dashboardModel.isReloadView;
-    this.dashboardModel.totalVehicles = 0;
-    this.dashboardModel.emptyVehicles = 0;
-    this.dashboardModel.loadedVehicles = 0;
-
-    this.dashboardModel.totalVehicles = this.filteredVehicles.length;
-    this.dashboardModel.emptyVehicles = this.filteredVehicles.filter(
-      (x) => x.isLoaded == false
-    ).length;
-    this.dashboardModel.loadedVehicles = this.filteredVehicles.filter(
-      (x) => x.isLoaded == true
-    ).length;
-
-    this.dashboardModel.setDataToVehicleWidget();
-  }
-  /**
-   * Refresh over BorderGate
-   * @event loading dữ liệu, tính toán lại để đưa vào widget cửa khẩu
-   */
-
-  refreshBorderGate() {
-    this.dashboardModel.vehicleBorderGate = this.vehicleService.getSummary(
-      this.filteredVehicles,
-      this.locationEnum.CuaKhau
-    );
-  }
-
-  /**
-   * Refresh on the road
-   * @event loading dữ liệu, tính toán lại để đưa vào widget xe đang trên đường
-   */
-  refreshOnTheRoad() {
-    this.dashboardModel.vehicleOnTheRoad = this.vehicleService.getSummary(
-      this.filteredVehicles,
-      this.locationEnum.TrenDuong
-    );
-  }
-
-  /**
-   * Refresh at the factory
-   * @event loading dữ liệu, tính toán lại để đưa vào widget xe tại nhà máy
-   */
-
-  refreshAtTheFactory() {
-    this.dashboardModel.listVehicleAtTheFactory =
-      this.vehicleService.getCompanySummary(
-        this.filteredVehicles.filter(
-          (x) => x.location == this.locationEnum.NhaMay
-        )
-      );
-  }
-
-  /**
-   * Refresh at the port
-   * @event loading dữ liệu, tính toán lại để đưa vào widget xe tại cảng
-   */
-  refreshAtThePort() {
-    this.dashboardModel.listVehicleAtThePort =
-      this.vehicleService.getCompanySummary(
-        this.filteredVehicles.filter(
-          (x) => x.location == this.locationEnum.TaiCang
-        )
-      );
+    this.updateFilteredVehicles(selectedItems);
   }
 
   /**

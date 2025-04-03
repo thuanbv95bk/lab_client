@@ -5,26 +5,52 @@ import {
   AfterViewInit,
   OnChanges,
   SimpleChanges,
+  OnInit,
 } from '@angular/core';
 import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartScrollService } from '../../../service/chart-bar-scroll/chart-bar-scroll.service';
-import { VehicleCompany } from '../../model/dashboard/dashboard.model';
+import { Widget } from '../../model/dashboard/dashboard.model';
+import { VehicleDataService } from '../../../service/vehicle-data/vehicle-data.service';
+
+export interface BarChartData {
+  key: string;
+  value: number;
+}
 
 @Component({
   selector: 'app-bar-chart',
   templateUrl: './bar-chart.component.html',
   styleUrls: ['./bar-chart.component.scss'],
 })
-export class BarChartComponent implements AfterViewInit, OnChanges {
-  @Input() dataModel: VehicleCompany[] = [];
-  @Input() barColor: string = '#d90429';
+export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
+  dataModel: BarChartData[] = [];
+
   @Input() minLabelWidth: number = 100;
-  @Input() defaultVisibleItems: number = 5;
+  @Input() defaultVisibleItems: number = 3;
+  @Input() widget!: Widget;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  constructor(private chartScrollService: ChartScrollService) {}
+  constructor(
+    private chartScrollService: ChartScrollService,
+    private vehicleService: VehicleDataService
+  ) {}
+
+  ngOnInit(): void {
+    this.initData();
+  }
+
+  /**
+   * Tính toán và thiết lập dư liệu để đẩy vào chart
+   */
+  initData() {
+    if (this.widget) {
+      this.dataModel = this.vehicleService.getCompanySummary(
+        this.widget.dataModel.filter((x) => x.location == this.widget.location)
+      );
+    }
+  }
 
   /**
    * Chart options of bar chart component
@@ -127,7 +153,7 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
   };
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
+    setTimeout(async () => {
       this.buildChart();
     }, 100);
   }
@@ -150,11 +176,11 @@ export class BarChartComponent implements AfterViewInit, OnChanges {
    */
   buildChart(): void {
     this.chartData = {
-      labels: this.dataModel.map((item) => item.company),
+      labels: this.dataModel.map((item) => item.key),
       datasets: [
         {
           data: this.dataModel.map((item) => item.value),
-          backgroundColor: this.barColor,
+          backgroundColor: this.widget.color,
           barPercentage: 1, // Cột chiếm 50% trong nhóm
           categoryPercentage: 0.8, // Nhóm cột chiếm 50% trục X
           maxBarThickness: 30,

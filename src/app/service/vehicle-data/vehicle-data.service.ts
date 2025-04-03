@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { LocationEnum } from '../../common/model/vehicle/location.enum';
-import { Vehicle } from '../../common/model/vehicle/vehicle.model';
-import { VehicleLoaded } from '../../common/model/dashboard/dashboard.model';
+import { LocationEnum } from '../../common/model/enum/location.enum';
+import { Vehicle } from '../../common/model/enum/vehicle.model';
+import { DoughnutModel } from '../../common/chart-items/dashboard-doughnut/dashboard-doughnut.component';
 
 /**
  * Injectable Sinh dữ liệu xe, theo radom,
@@ -90,8 +90,8 @@ export class VehicleDataService {
       {}
     );
 
-    return Object.entries(companyCounts).map(([company, value]) => ({
-      company,
+    return Object.entries(companyCounts).map(([key, value]) => ({
+      key,
       value: value as number,
     }));
   }
@@ -103,19 +103,17 @@ export class VehicleDataService {
    * @param locationEnum
    * @returns summary VehicleLoaded[]
    */
-  getSummary(data: Vehicle[], locationEnum: string): VehicleLoaded[] {
+  getDataToDoughnut(data: Vehicle[], locationEnum: string): DoughnutModel[] {
     // kiểm tra dữ liệu đầu vào
-    let res: VehicleLoaded[] = [];
+    let res: DoughnutModel[] = [];
     const emptyVehicles = {
       key: 'Phương tiện không hàng',
-      // value: 100,
       value: data.filter(
         (x) => x.isLoaded == false && x.location == locationEnum
       ).length,
     };
     const loadedVehicles = {
       key: 'Phương tiện có hàng',
-      // value: 0,
       value: data.filter(
         (x) => x.isLoaded == true && x.location == locationEnum
       ).length,

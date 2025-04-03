@@ -8,7 +8,7 @@ import {
   ViewChild,
   OnInit,
 } from '@angular/core';
-import { Vehicle } from '../model/vehicle/vehicle.model';
+import { Vehicle } from '../../model/enum/vehicle.model';
 
 @Component({
   selector: 'app-multi-select',

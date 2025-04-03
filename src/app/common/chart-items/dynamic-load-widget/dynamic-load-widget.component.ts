@@ -5,6 +5,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Widget } from '../../model/dashboard/dashboard.model';
 
 @Component({
   selector: 'app-dynamic-load-widget',
@@ -17,7 +18,7 @@ export class DynamicLoadWidgetComponent {
 
   @Input() set dynamicLoadWidgetComponent(data: {
     component: any;
-    inputs?: any;
+    inputs?: Widget;
   }) {
     if (data?.component) {
       this.container.clear(); // Xóa component cũ nếu có

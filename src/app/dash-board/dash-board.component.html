@@ -13,7 +13,7 @@
               (selectedChange)="onSelectedChangeVehicle($event)"></app-multi-select>
           </div>
           <div class="btn-contenner">
-            <button class="btn btn-primary bg-primary" (click)="getDataToDashBoard(this.filteredVehicles)">
+            <button class="btn btn-primary bg-primary" (click)="updateFilteredVehicles(this.filteredVehicles)">
               <i class="fa-solid fa-rotate-right"></i>
             </button>
           </div>
@@ -25,46 +25,33 @@
   <div class="pt-2">
     <div class="row g-2">
       <!-- Tổng quan công ty -->
-      <div [ngClass]="getWidgetClass(locationEnum.TongQuan)">
-        <app-widget-item [title]="'TỔNG QUAN CÔNG TY'" [location]="locationEnum.TongQuan"
-          [isVisible]="isVisibleOverView" [setClassForChild]="setOverViewClass"
-          [dataModel]="this.dashboardModel.listCardWidgetModel" [chartType]="typeChartEnum.vehicleWidget"
-          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TongQuan)"
-          (eventRefreshData)="refreshOverView()"></app-widget-item>
+      <div [ngClass]="getWidgetClass(widgetOverView.location)">
+        <app-widget-item [widget]="widgetOverView"
+          (eventWidthSelected)="changeWidthSelected($event, widgetOverView.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cửa khẩu -->
-      <div [ngClass]="getWidgetClass(locationEnum.CuaKhau)">
-        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI CỦA KHẨU'" [location]="locationEnum.CuaKhau"
-          [isVisible]="isVisibleBorderGate" [dataModel]="this.dashboardModel.vehicleBorderGate"
-          [chartType]="typeChartEnum.doughnut" (eventWidthSelected)="changeWidthSelected($event, locationEnum.CuaKhau)"
-          (eventRefreshData)="refreshBorderGate()"></app-widget-item>
+      <div [ngClass]="getWidgetClass( widgetBorderGate.location)">
+        <app-widget-item [widget]="widgetBorderGate"
+          (eventWidthSelected)="changeWidthSelected($event, widgetBorderGate.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện đang trên đường -->
-      <div [ngClass]="getWidgetClass(locationEnum.TrenDuong)">
-        <app-widget-item [title]="'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG'" [location]="locationEnum.TrenDuong"
-          [isVisible]="isVisibleOnTheRoad" [dataModel]="this.dashboardModel.vehicleOnTheRoad"
-          [chartType]="typeChartEnum.doughnut"
-          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TrenDuong)"
-          (eventRefreshData)="refreshOnTheRoad()"></app-widget-item>
+      <div [ngClass]="getWidgetClass(widgetOnTheRoad.location)">
+        <app-widget-item [widget]="widgetOnTheRoad"
+          (eventWidthSelected)="changeWidthSelected($event, widgetOnTheRoad.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
-      <div [ngClass]="getWidgetClass(locationEnum.NhaMay)">
-        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI NHÀ MÁY'" [location]="locationEnum.NhaMay"
-          [isVisible]="isVisibleAtTheFactory" [dataModel]="this.dashboardModel.listVehicleAtTheFactory"
-          [chartType]="typeChartEnum.bar" [color]="'#e63946'"
-          (eventWidthSelected)="changeWidthSelected($event, locationEnum.NhaMay)"
-          (eventRefreshData)="refreshAtTheFactory()"></app-widget-item>
+      <div [ngClass]="getWidgetClass(widgetAtTheFactory.location)">
+        <app-widget-item [widget]="widgetAtTheFactory"
+          (eventWidthSelected)="changeWidthSelected($event, widgetAtTheFactory.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cảng -->
-      <div [ngClass]="getWidgetClass(locationEnum.TaiCang)">
-        <app-widget-item [title]="'PHƯƠNG TIỆN TẠI CẢNG'" [location]="locationEnum.TaiCang"
-          [isVisible]="isVisibleAtThePort" [dataModel]="this.dashboardModel.listVehicleAtThePort"
-          [chartType]="typeChartEnum.bar" [color]="'#20C997'"
-          (eventWidthSelected)="changeWidthSelected($event, locationEnum.TaiCang)" (refreshData)="refreshAtThePort()">
+      <div [ngClass]="getWidgetClass(widgetAtThePort.location)">
+        <app-widget-item [widget]="widgetAtThePort"
+          (eventWidthSelected)="changeWidthSelected($event, widgetAtThePort.location)">
         </app-widget-item>
       </div>
     </div>
