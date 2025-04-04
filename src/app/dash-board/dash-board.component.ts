@@ -187,8 +187,9 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @param locationEnum vị trí tương ứng định nghĩa ở enum location
    */
 
-  changeWidthSelected(size: SizeEnum, location: LocationEnum) {
-    this.widgetSizeConfig.setCurrentSize(location, size);
+  changeWidthSelected(widget: Widget, size: SizeEnum) {
+    widget.currentSize = size;
+    this.widgetSizeConfig.setCurrentSize(widget.location, size);
   }
 
   /**

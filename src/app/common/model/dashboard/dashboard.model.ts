@@ -12,7 +12,7 @@ export class Widget {
   location!: LocationEnum;
   isVisible: boolean = true;
   chartType!: TypeChartEnum;
-  currentSize!: 'auto' | 'small' | 'medium' | 'large';
+  currentSize!: SizeEnum;
 
   dataModel: Vehicle[] = []; // Sử dụng Observable thay vì dữ liệu tĩnh
   private subscription!: Subscription;
@@ -26,7 +26,7 @@ export class Widget {
     this.chartType = obj?.chartType!;
     this.location = obj?.location!;
     this.dataModel = obj?.dataModel || [];
-    this.currentSize = obj?.currentSize || 'auto';
+    this.currentSize = obj?.currentSize || SizeEnum.auto;
     // Nếu có vehicleService, lắng nghe filteredVehicles$
     if (this.updateDataService) {
       this.subscription = this.updateDataService.filteredVehicles$.subscribe((vehicles) => {
@@ -93,8 +93,6 @@ export class WidgetSizeConfig {
    */
   static getClass(location: LocationEnum): string {
     const size = this.currentSize[location] ?? SizeEnum.auto;
-    console.log(size);
-
     return this.sizeConfig[location]?.[size];
   }
 
