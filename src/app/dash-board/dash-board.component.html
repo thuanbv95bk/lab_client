@@ -31,9 +31,7 @@
     <div class="row g-2">
       <!-- Tổng quan công ty -->
       <div [ngClass]="getWidgetClass(widgetOverView.location)">
-        <app-widget-item
-          [widget]="widgetOverView"
-          (eventWidthSelected)="changeWidthSelected($event, widgetOverView.location)">
+        <app-widget-item [widget]="widgetOverView" (eventWidthSelected)="changeWidthSelected(widgetOverView, $event)">
         </app-widget-item>
       </div>
 
@@ -41,7 +39,7 @@
       <div [ngClass]="getWidgetClass(widgetBorderGate.location)">
         <app-widget-item
           [widget]="widgetBorderGate"
-          (eventWidthSelected)="changeWidthSelected($event, widgetBorderGate.location)">
+          (eventWidthSelected)="changeWidthSelected(widgetBorderGate, $event)">
         </app-widget-item>
       </div>
 
@@ -49,21 +47,19 @@
       <div [ngClass]="getWidgetClass(widgetOnTheRoad.location)">
         <app-widget-item
           [widget]="widgetOnTheRoad"
-          (eventWidthSelected)="changeWidthSelected($event, widgetOnTheRoad.location)"></app-widget-item>
+          (eventWidthSelected)="changeWidthSelected(widgetOnTheRoad, $event)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
       <div [ngClass]="getWidgetClass(widgetAtTheFactory.location)">
         <app-widget-item
           [widget]="widgetAtTheFactory"
-          (eventWidthSelected)="changeWidthSelected($event, widgetAtTheFactory.location)"></app-widget-item>
+          (eventWidthSelected)="changeWidthSelected(widgetAtTheFactory, $event)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cảng -->
       <div [ngClass]="getWidgetClass(widgetAtThePort.location)">
-        <app-widget-item
-          [widget]="widgetAtThePort"
-          (eventWidthSelected)="changeWidthSelected($event, widgetAtThePort.location)">
+        <app-widget-item [widget]="widgetAtThePort" (eventWidthSelected)="changeWidthSelected(widgetAtThePort, $event)">
         </app-widget-item>
       </div>
     </div>
