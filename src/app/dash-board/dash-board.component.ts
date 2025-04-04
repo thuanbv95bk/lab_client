@@ -38,7 +38,10 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   @ViewChildren(WidgetItemComponent)
   WidgetItem!: QueryList<WidgetItemComponent>;
 
-  constructor(private vehicleService: VehicleDataService, private widgetUpdateDataService: WidgetUpdateDataService) {
+  constructor(
+    private vehicleService: VehicleDataService,
+    private widgetUpdateDataService: WidgetUpdateDataService
+  ) {
     this.widgetOverView = new Widget(
       {
         orderValue: 1,
@@ -176,8 +179,9 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     if (selectedItems.length == 0) {
       selectedItems = [...this.vehicles];
     }
+    this.filteredVehicles = selectedItems;
 
-    this.updateFilteredVehicles(selectedItems);
+    this.updateFilteredVehicles(this.filteredVehicles);
   }
 
   /**

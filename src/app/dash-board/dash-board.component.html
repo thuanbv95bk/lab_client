@@ -18,7 +18,9 @@
             </app-multi-select>
           </div>
           <div class="btn-contenner">
-            <button class="btn btn-primary bg-primary" (click)="updateFilteredVehicles(this.filteredVehicles)">
+            <button
+              class="btn btn-primary bg-primary"
+              (click)="updateFilteredVehicles(this.filteredVehicles)">
               <i class="fa-solid fa-rotate-right"></i>
             </button>
           </div>
@@ -31,7 +33,9 @@
     <div class="row g-2">
       <!-- Tổng quan công ty -->
       <div [ngClass]="getWidgetClass(widgetOverView.location)">
-        <app-widget-item [widget]="widgetOverView" (eventWidthSelected)="changeWidthSelected(widgetOverView, $event)">
+        <app-widget-item
+          [widget]="widgetOverView"
+          (eventWidthSelected)="changeWidthSelected(widgetOverView, $event)">
         </app-widget-item>
       </div>
 
@@ -47,19 +51,23 @@
       <div [ngClass]="getWidgetClass(widgetOnTheRoad.location)">
         <app-widget-item
           [widget]="widgetOnTheRoad"
-          (eventWidthSelected)="changeWidthSelected(widgetOnTheRoad, $event)"></app-widget-item>
+          (eventWidthSelected)="changeWidthSelected(widgetOnTheRoad, $event)">
+        </app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
       <div [ngClass]="getWidgetClass(widgetAtTheFactory.location)">
         <app-widget-item
           [widget]="widgetAtTheFactory"
-          (eventWidthSelected)="changeWidthSelected(widgetAtTheFactory, $event)"></app-widget-item>
+          (eventWidthSelected)="changeWidthSelected(widgetAtTheFactory, $event)">
+        </app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cảng -->
       <div [ngClass]="getWidgetClass(widgetAtThePort.location)">
-        <app-widget-item [widget]="widgetAtThePort" (eventWidthSelected)="changeWidthSelected(widgetAtThePort, $event)">
+        <app-widget-item
+          [widget]="widgetAtThePort"
+          (eventWidthSelected)="changeWidthSelected(widgetAtThePort, $event)">
         </app-widget-item>
       </div>
     </div>
