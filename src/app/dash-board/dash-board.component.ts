@@ -23,8 +23,6 @@ import { WidgetUpdateDataService } from '../service/widget-update-data.service';
 })
 export class DashBoardComponent implements OnInit, OnDestroy {
   vehicles: Vehicle[] = []; // Danh sách xe
-  locationEnum = LocationEnum;
-  typeChartEnum = TypeChartEnum;
   filteredVehicles: Vehicle[] = []; // danh sách xe được chọn
   isAllSelectedVehicles: boolean = false;
 

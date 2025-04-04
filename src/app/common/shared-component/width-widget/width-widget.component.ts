@@ -39,10 +39,10 @@ export class WidthWidgetComponent {
       id: 'width-options',
       name: 'Độ rộng',
       children: [
-        { id: 'auto', name: 'Tự động' },
-        { id: 'small', name: 'Nhỏ' },
-        { id: 'medium', name: 'Trung bình' },
-        { id: 'large', name: 'Lớn' },
+        { id: SizeEnum.auto, name: 'Tự động' },
+        { id: SizeEnum.small, name: 'Nhỏ' },
+        { id: SizeEnum.medium, name: 'Trung bình' },
+        { id: SizeEnum.large, name: 'Lớn' },
       ],
     },
   ];

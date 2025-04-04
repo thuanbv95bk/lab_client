@@ -24,9 +24,6 @@ export class WidgetItemComponent implements AfterViewInit {
   @Input() widget!: Widget;
   @Output() eventWidthSelected = new EventEmitter<any>();
   @Output() eventRefreshData = new EventEmitter<any>();
-  typeChartEnum = TypeChartEnum;
-  sizeEnum = SizeEnum;
-  locationEnum = LocationEnum;
   dynamicComponentData: any;
 
   ngAfterViewInit(): void {
@@ -41,21 +38,21 @@ export class WidgetItemComponent implements AfterViewInit {
    * đồng thời dùng để update lại dữ liệu
    */
   setDashboardToComponent() {
-    if (this.widget.chartType == this.typeChartEnum.vehicleWidget) {
+    if (this.widget.chartType == TypeChartEnum.vehicleWidget) {
       this.dynamicComponentData = {
         component: VehicleWidgetComponent,
         inputs: {
           widget: this.widget,
         },
       };
-    } else if (this.widget.chartType == this.typeChartEnum.doughnut) {
+    } else if (this.widget.chartType == TypeChartEnum.doughnut) {
       this.dynamicComponentData = {
         component: DashboardDoughnutComponent,
         inputs: {
           widget: this.widget,
         },
       };
-    } else if (this.widget.chartType == this.typeChartEnum.bar) {
+    } else if (this.widget.chartType == TypeChartEnum.bar) {
       this.dynamicComponentData = {
         component: BarChartComponent,
         inputs: {
@@ -78,13 +75,13 @@ export class WidgetItemComponent implements AfterViewInit {
   changeWidthSelected(size: SizeEnum, location: LocationEnum) {
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
-      location == this.locationEnum.tongQuan &&
+      location == LocationEnum.tongQuan &&
       (size == SizeEnum.small || size == SizeEnum.medium)
     ) {
       this.widget.setClassForChild = 'col-12';
       this.setDashboardToComponent();
     } else if (
-      location == this.locationEnum.tongQuan &&
+      location == LocationEnum.tongQuan &&
       (size == SizeEnum.auto || size == SizeEnum.large)
     ) {
       this.widget.setClassForChild = 'col-12 col-sm-4';
