@@ -3,11 +3,11 @@
  * enum các vị trí của xe
  */
 export enum LocationEnum {
-  tongQuan = 'overView',
-  cuaKhau = 'borderGate',
-  trenDuong = 'onTheRoad',
-  nhaMay = 'atTheFactory',
-  taiCang = 'atThePort',
+  TongQuan = 'OverView',
+  CuaKhau = 'BorderGate',
+  TrenDuong = 'OnTheRoad',
+  NhaMay = 'AtTheFactory',
+  TaiCang = 'AtThePort',
 }
 
 /**
@@ -17,7 +17,7 @@ export enum LocationEnum {
 export enum TypeChartEnum {
   bar = 'bar',
   doughnut = 'doughnut',
-  vehicleWidget = 'vehicleWidget',
+  vehicleWidget = 'VehicleWidget',
 }
 
 export enum SizeEnum {

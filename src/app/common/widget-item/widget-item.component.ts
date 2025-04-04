@@ -75,13 +75,13 @@ export class WidgetItemComponent implements AfterViewInit {
   changeWidthSelected(size: SizeEnum, location: LocationEnum) {
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
-      location == LocationEnum.tongQuan &&
+      location == LocationEnum.TongQuan &&
       (size == SizeEnum.small || size == SizeEnum.medium)
     ) {
       this.widget.setClassForChild = 'col-12';
       this.setDashboardToComponent();
     } else if (
-      location == LocationEnum.tongQuan &&
+      location == LocationEnum.TongQuan &&
       (size == SizeEnum.auto || size == SizeEnum.large)
     ) {
       this.widget.setClassForChild = 'col-12 col-sm-4';

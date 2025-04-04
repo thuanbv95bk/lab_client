@@ -43,31 +43,31 @@ export class DashBoardComponent implements OnInit, OnDestroy {
       large: string;
     };
   } = {
-    [LocationEnum.tongQuan]: {
+    [LocationEnum.TongQuan]: {
       auto: 'col-12 flex-grow-1',
       small: 'col-12 col-md-4 ',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.cuaKhau]: {
+    [LocationEnum.CuaKhau]: {
       auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.trenDuong]: {
+    [LocationEnum.TrenDuong]: {
       auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.nhaMay]: {
+    [LocationEnum.NhaMay]: {
       auto: 'col-12 col-md-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.taiCang]: {
+    [LocationEnum.TaiCang]: {
       auto: 'col-12 col-md-4 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
@@ -78,11 +78,11 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   currentSize: {
     [key in LocationEnum]: SizeEnum;
   } = {
-    [LocationEnum.tongQuan]: SizeEnum.auto,
-    [LocationEnum.cuaKhau]: SizeEnum.auto,
-    [LocationEnum.trenDuong]: SizeEnum.auto,
-    [LocationEnum.nhaMay]: SizeEnum.auto,
-    [LocationEnum.taiCang]: SizeEnum.auto,
+    [LocationEnum.TongQuan]: SizeEnum.auto,
+    [LocationEnum.CuaKhau]: SizeEnum.auto,
+    [LocationEnum.TrenDuong]: SizeEnum.auto,
+    [LocationEnum.NhaMay]: SizeEnum.auto,
+    [LocationEnum.TaiCang]: SizeEnum.auto,
   };
   /**
    * Interval refresh of dash board component
@@ -105,7 +105,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 1,
         title: 'TỔNG QUAN CÔNG TY',
         color: '',
-        location: LocationEnum.tongQuan,
+        location: LocationEnum.TongQuan,
         isVisible: true,
         setClassForChild: this.setOverViewClass,
         chartType: TypeChartEnum.vehicleWidget,
@@ -118,7 +118,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 2,
         title: 'PHƯƠNG TIỆN TẠI CỬA KHẨU',
         color: '',
-        location: LocationEnum.cuaKhau,
+        location: LocationEnum.CuaKhau,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.doughnut,
@@ -131,7 +131,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 3,
         title: 'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG',
         color: '',
-        location: LocationEnum.trenDuong,
+        location: LocationEnum.TrenDuong,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.doughnut,
@@ -145,7 +145,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 1,
         title: 'PHƯƠNG TIỆN TẠI NHÀ MÁY',
         color: '#e63946',
-        location: LocationEnum.nhaMay,
+        location: LocationEnum.NhaMay,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.bar,
@@ -159,7 +159,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 1,
         title: 'PHƯƠNG TIỆN TẠI CẢNG',
         color: '#20C997',
-        location: LocationEnum.taiCang,
+        location: LocationEnum.TaiCang,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.bar,
