@@ -10,6 +10,7 @@ import { Vehicle } from '../common/model/enum/vehicle.model';
 import { Widget } from '../common/model/dashboard/dashboard.model';
 import {
   LocationEnum,
+  SizeEnum,
   TypeChartEnum,
 } from '../common/model/enum/location.enum';
 import { WidgetItemComponent } from '../common/widget-item/widget-item.component';
@@ -44,45 +45,46 @@ export class DashBoardComponent implements OnInit, OnDestroy {
       large: string;
     };
   } = {
-    [LocationEnum.TongQuan]: {
+    [LocationEnum.tongQuan]: {
       auto: 'col-12 flex-grow-1',
       small: 'col-12 col-md-4 ',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.CuaKhau]: {
+    [LocationEnum.cuaKhau]: {
       auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.TrenDuong]: {
+    [LocationEnum.trenDuong]: {
       auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.NhaMay]: {
+    [LocationEnum.nhaMay]: {
       auto: 'col-12 col-md-6 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
-    [LocationEnum.TaiCang]: {
+    [LocationEnum.taiCang]: {
       auto: 'col-12 col-md-4 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
   };
+
   currentSize: {
-    [key in LocationEnum]: 'auto' | 'small' | 'medium' | 'large';
+    [key in LocationEnum]: SizeEnum;
   } = {
-    [LocationEnum.TongQuan]: 'auto',
-    [LocationEnum.CuaKhau]: 'auto',
-    [LocationEnum.TrenDuong]: 'auto',
-    [LocationEnum.NhaMay]: 'auto',
-    [LocationEnum.TaiCang]: 'auto',
+    [LocationEnum.tongQuan]: SizeEnum.auto,
+    [LocationEnum.cuaKhau]: SizeEnum.auto,
+    [LocationEnum.trenDuong]: SizeEnum.auto,
+    [LocationEnum.nhaMay]: SizeEnum.auto,
+    [LocationEnum.taiCang]: SizeEnum.auto,
   };
   /**
    * Interval refresh of dash board component
@@ -105,19 +107,20 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 1,
         title: 'TỔNG QUAN CÔNG TY',
         color: '',
-        location: LocationEnum.TongQuan,
+        location: LocationEnum.tongQuan,
         isVisible: true,
-        setClassForChild: 'col-12 col-sm-4',
+        setClassForChild: this.setOverViewClass,
         chartType: TypeChartEnum.vehicleWidget,
       },
       this.widgetUpdateDataService
     );
+
     this.widgetBorderGate = new Widget(
       {
         orderValue: 2,
         title: 'PHƯƠNG TIỆN TẠI CỬA KHẨU',
         color: '',
-        location: LocationEnum.CuaKhau,
+        location: LocationEnum.cuaKhau,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.doughnut,
@@ -130,7 +133,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         orderValue: 3,
         title: 'PHƯƠNG TIỆN ĐANG TRÊN ĐƯỜNG',
         color: '',
-        location: LocationEnum.TrenDuong,
+        location: LocationEnum.trenDuong,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.doughnut,
@@ -138,12 +141,13 @@ export class DashBoardComponent implements OnInit, OnDestroy {
       },
       this.widgetUpdateDataService
     );
+
     this.widgetAtTheFactory = new Widget(
       {
         orderValue: 1,
         title: 'PHƯƠNG TIỆN TẠI NHÀ MÁY',
         color: '#e63946',
-        location: LocationEnum.NhaMay,
+        location: LocationEnum.nhaMay,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.bar,
@@ -151,12 +155,13 @@ export class DashBoardComponent implements OnInit, OnDestroy {
       },
       this.widgetUpdateDataService
     );
+
     this.widgetAtThePort = new Widget(
       {
         orderValue: 1,
         title: 'PHƯƠNG TIỆN TẠI CẢNG',
         color: '#20C997',
-        location: LocationEnum.TaiCang,
+        location: LocationEnum.taiCang,
         isVisible: true,
         setClassForChild: '',
         chartType: TypeChartEnum.bar,
@@ -245,10 +250,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @param locationEnum vị trí tương ứng định nghĩa ở enum location
    */
 
-  changeWidthSelected(
-    size: 'auto' | 'small' | 'medium' | 'large',
-    location: LocationEnum
-  ) {
+  changeWidthSelected(size: SizeEnum, location: LocationEnum) {
     this.currentSize[location] = size;
   }
 

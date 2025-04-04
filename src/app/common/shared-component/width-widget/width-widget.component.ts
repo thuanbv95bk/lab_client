@@ -8,6 +8,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
+import { SizeEnum } from '../../model/enum/location.enum';
 
 interface DropdownItem {
   id: string;
@@ -21,11 +22,8 @@ interface DropdownItem {
   styleUrls: ['./width-widget.component.scss'],
 })
 export class WidthWidgetComponent {
-  @Input() selectedItem: 'auto' | 'small' | 'medium' | 'large' =
-    'auto' as const;
-  @Output() widthSelected = new EventEmitter<
-    'auto' | 'small' | 'medium' | 'large'
-  >();
+  @Input() selectedItem: SizeEnum = SizeEnum.auto as const;
+  @Output() widthSelected = new EventEmitter<SizeEnum>();
 
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
   @ViewChild('dropdownWidth') dropdownWidth!: ElementRef;
@@ -79,7 +77,7 @@ export class WidthWidgetComponent {
    * @description Khi chọn một item trong submenu, đóng menu
    */
   selectWidth(child: DropdownItem) {
-    this.selectedItem = child.id as 'auto' | 'small' | 'medium' | 'large';
+    this.selectedItem = child.id as SizeEnum;
     this.widthSelected.emit(this.selectedItem);
     this.isMenuOpen = false;
     this.isSubMenuOpen = false;
