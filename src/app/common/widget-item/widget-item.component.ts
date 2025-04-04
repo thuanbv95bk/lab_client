@@ -3,13 +3,14 @@ import {
   Component,
   EventEmitter,
   Input,
-  OnChanges,
-  OnInit,
   Output,
-  SimpleChanges,
 } from '@angular/core';
 import { VehicleWidgetComponent } from '../chart-items/vehicle-widget/vehicle-widget.component';
-import { LocationEnum, TypeChartEnum } from '../model/enum/location.enum';
+import {
+  LocationEnum,
+  SizeEnum,
+  TypeChartEnum,
+} from '../model/enum/location.enum';
 import { DashboardDoughnutComponent } from '../chart-items/dashboard-doughnut/dashboard-doughnut.component';
 import { Widget } from '../model/dashboard/dashboard.model';
 import { BarChartComponent } from '../chart-items/bar-chart/bar-chart.component';
@@ -24,6 +25,7 @@ export class WidgetItemComponent implements AfterViewInit {
   @Output() eventWidthSelected = new EventEmitter<any>();
   @Output() eventRefreshData = new EventEmitter<any>();
   typeChartEnum = TypeChartEnum;
+  sizeEnum = SizeEnum;
   locationEnum = LocationEnum;
   dynamicComponentData: any;
 
@@ -73,20 +75,17 @@ export class WidgetItemComponent implements AfterViewInit {
    * @param locationEnum vị trí tương ứng định nghĩa ở enum location
    */
 
-  changeWidthSelected(
-    size: 'auto' | 'small' | 'medium' | 'large',
-    location: LocationEnum
-  ) {
+  changeWidthSelected(size: SizeEnum, location: LocationEnum) {
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
     if (
-      location == this.locationEnum.TongQuan &&
-      (size == 'small' || size == 'medium')
+      location == this.locationEnum.tongQuan &&
+      (size == SizeEnum.small || size == SizeEnum.medium)
     ) {
       this.widget.setClassForChild = 'col-12';
       this.setDashboardToComponent();
     } else if (
-      location == this.locationEnum.TongQuan &&
-      (size == 'auto' || size == 'large')
+      location == this.locationEnum.tongQuan &&
+      (size == SizeEnum.auto || size == SizeEnum.large)
     ) {
       this.widget.setClassForChild = 'col-12 col-sm-4';
       this.setDashboardToComponent();

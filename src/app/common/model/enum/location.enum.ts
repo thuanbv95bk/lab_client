@@ -3,11 +3,11 @@
  * enum các vị trí của xe
  */
 export enum LocationEnum {
-  TongQuan = 'OverView',
-  CuaKhau = 'borderGate',
-  TrenDuong = 'onTheRoad',
-  NhaMay = 'atTheFactory',
-  TaiCang = 'atThePort',
+  tongQuan = 'overView',
+  cuaKhau = 'borderGate',
+  trenDuong = 'onTheRoad',
+  nhaMay = 'atTheFactory',
+  taiCang = 'atThePort',
 }
 
 /**
@@ -18,6 +18,13 @@ export enum TypeChartEnum {
   bar = 'bar',
   doughnut = 'doughnut',
   vehicleWidget = 'vehicleWidget',
+}
+
+export enum SizeEnum {
+  auto = 'auto',
+  small = 'small',
+  medium = 'medium',
+  large = 'large',
 }
 export const LOCATION_OPTIONS: LocationEnum[] = Object.values(LocationEnum);
 
