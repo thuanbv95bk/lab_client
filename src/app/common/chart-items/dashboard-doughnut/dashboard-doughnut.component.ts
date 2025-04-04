@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ChartConfiguration, ChartType } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import { debounceTime, fromEvent, Subscription } from 'rxjs';
@@ -25,9 +17,7 @@ export interface DoughnutModel {
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
-export class DashboardDoughnutComponent
-  implements OnInit, OnDestroy, OnChanges
-{
+export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges {
   emptyVehicles: number = 0; // Phương tiện không hàng
   loadedVehicles: number = 0; // Phương tiện có hàng
   @Input() dataModel: DoughnutModel[] = [];
@@ -79,10 +69,7 @@ export class DashboardDoughnutComponent
    */
   initData() {
     if (this.widget) {
-      this.dataModel = this.vehicleService.getDataToDoughnut(
-        this.widget?.dataModel,
-        this.widget?.location
-      );
+      this.dataModel = this.vehicleService.getDataToDoughnut(this.widget?.dataModel, this.widget?.location);
     }
   }
 

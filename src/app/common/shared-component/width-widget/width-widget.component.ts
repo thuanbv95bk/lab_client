@@ -1,13 +1,4 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  Output,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, Renderer2, ViewChild } from '@angular/core';
 import { SizeEnum } from '../../model/enum/location.enum';
 
 interface DropdownItem {
