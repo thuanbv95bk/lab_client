@@ -1,16 +1,6 @@
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { VehicleWidgetComponent } from '../chart-items/vehicle-widget/vehicle-widget.component';
-import {
-  LocationEnum,
-  SizeEnum,
-  TypeChartEnum,
-} from '../model/enum/location.enum';
+import { LocationEnum, SizeEnum, TypeChartEnum } from '../model/enum/location.enum';
 import { DashboardDoughnutComponent } from '../chart-items/dashboard-doughnut/dashboard-doughnut.component';
 import { Widget } from '../model/dashboard/dashboard.model';
 import { BarChartComponent } from '../chart-items/bar-chart/bar-chart.component';
@@ -74,16 +64,10 @@ export class WidgetItemComponent implements AfterViewInit {
 
   changeWidthSelected(size: SizeEnum, location: LocationEnum) {
     // xử lý khi chọn widget tổng quan là : small hoặc medium thì các dashboard bên trong phải set về 3 hàng
-    if (
-      location == LocationEnum.TongQuan &&
-      (size == SizeEnum.small || size == SizeEnum.medium)
-    ) {
+    if (location == LocationEnum.TongQuan && (size == SizeEnum.small || size == SizeEnum.medium)) {
       this.widget.setClassForChild = 'col-12';
       this.setDashboardToComponent();
-    } else if (
-      location == LocationEnum.TongQuan &&
-      (size == SizeEnum.auto || size == SizeEnum.large)
-    ) {
+    } else if (location == LocationEnum.TongQuan && (size == SizeEnum.auto || size == SizeEnum.large)) {
       this.widget.setClassForChild = 'col-12 col-sm-4';
       this.setDashboardToComponent();
     }

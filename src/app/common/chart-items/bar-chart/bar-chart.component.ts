@@ -1,12 +1,4 @@
-import {
-  Component,
-  Input,
-  ViewChild,
-  AfterViewInit,
-  OnChanges,
-  SimpleChanges,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -32,10 +24,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() widget!: Widget;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  constructor(
-    private chartScrollService: ChartScrollService,
-    private vehicleService: VehicleDataService
-  ) {}
+  constructor(private chartScrollService: ChartScrollService, private vehicleService: VehicleDataService) {}
 
   ngOnInit(): void {
     this.initData();
@@ -125,8 +114,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
           callback: function (value, index) {
             let maxY = this.chart.scales['y'].max; // Lấy giá trị max của trục Y
 
-            if (Number(this.getLabelForValue(value as number)) == maxY)
-              return 'Số phương tiện';
+            if (Number(this.getLabelForValue(value as number)) == maxY) return 'Số phương tiện';
             return this.getLabelForValue(value as number);
           },
         },
@@ -200,10 +188,7 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
   getPlugins() {
     return [
       ChartDataLabels,
-      this.chartScrollService.getHorizontalScrollPlugin(
-        this.minLabelWidth,
-        this.defaultVisibleItems
-      ),
+      this.chartScrollService.getHorizontalScrollPlugin(this.minLabelWidth, this.defaultVisibleItems),
     ];
   }
 }

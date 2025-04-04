@@ -5,13 +5,7 @@
   },
   "extends": ["eslint:recommended"],
   "rules": {
-    "camelcase": [
-      "error",
-      {
-        "properties": "always",
-        "ignoreDestructuring": false
-      }
-    ],
+    "camelcase": ["error", { "properties": "always" }],
     "id-match": [
       "error",
       "^[a-z][a-zA-Z0-9]*$",
@@ -20,12 +14,7 @@
         "onlyDeclarations": true
       }
     ],
-    "new-cap": [
-      "error",
-      {
-        "newIsCap": true,
-        "capIsNew": false
-      }
-    ]
+    "new-cap": ["error", { "capIsNew": false }],
+    "capitalize-comments": "error"
   }
 }

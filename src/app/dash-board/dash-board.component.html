@@ -8,9 +8,14 @@
         <div class="col-sm-auto d-flex justify-content-between align-items-center">
           <div class="fs-12 fw-bold">XEM THEO</div>
           <div>
-            <app-multi-select [vehicles]="vehicles" [placeholder]="'Chọn phương tiện'" [search]="true"
-              [selectAll]="true" [allSelected]="isAllSelectedVehicles"
-              (selectedChange)="onSelectedChangeVehicle($event)"></app-multi-select>
+            <app-multi-select
+              [vehicles]="vehicles"
+              [placeholder]="'Chọn phương tiện'"
+              [search]="true"
+              [selectAll]="true"
+              [allSelected]="isAllSelectedVehicles"
+              (selectedChange)="onSelectedChangeVehicle($event)">
+            </app-multi-select>
           </div>
           <div class="btn-contenner">
             <button class="btn btn-primary bg-primary" (click)="updateFilteredVehicles(this.filteredVehicles)">
@@ -26,31 +31,38 @@
     <div class="row g-2">
       <!-- Tổng quan công ty -->
       <div [ngClass]="getWidgetClass(widgetOverView.location)">
-        <app-widget-item [widget]="widgetOverView"
-          (eventWidthSelected)="changeWidthSelected($event, widgetOverView.location)"></app-widget-item>
+        <app-widget-item
+          [widget]="widgetOverView"
+          (eventWidthSelected)="changeWidthSelected($event, widgetOverView.location)">
+        </app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cửa khẩu -->
-      <div [ngClass]="getWidgetClass( widgetBorderGate.location)">
-        <app-widget-item [widget]="widgetBorderGate"
-          (eventWidthSelected)="changeWidthSelected($event, widgetBorderGate.location)"></app-widget-item>
+      <div [ngClass]="getWidgetClass(widgetBorderGate.location)">
+        <app-widget-item
+          [widget]="widgetBorderGate"
+          (eventWidthSelected)="changeWidthSelected($event, widgetBorderGate.location)">
+        </app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện đang trên đường -->
       <div [ngClass]="getWidgetClass(widgetOnTheRoad.location)">
-        <app-widget-item [widget]="widgetOnTheRoad"
+        <app-widget-item
+          [widget]="widgetOnTheRoad"
           (eventWidthSelected)="changeWidthSelected($event, widgetOnTheRoad.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại nhà máy -->
       <div [ngClass]="getWidgetClass(widgetAtTheFactory.location)">
-        <app-widget-item [widget]="widgetAtTheFactory"
+        <app-widget-item
+          [widget]="widgetAtTheFactory"
           (eventWidthSelected)="changeWidthSelected($event, widgetAtTheFactory.location)"></app-widget-item>
       </div>
 
       <!-- Biểu đồ: Phương tiện tại cảng -->
       <div [ngClass]="getWidgetClass(widgetAtThePort.location)">
-        <app-widget-item [widget]="widgetAtThePort"
+        <app-widget-item
+          [widget]="widgetAtThePort"
           (eventWidthSelected)="changeWidthSelected($event, widgetAtThePort.location)">
         </app-widget-item>
       </div>

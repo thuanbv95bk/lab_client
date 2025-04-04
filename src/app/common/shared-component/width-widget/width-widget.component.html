@@ -6,7 +6,11 @@
     </button>
 
     <!-- Dropdown menu -->
-    <div #dropdownMenu class="dropdown-menu" [class.show]="isMenuOpen" (mouseenter)="isMenuOpen = true"
+    <div
+      #dropdownMenu
+      class="dropdown-menu"
+      [class.show]="isMenuOpen"
+      (mouseenter)="isMenuOpen = true"
       (mouseleave)="closeMenuOnHover()">
       <li class="dropdown-item active disabled">
         <div *ngIf="isSubMenuLeft">
@@ -20,7 +24,11 @@
       </li>
 
       <!-- Submenu -->
-      <ul #dropdownWidth class="dropdown-menu sub-menu" [class.show]="isSubMenuOpen" (mouseenter)="isSubMenuOpen = true"
+      <ul
+        #dropdownWidth
+        class="dropdown-menu sub-menu"
+        [class.show]="isSubMenuOpen"
+        (mouseenter)="isSubMenuOpen = true"
         (mouseleave)="closeMenuOnHover()">
         <li *ngFor="let item of listWidthWidget[0].children" class="dropdown-item" (click)="selectWidth(item)">
           {{ item.name }}

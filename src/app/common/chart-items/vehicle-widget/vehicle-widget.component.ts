@@ -26,13 +26,9 @@ export class VehicleWidgetComponent implements OnInit {
   initData() {
     this.totalVehicles = this.widget?.dataModel.length;
 
-    this.emptyVehicles = this.widget?.dataModel.filter(
-      (x) => x.isLoaded == false
-    ).length;
+    this.emptyVehicles = this.widget?.dataModel.filter((x) => x.isLoaded == false).length;
 
-    this.loadedVehicles = this.widget?.dataModel.filter(
-      (x) => x.isLoaded == true
-    ).length;
+    this.loadedVehicles = this.widget?.dataModel.filter((x) => x.isLoaded == true).length;
 
     this.listCardWidgetModel = [];
 
