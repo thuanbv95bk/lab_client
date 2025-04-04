@@ -1,18 +1,8 @@
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  ViewChildren,
-} from '@angular/core';
+import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
 import { Vehicle } from '../common/model/enum/vehicle.model';
-import { Widget } from '../common/model/dashboard/dashboard.model';
-import {
-  LocationEnum,
-  SizeEnum,
-  TypeChartEnum,
-} from '../common/model/enum/location.enum';
+import { Widget, WidgetSizeConfig } from '../common/model/dashboard/dashboard.model';
+import { LocationEnum, SizeEnum, TypeChartEnum } from '../common/model/enum/location.enum';
 import { WidgetItemComponent } from '../common/widget-item/widget-item.component';
 import { WidgetUpdateDataService } from '../service/widget-update-data.service';
 
@@ -34,56 +24,8 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   widgetAtTheFactory!: Widget; // widget tại nhà máy
   widgetAtThePort!: Widget; // widget tại cảng
 
-  // Cấu hình class cho từng widget
-  sizeConfig: {
-    [key in LocationEnum]: {
-      auto: string;
-      small: string;
-      medium: string;
-      large: string;
-    };
-  } = {
-    [LocationEnum.TongQuan]: {
-      auto: 'col-12 flex-grow-1',
-      small: 'col-12 col-md-4 ',
-      medium: 'col-12 col-md-8',
-      large: 'col-12',
-    },
-    [LocationEnum.CuaKhau]: {
-      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
-      small: 'col-12 col-md-4',
-      medium: 'col-12 col-md-8',
-      large: 'col-12',
-    },
-    [LocationEnum.TrenDuong]: {
-      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
-      small: 'col-12 col-md-4',
-      medium: 'col-12 col-md-8',
-      large: 'col-12',
-    },
-    [LocationEnum.NhaMay]: {
-      auto: 'col-12 col-md-6 col-lg-4 flex-grow-1',
-      small: 'col-12 col-md-4',
-      medium: 'col-12 col-md-8',
-      large: 'col-12',
-    },
-    [LocationEnum.TaiCang]: {
-      auto: 'col-12 col-md-4 col-lg-4 flex-grow-1',
-      small: 'col-12 col-md-4',
-      medium: 'col-12 col-md-8',
-      large: 'col-12',
-    },
-  };
+  widgetSizeConfig = WidgetSizeConfig;
 
-  currentSize: {
-    [key in LocationEnum]: SizeEnum;
-  } = {
-    [LocationEnum.TongQuan]: SizeEnum.auto,
-    [LocationEnum.CuaKhau]: SizeEnum.auto,
-    [LocationEnum.TrenDuong]: SizeEnum.auto,
-    [LocationEnum.NhaMay]: SizeEnum.auto,
-    [LocationEnum.TaiCang]: SizeEnum.auto,
-  };
   /**
    * Interval refresh of dash board component
    * @description Thời gian để tải lại dữ liệu
@@ -96,10 +38,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   @ViewChildren(WidgetItemComponent)
   WidgetItem!: QueryList<WidgetItemComponent>;
 
-  constructor(
-    private vehicleService: VehicleDataService,
-    private widgetUpdateDataService: WidgetUpdateDataService
-  ) {
+  constructor(private vehicleService: VehicleDataService, private widgetUpdateDataService: WidgetUpdateDataService) {
     this.widgetOverView = new Widget(
       {
         orderValue: 1,
@@ -249,7 +188,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    */
 
   changeWidthSelected(size: SizeEnum, location: LocationEnum) {
-    this.currentSize[location] = size;
+    this.widgetSizeConfig.setCurrentSize(location, size);
   }
 
   /**
@@ -259,6 +198,6 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @returns widget class
    */
   getWidgetClass(location: LocationEnum): string {
-    return this.sizeConfig[location][this.currentSize[location]];
+    return this.widgetSizeConfig.getClass(location);
   }
 }
