@@ -1,0 +1,338 @@
+<nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="../assets/image/logo.svg" alt="Logo" height="40" />
+    </a>
+
+    <!-- Menu chính -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item" *ngFor="let item of listMenu">
+          <a class="nav-link" (click)="goTabPage(item.href)" href="#"
+            >{{ item.code | translate }}
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Nút gọi và chọn ngôn ngữ -->
+    <div class="call-phone d-flex flex-nowrap align-items-center">
+      <a href="tel:19006464" class="btn btn-outline-primary me-3">
+        <i class="fa fa-phone"></i>
+        <span class="phone d-lg-inline ms-2">1900 6464</span>
+      </a>
+
+      <div class="select-lang">
+        <button
+          class="btn dropdown-toggle d-flex align-items-center"
+          type="button"
+          id="dropdownSelectLang"
+          data-bs-toggle="dropdown">
+          <img [src]="selectedLang.flag" alt="Flag" class="flag-icon me-2" />
+          <span class="fs-7 d-none d-lg-inline ms-2">{{ selectedLang.name }}</span>
+        </button>
+        <ul class="dropdown-menu">
+          <li *ngFor="let lang of listLanguages">
+            <a
+              class="dropdown-item d-flex align-items-center"
+              href="#"
+              (click)="selectedLanguage(lang.code)">
+              <img [src]="lang.flag" alt="Flag" class="flag-icon me-2" />
+              <span class="">{{ lang.name }}</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-target="#menuModal"
+        aria-controls="menuModal"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+        data-bs-toggle="modal">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+<!-- Modal Bootstrap -->
+<div class="modal fade" id="menuModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-slide">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <ul class="nav flex-column">
+          <li class="nav-item" *ngFor="let item of listMenu">
+            <a class="nav-link text-primary" href="#" (click)="goTabPage(item.href)"
+              >{{ item.code | translate }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Carousel Slider -->
+<div
+  class="carousel-container text-center d-flex h-auto"
+  [style.backgroundImage]="'url(' + listNew[currentSlide].imageUrl + ')'">
+  <div class="container-fluid">
+    <div class="row px-2">
+      <div
+        class="col-sm-12 col-lg-8 col-auto order-last order-lg-first d-flex flex-column justify-content-end mt-3 mb-2">
+        <div class="row w-100">
+          <div class="caption-box">
+            <div class="h-auto row align-items-center justify-content-between p-2">
+              <div class="col-12 col-lg-10 text-left">
+                <h5 class="text-uppercase text-white">
+                  {{ listNew[currentSlide].title }}
+                </h5>
+                <p class="caption-text mb-2">
+                  {{ listNew[currentSlide].shortContent }}
+                </p>
+              </div>
+              <div class="col-auto mx-auto text-center text-lg-right">
+                <a
+                  href="#"
+                  class="btn btn-success px-3 py-2 btn-detail"
+                  (click)="goTabPage(listNew[currentSlide].link)">
+                  {{ 'btnDetail' | translate }}
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGIN -->
+      <div
+        class="login-container container-fluid col-sm-12 col-md-4 order-first order-lg-last mx-auto ml-md-auto p-4 flex-wrap">
+        <div class="d-flex flex-column align-items-center">
+          <div class="login-logo text-center p-3">
+            <img src="../assets/image/logo.svg" alt="Logo" />
+          </div>
+
+          <div class="input-group d-flex flex-nowrap">
+            <span class="icon"><i class="fas fa-user"></i></span>
+            <input
+              type="text"
+              [placeholder]="'userName' | translate"
+              name="userName"
+              [(ngModel)]="userName"
+              maxlength="50"
+              onkeypress="return /^[A-Za-z0-9]$/.test(event.key)" />
+          </div>
+
+          <div class="input-group input-pass d-flex flex-nowrap">
+            <span class="icon"><i class="fas fa-lock"></i></span>
+            <input
+              #passwordField
+              class="mr-3"
+              name="password"
+              autocomplete="off"
+              type="password"
+              id="password"
+              maxlength="200"
+              [placeholder]="'passWord' | translate"
+              [(ngModel)]="passWord" />
+            <span
+              class="fa fa-fw toggle-password"
+              [ngClass]="passwordField.type == 'password' ? ' fa-eye' : ' fa-eye-slash'"
+              (click)="passwordField.type = passwordField.type == 'password' ? 'text' : 'password'">
+            </span>
+          </div>
+
+          <div class="remember-forgot w-100 d-flex justify-content-between" style="z-index: 3">
+            <label class="d-flex mb-0">
+              <input type="checkbox" name="rememberMe" [(ngModel)]="isRememberMe" />
+              <label class="mx-1 mb-0">{{ 'remember' | translate }}</label>
+            </label>
+            <a href="#"
+              ><label class="mb-0">{{ 'forgot' | translate }}</label></a
+            >
+          </div>
+
+          <button type="button" class="btn btn-primary w-100 login-btn mt-2" (click)="login()">
+            {{ 'login' | translate }}
+          </button>
+
+          <div class="qr-code mt-3">
+            <img src="../assets/image/onelinkto_taxiba.png" alt="QR Code" />
+            <p class="text-center">{{ 'scanCode' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE CONTROLS -->
+  <div class="controls-slide">
+    <div (click)="prevSlide()">
+      <span class="next">&#10094;</span>
+    </div>
+    <div (click)="nextSlide()">
+      <span class="next">&#10095;</span>
+    </div>
+  </div>
+
+  <!-- SLIDE DOTS -->
+  <div class="dots">
+    <div
+      *ngFor="let img of listNew; let i = index"
+      class="outer-circle"
+      [class.active]="i === currentSlide"
+      (click)="updateSlide(i)">
+      <div class="inner-circle"></div>
+    </div>
+  </div>
+</div>
+
+<!-- <div
+  class="carousel-container text-center d-flex h-auto"
+  [style.backgroundImage]="'url(' + listNew[currentSlide].imageUrl + ')'">
+  <div class="container-fluid">
+    <div class="row">
+      <div
+        class="col-sm-12 col-lg-8 col-auto order-last order-lg-first d-flex flex-column justify-content-end mt-3 mb-2">
+        <div class="row container-fluid">
+          <div class="caption-box">
+            <div class="h-auto row align-items-center justify-content-between p-2">
+              <div class="col-12 col-lg-10 text-start">
+                <h5 class="fs-6 text-uppercase text-white">
+                  {{ listNew[currentSlide].title }}
+                </h5>
+                <p class="caption-text mb-2">
+                  {{ listNew[currentSlide].shortContent }}
+                </p>
+              </div>
+              <div class="col-auto mx-auto text-md-center text-lg-end">
+                <a
+                  href="#"
+                  class="btn btn-success px-3 py-2 fs-6 btn-detail"
+                  (click)="goTabPage(listNew[currentSlide].link)">
+                  {{ 'btnDetail' | translate }}
+                  <i class="fas fa-arrow-right"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="login-container col-sm-12 col-md-4 order-first order-lg-last mx-auto ml-md-auto p-2 flex-wrap mb-2">
+        <div class="container-fluid d-flex flex-column align-items-center w-100">
+          <div class="login-logo text-center p-3">
+            <img src="../assets/image/logo.svg" alt="Logo" />
+          </div>
+
+          <div class="input-group d-flex flex-nowrap">
+            <span class="icon"><i class="fas fa-user"></i></span>
+            <input
+              type="text"
+              [placeholder]="'userName' | translate"
+              name="userName"
+              [(ngModel)]="userName"
+              maxlength="50"
+              onkeypress="return /^[A-Za-z0-9]$/.test(event.key)" />
+          </div>
+
+          <div class="input-group input-pass d-flex flex-nowrap">
+            <span class="icon"><i class="fas fa-lock"></i></span>
+            <input
+              #passwordField
+              class="mr-3"
+              name="password"
+              autocomplete="off"
+              type="password"
+              id="password"
+              maxlength="200"
+              [placeholder]="'passWord' | translate"
+              [(ngModel)]="passWord" />
+            <span
+              class="fa fa-fw toggle-password"
+              [ngClass]="passwordField.type == 'password' ? ' fa-eye' : ' fa-eye-slash'"
+              (click)="passwordField.type = passwordField.type == 'password' ? 'text' : 'password'">
+            </span>
+          </div>
+
+          <div class="remember-forgot w-100 d-flex justify-content-between zindex-3">
+            <label class="d-flex">
+              <input type="checkbox" name="rememberMe" [(ngModel)]="isRememberMe" /><label
+                class="mx-1"
+                >{{ 'remember' | translate }}</label
+              >
+            </label>
+            <a href="#"
+              ><label>{{ 'forgot' | translate }}</label>
+            </a>
+          </div>
+
+          <button type="button" class="w-100 login-btn" (click)="login()">
+            {{ 'login' | translate }}
+          </button>
+
+          <div class="qr-code">
+            <img src="../assets/image/onelinkto_taxiba.png" alt="QR Code" />
+            <p class="text-center">{{ 'scanCode' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-slide">
+    <div (click)="prevSlide()">
+      <span class="next">&#10094;</span>
+    </div>
+    <div (click)="nextSlide()">
+      <span class="next">&#10095;</span>
+    </div>
+  </div>
+  <div class="dots">
+    <div
+      *ngFor="let img of listNew; let i = index"
+      class="outer-circle"
+      [class.active]="i === currentSlide"
+      (click)="updateSlide(i)">
+      <div class="inner-circle"></div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Footer -->
+<footer class="footer w-100">
+  <div class="container-fluid py-sm-0">
+    <div class="row">
+      <div
+        *ngFor="let itembranch of Listbranch; let i = index"
+        class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl col-xxl pb-1">
+        <h5 class="mb-1">{{ itembranch.name }}</h5>
+        <p *ngFor="let item of itembranch.address; let i1 = index">
+          {{ item.add }}
+        </p>
+      </div>
+      <div class="col-12 col-sm-12 col-md col-lg col-xl col-xxl text-center">
+        <a href="https://play.google.com/store/apps/details?id=vn.bagps.gpsmobile" target="_blank">
+          <img src="../assets/image/photo_logo-android.svg" alt="Google Play" class="app-icon" />
+        </a>
+        <a href="https://itunes.apple.com/us/app/ba-gps/id1466206178?ls=1&mt=8" target="_blank">
+          <img src="./assets/image/photo_logo-IOS.svg" alt="App Store" class="app-icon" />
+        </a>
+        <a href="https://www.facebook.com/giamsathanhtrinhbinhanh/" target="_blank">
+          <img src="../assets/image/icon-facebook.svg" alt="Facebook" class="social-icon" />
+        </a>
+        <a href="https://zalo.me/1958838581480438876" target="_blank">
+          <img src="../assets/image/icons8-zalo.svg" alt="Zalo" class="social-icon" />
+        </a>
+        <a href="https://www.youtube.com/@BAGPS" target="_blank">
+          <img src="../assets/image/icon-youtube.svg" alt="YouTube" class="social-icon" />
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

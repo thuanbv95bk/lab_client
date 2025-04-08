@@ -1,10 +1,10 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { VehicleDataService } from '../service/vehicle-data/vehicle-data.service';
-import { Vehicle } from '../common/model/enum/vehicle.model';
-import { Widget, WidgetSizeConfig } from '../common/model/dashboard/dashboard.model';
-import { LocationEnum, SizeEnum, TypeChartEnum } from '../common/model/enum/location.enum';
-import { WidgetItemComponent } from '../common/widget-item/widget-item.component';
-import { WidgetUpdateDataService } from '../service/widget-update-data.service';
+import { LocationEnum, SizeEnum, TypeChartEnum } from '../../enum/location.enum';
+import { Vehicle } from '../../enum/vehicle.model';
+import { Widget, WidgetSizeConfig } from '../../model/dashboard/dashboard.model';
+import { WidgetItemComponent } from '../../common/widget-item/widget-item.component';
+import { WidgetUpdateDataService } from '../../service/vehicle-data/widget-update-data.service';
+import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.service';
 
 @Component({
   selector: 'app-dash-board',
@@ -25,6 +25,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   widgetAtThePort!: Widget; // widget tại cảng
 
   widgetSizeConfig = WidgetSizeConfig;
+  sizeEnum = SizeEnum;
 
   /**
    * Interval refresh of dash board component

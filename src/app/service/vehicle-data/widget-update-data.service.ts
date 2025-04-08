@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Vehicle } from '../common/model/enum/vehicle.model';
+import { Vehicle } from '../../enum/vehicle.model';
 
 /**
  * Injectable

@@ -1,7 +1,14 @@
-import { Component, Input, ViewChild, AfterViewInit, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  ViewChild,
+  AfterViewInit,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
+} from '@angular/core';
 import { ChartOptions, ChartType, ChartData, Chart } from 'chart.js';
 import { BaseChartDirective } from 'ng2-charts';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { ChartScrollService } from '../../../service/chart-bar-scroll/chart-bar-scroll.service';
 import { Widget } from '../../model/dashboard/dashboard.model';
 import { VehicleDataService } from '../../../service/vehicle-data/vehicle-data.service';
@@ -24,7 +31,10 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() widget!: Widget;
 
   @ViewChild(BaseChartDirective) chart?: BaseChartDirective;
-  constructor(private chartScrollService: ChartScrollService, private vehicleService: VehicleDataService) {}
+  constructor(
+    private chartScrollService: ChartScrollService,
+    private vehicleService: VehicleDataService
+  ) {}
 
   ngOnInit(): void {
     this.initData();
@@ -125,11 +135,11 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
     plugins: {
       legend: { display: false },
       tooltip: { enabled: true },
-      datalabels: {
-        anchor: 'end',
-        align: 'top',
-        font: { weight: 'bold', size: 12 },
-      },
+      // datalabels: {
+      //   anchor: 'end',
+      //   align: 'top',
+      //   font: { weight: 'bold', size: 12 },
+      // },
     },
   };
 
@@ -187,8 +197,11 @@ export class BarChartComponent implements OnInit, AfterViewInit, OnChanges {
 
   getPlugins() {
     return [
-      ChartDataLabels,
-      this.chartScrollService.getHorizontalScrollPlugin(this.minLabelWidth, this.defaultVisibleItems),
+      // ChartDataLabels,
+      this.chartScrollService.getHorizontalScrollPlugin(
+        this.minLabelWidth,
+        this.defaultVisibleItems
+      ),
     ];
   }
 }

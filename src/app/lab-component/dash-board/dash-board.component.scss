@@ -14,6 +14,23 @@
   overflow-x: auto;
 }
 
+.flex-grow-1 {
+  flex-grow: 1 !important;
+  width: 100%;
+  // max-width: max-content;
+}
+
+
+.g-2>[class^="col"] {
+  padding: 0.5rem;
+  /* tương đương g-2 trong BS5 */
+}
+
+.g-2 {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
 .dash-board {
   background-color: #eeefff;
   overflow-x: hidden;

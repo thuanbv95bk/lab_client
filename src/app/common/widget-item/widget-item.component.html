@@ -5,7 +5,9 @@
     'widget-display': widget.isVisible == true
   }">
   <div class="widget-header d-flex justify-content-between text-center align-items-center">
-    <span class="widget-title text-primary fw-bold text-uppercase">{{ this.widget.title }}</span>
+    <span class="widget-title text-primary font-weight-bold text-uppercase">{{
+      this.widget.title
+    }}</span>
     <div class="d-flex ms-auto align-items-center">
       <app-set-hidden-extend [(isVisible)]="widget.isVisible"></app-set-hidden-extend>
       <div>
@@ -14,12 +16,14 @@
         </button>
       </div>
 
-      <app-width-widget (widthSelected)="changeWidthSelected($event, widget.location)"></app-width-widget>
+      <app-width-widget
+        (widthSelected)="changeWidthSelected($event, widget.location)"></app-width-widget>
     </div>
   </div>
   <div class="border-top border-2 p-2" [ngClass]="{ hidden: widget.isVisible == false }">
     <div>
-      <app-dynamic-load-widget [dynamicLoadWidgetComponent]="dynamicComponentData"></app-dynamic-load-widget>
+      <app-dynamic-load-widget
+        [dynamicLoadWidgetComponent]="dynamicComponentData"></app-dynamic-load-widget>
     </div>
   </div>
 </div>

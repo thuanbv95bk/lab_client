@@ -1,0 +1,16 @@
+{
+    "login": "Login",
+    "userName": "Name",
+    "passWord": "PassWord",
+    "remember":"Remember password",
+    "forgot":"Forgot password?",
+    "scanCode":"Scan the code to install",
+    "btnDetail":"Detail",
+    "menuHome":"Home",
+    "menuService":"Service",
+    "menuNews":"News",
+    "menuPayFee":"PayFee",
+    "menuInstruct":"Instruct",
+    "menuNetwork":"Network",
+    "menuAboutUs":"About Us"
+}

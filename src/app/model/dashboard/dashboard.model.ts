@@ -1,7 +1,7 @@
 import { Subscription } from 'rxjs';
-import { LocationEnum, SizeEnum, TypeChartEnum } from '../enum/location.enum';
-import { Vehicle } from '../enum/vehicle.model';
-import { WidgetUpdateDataService } from '../../../service/vehicle-data/widget-update-data.service';
+import { LocationEnum, SizeEnum, TypeChartEnum } from '../../enum/location.enum';
+import { Vehicle } from '../../enum/vehicle.model';
+import { WidgetUpdateDataService } from '../../service/vehicle-data/widget-update-data.service';
 
 export class Widget {
   orderValue: number = 0;
@@ -12,7 +12,7 @@ export class Widget {
   location!: LocationEnum;
   isVisible: boolean = true;
   chartType!: TypeChartEnum;
-  currentSize!: SizeEnum;
+  currentSize: SizeEnum | SizeEnum.auto;
 
   dataModel: Vehicle[] = []; // Sử dụng Observable thay vì dữ liệu tĩnh
   private subscription!: Subscription;
@@ -46,31 +46,31 @@ export class WidgetSizeConfig {
   // Cấu hình class cho từng kích thước của widget theo location
   private static readonly sizeConfig: Record<LocationEnum, Record<SizeEnum, string>> = {
     [LocationEnum.TongQuan]: {
-      auto: 'col-12 flex-grow-1',
+      auto: 'col-12  flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
     [LocationEnum.CuaKhau]: {
-      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-sm-6 col-lg-4  flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
     [LocationEnum.TrenDuong]: {
-      auto: 'col-12 col-sm-6 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-sm-6 col-lg-4  flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
     [LocationEnum.NhaMay]: {
-      auto: 'col-12 col-md-6 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-md-6 col-lg-4  flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
     },
     [LocationEnum.TaiCang]: {
-      auto: 'col-12 col-md-4 col-lg-4 flex-grow-1',
+      auto: 'd-flex p-0 w-100 col-12 col-md-4 col-lg-4 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',
