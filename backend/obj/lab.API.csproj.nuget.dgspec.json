@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj": {}
+    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.API.csproj": {}
   },
   "projects": {
-    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj": {
+    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj",
-        "projectName": "lab",
-        "projectPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj",
+        "projectUniqueName": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.API.csproj",
+        "projectName": "lab.API",
+        "projectPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.API.csproj",
         "packagesPath": "C:\\Users\\THUAN-PC\\.nuget\\packages\\",
         "outputPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\obj\\",
         "projectStyle": "PackageReference",

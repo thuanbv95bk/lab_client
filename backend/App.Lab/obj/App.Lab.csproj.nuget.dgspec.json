@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj": {}
+    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\App.Lab\\App.Lab.csproj": {}
   },
   "projects": {
-    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj": {
+    "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\App.Lab\\App.Lab.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj",
-        "projectName": "lab",
-        "projectPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\lab.csproj",
+        "projectUniqueName": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\App.Lab\\App.Lab.csproj",
+        "projectName": "App.Lab",
+        "projectPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\App.Lab\\App.Lab.csproj",
         "packagesPath": "C:\\Users\\THUAN-PC\\.nuget\\packages\\",
-        "outputPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\obj\\",
+        "outputPath": "D:\\1.work\\6.BA_LAB\\labDashboard\\backend\\App.Lab\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,16 +49,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[8.0.14, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.6.2, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -71,9 +61,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }
