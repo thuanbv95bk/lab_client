@@ -25,6 +25,8 @@ import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { WidgetItemComponent } from './common/widget-item/widget-item.component';
 import { LoginComponent } from './lab-component/login/login.component';
+import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/user-vehicle-group.component';
+import { FilterPipe } from './pipe/filter.pipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -33,6 +35,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    FilterPipe,
     MultiSelectComponent,
     WidthWidgetComponent,
     setHiddenExtendComponent,
@@ -44,6 +47,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DashBoardComponent,
     WidgetItemComponent,
     LoginComponent,
+    UserVehicleGroupComponent,
   ],
   imports: [
     HttpClientModule,

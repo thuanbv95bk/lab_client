@@ -1,0 +1,119 @@
+<div class="container-fluid container-from">
+  <h6 class="font-weight-bold from-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
+  <div class="row">
+    <!-- Danh sách người dùng -->
+    <div class="col-12 col-md-4 mb-3">
+      <div class="card h-100">
+        <div class="card-header font-weight-bold from-title">Danh sách người dùng</div>
+        <div class="card-body">
+          <div class="input-group mb-2">
+            <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+          </div>
+          <!-- <input type="text" class="form-control mb-2" [(ngModel)]="userSearch" placeholder="Tìm người dùng" /> -->
+          <div class="list-group user-list flex-grow-1 overflow-auto">
+            <button
+              type="button"
+              class="list-group-item list-group-item-action"
+              *ngFor="let user of users | filter : userSearch : 'name'"
+              [class.active]="user === selectedUser"
+              (click)="selectUser(user)">
+              {{ user.name }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hai cột nhóm: chọn + đã gán với nút ở giữa -->
+    <div class="col-12 col-md-8">
+      <div class="row">
+        <!-- Chọn nhóm -->
+        <div class="col-12 col-sm-5 mb-3">
+          <div class="card">
+            <div class="card-header font-weight-bold from-title">
+              Chọn nhóm cho người dùng ({{ availableGroups.length }})
+            </div>
+            <div class="card-body">
+              <!-- <input
+                type="text"
+                class="form-control mb-2"
+                [(ngModel)]="availableGroupSearch"
+                placeholder="Tìm nhóm phương tiện" /> -->
+              <div class="input-group mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="availableGroupSearch"
+                  placeholder="Tìm nhóm phương tiện" />
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+              </div>
+
+              <div class="group-list flex-grow-1 overflow-auto">
+                <div *ngFor="let group of availableGroups | filter : availableGroupSearch : 'name'">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="group.selected" />
+                    <label class="form-check-label">{{ group.name }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Nút ở giữa -->
+        <div class="col-auto d-flex align-items-center justify-content-center mb-3">
+          <div class="text-center" style="width: max-content">
+            <button class="btn btn-secondary btn-sm mb-2 px-2" (click)="assignGroups()">&gt;</button><br />
+            <button class="btn btn-secondary btn-sm px-2" (click)="unassignGroups()">&lt;</button>
+          </div>
+        </div>
+
+        <!-- Nhóm đã gán -->
+        <div class="col-12 col-sm-5 mb-3">
+          <div class="card h-100">
+            <div class="card-header font-weight-bold from-title">
+              Nhóm đã gán cho người dùng ({{ assignedGroups.length }})
+            </div>
+            <div class="card-body">
+              <!-- <input
+                type="text"
+                class="form-control mb-2"
+                [(ngModel)]="assignedGroupSearch"
+                placeholder="Tìm nhóm phương tiện" /> -->
+              <div class="input-group mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="assignedGroupSearch"
+                  placeholder="Tìm nhóm phương tiện" />
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+              </div>
+
+              <div class="assigned-list flex-grow-1 overflow-auto">
+                <div *ngFor="let group of assignedGroups | filter : assignedGroupSearch : 'name'">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" [(ngModel)]="group.selected" />
+                    <label class="form-check-label">{{ group.name }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer buttons -->
+  <div class="text-center mt-3">
+    <button class="btn btn-primary mr-2" (click)="save()">Lưu</button>
+    <button class="btn btn-secondary" (click)="cancel()">Hủy</button>
+  </div>
+</div>
