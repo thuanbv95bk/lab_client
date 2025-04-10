@@ -7,15 +7,15 @@ namespace App.Cache
     {
         #region Constants
 
-        private const string SectionName = "RedisConfiguration";
+        //private const string SectionName = "RedisConfiguration";
 
-        public static RedisConfigurationSection Config
-        {
-            get
-            {
-                return (RedisConfigurationSection)ConfigurationManager.GetSection(SectionName);
-            }
-        }
+        //public static RedisConfigurationSection Config
+        //{
+        //    get
+        //    {
+        //        return (RedisConfigurationSection)ConfigurationManager.GetSection(SectionName);
+        //    }
+        //}
 
         #endregion
     }

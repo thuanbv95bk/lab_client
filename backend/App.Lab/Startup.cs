@@ -1,5 +1,4 @@
-﻿
-using App.DataAccess;
+﻿using App.DataAccess;
 using App.Lab.Repository.Implement;
 using App.Lab.Repository.Interface;
 using App.Lab.Service.Implement;

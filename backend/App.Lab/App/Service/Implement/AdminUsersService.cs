@@ -21,12 +21,12 @@ namespace App.Lab.Service.Implement
             _uow = uow;
         }
 
-        public string Create(AdminUsers objinfo)
+        public string Create(Users objinfo)
         {
             return _repo.Create(objinfo);
         }
 
-        public void Update(AdminUsers objinfo)
+        public void Update(Users objinfo)
         {
             _repo.Update(objinfo);
         }
@@ -36,20 +36,20 @@ namespace App.Lab.Service.Implement
             _repo.Delete(id);
         }
 
-        public AdminUsers GetById(string id)
+        public Users GetById(string id)
         {
             return _repo.GetById(id);
         }
 
 
-        public List<AdminUsers> GetAll()
+        public List<Users> GetAll()
         {
             return _repo.GetAll();
         }
 
-        public List<AdminUsers> GetList()
+        public List<Users> GetList(UsersFilter filter)
         {
-            return _repo.GetList();
+            return _repo.GetList(filter);
         }
     }
 }

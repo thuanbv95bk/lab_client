@@ -3,15 +3,26 @@ using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using System.Data;
 using System.Text;
-using System.Dynamic;
 using App.Common.Helper;
 using Microsoft.Data.SqlClient;
+using System.Xml.Linq;
 
 namespace App.DataAccess
 {
     public class Repo : Accessor
     {
         private readonly IUnitOfWork _unitOfWork;
+        public string Schema;
+
+        private static readonly JsonSerializerOptions jsonSerializeroptions = new JsonSerializerOptions
+        {
+            Converters =
+        {
+                new BooleanConverter(),
+                new NullableBooleanConverter()
+        },
+            PropertyNameCaseInsensitive = true
+        };
 
         public Repo(IUnitOfWork unitOfWork)
         {
@@ -29,37 +40,101 @@ namespace App.DataAccess
         }
 
         #region "data helper"
-        public int ExecuteNonQuery(string spName, params object[] parameterValues)
+        public void ExecNonQuery(string spName, params object[] parameterValues)
         {
-            IDbTransaction trans = null;
-            try
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
+            if (_unitOfWork.GetDbContext().IsSqlServer())
             {
-                if (_unitOfWork.GetTransaction() == null)
+                IDbTransaction trans = null;
+                try
                 {
-                    trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                    var ret = SqlHelper.ExecuteNonQuery((SqlTransaction)trans, spName, parameterValues);
-                    trans.Commit();
-                    trans.Dispose();
-                    return ret;
+                    if (_unitOfWork.GetTransaction() == null)
+                    {
+                        trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
+                        var ret = SqlHelper.ExecuteNonQuery((SqlTransaction)trans, spName, parameterValues);
+                        trans.Commit();
+                        trans.Dispose();
+                    }
+                    else
+                    {
+                        SqlHelper.ExecuteNonQuery((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                    }
                 }
-                else
-                    return SqlHelper.ExecuteNonQuery((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                catch (Exception ex)
+                {
+                    if (trans != null)
+                    {
+                        trans.Rollback();
+                        trans.Dispose();
+                    }
+                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                }
             }
-            catch (Exception ex)
+            else if (_unitOfWork.GetDbContext().IsOracle())
             {
-                if (trans != null)
+                IDbTransaction trans = null;
+                try
                 {
-                    trans.Rollback();
-                    trans.Dispose();
+                    if (_unitOfWork.GetTransaction() == null)
+                    {
+                        //trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
+                        //var ret = OracleHelper.ExecuteNonQuery((OracleTransaction)trans, spName, parameterValues);
+                        //trans.Commit();
+                        //trans.Dispose();
+                    }
+                    else
+                    {
+                        //OracleHelper.ExecuteNonQuery((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                    }
                 }
-                throw new Exception(spName + ": " + ex.ToString());
+                catch (Exception ex)
+                {
+                    if (trans != null)
+                    {
+                        trans.Rollback();
+                        trans.Dispose();
+                    }
+                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                }
+            }
+            else if (_unitOfWork.GetDbContext().IsMySql())
+            {
+                IDbTransaction trans = null;
+                try
+                {
+                    if (_unitOfWork.GetTransaction() == null)
+                    {
+                        //trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
+                        //var ret = MySqlHelper.ExecuteNonQuery((MySqlTransaction)trans, spName, parameterValues);
+                        //trans.Commit();
+                        //trans.Dispose();
+                    }
+                    else
+                    {
+                        //MySqlHelper.ExecuteNonQuery((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    if (trans != null)
+                    {
+                        trans.Rollback();
+                        trans.Dispose();
+                    }
+                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                }
             }
         }
 
         public object ExecuteScalar(string spName, params object[] parameterValues)
         {
-            IDataReader dr = null;
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             object ret = null;
+            IDataReader dr = null;
             IDbTransaction trans = null;
             try
             {
@@ -67,11 +142,7 @@ namespace App.DataAccess
 
                 if (dr != null)
                 {
-                    if (dr.Read())
-                        ret = dr.GetValue(0);
-                    else
-                        ret = null;
-
+                    ret = CBO.FillString(dr);
                     dr.Close();
                 }
 
@@ -83,23 +154,45 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
 
             return ret;
         }
 
+        public T ExecuteScalarAs<T>(string spName, params object[] parameterValues)
+        {
+            Type type = typeof(T);
+
+            var allowedTypes = new[]
+            {
+                typeof(bool), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort),
+                typeof(int), typeof(uint), typeof(long), typeof(ulong),
+                typeof(float), typeof(double), typeof(decimal), typeof(char),
+                typeof(string), typeof(DateTime)
+            };
+
+            if (Array.IndexOf(allowedTypes, type) < 0)
+            {
+                throw new InvalidOperationException($"The type {type} is not a supported primitive type.");
+            }
+
+            var retstr = ExecuteScalar(spName, parameterValues);
+            var ret = (T)Convert.ChangeType(retstr, typeof(T));
+            return ret;
+        }
+
         public void ExecuteReader<T>(out T ret, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
@@ -116,34 +209,30 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
         public void ExecuteReaderJson<T>(out T ret, string spName, params object[] parameterValues)
         {
             var data = ExecuteScalar(spName, parameterValues);
-            if (data == null)
-            {
+            if (string.IsNullOrEmpty(data?.ToString()))
                 ret = default;
-            }
             else
-            {
-                ret = JsonSerializer.Deserialize<List<T>>(data.ToString()).FirstOrDefault();
-            }
+                ret = JsonSerializer.Deserialize<T>(data.ToString(), jsonSerializeroptions);
         }
 
         public void ExecuteReader<T>(out List<T> ret, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
@@ -160,34 +249,30 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
         public void ExecuteReaderJson<T>(out List<T> ret, string spName, params object[] parameterValues)
         {
             var data = ExecuteScalar(spName, parameterValues);
-            if (data == null)
-            {
+            if (string.IsNullOrEmpty(data?.ToString()))
                 ret = default;
-            }
             else
-            {
-                ret = JsonSerializer.Deserialize<List<T>>(data.ToString());
-            }
+                ret = JsonSerializer.Deserialize<List<T>>(data.ToString(), jsonSerializeroptions);
         }
 
         public void ExecuteReader<T>(out List<T> ret, out int TotalCount, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
@@ -204,21 +289,21 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
         public void ExecuteReader<T>(out T ret, List<string> objProperties, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
@@ -235,21 +320,21 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
         public void ExecuteReader<T>(out List<T> ret, List<string> objProperties, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
@@ -266,66 +351,21 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-
-                throw new Exception(spName + ": " + ex.ToString());
-            }
-        }
-
-        public void ExecuteReader<T>(out T ret,string commandText,CommandType commandType = CommandType.StoredProcedure, params object[] parameterValues)
-        {
-            //if (!string.IsNullOrEmpty(Schema) && commandType == CommandType.StoredProcedure)
-            //{
-            //    commandText = Schema + "." + commandText;
-            //}
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            ret = default;
-
-            try
-            {
-                if (commandType == CommandType.StoredProcedure)
-                {
-                    Exec(out dr, out trans, commandText, parameterValues);
-                }
-                else // CommandType.Text
-                {
-                    ExecCommand(out dr, commandText);
-                }
-
-                ret = CBO.FillObject<T>(dr);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
                 dr?.Close();
-
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(commandText + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
-
 
         public DataSet ExecuteDataset(string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             DataSet ds = null;
             IDbTransaction trans = null;
             try
@@ -342,37 +382,155 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (ds != null)
-                    ds.Dispose();
-
+                ds?.Dispose();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception(spName + ": " + ex.ToString());
+                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
+        }
+
+        private string ErrorMessage(Exception ex, string spName, params object[] parameterValues)
+        {
+            return ">>>>>>> " + spName + " " + string.Join(", ", parameterValues.Select(p =>
+                    string.IsNullOrEmpty(p?.ToString()) ? "NULL" :
+                    p is string ? $"'{p}'" :
+                    p is DateTime dt ? $"'{dt:yyyy-MM-dd HH:mm:ss}'" :
+                    p.ToString())) + " >>>>>>> "
+                + ex.ToString() + " >>>>>>>";
         }
 
         private void Exec(out IDataReader dr, out IDbTransaction trans, string spName, params object[] parameterValues)
         {
+            dr = null;
             trans = null;
             if (_unitOfWork.GetTransaction() == null)
             {
                 trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                dr = SqlHelper.ExecuteReader((SqlTransaction)trans, spName, parameterValues);
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsMySql())
+                //    dr = MySqlHelper.ExecuteReader((MySqlTransaction)trans, spName, parameterValues);
             }
             else
-                dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+            {
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    dr = OracleHelper.ExecuteReader((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsMySql())
+                //    dr = MySqlHelper.ExecuteReader((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+            }
         }
-        public void ExecCommand<T>(out List<T> ret, string sqlCommand)
+
+        private void ExecDataset(out DataSet ds, out IDbTransaction trans, string spName, params object[] parameterValues)
         {
+            ds = null;
+            trans = null;
+            if (_unitOfWork.GetTransaction() == null)
+            {
+                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    ds = SqlHelper.ExecuteDataset((SqlTransaction)trans, spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    ds = OracleHelper.ExecuteDataset((OracleTransaction)trans, spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsMySql())
+                //    ds = MySqlHelper.ExecuteDataset((MySqlTransaction)trans, spName, parameterValues);
+            }
+            else
+            {
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    ds = SqlHelper.ExecuteDataset((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    ds = OracleHelper.ExecuteDataset((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+                //else if (_unitOfWork.GetDbContext().IsMySql())
+                //    ds = MySqlHelper.ExecuteDataset((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
+            }
+        }
+
+        private void _ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
+        {
+            dr = null;
+            trans = null;
+            if (_unitOfWork.GetTransaction() == null)
+            {
+                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, sqlCommand, commandParameters);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, CommandType.Text, sqlCommand);
+                else
+                    throw new NotImplementedException();
+            }
+            else
+            {
+                if (_unitOfWork.GetDbContext().IsSqlServer())
+                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), CommandType.Text, sqlCommand, commandParameters);
+                //else if (_unitOfWork.GetDbContext().IsOracle())
+                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, CommandType.Text, sqlCommand);
+                else
+                    throw new NotImplementedException();
+            }
+        }
+
+        public void GetTableData<T>(out List<T> ret, string tableName, string[] lstColumn = null, FilterOption[] lstFilterOption = null, OrderOption[] lstOrderOption = null) 
+        { 
+
+            if (!string.IsNullOrEmpty(Schema))
+                tableName = $"[{Schema}.{tableName}]";
+
+            SqlParameter[] commandParameters = null;
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.Append(" SELECT ");
+            if (lstColumn == null || lstColumn.Length == 0)
+            {
+                stringBuilder.Append(" * ");
+            }
+            else if (lstColumn.Length == 1)
+            {
+                stringBuilder.Append(string.Join(" , ", lstColumn));
+            }
+
+            StringBuilder stringBuilder2 = stringBuilder;
+            StringBuilder stringBuilder3 = stringBuilder2;
+            StringBuilder.AppendInterpolatedStringHandler handler = new StringBuilder.AppendInterpolatedStringHandler(7, 1, stringBuilder2);
+            handler.AppendLiteral(" FROM ");
+            handler.AppendFormatted(tableName);
+            handler.AppendLiteral(" ");
+            stringBuilder3.Append(ref handler);
+            if (lstFilterOption != null && lstFilterOption.Length != 0)
+            {
+                stringBuilder.Append(" WHERE 1=1 ");
+                foreach (FilterOption filterOption in lstFilterOption)
+                {
+                    stringBuilder2 = stringBuilder;
+                    StringBuilder stringBuilder4 = stringBuilder2;
+                    handler = new StringBuilder.AppendInterpolatedStringHandler(8, 3, stringBuilder2);
+                    handler.AppendLiteral(" AND ");
+                    handler.AppendFormatted(filterOption.Column);
+                    handler.AppendLiteral(" = ");
+                    handler.AppendFormatted(filterOption.Value);
+                    handler.AppendLiteral(" ");
+                    stringBuilder4.Append(ref handler);
+                }
+            }
+
+            if (lstOrderOption != null && lstOrderOption.Length != 0)
+            {
+                stringBuilder.Append(" ORDER BY ");
+                stringBuilder.Append(string.Join(" , ", lstOrderOption.Select((OrderOption x) => x.ToString())));
+            }
+
+            string text = stringBuilder.ToString();
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
             {
-                _ExecCommand(out dr, out trans, sqlCommand, null);
+                _ExecCommand(out dr, out trans, text, commandParameters);
                 ret = CBO.FillList<T>(dr);
                 if (trans != null)
                 {
@@ -389,107 +547,17 @@ namespace App.DataAccess
                     trans.Dispose();
                 }
 
-                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
-            }
-        }
-        private void _ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
-        {
-            dr = null;
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, sqlCommand, commandParameters);
-            }
-            else
-            {
-                dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), CommandType.Text, sqlCommand, commandParameters);
-            }
-        }
-        //private void ExecComment(out IDataReader dr, out IDbTransaction trans,  string commandText, params object[] parameterValues)
-        //{
-        //    trans = null;
-        //    if (_unitOfWork.GetTransaction() == null)
-        //    {
-        //        trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-        //        dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, commandText, parameterValues);
-        //    }
-        //    else
-        //        dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), commandText, parameterValues);
-        //}
-
-        private void ExecDataset(out DataSet ds, out IDbTransaction trans, string spName, params object[] parameterValues)
-        {
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                ds = SqlHelper.ExecuteDataset((SqlTransaction)trans, spName, parameterValues);
-            }
-            else
-                ds = SqlHelper.ExecuteDataset((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-        }
-
-        private void ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
-        {
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, sqlCommand, commandParameters);
-            }
-            else
-            {
-                dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), CommandType.Text, sqlCommand, commandParameters);
+                throw new Exception("sqlCommand: " + text + ": " + ex.ToString());
             }
         }
 
-        public void GetTableData<T>(out List<T> ret, string tableName, string[] lstColumn = null,
-            FilterOption[] lstFilterOption = null, OrderOption[] lstOrderOption = null)
+        public void ExecCommand<T>(out List<T> ret, string sqlCommand)
         {
-            SqlParameter[] commandParameters = null;
-            //SqlParameter[] commandParameters = new SqlParameter[1];
-
-            var queryBuilder = new StringBuilder();
-            queryBuilder.Append(" SELECT ");
-
-            // lst column select
-            if (lstColumn == null || lstColumn.Length == 0)
-            {
-                queryBuilder.Append(" * ");
-            }
-            else if (lstColumn.Length == 1)
-            {
-                queryBuilder.Append(string.Join(" , ", lstColumn));
-            }
-
-            // from
-            queryBuilder.Append($" FROM {tableName} ");
-
-            // Generate filter conditions
-            if (lstFilterOption != null && lstFilterOption.Length > 0)
-            {
-                queryBuilder.Append(" WHERE 1=1 ");
-                foreach (var filter in lstFilterOption)
-                {
-                    queryBuilder.Append($" AND {filter.Column} {filter.Operator} {filter.Value} ");
-                }
-            }
-
-            // Generate sort configurations
-            if (lstOrderOption != null && lstOrderOption.Length > 0)
-            {
-                queryBuilder.Append(" ORDER BY ");
-                queryBuilder.Append(string.Join(" , ", lstOrderOption.Select(x => x.ToString())));
-            }
-
-            var sqlCommand = queryBuilder.ToString();
-
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
             {
-                ExecCommand(out dr, out trans, sqlCommand, commandParameters);
+                _ExecCommand(out dr, out trans, sqlCommand, null);
 
                 ret = CBO.FillList<T>(dr);
 
@@ -501,62 +569,45 @@ namespace App.DataAccess
             }
             catch (Exception ex)
             {
-                if (dr != null)
-                    dr.Close();
-
+                dr?.Close();
                 if (trans != null)
                 {
                     trans.Rollback();
                     trans.Dispose();
                 }
+                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
+            }
+        }
 
+        public void ExecCommand(string sqlCommand)
+        {
+            IDataReader dr = null;
+            IDbTransaction trans = null;
+            try
+            {
+                _ExecCommand(out dr, out trans, sqlCommand, null);
+
+                dr?.Close();
+
+                if (trans != null)
+                {
+                    trans.Commit();
+                    trans.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                dr?.Close();
+                if (trans != null)
+                {
+                    trans.Rollback();
+                    trans.Dispose();
+                }
                 throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
         }
 
         #endregion
-
-
-        public List<dynamic> ToDynamic(DataTable dt)
-        {
-            var dynamicDt = new List<dynamic>();
-            foreach (DataRow row in dt.Rows)
-            {
-                dynamic dyn = new ExpandoObject();
-                dynamicDt.Add(dyn);
-                foreach (DataColumn column in dt.Columns)
-                {
-                    var dic = (IDictionary<string, object>)dyn;
-                    dic[column.ColumnName] = row[column];
-                }
-            }
-            return dynamicDt;
-        }
-
-        public List<Dictionary<string, object>> ToDictionary(DataTable dt)
-        {
-            var columns = dt.Columns.Cast<DataColumn>();
-            var Temp = dt.AsEnumerable().Select(dataRow => columns.Select(column =>
-                                 new { Column = column.ColumnName, Value = dataRow[column] })
-                             .ToDictionary(data => data.Column, data => data.Value)).ToList();
-            return Temp.ToList();
-        }
-
-        public Type GetTypeByName(string name)
-        {
-            return
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .Reverse()
-                    .Select(assembly => assembly.GetType(name))
-                    .FirstOrDefault(t => t != null)
-                // Safely delete the following part
-                // if you do not want fall back to first partial result
-                ??
-                AppDomain.CurrentDomain.GetAssemblies()
-                    .Reverse()
-                    .SelectMany(assembly => assembly.GetTypes())
-                    .FirstOrDefault(t => t.Name.Contains(name));
-        }
     }
 
     public class FilterOption
@@ -564,6 +615,8 @@ namespace App.DataAccess
         public string Column { get; set; }
         public string Operator { get; set; }
         public string Value { get; set; }
+        public string ValueType { get; set; }
+        public int OrderValue { get; set; }
     }
 
     public class OrderOption

@@ -3,36 +3,40 @@
   "WorkspaceRootPath": "D:\\2.lab\\2.labDashboard\\backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\implement\\adminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\implement\\adminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\repo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\repo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\cbo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\cbo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\model\\adminusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\model\\adminusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\implement\\adminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\implement\\adminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\connectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\connectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\sqlhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\sqlhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\implement\\adminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\implement\\adminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\basecontroller\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\basecontroller\\basecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\interface\\iadminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\interface\\iadminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\redisconfigurationsection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\redisconfigurationsection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\redisconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\redisconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\rediscacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\rediscacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\interface\\ivehiclegroupsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\interface\\ivehiclegroupsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\service\\interface\\iadminusersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\service\\interface\\iadminusersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\service\\implement\\adminusersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -43,8 +47,88 @@
       "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\model\\servicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\model\\servicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\model\\reponsedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\model\\reponsedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\interface\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\interface\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\repo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\repo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\interface\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\interface\\irepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\connectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\connectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\jsonbooleanconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\jsonbooleanconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\sqlhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\sqlhelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\interface\\iconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\interface\\iconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\accessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\accessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\encrypthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\encrypthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\null.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\null.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\controller\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\controller\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\model\\adminusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\model\\adminusers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\interface\\iadminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\interface\\iadminusersrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\jsonnullablebooleanconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\jsonnullablebooleanconverter.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\baseservice\\baseservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -57,42 +141,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\interface\\iadminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\interface\\iadminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\implement\\adminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\implement\\adminuservehiclegrouprepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\accessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\accessor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\unitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\service\\interface\\iadminusersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\service\\interface\\iadminusersservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\implement\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\implement\\dbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\model\\reponsedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\model\\reponsedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\startup.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\controller\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\controller\\adminuserscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -111,36 +159,8 @@
       "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\lab.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\appconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\lab.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
       "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\lab.api.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\model\\servicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\model\\servicestatus.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\null.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\null.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\helper\\encrypthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\helper\\encrypthelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\interface\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\interface\\iunitofwork.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\common\\dataaccess\\interface\\iconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\common\\dataaccess\\interface\\iconnectionfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\interface\\ivehiclegroupsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\app\\repository\\interface\\ivehiclegroupsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\app\\repository\\implement\\vehiclegroupsrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -167,28 +187,8 @@
       "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\redisconfigurationsection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\redisconfigurationsection.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\lab.api.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
       "RelativeMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|solutionrelative:app.api\\lab.api.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\cacheutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\cacheutil.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\redisconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\redisconfigurationmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\rediscacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\rediscacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.lab\\cache\\icacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{E4F1CD95-1E6E-493A-9F6B-22DA238967E3}|App.Lab\\App.Lab.csproj|solutionrelative:app.lab\\cache\\icacheprovider.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}|App.API\\lab.API.csproj|d:\\2.lab\\2.labdashboard\\backend\\app.api\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -206,141 +206,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AdminUsersRepository.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs*",
-              "RelativeToolTip": "App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs*",
-              "ViewState": "AgIAAEcAAAAAAAAAAAAcwE0AAAAAAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "RedisCacheProvider.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisCacheProvider.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisCacheProvider.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisCacheProvider.cs",
+              "RelativeToolTip": "App.Lab\\Cache\\RedisCacheProvider.cs",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAQwJcAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:13:24.635Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "BaseService.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseService\\BaseService.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\BaseService\\BaseService.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseService\\BaseService.cs",
-              "RelativeToolTip": "App.Lab\\Common\\BaseService\\BaseService.cs",
-              "ViewState": "AgIAAAYAAAAAAAAAAAAmwA0AAAAcAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:07:50.074Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Repo.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
-              "ViewState": "AgIAAH8BAAAAAAAAAAAUwKIBAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:20:06.331Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "IRepository.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAWAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:58:52.429Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "AdminUsers.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\AdminUsers.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Model\\AdminUsers.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\AdminUsers.cs",
-              "RelativeToolTip": "App.Lab\\App\\Model\\AdminUsers.cs",
-              "ViewState": "AgIAABsAAAAAAAAAAAAiwCIAAAAuAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T06:44:12.863Z",
+              "WhenOpened": "2025-04-09T03:50:25.771Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 5,
-              "Title": "SqlHelper.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
-              "ViewState": "AgIAAGYDAAAAAAAAAAAcwDQDAAAAAAAAAAAAAA==",
+              "Title": "RedisConfigurationManager.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationManager.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisConfigurationManager.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationManager.cs",
+              "RelativeToolTip": "App.Lab\\Cache\\RedisConfigurationManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAPAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:22:25.559Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "IAdminUsersRepository.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
-              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:13:12.371Z",
+              "WhenOpened": "2025-04-09T03:49:35.466Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "ConnectionFactory.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAA2wBsAAAAMAAAAAAAAAA==",
+              "Title": "RedisConfigurationSection.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationSection.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisConfigurationSection.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationSection.cs",
+              "RelativeToolTip": "App.Lab\\Cache\\RedisConfigurationSection.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwBoAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:17:57.592Z",
+              "WhenOpened": "2025-04-09T03:48:46.987Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "CBO.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\CBO.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\CBO.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\CBO.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Helper\\CBO.cs",
-              "ViewState": "AgIAAJsBAAAAAAAAAAAUwLUBAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:30:57.568Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ICompanyCompaniesRepository.cs.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
-              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:15:05.055Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 3,
               "Title": "BaseController.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseController\\BaseController.cs",
               "RelativeDocumentMoniker": "App.Lab\\Common\\BaseController\\BaseController.cs",
@@ -353,20 +262,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "IAdminUserVehicleGroupRepository.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
-              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAASAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "AdminUsersRepository.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
+              "RelativeToolTip": "App.Lab\\App\\Repository\\Implement\\AdminUsersRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:14:19.496Z",
+              "WhenOpened": "2025-04-09T07:13:24.635Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 1,
               "Title": "AdminUserVehicleGroupRepository.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUserVehicleGroupRepository.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Implement\\AdminUserVehicleGroupRepository.cs",
@@ -379,129 +288,381 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
-              "Title": "DbContext.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "CBO.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\CBO.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\CBO.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\CBO.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Helper\\CBO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAADAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:16:26.291Z"
+              "WhenOpened": "2025-04-09T02:30:57.568Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Startup.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Startup.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Startup.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Startup.cs",
-              "RelativeToolTip": "App.Lab\\Startup.cs",
-              "ViewState": "AgIAAEEAAAAAAAAAAAAmwEgAAAAtAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "IVehicleGroupsRepository.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
+              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T01:42:43.089Z",
+              "WhenOpened": "2025-04-09T07:15:52.196Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 8,
+              "Title": "IAdminUsersService.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
+              "RelativeToolTip": "App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T08:03:24.887Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
               "Title": "AdminUsersService.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Implement\\AdminUsersService.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Service\\Implement\\AdminUsersService.cs",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Implement\\AdminUsersService.cs",
               "RelativeToolTip": "App.Lab\\App\\Service\\Implement\\AdminUsersService.cs",
-              "ViewState": "AgIAAAEAAAAAAAAAAAAIwAwAAAAJAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAIwDMAAAApAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-09T08:03:09.262Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
-              "Title": "Accessor.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Accessor.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\Accessor.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Accessor.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Helper\\Accessor.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwAUAAAARAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Startup.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Startup.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Startup.cs",
+              "RelativeToolTip": "App.Lab\\Startup.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:42:45.2Z"
+              "WhenOpened": "2025-04-09T01:42:43.089Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "UnitOfWork.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
-              "ViewState": "AgIAAB4AAAAAAAAAAAAkwDYAAAAIAAAAAAAAAA==",
+              "DocumentIndex": 11,
+              "Title": "ServiceStatus.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ServiceStatus.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Model\\ServiceStatus.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ServiceStatus.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Model\\ServiceStatus.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:54:57.958Z"
+              "WhenOpened": "2025-04-09T08:17:56.037Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "IAdminUsersService.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
-              "RelativeToolTip": "App.Lab\\App\\Service\\Interface\\IAdminUsersService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAsAAAAXAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:03:24.887Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 12,
               "Title": "ReponseData.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ReponseData.cs",
               "RelativeDocumentMoniker": "App.Lab\\Common\\Model\\ReponseData.cs",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ReponseData.cs",
               "RelativeToolTip": "App.Lab\\Common\\Model\\ReponseData.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:19:28.64Z"
+              "WhenOpened": "2025-04-09T08:19:28.64Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AppConfig.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\AppConfig.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\AppConfig.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\AppConfig.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Helper\\AppConfig.cs",
+              "ViewState": "AgIAAMMAAAAAAAAAAAAmwHMAAABwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T01:52:47.251Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "UnitOfWork.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\UnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:54:57.958Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "Repo.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
+              "ViewState": "AgIAALoBAAAAAAAAAADwv8wBAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:20:06.331Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "Accessor.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Accessor.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\Accessor.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Accessor.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Helper\\Accessor.cs",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAowA4AAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:42:45.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IUnitOfWork.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAcAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:14:16.557Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ConnectionFactory.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\ConnectionFactory.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAADwvzIAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:17:57.592Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "DbContext.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\DbContext.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAAAeAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:16:26.291Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 20,
-              "Title": "Startup.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Startup.cs",
-              "RelativeDocumentMoniker": "App.API\\Startup.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Startup.cs",
-              "RelativeToolTip": "App.API\\Startup.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAFAAAAAAAAAA==",
+              "Title": "JsonBooleanConverter.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\JsonBooleanConverter.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\JsonBooleanConverter.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\JsonBooleanConverter.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\JsonBooleanConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:42:39.994Z"
+              "WhenOpened": "2025-04-10T08:12:53.602Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 21,
+              "Title": "SqlHelper.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\SqlHelper.cs",
+              "ViewState": "AgIAALYDAAAAAAAAAADwv9YDAACBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:22:25.559Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IRepository.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:58:52.429Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "IConnectionFactory.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:18:33.876Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "EncryptHelper.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\EncryptHelper.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\EncryptHelper.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\EncryptHelper.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Helper\\EncryptHelper.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAADwvwsAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T01:55:21.995Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "Null.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Null.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\Null.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Null.cs",
+              "RelativeToolTip": "App.Lab\\Common\\Helper\\Null.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:33:54.559Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "AdminUsers.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\AdminUsers.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Model\\AdminUsers.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\AdminUsers.cs",
+              "RelativeToolTip": "App.Lab\\App\\Model\\AdminUsers.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T06:44:12.863Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
               "Title": "AdminUsersController.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Controller\\AdminUsersController.cs",
               "RelativeDocumentMoniker": "App.API\\Controller\\AdminUsersController.cs",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Controller\\AdminUsersController.cs",
               "RelativeToolTip": "App.API\\Controller\\AdminUsersController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAACYAAAAAAAAAAAAIwBAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:26:39.848Z"
+              "WhenOpened": "2025-04-09T08:26:39.848Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 28,
+              "Title": "IAdminUsersRepository.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
+              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IAdminUsersRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:13:12.371Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Startup.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Startup.cs",
+              "RelativeDocumentMoniker": "App.API\\Startup.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Startup.cs",
+              "RelativeToolTip": "App.API\\Startup.cs",
+              "ViewState": "AgIAABEAAAAAAAAAAAAwwCgAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T02:42:39.994Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
               "Title": "app.config",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config",
               "RelativeDocumentMoniker": "App.API\\app.config",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config",
               "RelativeToolTip": "App.API\\app.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAACiAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-04-09T02:50:03.225Z"
+              "WhenOpened": "2025-04-09T02:50:03.225Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 30,
+              "Title": "JsonNullableBooleanConverter.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\JsonNullableBooleanConverter.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Implement\\JsonNullableBooleanConverter.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Implement\\JsonNullableBooleanConverter.cs",
+              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\JsonNullableBooleanConverter.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-10T08:13:08.211Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "ICompanyCompaniesRepository.cs.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
+              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\ICompanyCompaniesRepository.cs.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:15:05.055Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "BaseService.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseService\\BaseService.cs",
+              "RelativeDocumentMoniker": "App.Lab\\Common\\BaseService\\BaseService.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseService\\BaseService.cs",
+              "RelativeToolTip": "App.Lab\\Common\\BaseService\\BaseService.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAmwA0AAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T08:07:50.074Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "IAdminUserVehicleGroupRepository.cs",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
+              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
+              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IAdminUserVehicleGroupRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T07:14:19.496Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\Program.cs",
               "RelativeDocumentMoniker": "App.API\\Program.cs",
@@ -513,7 +674,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 37,
               "Title": "IBaseService.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\BaseService\\IBaseService.cs",
               "RelativeDocumentMoniker": "App.Lab\\Common\\BaseService\\IBaseService.cs",
@@ -525,7 +686,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 36,
               "Title": "App.Lab.csproj",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App.Lab.csproj",
               "RelativeDocumentMoniker": "App.Lab\\App.Lab.csproj",
@@ -533,11 +694,12 @@
               "RelativeToolTip": "App.Lab\\App.Lab.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-09T01:51:55.421Z"
+              "WhenOpened": "2025-04-09T01:51:55.421Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 39,
               "Title": "lab.API.csproj",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\lab.API.csproj",
               "RelativeDocumentMoniker": "App.API\\lab.API.csproj",
@@ -545,11 +707,12 @@
               "RelativeToolTip": "App.API\\lab.API.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-09T08:25:44.544Z"
+              "WhenOpened": "2025-04-09T08:25:44.544Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 38,
               "Title": "lab.http",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\lab.http",
               "RelativeDocumentMoniker": "App.API\\lab.http",
@@ -561,91 +724,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
-              "Title": "AppConfig.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\AppConfig.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\AppConfig.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\AppConfig.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Helper\\AppConfig.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAqwAoAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T01:52:47.251Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 29,
-              "Title": "ServiceStatus.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ServiceStatus.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Model\\ServiceStatus.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Model\\ServiceStatus.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Model\\ServiceStatus.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAABUAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T08:17:56.037Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 33,
-              "Title": "IConnectionFactory.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IConnectionFactory.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:18:33.876Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "IUnitOfWork.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
-              "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Interface\\IUnitOfWork.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:14:16.557Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
-              "Title": "EncryptHelper.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\EncryptHelper.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\EncryptHelper.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\EncryptHelper.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Helper\\EncryptHelper.cs",
-              "ViewState": "AgIAAAIAAAAAAAAAAADwvwUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T01:55:21.995Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 30,
-              "Title": "Null.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Null.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Common\\Helper\\Null.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Common\\Helper\\Null.cs",
-              "RelativeToolTip": "App.Lab\\Common\\Helper\\Null.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T02:33:54.559Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 34,
-              "Title": "IVehicleGroupsRepository.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
-              "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
-              "RelativeToolTip": "App.Lab\\App\\Repository\\Interface\\IVehicleGroupsRepository.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAFAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T07:15:52.196Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 40,
               "Title": "VehicleGroupsRepository.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\VehicleGroupsRepository.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Implement\\VehicleGroupsRepository.cs",
@@ -657,7 +736,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 41,
               "Title": "CompanyCompaniesRepository.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\CompanyCompaniesRepository.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Repository\\Implement\\CompanyCompaniesRepository.cs",
@@ -669,7 +748,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 42,
               "Title": "VehicleGroups.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\VehicleGroups.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Model\\VehicleGroups.cs",
@@ -681,7 +760,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 43,
               "Title": "CompanyCompanies.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\CompanyCompanies.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Model\\CompanyCompanies.cs",
@@ -693,7 +772,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 39,
+              "DocumentIndex": 44,
               "Title": "AdminUserVehicleGroup.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Model\\AdminUserVehicleGroup.cs",
               "RelativeDocumentMoniker": "App.Lab\\App\\Model\\AdminUserVehicleGroup.cs",
@@ -705,7 +784,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 40,
+              "DocumentIndex": 45,
               "Title": "appsettings.json",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\appsettings.json",
               "RelativeDocumentMoniker": "App.API\\appsettings.json",
@@ -729,74 +808,15 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 41,
-              "Title": "RedisConfigurationSection.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationSection.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisConfigurationSection.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationSection.cs",
-              "RelativeToolTip": "App.Lab\\Cache\\RedisConfigurationSection.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T03:48:46.987Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 42,
+              "DocumentIndex": 46,
               "Title": "lab.API",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\lab.API.csproj",
               "RelativeDocumentMoniker": "App.API\\lab.API.csproj",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\lab.API.csproj",
               "RelativeToolTip": "App.API\\lab.API.csproj",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-04-09T04:31:54.23Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 44,
-              "Title": "RedisConfigurationManager.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationManager.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisConfigurationManager.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisConfigurationManager.cs",
-              "RelativeToolTip": "App.Lab\\Cache\\RedisConfigurationManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T03:49:35.466Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 45,
-              "Title": "RedisCacheProvider.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisCacheProvider.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Cache\\RedisCacheProvider.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\RedisCacheProvider.cs",
-              "RelativeToolTip": "App.Lab\\Cache\\RedisCacheProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T03:50:25.771Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 46,
-              "Title": "ICacheProvider.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\ICacheProvider.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Cache\\ICacheProvider.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\ICacheProvider.cs",
-              "RelativeToolTip": "App.Lab\\Cache\\ICacheProvider.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAjAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T03:51:20.288Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 43,
-              "Title": "CacheUtil.cs",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\CacheUtil.cs",
-              "RelativeDocumentMoniker": "App.Lab\\Cache\\CacheUtil.cs",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\Cache\\CacheUtil.cs",
-              "RelativeToolTip": "App.Lab\\Cache\\CacheUtil.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAAAgwAIAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T03:54:18.119Z"
+              "WhenOpened": "2025-04-09T04:31:54.23Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",

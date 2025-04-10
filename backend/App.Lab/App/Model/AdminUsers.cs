@@ -6,18 +6,17 @@ using System.Threading.Tasks;
 
 namespace App.Lab.Model
 {
-    public class AdminUsers
+    public class Users
     {
         public string PK_UserID { get; set; }
         public int? FK_CompanyID { get; set; }
         public string Username { get; set; } 
         public string UserNameLower { get; set; }
         public string Password { get; set; }
-        public string Fullname { get; set; } 
-        public byte UserType { get; set; }
+        public string fullName { get; set; } 
         public bool? IsLock { get; set; }
         public DateTime? LastPasswordChanged { get; set; }
-        //public short? ChangePasswordAfterDays { get; set; }
+    
         public string CreatedByUser { get; set; }
         public DateTime? CreatedDate { get; set; }
         public string UpdatedByUser { get; set; }
@@ -34,11 +33,24 @@ namespace App.Lab.Model
         public string? UsernameBAP { get; set; }
         public string? LoginType { get; set; }
         public string SuperiorSaleID { get; set; }
-        //public short? ExtendChangePasswordDays { get; set; }
+
         public bool? IsActived { get; set; }
         public DateTime? ActivedDate { get; set; }
-        //public short? RequiredChangePasswordDays { get; set; }
         public bool? IsWeakPassword { get; set; }
         public DateTime? KeepWeakPasswordDate { get; set; }
+    }
+
+
+    public class UsersFilter
+    {
+        public string PK_UserID { get; set; }
+        public int? FK_CompanyID { get; set; }
+        public string Username { get; set; }
+        public string UserNameLower { get; set; }
+        public string Fullname { get; set; }
+        public bool? IsLock { get; set; }
+        public bool? IsDeleted { get; set; }
+        public bool? IsActived { get; set; }
+       
     }
 }

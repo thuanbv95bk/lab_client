@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-interface User {
-  name: string;
-}
+import { UserVehicleGroupService } from './service/user-vehicle-group.service';
+import { DialogService } from '../../service/dialog.service';
+import { User, UsersFilter } from './model/User';
+
 interface Group {
   name: string;
   selected: boolean;
@@ -16,11 +17,8 @@ export class UserVehicleGroupComponent implements OnInit {
   availableGroupSearch = '';
   assignedGroupSearch = '';
 
-  users: User[] = [
-    { name: '29H16823' },
-    { name: '29H20925' },
-    { name: 'Công ty xăng dầu Khu vực III' },
-  ];
+  listUser: User[] = [];
+  userFilter = new UsersFilter();
 
   availableGroups: Group[] = [
     { name: 'Đội xe 1', selected: false },
@@ -62,10 +60,45 @@ export class UserVehicleGroupComponent implements OnInit {
   }
 
   cancel() {
+    // this.openError();
+    // return;
     this.selectedUser = null;
     this.assignedGroups = [];
   }
-  constructor() {}
+  constructor(private _service: UserVehicleGroupService, private dialogService: DialogService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.getMasterData();
+  }
+
+  getMasterData() {
+    this.userFilter.FK_CompanyID = 15076;
+    this._service.getList(this.userFilter).then(
+      async (res) => {
+        if (!res.isSuccess) {
+          console.error(res);
+          return;
+        }
+        console.log(res.data);
+        this.listUser = res.data;
+      },
+      (err) => {
+        // this.dialogService.openErrorDialog(err);
+      }
+    );
+  }
+
+  // Hàm gọi modal
+  openError() {
+    const errorData = {
+      message: 'An error occurred',
+      ErrorMessage: 'Something went wrong!',
+      Data: 'Additional information',
+    };
+
+    const dialogRef = this.dialogService.openErrorDialog(errorData);
+
+    // Bạn có thể kiểm tra hoặc theo dõi khi modal đóng tại đây nếu cần
+    dialogRef.closeDialog(); // Đóng modal khi cần thiết (có thể trigger sau khi xử lý)
+  }
 }

@@ -8,7 +8,7 @@ import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/us
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'user-vehicle-group',
+    redirectTo: 'login',
     pathMatch: 'full',
   },
   { path: 'dash-board', component: DashBoardComponent },

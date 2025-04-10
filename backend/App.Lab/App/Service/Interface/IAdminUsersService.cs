@@ -6,11 +6,11 @@ namespace App.Lab.Service.Interface
 {
     public interface IAdminUsersService : IBaseService
     {
-        string Create(AdminUsers obj);
-        void Update(AdminUsers obj);
+        string Create(Users obj);
+        void Update(Users obj);
         void Delete(string id);
-        AdminUsers GetById(string id);
-        List<AdminUsers> GetAll();
-        List<AdminUsers> GetList();
+        Users GetById(string id);
+        List<Users> GetAll();
+        List<Users> GetList(UsersFilter filter);
     }
 }

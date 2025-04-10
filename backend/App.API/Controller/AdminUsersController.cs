@@ -5,7 +5,7 @@ using App.Lab.Model;
 namespace App.Admin.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/user-vehicle-group")]
     public class AdminUsersController : BaseController
     {
         private readonly IAdminUsersService _service;
@@ -15,7 +15,6 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-      
         [HttpPost]
         [Route("GetById")]
         public async Task<IActionResult> GetById(string id)
@@ -40,6 +39,14 @@ namespace App.Admin.Controllers
             return Success(ret);
         }
 
-        
+        [HttpPost]
+        [Route("GetList")]
+        public async Task<IActionResult> GetList(UsersFilter filter)
+        {
+            var ret = await Task.Run(() => _service.GetList(filter));
+            return Success(ret);
+        }
+
+
     }
 }

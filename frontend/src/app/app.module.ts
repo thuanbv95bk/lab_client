@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +27,9 @@ import { WidgetItemComponent } from './common/widget-item/widget-item.component'
 import { LoginComponent } from './lab-component/login/login.component';
 import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/user-vehicle-group.component';
 import { FilterPipe } from './pipe/filter.pipe';
+import { AppConfig, InitApp } from './app.config';
+import { DialogHandleErrorComponent } from './common/base-component/dialog-handle-error/dialog-handle-error.component';
+import { DialogService } from './service/dialog.service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -35,6 +38,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
+    DialogHandleErrorComponent,
     FilterPipe,
     MultiSelectComponent,
     WidthWidgetComponent,
@@ -70,12 +74,21 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     }),
   ],
   providers: [
+    AppConfig,
     DoughnutPluginService,
     LegendService,
     ChartScrollService,
     VehicleDataService,
     WidgetUpdateDataService,
+    DialogService,
+    // TranslateService,
     TranslateService,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: InitApp,
+      deps: [AppConfig],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

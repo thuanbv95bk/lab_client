@@ -145,7 +145,7 @@ namespace App.Common.Helper
         {
             PropertyInfo objPropertyInfo;
             object objValue;
-            Type objPropertyType = null;
+            Type objPropertyType;
             int intProperty;
 
             object objObject = Activator.CreateInstance(objType);
@@ -160,50 +160,68 @@ namespace App.Common.Helper
                     {
                         objValue = dr.GetValue(arrOrdinals[intProperty]);
                         if (Information.IsDBNull(objValue))
+                        {
                             // translate Null value
                             objPropertyInfo.SetValue(objObject, Null.SetNull(objPropertyInfo), null/* TODO Change to default(_) if this is not a reference type */);
+                        }
                         else
+                        {
                             try
                             {
-                                // try implicit conversion first
-                                objPropertyInfo.SetValue(objObject, objValue, null);
-                            }
-                            catch
-                            {
-                                // business object info class member data type does not match datareader member data type
                                 objPropertyType = objPropertyInfo.PropertyType;
-                                try
-                                {
-                                    // need to handle enumeration conversions differently than other base types
-                                    if (objPropertyType.BaseType.Equals(typeof(System.Enum)))
-                                    {
-                                        // check if value is numeric and if not convert to integer ( supports databases like Oracle )
-                                        if (Information.IsNumeric(objValue))
-                                            ((PropertyInfo)objProperties[intProperty]).SetValue(objObject, System.Enum.ToObject(objPropertyType, Convert.ToInt32(objValue)), null);
-                                        else
-                                            ((PropertyInfo)objProperties[intProperty]).SetValue(objObject, System.Enum.ToObject(objPropertyType, objValue), null);
-                                    }
-                                    else
-                                        // try explicit conversion
-                                        objPropertyInfo.SetValue(objObject, Convert.ChangeType(objValue, objPropertyType), null);
-                                }
-                                catch
-                                {
-                                    if (objPropertyType.Name == "Boolean")
-                                        objPropertyInfo.SetValue(objObject, System.Convert.ToBoolean(objValue), null);
-                                    else if (objPropertyType.BaseType.Name == "Enum")
-                                        objPropertyInfo.SetValue(objObject, Enum.Parse(objPropertyType, objValue.ToString(), true), null);
-                                    else
-                                        objPropertyInfo.SetValue(objObject, Convert.ChangeType(objValue, objPropertyType), null);
-                                }
+
+                                if (objPropertyType.Name == "String")
+                                    objPropertyInfo.SetValue(objObject, Convert.ToString(objValue), null);
+                                else if (objPropertyType.Name == "Boolean" || objPropertyType.ToString().Contains("Boolean"))
+                                    objPropertyInfo.SetValue(objObject, Convert.ToBoolean(objValue), null);
+                                else if (objPropertyType.Name == "Int32" || objPropertyType.ToString().Contains("Int32"))
+                                    objPropertyInfo.SetValue(objObject, Convert.ToInt32(objValue), null);
+                                else if (objPropertyType.Name == "Int64" || objPropertyType.ToString().Contains("Int64"))
+                                    objPropertyInfo.SetValue(objObject, Convert.ToInt64(objValue), null);
+                                else if (objPropertyType.Name == "Decimal" || objPropertyType.ToString().Contains("Decimal"))
+                                    objPropertyInfo.SetValue(objObject, Convert.ToDecimal(objValue), null);
+                                else if (objPropertyType.Name == "DateTime" || objPropertyType.ToString().Contains("DateTime"))
+                                    objPropertyInfo.SetValue(objObject, Convert.ToDateTime(objValue), null);
+                                else if (objPropertyType.Name == "Byte[]" || objPropertyType.ToString().Contains("Byte[]"))
+                                    //objPropertyInfo.SetValue(objObject, ByteHelper.ToByteArray(objValue), null);
+                                    objPropertyInfo.SetValue(objObject, objValue, null);
+                                else
+                                    throw new Exception($"Can not convert {objPropertyInfo.Name}={objValue} to {objPropertyType} (objPropertyType.Name: {objPropertyType.Name})");
                             }
-                    }
-                    else
-                    {
+                            catch (Exception ex)
+                            {
+                                throw new Exception(objPropertyInfo.Name + ". " + ex.Message, ex);
+                            }
+
+                            //try
+                            //{
+                            //    // try implicit conversion first
+                            //    // objPropertyInfo.SetValue(objObject, objValue, null);
+                            //}
+                            //catch
+                            //{
+                            //    Console.WriteLine($"Can not implicit convert {objPropertyInfo.Name} value {objValue} to {objPropertyInfo.PropertyType}");
+                            //    // business object info class member data type does not match datareader member data type
+
+                            //}
+                        }
                     }
                 }
             }
             return objObject;
+        }
+
+        public static string FillString(IDataReader dr)
+        {
+            var isNull = true;
+            var result = new StringBuilder();
+            while (dr.Read())
+            {
+                isNull = false;
+                var ret = dr.GetValue(0);
+                result.Append(ret);
+            }
+            return isNull ? null : result.ToString();
         }
 
         public static T FillObject<T>(IDataReader dr)
@@ -216,7 +234,6 @@ namespace App.Common.Helper
         {
             return (T)FillObject(dr, objProperties, true);
         }
-
 
         public static object FillObject(IDataReader dr, Type objType)
         {
@@ -398,14 +415,23 @@ namespace App.Common.Helper
 
             Type objType = typeof(T);
 
+            var primaryTypes = new[]
+            {
+                typeof(bool), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort),
+                typeof(int), typeof(uint), typeof(long), typeof(ulong),
+                typeof(float), typeof(double), typeof(decimal), typeof(char),
+                typeof(string), typeof(DateTime)
+            };
+
             // iterate datareader
             try
             {
-                if (objType == typeof(string))
+                if (Array.IndexOf(primaryTypes, objType) >= 0)
                 {
                     while (dr.Read())
                     {
-                        objFillCollection.Add((T)dr.GetValue(0));
+                        var ret = (T)Convert.ChangeType(dr.GetValue(0), typeof(T));
+                        objFillCollection.Add(ret);
                     }
                 }
                 else
@@ -587,7 +613,7 @@ namespace App.Common.Helper
                 // add to collection
                 objFillCollection.Add((T)objFillObject);
                 if (total_record < 0)
-                    total_record = (int)dr.GetValue(iTotalOrdinal); //gan total record
+                    total_record = Convert.ToInt32(dr.GetValue(iTotalOrdinal)); //gan total record
             }
 
             // close datareader
@@ -759,18 +785,6 @@ namespace App.Common.Helper
             xmlSerializedObject.LoadXml(objDataSet.GetXml());
 
             return xmlSerializedObject;
-        }
-
-        public static DateTime? GetDateFromString(string date)
-        {
-            try
-            {
-                return new DateTime(Convert.ToInt32(date.Substring(0, 4)), Convert.ToInt32(date.Substring(4, 2)), Convert.ToInt32(date.Substring(6, 2)));
-            }
-            catch (Exception)
-            {
-                return null;
-            }
         }
 
         public static ExpandoObject DeepCopy(ExpandoObject original)

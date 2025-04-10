@@ -1,4 +1,5 @@
 ﻿
+using App.Common.Helper;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 
@@ -22,6 +23,18 @@ public class Startup
 
         App.Lab.Startup.RegisterDependency(services);
         services.AddEndpointsApiExplorer();
+
+        services
+                .AddCors
+                (
+                    o => o.AddPolicy("CorsPolicy", builder => builder
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        //.AllowCredentials()
+                        //.AllowAnyOrigin()
+                        .WithOrigins(AppConfig.LstFrontEndUrl.ToArray())
+                    )
+                );
         services.AddSwaggerGen();
     }
 
@@ -33,9 +46,9 @@ public class Startup
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-
+        app.UseCors("CorsPolicy");
         app.UseHttpsRedirection();
-
+      
         // Bắt buộc để hỗ trợ Minimal API
         app.UseRouting();
         App.Lab.Startup.Configure(app);

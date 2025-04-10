@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="errorDialog"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="errorDialogLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-danger text-white">
+        <i class="material-icons">label_important</i>&nbsp;&nbsp;
+        <h5 class="modal-title" id="errorDialogLabel">{{ 'error' | translate }}</h5>
+        <button type="button" class="close" (click)="closeDialog()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>{{ data?.message }}</p>
+        <hr *ngIf="data?.ErrorMessage" />
+        <div *ngIf="data?.ErrorMessage">{{ data?.ErrorMessage }}</div>
+        <hr *ngIf="data?.Data" />
+        <div *ngIf="data?.Data">{{ data?.Data }}</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeDialog()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="closeDialog()">Ok</button>
+      </div>
+    </div>
+  </div>
+</div>

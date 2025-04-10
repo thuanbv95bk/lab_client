@@ -10,9 +10,12 @@ namespace App.Lab.Repository.Implement
 {
     public class AdminUsersRepository : Repo, IAdminUsersRepository
     {
-        public AdminUsersRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { }
+
+        public AdminUsersRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Admin"; }
+        public AdminUsersRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Admin"; }
+
        
-        public string Create(AdminUsers obj)
+        public string Create(Users obj)
         {
             //var ret = this.ExecuteScalar
             //(
@@ -33,7 +36,7 @@ namespace App.Lab.Repository.Implement
             return "";
         }
 
-        public void Update(AdminUsers obj)
+        public void Update(Users obj)
         {
             //this.ExecuteNonQuery
             //(
@@ -61,42 +64,45 @@ namespace App.Lab.Repository.Implement
             //    , Null.GetDBNull(objId));
         }
 
-        public AdminUsers GetById(string objId)
+        public Users GetById(string objId)
         {
             this.ExecuteReader
             (
-                out AdminUsers ret
+                out Users ret
                 , "select top 1 * from dbo.[Admin.Users] where PK_UserID ='1FECCEA2-8D0E-433E-8045-079F6ACD6319'"
                 , Null.GetDBNull(OrgId)
                 , Null.GetDBNull(UserName)
                 , Null.GetDBNull(objId)
             );
-            var item = new AdminUsers();
+            var item = new Users();
             return ret;
-
-
-
-         
         }
 
-        public List<AdminUsers> GetAll()
+        public List<Users> GetAll()
         {
             this.GetTableData
             (
-                out List<AdminUsers> ret
-                , "dbo.Admin.Users"
-
+                out List<Users> ret
+                , "Users"
             );
-            var  items = new List<AdminUsers>() {  };
             return ret;
         }
 
-        public List<AdminUsers> GetList()
+        public List<Users> GetList(UsersFilter filter)
         {
-            //this.ExecuteReader(out List<App_Dic_Domain> ret, "App_Dic_Domain_getAllByDomain", Null.GetDBNull(domainCode));
-            //return ret;
-            var items = new List<AdminUsers>() { };
-            return items;
+            var listFilter = new FilterOption[] {
+            new FilterOption {
+                Column = "FK_CompanyID",
+                Value = (15076).ToString(),
+                ValueType = "int"
+            }};
+
+            this.GetTableData
+            (
+                out List<Users> ret
+                , "Users", null, listFilter
+            );
+            return ret;
 
         }
     }
