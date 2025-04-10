@@ -7,30 +7,14 @@ export class User {
   fullName!: string;
   userType!: number;
   isLock!: boolean;
-  lastPasswordChanged!: Date;
-  changePasswordAfterDays!: number;
-  createdByUser!: string;
-  createdDate!: Date;
   updatedByUser?: string;
   updatedDate?: Date;
-  lastLoginDate?: Date;
-  lockLevel?: number;
   isDeleted!: boolean;
   phoneNumber?: string;
-  createdIP?: string;
-  updatedIP?: string;
   email?: string;
-  allowedAccessIP?: string;
-  useSecurityCodeSMS?: boolean;
   usernameBAP?: string;
   loginType?: string;
-  superiorSaleID?: string;
-  extendChangePasswordDays?: number;
   isActivated!: boolean;
-  requiredChangePasswordDays?: number;
-  weakPassword!: boolean;
-  keepWeakPasswordDate?: Date;
-
   constructor(data?: Partial<User>) {
     if (data) {
       Object.assign(this, {
@@ -41,18 +25,43 @@ export class User {
 }
 
 export class UsersFilter {
-  PK_UserID: string | null = null;
-  FK_CompanyID: number | null = null;
-  userName: string | null = null;
-  userNameLower: string | null = null;
-  fullName: string | null = null;
-  isLock: boolean | null = null;
-  constructor(obj?: Partial<UsersFilter>) {
-    this.PK_UserID = obj?.PK_UserID || '';
-    this.FK_CompanyID = obj?.FK_CompanyID || null;
-    this.userName = obj?.userName || '';
-    this.userNameLower = obj?.userNameLower || '';
-    this.fullName = obj?.fullName || '';
-    this.isLock = obj?.isLock || true;
+  PK_UserID!: string;
+  FK_CompanyID!: number;
+  userName!: string;
+  userNameLower!: string;
+  fullName!: string;
+  isLock!: boolean;
+  // constructor(obj?: Partial<UsersFilter>) {
+  //   this.PK_UserID = obj?.PK_UserID || '';
+  //   this.FK_CompanyID = obj?.FK_CompanyID || null;
+  //   this.userName = obj?.userName || '';
+  //   this.userNameLower = obj?.userNameLower || '';
+  //   this.fullName = obj?.fullName || '';
+  //   this.isLock = obj?.isLock || true;
+  // }
+}
+
+function generateMockUsers(count: number = 60): User[] {
+  const users: User[] = [];
+
+  for (let i = 1; i <= count; i++) {
+    const user: User = new User({
+      PK_UserID: `USR${i.toString().padStart(4, '0')}`,
+      FK_CompanyID: Math.floor(Math.random() * 5) + 1,
+      username: `user${i}`,
+      userNameLower: `user${i}`.toLowerCase(),
+      fullName: `User Name ${i}`,
+      userType: i % 3,
+      isLock: i % 10 === 0, // mỗi 10 user thì khóa 1
+      updatedByUser: `admin`,
+      updatedDate: new Date(),
+      isDeleted: false,
+      phoneNumber: `090${Math.floor(1000000 + Math.random() * 9000000)}`,
+      email: `user${i}@example.com`,
+    });
+
+    users.push(user);
   }
+
+  return users;
 }

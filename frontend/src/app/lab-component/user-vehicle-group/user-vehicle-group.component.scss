@@ -3,7 +3,7 @@
   overflow: none;
 
   .form-title {
-    color: #40659b;
+    color: #436a9f;
     font-size: 14px;
   }
 
@@ -13,220 +13,127 @@
     }
 
     .card-body {
-      padding: 1rem;
-    }
+      padding: 0;
+      &-search {
+        padding: 17px 10px;
+      }
+      .input-group {
+        input {
+          border-right: none;
+        }
 
-    .input-group {
-      input {
-        border-right: none;
+        .form-control:focus {
+          box-shadow: none;
+          border-color: #ced4da;
+          outline: none; /* giữ viền giống trạng thái bình thường */
+        }
+
+        .input-group-text {
+          background-color: white;
+          padding: 0.375rem 0.5rem;
+          border-left: none !important;
+        }
       }
 
-      .form-control:focus {
-        box-shadow: none;
-        border-color: #ced4da;
-        /* giữ viền giống trạng thái bình thường */
-        outline: none;
-      }
+      table {
+        td {
+          padding: 8px 10px !important;
+          border: none;
+        }
+        tr:nth-child(even) {
+          background-color: #f5f5f5;
+        }
 
-      .input-group-text {
-        background-color: white;
-        padding: 0.375rem 0.5rem;
-        border-left: none !important;
+        tbody tr:hover,
+        tr.mat-row:hover {
+          background-color: #caeffb;
+        }
       }
     }
   }
 }
-
+.selected-row {
+  background-color: #caeffb !important;
+}
 
 // ******************* table *******************
-// table {
-//   &.table-with-border {
+$padding-value: 20px;
 
-//     border: 1px solid rgba(133, 133, 133, 0.413);
-//     border-spacing: 0px;
-//     border-collapse: separate;
-//     width: 100%;
+.padding-0 {
+  padding-left: 0;
+}
 
-//     th,
-//     td {
-//       padding-left: 8px !important;
-//       padding-right: 8px !important;
-//     }
+.padding-1 {
+  padding-left: $padding-value;
+}
 
-//     th {
-//       border: 1px solid rgba(133, 133, 133, 0.413);
-//       font-size: 12px;
-//     }
+.padding-2 {
+  padding-left: $padding-value * 2;
+}
+.showHideIcon {
+  color: black;
+}
 
-//     td {
-//       border-top: 1px solid rgba(133, 133, 133, 0.413);
-//     }
+.showHideIcon:hover {
+  cursor: pointer;
+  color: #7e7e7e;
+}
 
-//     tr:nth-child(even) {
-//       background-color: #eeeeee49;
-//     }
+.collapse {
+  color: black;
+  //font-weight: bold;
+}
 
-//     tr.row-le {
-//       background-color: #eeeeee49;
-//     }
+/*** Table ***/
+.task-table tr {
+  height: auto !important;
+}
 
-//     tr.mat-header-row:not(.search-row) {
-//       height: 30px !important;
-//     }
+.table-with-border {
+  position: relative;
+}
 
-//     tr,
-//     tr.mat-row,
-//     tr.mat-footer-row {
-//       height: 30px !important;
-//     }
+.table-with-border thead tr:first-child th {
+  position: sticky;
+  top: 0px;
+  background-color: gainsboro;
+  z-index: 10;
+}
 
-//     thead,
-//     thead[role="rowgroup"] {
-//       background-color: gainsboro !important;
+.table-with-border thead tr:nth-child(2) th {
+  position: sticky;
+  top: 33px;
+  background-color: gainsboro;
+  z-index: 10;
+}
 
-//       th {
-//         color: black !important;
-//         font-weight: bold !important;
-//       }
-//     }
+.table-with-border tfoot tr:first-child td {
+  position: sticky;
+  bottom: -10px;
+  background-color: gainsboro;
+  z-index: 10;
+}
 
+.hide-row td,
+.hide-row th,
+.hide-row tr {
+  border-top: none;
+  padding: 0 0px;
+  margin: 0;
+  height: 0;
+}
 
-//     // tbody tr:not(.no-hover):hover,
-//     // tr.mat-row:not(.no-hover):hover {
-//     //     background-color: #c5cae957;
-//     // }
+.hide-row td *,
+.hide-row th * {
+  z-index: -1000;
+  position: relative;
+}
 
-//     tfoot,
-//     tfoot[role="rowgroup"] {
-//       background-color: gainsboro !important;
+tr td *,
+tr th * {
+  z-index: 1;
+  position: relative;
+  // display: none;
+}
 
-//       th {
-//         color: black !important;
-//         font-weight: bold !important;
-//       }
-
-//       td {
-//         color: black !important;
-//         border: 1px solid rgba(133, 133, 133, 0.413);
-//         font-size: 12px;
-//       }
-//     }
-
-
-//     .link-detail {
-//       color: mat-color($primary);
-//       cursor: pointer;
-
-//       &:hover {
-//         text-decoration: underline;
-//       }
-//     }
-
-//     th.mat-header-cell:last-of-type,
-//     td.mat-cell:last-of-type,
-//     td.mat-footer-cell:last-of-type {
-//       padding-right: 5px !important;
-//     }
-
-//     tr.search-row {
-//       th {
-//         background-color: rgb(240, 240, 213);
-//         padding-left: 5px;
-//       }
-
-//       .mat-form-field-infix {
-//         width: 100px;
-//       }
-
-//       .mat-form-field-underline {
-//         display: none;
-//       }
-
-//       label:not(.mat-empty, .mat-checkbox-layout) {
-//         display: none !important;
-//       }
-
-//       .mat-form-field-wrapper {
-//         padding-bottom: 0;
-//       }
-
-//       mat-icon {
-//         font-weight: bold;
-//       }
-//     }
-
-//     thead.sticky {
-//       position: sticky;
-//       top: -1px;
-//       z-index: 1;
-//     }
-
-//     tfoot.sticky {
-//       position: sticky;
-//       bottom: -1px;
-//       z-index: 1;
-//     }
-//   }
-
-//   &.sticky-thead {
-//     thead {
-//       position: sticky;
-//       top: -1px;
-//       z-index: 1;
-//     }
-//   }
-
-//   &.sticky-thead-popup {
-//     thead {
-//       position: sticky;
-//       top: -10px;
-//       z-index: 1;
-//     }
-//   }
-
-//   &.sticky-tfoot {
-//     tfoot {
-//       position: sticky;
-//       bottom: -1px;
-//       z-index: 1;
-//     }
-//   }
-
-//   &.sticky-tfoot-popup {
-//     tfoot {
-//       position: sticky;
-//       bottom: -10px;
-//       z-index: 1;
-//     }
-//   }
-
-//   .mat-table-sticky {
-//     top: -1px !important;
-//   }
-
-//   .selected-row {
-//     background-color: mat-color($primary, 50) !important;
-//   }
-
-//   .selected-row-100 {
-//     background-color: mat-color($primary, 100) !important;
-//   }
-
-//   .selected-row-150 {
-//     background-color: mat-color($primary, 150) !important;
-//   }
-
-//   .active-row {
-//     background-color: mat-color($accent, 50) !important;
-//   }
-
-//   .table-head-btn {
-//     width: 30px;
-//     height: 30px;
-
-//     .mat-icon {
-//       position: relative;
-//       bottom: 5px;
-//     }
-//   }
-// }
+/*** Table ***/

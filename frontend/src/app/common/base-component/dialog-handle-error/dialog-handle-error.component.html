@@ -11,7 +11,7 @@
       <div class="modal-header bg-danger text-white">
         <i class="material-icons">label_important</i>&nbsp;&nbsp;
         <h5 class="modal-title" id="errorDialogLabel">{{ 'error' | translate }}</h5>
-        <button type="button" class="close" (click)="closeDialog()" aria-label="Close">
+        <button type="button" class="close" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -23,8 +23,8 @@
         <div *ngIf="data?.Data">{{ data?.Data }}</div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeDialog()">Close</button>
-        <button type="button" class="btn btn-primary" (click)="closeDialog()">Ok</button>
+        <!-- <button type="button" class="btn btn-secondary" (click)="closeDialog()">Close</button>
+        <button type="button" class="btn btn-primary" (click)="closeDialog()">Ok</button> -->
       </div>
     </div>
   </div>

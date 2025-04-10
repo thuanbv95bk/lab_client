@@ -6,21 +6,24 @@
       <div class="card h-100">
         <div class="card-header font-weight-bold form-title">Danh sách người dùng</div>
         <div class="card-body">
-          <div class="input-group mb-2">
+          <div class="card-body-search input-group">
             <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
             <div class="input-group-append">
               <span class="input-group-text"><i class="fa fa-search"></i></span>
             </div>
           </div>
-          <div class="list-group user-list overflow-auto" style="height: calc(100vh - 240px)">
-            <button
-              type="button"
-              class="list-group-item list-group-item-action"
-              *ngFor="let user of listUser | filter : userSearch : 'username'"
-              [class.active]="user === selectedUser"
-              (click)="selectUser(user)">
-              {{ user.fullName }}
-            </button>
+          <div class="overflow-auto" style="height: calc(100vh - 240px)">
+            <table class="table">
+              <tbody>
+                <tr
+                  *ngFor="let item of listUser | filter : userSearch : 'fullName'; let i = index"
+                  id="{{ item.PK_UserID }}"
+                  [ngClass]="{ 'selected-row': selectedId && item.PK_UserID == selectedId }"
+                  (click)="onClickRow(item)">
+                  <td>{{ item.fullName }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -36,7 +39,7 @@
               Chọn nhóm cho người dùng ({{ availableGroups.length }})
             </div>
             <div class="card-body">
-              <div class="input-group mb-2">
+              <div class="card-body-search input-group">
                 <input
                   type="text"
                   class="form-control"
@@ -46,12 +49,54 @@
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
               </div>
-              <div class="group-list flex-grow-1 overflow-auto">
-                <div *ngFor="let group of availableGroups | filter : availableGroupSearch : 'name'">
+
+              <div class="flex-grow-1 overflow-auto">
+                <!-- <div *ngFor="let group of availableGroups | filter : availableGroupSearch : 'name'">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" [(ngModel)]="group.selected" />
                     <label class="form-check-label">{{ group.name }}</label>
                   </div>
+                </div> -->
+                <div class="overflow-auto" style="height: calc(100vh - 240px)">
+                  <table class="table table-with-border">
+                    <tbody>
+                      <tr
+                        *ngFor="let item of availableGroups | filter : availableGroupSearch : 'name'; let i = index"
+                        [ngClass]="{ 'hide-row': item.IsHide }">
+                        <td>
+                          <div [ngClass]="cssTaskLevel(item)" [@showHide]="!item.IsHide ? 'open' : 'closed'">
+                            <span *ngIf="item.HasChild">
+                              <i
+                                (click)="showHideChildren(item)"
+                                class="showHideIcon"
+                                [ngClass]="{ collapse: !item.IsHideChildren }"
+                                [@openClose]="!item.IsHideChildren ? 'open' : 'closed'"
+                                [ngClass]="
+                                  !item.IsHideChildren ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'
+                                "></i>
+                            </span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div [ngClass]="cssTaskLevel(item)" [@showHide]="!item.IsHide ? 'open' : 'closed'">
+                            <div *ngIf="!item.HasChild" style="width: 24px"></div>
+                            <div class="form-check">
+                              <input class="form-check-input" type="checkbox" [(ngModel)]="item.selected" />
+                              <label class="form-check-label">{{ item.name }}</label>
+                            </div>
+                          </div>
+                        </td>
+
+                        <!-- <td >
+                          <div [@showHide]="!item.IsHide ? 'open' : 'closed'">{{ item.TaskTypeName }}</div>
+                        </td>
+                        <td >
+                          <div [@showHide]="!item.IsHide ? 'open' : 'closed'">{{ item.AssignedOrgName }}</div>
+                        </td> -->
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -73,7 +118,7 @@
               Nhóm đã gán cho người dùng ({{ assignedGroups.length }})
             </div>
             <div class="card-body">
-              <div class="input-group mb-2">
+              <div class="card-body-search input-group">
                 <input
                   type="text"
                   class="form-control"
@@ -83,7 +128,7 @@
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
               </div>
-              <div class="assigned-list flex-grow-1 overflow-auto">
+              <div class="flex-grow-1 overflow-auto">
                 <div *ngFor="let group of assignedGroups | filter : assignedGroupSearch : 'name'">
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" [(ngModel)]="group.selected" />
