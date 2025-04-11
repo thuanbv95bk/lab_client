@@ -10,7 +10,7 @@ export class DialogService {
   // Hàm để mở modal và truyền dữ liệu vào
   openErrorDialog(data: any) {
     const modalComponent = new DialogHandleErrorComponent();
-    modalComponent.openDialog(data);
+    // modalComponent.openDialog(data);
     return modalComponent; // Trả về để có thể theo dõi khi đóng
   }
 }

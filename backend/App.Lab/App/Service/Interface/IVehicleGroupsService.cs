@@ -1,4 +1,5 @@
-﻿using App.Lab.App.Model;
+﻿using App.Common.BaseService;
+using App.Lab.App.Model;
 using App.Lab.Model;
 using System;
 using System.Collections.Generic;
@@ -6,14 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Lab.App.Repository.Interface
+namespace App.Lab.App.Service.Interface
 {
-    public interface IVehicleGroupsRepository
+    public interface IVehicleGroupsService : IBaseService
     {
         string Create(VehicleGroups obj);
         void Update(VehicleGroups obj);
-        void Delete(string objId);
-        VehicleGroups GetById(string objId);
+        void Delete(string id);
+        VehicleGroups GetById(string id);
         List<VehicleGroups> GetAll();
         List<VehicleGroups> GetList(VehicleGroupsFilter filter);
     }

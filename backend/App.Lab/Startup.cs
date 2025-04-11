@@ -1,4 +1,7 @@
 ﻿using App.DataAccess;
+using App.Lab.App.Repository.Interface;
+using App.Lab.App.Service.Implement;
+using App.Lab.App.Service.Interface;
 using App.Lab.Repository.Implement;
 using App.Lab.Repository.Interface;
 using App.Lab.Service.Implement;
@@ -71,6 +74,9 @@ namespace App.Lab
 
             services.AddTransient<IAdminUsersRepository, AdminUsersRepository>();
             services.AddTransient<IAdminUsersService, AdminUsersService>();
+
+            services.AddTransient<IVehicleGroupsRepository, VehicleGroupsRepository>();
+            services.AddTransient<IVehicleGroupsService, VehicleGroupsService>();
 
             // Add framework services.
             services.AddMvcCore();

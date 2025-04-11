@@ -1,0 +1,25 @@
+<!-- <div [ngClass]="{ 'hide-row': item.isHide }">
+  
+</div> -->
+<tr [ngClass]="{ 'hide-row': item.isHide }">
+  <td class="text-center" [@showHide]="!item.isHide ? 'open' : 'closed'">
+    <span *ngIf="item.hasChild">
+      <i
+        (click)="showHideChildren(item)"
+        [ngClass]="{ collapse: !item.isHideChildren }"
+        [@openClose]="!item.isHideChildren ? 'open' : 'closed'"
+        [ngClass]="!item.isHideChildren ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"></i>
+    </span>
+  </td>
+
+  <td>
+    <div [ngClass]="paddingLevel(item)" [@showHide]="!item.isHide ? 'open' : 'closed'">
+      <div *ngIf="!item.hasChild" style="width: 24px"></div>
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="item.isSelected" />
+        <i class="fa fa-folder"></i>
+        <div class="form-check-label d-inline">{{ item.name }}</div>
+      </div>
+    </div>
+  </td>
+</tr>
