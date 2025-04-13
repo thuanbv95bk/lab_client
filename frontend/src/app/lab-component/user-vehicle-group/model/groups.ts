@@ -1,20 +1,21 @@
 export class Groups {
-  PK_VehicleGroupID!: number | null;
-  FK_CompanyID!: number | null;
+  pK_VehicleGroupID!: number | null;
+  fK_CompanyID!: number | null;
   parentVehicleGroupId!: number | 0;
   name!: string;
   status!: boolean;
   isDeleted!: boolean;
   hasChild!: boolean;
   isHideChildren!: boolean;
-  isHide!: boolean;
+  isHide: boolean;
   level: number;
+  allComplete!: boolean;
   groupsChild!: Groups[];
 
   isSelected!: boolean | false;
   constructor(obj?: Partial<Groups>) {
-    this.PK_VehicleGroupID = obj?.PK_VehicleGroupID || null;
-    this.FK_CompanyID = obj?.FK_CompanyID || null;
+    this.pK_VehicleGroupID = obj?.pK_VehicleGroupID || null;
+    this.fK_CompanyID = obj?.fK_CompanyID || null;
     this.parentVehicleGroupId = obj?.parentVehicleGroupId || 0;
     this.name = obj?.name || '';
     this.status = obj?.status || true;
@@ -24,23 +25,26 @@ export class Groups {
     this.level = obj?.level || 0;
     this.isHide = obj?.isHide || false;
     this.groupsChild = obj?.groupsChild || [];
+    this.allComplete == obj?.allComplete || false;
   }
 }
 
 export class GroupsFilter {
-  PK_VehicleGroupID!: number | null;
-  FK_CompanyID!: number | null;
+  pK_VehicleGroupID!: number | null;
+  fK_CompanyID!: number | null;
   parentVehicleGroupId!: number | null;
   name!: string;
   status!: boolean;
   isDeleted!: boolean;
+  pK_UserID: string;
 
   constructor(obj?: Partial<GroupsFilter>) {
-    this.PK_VehicleGroupID = obj?.PK_VehicleGroupID || null;
-    this.FK_CompanyID = obj?.FK_CompanyID || null;
+    this.pK_VehicleGroupID = obj?.pK_VehicleGroupID || null;
+    this.fK_CompanyID = obj?.fK_CompanyID || null;
     this.parentVehicleGroupId = obj?.parentVehicleGroupId || null;
     this.name = obj?.name || '';
     this.status = obj?.status || true;
     this.isDeleted = obj?.isDeleted || false;
+    this.pK_UserID = obj?.pK_UserID || '';
   }
 }

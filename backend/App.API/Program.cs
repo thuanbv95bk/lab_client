@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
+var builder = WebApplication.CreateBuilder(args);
 
-CreateHostBuilder(args).Build().Run();
+// G?i Startup.cs
+var startup = new Startup(builder.Configuration);
+startup.ConfigureServices(builder.Services);
 
-static IHostBuilder CreateHostBuilder(string[] args) =>
-    Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(webBuilder =>
-        {
-            webBuilder.UseStartup<Startup>();
-        });
+var app = builder.Build();
+
+startup.Configure(app, builder.Environment);
+
+app.Run();

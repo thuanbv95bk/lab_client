@@ -7,6 +7,7 @@ using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -36,7 +37,38 @@ namespace App.Lab.Repository.Implement
             //    , Null.GetDBNull(obj.OrderValue)
             //    , Null.GetDBNull(obj.Description)
             //);
-            return "";
+            //return "";
+
+           
+        string sql = @"
+            INSERT INTO VehicleGroups (
+                FK_CompanyID,
+                ParentVehicleGroupId,
+                Name,
+                IsDeleted,
+                Status,
+                Level,
+                hasChild,
+                isHideChildren,
+                isHide
+            ) VALUES (
+                @FK_CompanyID,
+                @ParentVehicleGroupId,
+                @Name,
+                @IsDeleted,
+                @Status,
+                @Level,
+                @hasChild,
+                @isHideChildren,
+                @isHide
+            );
+            SELECT CAST(SCOPE_IDENTITY() as int);";
+
+            var parameters = this.MapToSqlParameters(obj);
+
+            var newId = this.ExecuteScalarAs<int>(sql, parameters);
+            return newId.ToString();
+            
         }
 
         public void Update(VehicleGroups obj)
@@ -46,16 +78,7 @@ namespace App.Lab.Repository.Implement
             //    "App_Dic_Domain_update"
             //    , Null.GetDBNull(OrgId)
             //    , Null.GetDBNull(UserName)
-            //    , Null.GetDBNull(obj.App_Dic_Domain_Id)
-            //    , Null.GetDBNull(obj.App_Org_Id)
-            //    , Null.GetDBNull(obj.IsActive)
-            //    , Null.GetDBNull(obj.UpdatedDate)
-            //    , Null.GetDBNull(obj.UpdatedUser)
-            //    , Null.GetDBNull(obj.DomainCode)
-            //    , Null.GetDBNull(obj.ItemCode)
-            //    , Null.GetDBNull(obj.ItemValue)
-            //    , Null.GetDBNull(obj.OrderValue)
-            //    , Null.GetDBNull(obj.Description)
+               
             //);
         }
 
@@ -67,20 +90,24 @@ namespace App.Lab.Repository.Implement
             //    , Null.GetDBNull(objId));
         }
 
-        public VehicleGroups GetById(string objId)
+        public VehicleGroups GetById(int PK_VehicleGroupID)
         {
-            this.ExecuteReader
-            (
-                out VehicleGroups ret
-                , "select top 1 * from dbo.[Admin.Users] where PK_UserID ='1FECCEA2-8D0E-433E-8045-079F6ACD6319'"
-                , Null.GetDBNull(OrgId)
-                , Null.GetDBNull(UserName)
-                , Null.GetDBNull(objId)
-            );
-            var item = new VehicleGroups();
-            return ret;
-        }
+            string sql = @"select * from [Vehicle.Groups] where PK_VehicleGroupID = @PK_VehicleGroupID";
+            var parameters = this.MapToSqlParameters(new { PK_VehicleGroupID });
+            //var parameters = this.MapToSqlParameters(PK_VehicleGroupID);
 
+            this.ExecCommand<VehicleGroups>(out var retList, sql, parameters);
+            return retList.FirstOrDefault();
+        }
+        public UserVehicleGroupView GetViewById(int PK_VehicleGroupID)
+        {
+            string sql = @"select * from [Vehicle.Groups] where PK_VehicleGroupID = @PK_VehicleGroupID";
+            var parameters = this.MapToSqlParameters(new { PK_VehicleGroupID });
+            //var parameters = this.MapToSqlParameters(PK_VehicleGroupID);
+
+            this.ExecCommand<UserVehicleGroupView>(out var retList, sql, parameters);
+            return retList.FirstOrDefault();
+        }
         public List<VehicleGroups> GetAll()
         {
             this.GetTableData
@@ -93,13 +120,12 @@ namespace App.Lab.Repository.Implement
 
         public List<VehicleGroups> GetList(VehicleGroupsFilter filter)
         {
-            var listFilter = new FilterOption[] {
-            new FilterOption {
-                Column = "FK_CompanyID",
-                Value = (15076).ToString(),
-                ValueType = "int"
+            var listOrderOption = new OrderOption[] {
+            new OrderOption {
+                Column = "Name",
+                OrderType = "ASC",
             }};
-
+            var listFilter = MapFilterToOptions(filter);
             this.GetTableData
             (
                 out List<VehicleGroups> ret
@@ -107,6 +133,14 @@ namespace App.Lab.Repository.Implement
             );
             return ret;
 
+        }
+        public List<VehicleGroups> GetListNotAssigned(VehicleGroupsFilter filter)
+        {
+            string sql = @"select * from [Vehicle.Groups] where PK_VehicleGroupID = @PK_VehicleGroupID";
+            var parameters = this.MapToSqlParameters(filter);
+
+            this.ExecCommand<VehicleGroups>(out var retList, sql, parameters);
+            return retList.Cast<VehicleGroups>().ToList();
         }
     }
 }

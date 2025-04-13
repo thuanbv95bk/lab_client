@@ -4,6 +4,8 @@ using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using App.DataAccess;
 using App.Common.Helper;
+using Microsoft.VisualStudio.Services.Common;
+
 
 
 namespace App.Lab.Repository.Implement
@@ -14,26 +16,42 @@ namespace App.Lab.Repository.Implement
         public AdminUsersRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Admin"; }
         public AdminUsersRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Admin"; }
 
-       
+
         public string Create(Users obj)
         {
-            //var ret = this.ExecuteScalar
-            //(
-            //    "App_Dic_Domain_create"
-            //    , Null.GetDBNull(OrgId)
-            //    , Null.GetDBNull(UserName)
-            //    , Null.GetDBNull(obj.App_Dic_Domain_Id)
-            //    , Null.GetDBNull(obj.App_Org_Id)
-            //    , Null.GetDBNull(obj.IsActive)
-            //    , Null.GetDBNull(obj.CreatedDate)
-            //    , Null.GetDBNull(obj.CreatedUser)
-            //    , Null.GetDBNull(obj.DomainCode)
-            //    , Null.GetDBNull(obj.ItemCode)
-            //    , Null.GetDBNull(obj.ItemValue)
-            //    , Null.GetDBNull(obj.OrderValue)
-            //    , Null.GetDBNull(obj.Description)
-            //);
-            return "";
+            if (string.IsNullOrEmpty(obj.PK_UserID) || !Guid.TryParse(obj.PK_UserID, out Guid userId))
+            {
+                obj.PK_UserID = Guid.NewGuid().ToString();
+            }
+            else
+            {
+                obj.PK_UserID = userId.ToString();
+            }
+            string sql = 
+                "INSERT INTO [Admin.Users] " +
+                "(PK_UserID, " +
+                "FK_CompanyID, " +
+                "Username, " +
+                "UserNameLower, " +
+                "Fullname, " +
+                "IsLock, " +
+                "IsDeleted, " +
+                "Email, IsActived) " +
+                "VALUES " +
+                "(@PK_UserID, " +
+                "@FK_CompanyID," +
+                "@Username," +
+                "@UserNameLower," +
+                "@Fullname, " +
+                "@IsLock, " +
+                "@IsDeleted, " +
+                "@Email, " +
+                "@IsActived); ";
+
+            var parameters = this.MapToSqlParameters(obj);
+
+            this.ExecCommand(sql, parameters);
+            return obj.PK_UserID;
         }
 
         public void Update(Users obj)
@@ -80,27 +98,32 @@ namespace App.Lab.Repository.Implement
 
         public List<Users> GetAll()
         {
+            var listOrderOption = new OrderOption[] {
+            new OrderOption {
+                Column = "UserNameLower",
+                OrderType = "ASC",
+            }};
             this.GetTableData
             (
-                out List<Users> ret
-                , "Users"
+            out List<Users> ret
+                , "Users", null, null, listOrderOption
             );
             return ret;
         }
 
         public List<Users> GetList(UsersFilter filter)
         {
-            var listFilter = new FilterOption[] {
-            new FilterOption {
-                Column = "FK_CompanyID",
-                Value = (15076).ToString(),
-                ValueType = "int"
+            
+            var listOrderOption = new OrderOption[] {
+            new OrderOption {
+                Column = "UserNameLower",
+                OrderType = "ASC",
             }};
-
+            var listFilter = MapFilterToOptions(filter);
             this.GetTableData
             (
                 out List<Users> ret
-                , "Users", null, listFilter
+                , "Users", null, listFilter, listOrderOption
             );
             return ret;
 

@@ -52,43 +52,6 @@
           background-color: #caeffb;
         }
       }
-
-      .table-tree {
-        tr:nth-child(even) {
-          background-color: white;
-        }
-
-        tr {
-          height: auto !important;
-
-          td {
-            padding: 5px 5px !important;
-
-            i {
-              font-size: 17px;
-            }
-
-            .form-check {
-              i {
-                padding: 2px 10px;
-              }
-
-              // padding-left: 5px;
-            }
-          }
-
-          &>td {
-            padding-left: 0 !important;
-          }
-        }
-
-        .hide-row td {
-          border-top: none;
-          padding: 0 !important;
-          margin: 0;
-          height: 0 !important;
-        }
-      }
     }
   }
 }
@@ -98,7 +61,7 @@
 }
 
 // ******************* table *******************
-$padding-value: 12px;
+$padding-value: 15px;
 
 .padding-0 {
   padding-left: 0;
@@ -156,8 +119,6 @@ $padding-value: 12px;
   z-index: 10;
 }
 
-
-
 // .hide-row td *,
 // .hide-row th * {
 //   z-index: -1000;
@@ -172,3 +133,43 @@ tr th * {
 }
 
 /*** Table ***/
+.attribute-section {
+  padding: 0px 10px;
+  margin-bottom: 5px;
+  .attribute-item:hover {
+    background-color: #caeffb;
+  }
+
+  .form-check {
+    padding-left: 28px;
+  }
+
+  .form-check-input {
+    cursor: pointer;
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  .toggle-icon {
+    margin-left: 15px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .toggle-icon.open {
+    transform: rotate(180deg);
+  }
+
+  .ms-4 {
+    // padding-left: 1rem; // tạo khoảng cách giữa cha và con
+    display: block;
+    margin-top: 20px;
+  }
+
+  // .form-check-input:checked {
+  //   font-weight: bold; // đổi màu hay độ đậm khi checkbox được chọn
+  // }
+}

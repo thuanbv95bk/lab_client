@@ -23,7 +23,15 @@ namespace App.Lab.Service.Implement
 
         public string Create(Users objinfo)
         {
-            return _repo.Create(objinfo);
+            using (_uow.BeginTransaction())
+            {
+                var id= _repo.Create(objinfo);
+                //if (string.IsNullOrEmpty(id))
+                //    return "có lỗi";
+                _uow.SaveChanges();
+                return id;
+            }
+               
         }
 
         public void Update(Users objinfo)

@@ -6,6 +6,7 @@ using System.Text;
 using App.Common.Helper;
 using Microsoft.Data.SqlClient;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 
 namespace App.DataAccess
 {
@@ -130,8 +131,8 @@ namespace App.DataAccess
 
         public object ExecuteScalar(string spName, params object[] parameterValues)
         {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
+            //if (!string.IsNullOrEmpty(Schema))
+            //    spName = $"{Schema}.{spName}";
 
             object ret = null;
             IDataReader dr = null;
@@ -168,6 +169,8 @@ namespace App.DataAccess
 
         public T ExecuteScalarAs<T>(string spName, params object[] parameterValues)
         {
+
+
             Type type = typeof(T);
 
             var allowedTypes = new[]
@@ -221,6 +224,9 @@ namespace App.DataAccess
 
         public void ExecuteReaderJson<T>(out T ret, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             var data = ExecuteScalar(spName, parameterValues);
             if (string.IsNullOrEmpty(data?.ToString()))
                 ret = default;
@@ -261,6 +267,9 @@ namespace App.DataAccess
 
         public void ExecuteReaderJson<T>(out List<T> ret, string spName, params object[] parameterValues)
         {
+            if (!string.IsNullOrEmpty(Schema))
+                spName = $"{Schema}.{spName}";
+
             var data = ExecuteScalar(spName, parameterValues);
             if (string.IsNullOrEmpty(data?.ToString()))
                 ret = default;
@@ -551,13 +560,13 @@ namespace App.DataAccess
             }
         }
 
-        public void ExecCommand<T>(out List<T> ret, string sqlCommand)
+        public void ExecCommand<T>(out List<T> ret, string sqlCommand, SqlParameter[] parameters)
         {
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
             {
-                _ExecCommand(out dr, out trans, sqlCommand, null);
+                _ExecCommand(out dr, out trans, sqlCommand, parameters);
 
                 ret = CBO.FillList<T>(dr);
 
@@ -605,6 +614,87 @@ namespace App.DataAccess
                 }
                 throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
+        }
+        public void ExecCommand(string sqlCommand, SqlParameter[] commandParameters)
+        {
+            IDataReader dr = null;
+            IDbTransaction trans = null;
+            try
+            {
+                _ExecCommand(out dr, out trans, sqlCommand, commandParameters);
+
+                dr?.Close();
+
+                if (trans != null)
+                {
+                    trans.Commit();
+                    trans.Dispose();
+                }
+            }
+            catch (Exception ex)
+            {
+                dr?.Close();
+                if (trans != null)
+                {
+                    trans.Rollback();
+                    trans.Dispose();
+                }
+                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
+            }
+        }
+        public SqlParameter[] MapToSqlParameters<T>(T obj)
+        {
+            var properties = typeof(T).GetProperties();
+            var parameters = new List<SqlParameter>();
+
+            foreach (var property in properties)
+            {
+                var value = property.GetValue(obj) ?? DBNull.Value;
+                parameters.Add(new SqlParameter($"@{property.Name}", value));
+            }
+
+            return parameters.ToArray();
+        }
+
+
+        public FilterOption[] MapFilterToOptions<T>(T filter)
+        {
+            var filterOptions = new List<FilterOption>();
+            var properties = typeof(T).GetProperties();
+
+            foreach (var property in properties)
+            {
+                var value = Null.GetDBNull(property.GetValue(filter));
+                if (value != null && !string.IsNullOrEmpty(value.ToString()))
+                {
+                    string valueString;
+                    if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
+                    {
+                        valueString = (bool)value ? "1" : "0";
+                    }
+                    else if (property.PropertyType == typeof(string) )
+                    {
+                        valueString = string.Format(" '{0}' ", value.ToString()) ;
+                    }
+                    //else if (property.PropertyType == typeof(int))
+                    //{
+                    //    valueString = string.Format(" '{0}' ", value.ToString());
+                    //}
+                    else
+                    {
+                        valueString = value.ToString();
+                    }
+
+                    filterOptions.Add(new FilterOption
+                    {
+                        Column = property.Name,
+                        Value = valueString,
+                        ValueType = property.PropertyType.Name.ToLower()
+                    });
+                }
+            }
+
+            return filterOptions.ToArray();
         }
 
         #endregion

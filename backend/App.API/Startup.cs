@@ -1,5 +1,6 @@
 ﻿
 using App.Common.Helper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
 
@@ -27,7 +28,7 @@ public class Startup
         services
                 .AddCors
                 (
-                    o => o.AddPolicy("CorsPolicy", builder => builder
+                    o => o.AddPolicy("AllowAngular", builder => builder
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         //.AllowCredentials()
@@ -35,28 +36,46 @@ public class Startup
                         .WithOrigins(AppConfig.LstFrontEndUrl.ToArray())
                     )
                 );
+        //services.AddCors(options =>
+        //{
+        //    options.AddPolicy("AllowAngular", policy =>
+        //    {
+        //        policy.WithOrigins("http://localhost:4200")
+        //              .AllowAnyHeader()
+        //              .AllowAnyMethod()
+        //              //.AllowCredentials()
+        //              ; // 👈 Bỏ comment dòng này nếu cần
+        //    });
+        //});
         services.AddSwaggerGen();
     }
 
     // Thiết lập middleware pipeline
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
+
+
+        
+
+        // Bắt buộc để hỗ trợ Minimal API
+        app.UseRouting();
+        app.UseCors("AllowAngular");
+
+        App.Lab.Startup.Configure(app);
+
         if (env.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
-        app.UseCors("CorsPolicy");
-        app.UseHttpsRedirection();
-      
-        // Bắt buộc để hỗ trợ Minimal API
-        app.UseRouting();
-        App.Lab.Startup.Configure(app);
+        //app.UseHttpsRedirection();
+        app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();  // 👈 Cho phép hiển thị controller như AdminUsersController
             
         });
+       
     }
 }
 

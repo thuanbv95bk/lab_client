@@ -14,8 +14,9 @@ namespace App.Lab.App.Service.Interface
         string Create(VehicleGroups obj);
         void Update(VehicleGroups obj);
         void Delete(string id);
-        VehicleGroups GetById(string id);
+        VehicleGroups GetById(int id);
         List<VehicleGroups> GetAll();
         List<VehicleGroups> GetList(VehicleGroupsFilter filter);
+        List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter);
     }
 }

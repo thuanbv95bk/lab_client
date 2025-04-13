@@ -3,23 +3,29 @@ using App.Common.BaseControllers;
 using App.Lab.Service.Interface;
 using App.Lab.Model;
 using App.Lab.App.Service.Interface;
-using App.Lab.App.Model;
 namespace App.Admin.Controllers
 {
     [ApiController]
-    [Route("api/groups")]
-    public class VehicleGroupsController : BaseController
+    [Route("api/user-vehicle-group")]
+    public class AdminUserVehicleController : BaseController
     {
-        private readonly IVehicleGroupsService _service;
+        private readonly IAdminUserVehicleGroupService _service;
 
-        public VehicleGroupsController(IVehicleGroupsService service)
+        public AdminUserVehicleController(IAdminUserVehicleGroupService service)
         {
             _service = service;
         }
-
+        [HttpPost]
+        [Route("AddOrEdit")]
+        public async Task<IActionResult> Create(AdminUserVehicleGroup item)
+        {
+            string id = "";
+            id = await Task.Run(() => _service.Create(item));
+            return Success(id);
+        }
         [HttpPost]
         [Route("GetById")]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(string id)
         {
             var ret = await Task.Run(() => _service.GetById(id));
             return Success(ret);
@@ -43,17 +49,16 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [Route("GetList")]
-        public async Task<IActionResult> GetList(VehicleGroupsFilter filter)
+        public async Task<IActionResult> GetList(AdminUserVehicleGroupFilter filter)
         {
             var ret = await Task.Run(() => _service.GetList(filter));
             return Success(ret);
         }
-
         [HttpPost]
-        [Route("GetListUnassignGroups")]
-        public async Task<IActionResult> GetListUnassignGroups(VehicleGroupsFilter filter)
+        [Route("GetListAssignGroups")]
+        public async Task<IActionResult> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
-            var ret = await Task.Run(() => _service.GetListUnassignGroups(filter));
+            var ret = await Task.Run(() => _service.GetListAssignGroups(filter));
             return Success(ret);
         }
 

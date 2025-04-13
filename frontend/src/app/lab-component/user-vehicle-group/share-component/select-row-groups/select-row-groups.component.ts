@@ -85,7 +85,7 @@ export class SelectRowGroupsComponent implements OnInit {
   collapseAll() {
     for (let i = 0; i < this.item.groupsChild.length; i++) {
       const element = this.item.groupsChild[i];
-      if (this.item.groupsChild.find((x) => x.PK_VehicleGroupID === element.parentVehicleGroupId)) {
+      if (this.item.groupsChild.find((x) => x.pK_VehicleGroupID === element.parentVehicleGroupId)) {
         element.isHide = true;
       }
       element.isHideChildren = true;
@@ -101,12 +101,12 @@ export class SelectRowGroupsComponent implements OnInit {
 
   showChildren1(item: Groups) {
     item.isHideChildren = false;
-    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.PK_VehicleGroupID);
+    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.pK_VehicleGroupID);
     if (!childRows) {
       return;
     }
     this.item.groupsChild.forEach((x) => {
-      if (x.parentVehicleGroupId === item.PK_VehicleGroupID) {
+      if (x.parentVehicleGroupId === item.pK_VehicleGroupID) {
         x.isHide = false;
         x.isHideChildren = false;
       }
@@ -116,12 +116,12 @@ export class SelectRowGroupsComponent implements OnInit {
 
   hideChildren1(item: Groups) {
     item.isHideChildren = true;
-    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.PK_VehicleGroupID);
+    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.pK_VehicleGroupID);
     if (!childRows) {
       return;
     }
     this.item.groupsChild.forEach((x) => {
-      if (x.parentVehicleGroupId === item.PK_VehicleGroupID) {
+      if (x.parentVehicleGroupId === item.pK_VehicleGroupID) {
         x.isHide = true;
         x.isHideChildren = true;
       }

@@ -3,20 +3,26 @@ using App.DataAccess;
 using App.Lab.App.Model;
 using App.Lab.App.Repository.Interface;
 using App.Lab.App.Service.Interface;
+using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
-using Microsoft.VisualStudio.Services.WebPlatform;
-
 
 namespace App.Lab.App.Service.Implement
 {
     public class VehicleGroupsService : BaseService<IVehicleGroupsRepository>, IVehicleGroupsService
     {
         private readonly IUnitOfWork _uow;
+        private readonly IAdminUserVehicleGroupService _IAdminUserVehicleGroupService;
 
-        public VehicleGroupsService(IHttpContextAccessor accessor, IVehicleGroupsRepository repo, IUnitOfWork uow) : base(accessor, repo)
+        public VehicleGroupsService(
+            IHttpContextAccessor accessor, 
+            IVehicleGroupsRepository repo, 
+            IUnitOfWork uow,
+            IAdminUserVehicleGroupService IAdminUserVehicleGroupService
+        ) : base(accessor, repo)
         {
             _uow = uow;
+            _IAdminUserVehicleGroupService = IAdminUserVehicleGroupService;
         }
 
         public string Create(VehicleGroups objinfo)
@@ -29,12 +35,13 @@ namespace App.Lab.App.Service.Implement
             _repo.Update(objinfo);
         }
 
+
         public void Delete(string id)
         {
             _repo.Delete(id);
         }
 
-        public VehicleGroups GetById(string id)
+        public VehicleGroups GetById(int id)
         {
             return _repo.GetById(id);
         }
@@ -46,14 +53,33 @@ namespace App.Lab.App.Service.Implement
 
         public List<VehicleGroups> GetList(VehicleGroupsFilter filter)
         {
+            var PK_UserID = filter.PK_UserID;
+            filter.PK_UserID = null;
             var listItem= _repo.GetList(filter);
 
             if (!listItem.Any())
                 return null;
-            BuildHierarchy(listItem);
-            return FlattenHierarchy(listItem); // Trả về danh sách phẳng với các phần 
+            return BuildHierarchy(listItem);
+            //return FlattenHierarchy(listItem); // Trả về danh sách phẳng với các phần 
 
         }
+
+        public List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter)
+        {
+            var PK_UserID = filter.PK_UserID;
+            filter.PK_UserID = null;
+            var listItem = _repo.GetList(filter);
+            var filterAssignGroups = new AdminUserVehicleGroupFilter();
+            filterAssignGroups.FK_UserID = PK_UserID;
+            var listAssignGroups = _IAdminUserVehicleGroupService.GetListAssignGroups(filterAssignGroups);
+            var result = listItem.Where(x => !listAssignGroups.Any(y => y.PK_VehicleGroupID == x.PK_VehicleGroupID)).ToList();
+            if (!result.Any())
+                return null;
+            var listAll= BuildHierarchy(result);
+
+            return listAll;
+        }
+
         public List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
             // Tìm các nhóm gốc (Level 1)

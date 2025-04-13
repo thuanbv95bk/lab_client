@@ -5,4 +5,5 @@ export const Urls = {
   getPaging: '/api/groups/getPaging',
   addOrEdit: '/api/groups/addOrEdit',
   delete: '/api/groups/delete',
+  getListUnassignGroups: '/api/groups/GetListUnassignGroups',
 };

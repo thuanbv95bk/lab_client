@@ -1,6 +1,7 @@
 export class AppGlobals {
   static apiEndpoint: string;
   public static readonly LANGUAGE = 'language';
+  static selectedId: any;
 
   /**
    * Sets language

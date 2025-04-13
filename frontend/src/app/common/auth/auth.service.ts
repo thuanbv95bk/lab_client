@@ -9,11 +9,7 @@ import { UserInfo } from '../../model/app-model';
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    public commonService: CommonService,
-    protected httpClient: HttpClient,
-    private router: Router
-  ) {
+  constructor(public commonService: CommonService, protected httpClient: HttpClient, private router: Router) {
     this.listenEvent();
   }
 

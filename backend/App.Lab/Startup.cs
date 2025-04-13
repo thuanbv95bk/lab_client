@@ -28,10 +28,6 @@ namespace App.Lab
                 context.Request.EnableBuffering();
                 await next();
             });
-
-            
-
-            //app.UseCors("CorsPolicy");
             //app.UseRouting();
             //app.UseMiddleware<MonitorMiddleware>();
             //app.UseMiddleware<LoggingFilterMiddleware>();
@@ -78,6 +74,8 @@ namespace App.Lab
             services.AddTransient<IVehicleGroupsRepository, VehicleGroupsRepository>();
             services.AddTransient<IVehicleGroupsService, VehicleGroupsService>();
 
+            services.AddTransient<IAdminUserVehicleGroupRepository, AdminUserVehicleGroupRepository>();
+            services.AddTransient<IAdminUserVehicleGroupService, AdminUserVehicleGroupService>();
             // Add framework services.
             services.AddMvcCore();
         }

@@ -1,0 +1,36 @@
+<div class="d-flex attribute-item">
+  <i
+    *ngIf="attribute.hasChild"
+    [ngClass]="!attribute.isHide ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"
+    (click)="toggleVisibility(attribute)"></i>
+  <div class="form-check">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      [id]="'attribute-' + attribute.pK_VehicleGroupID"
+      [checked]="attribute.allComplete"
+      [indeterminate]="someComplete(attribute)"
+      (change)="onCheckboxChange($event, attribute)" />
+  </div>
+  <label class="form-check-label fw-semibold">
+    <i class="fa fa-folder"></i>
+    {{ attribute.name }}
+  </label>
+</div>
+<!-- Checkbox con -->
+<div class="">
+  <div class="form-check" *ngFor="let attributeValue of attribute.groupsChild">
+    <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        [(ngModel)]="attributeValue.isSelected"
+        [id]="'value-' + attributeValue.pK_VehicleGroupID"
+        (ngModelChange)="updateAllComplete(attribute)" />
+      <label class="form-check-label">
+        <i class="fa fa-folder"></i>
+        {{ attributeValue.name }}
+      </label>
+    </div>
+  </div>
+</div>

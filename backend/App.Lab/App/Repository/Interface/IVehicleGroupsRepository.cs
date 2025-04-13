@@ -13,8 +13,10 @@ namespace App.Lab.App.Repository.Interface
         string Create(VehicleGroups obj);
         void Update(VehicleGroups obj);
         void Delete(string objId);
-        VehicleGroups GetById(string objId);
+        VehicleGroups GetById(int objId);
         List<VehicleGroups> GetAll();
         List<VehicleGroups> GetList(VehicleGroupsFilter filter);
+        List<VehicleGroups> GetListNotAssigned(VehicleGroupsFilter filter);
+        UserVehicleGroupView GetViewById(int objId);
     }
 }

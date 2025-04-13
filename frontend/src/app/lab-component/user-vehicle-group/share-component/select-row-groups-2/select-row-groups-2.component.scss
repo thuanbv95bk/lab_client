@@ -1,0 +1,55 @@
+.form-check {
+  padding-left: 28px;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+.form-check-label {
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/*** Table ***/
+.attribute-section {
+  padding: 0px 10px;
+  margin-bottom: 5px;
+  .attribute-item:hover {
+    background-color: #caeffb;
+  }
+
+  .toggle-icon {
+    margin-left: 15px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+  }
+
+  .toggle-icon.open {
+    transform: rotate(180deg);
+  }
+
+  .ms-4 {
+    // padding-left: 1rem; // tạo khoảng cách giữa cha và con
+    display: block;
+    margin-top: 20px;
+  }
+
+  // .form-check-input:checked {
+  //   font-weight: bold; // đổi màu hay độ đậm khi checkbox được chọn
+  // }
+}
+
+$padding-value: 15px;
+
+.padding-0 {
+  padding-left: 0;
+}
+
+.padding-1 {
+  padding-left: $padding-value;
+}
+
+.padding-2 {
+  padding-left: $padding-value * 2;
+}
