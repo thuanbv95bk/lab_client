@@ -51,3 +51,64 @@ export class GroupsFilter {
     this.pK_UserID = obj?.pK_UserID || '';
   }
 }
+
+export class GroupService {
+  // 1. Tạo cây cha-con từ danh sách phẳng
+  buildHierarchy(listItem: UserVehicleGroupView[]): UserVehicleGroupView[] {
+    const map = new Map<number, UserVehicleGroupView>();
+    const roots: UserVehicleGroupView[] = [];
+
+    // Bước 1: Gán mặc định và lưu vào map
+    listItem.forEach((item) => {
+      item.groupsChild = [];
+      item.hasChild = false;
+      item.isHide = false;
+      item.level = 1;
+      map.set(item.pK_VehicleGroupID!, item);
+    });
+
+    // Bước 2: Duyệt gán vào cây
+    listItem.forEach((item) => {
+      if (item.parentVehicleGroupId && map.has(item.parentVehicleGroupId)) {
+        const parent = map.get(item.parentVehicleGroupId)!;
+        item.level = parent.level + 1;
+        parent.groupsChild.push(item);
+        parent.hasChild = true;
+      } else {
+        roots.push(item); // Gốc (parentId == 0 hoặc null)
+      }
+    });
+
+    return roots;
+  }
+
+  // 2. Hàm đệ quy để tìm các nhóm con theo parentId
+  private getChildGroups(listItem: UserVehicleGroupView[], parentId: number | null, level: number): UserVehicleGroupView[] {
+    const children = listItem.filter((x) => x.parentVehicleGroupId === parentId);
+
+    for (const child of children) {
+      child.level = level;
+      child.groupsChild = this.getChildGroups(listItem, child.pK_VehicleGroupID, level + 1);
+      child.hasChild = child.groupsChild.length > 0;
+      child.isHide = false;
+    }
+
+    return children;
+  }
+
+  // 3. Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
+  flattenGroupTree(tree: UserVehicleGroupView[]): UserVehicleGroupView[] {
+    const result: UserVehicleGroupView[] = [];
+
+    const flatten = (group: UserVehicleGroupView) => {
+      result.push(group); // Thêm phần tử cha vào kết quả
+
+      // Đệ quy qua tất cả các nhóm con
+      group.groupsChild?.forEach((child) => flatten(child));
+    };
+
+    tree.forEach((g) => flatten(g)); // Bắt đầu với từng nhóm gốc trong cây
+
+    return result;
+  }
+}

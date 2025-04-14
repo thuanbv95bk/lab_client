@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UserService } from './service/user.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GroupsService } from './service/groups.service';
-import { Groups, GroupsFilter } from './model/groups';
+import { Groups, GroupService, GroupsFilter } from './model/groups';
 import { UserVehicleGroupFilter, UserVehicleGroupView } from './model/user-vehicle-group';
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
 import { User, UsersFilter } from './model/user';
@@ -54,43 +54,214 @@ export class UserVehicleGroupComponent implements OnInit {
     this.getListUnassignGroups(item.pK_UserID);
     this.getListAssignGroups(item.pK_UserID);
   }
+  /**
+   * Assigns groups
+   */
 
-  assignGroups() {
-    const toAssign = this.listUnassignGroups.filter((g) => g.isSelected);
-    toAssign.forEach((g) => {
-      if (!g.hasChild || g.allComplete == true) {
-        g.isSelected = false;
-        this.listAssignGroups.push(g);
-      } else {
-        console.log('ffff');
+  private moveGroups(fromList: any[], toList: any[], direction: 'assign' | 'unassign') {
+    const toMove = fromList.filter((g) => g.isSelected || g.hasChild || g.allComplete);
+    const movedItems = [];
 
-        g.groupsChild.forEach((x) => {
-          if (x.isSelected == true) {
-            this.listAssignGroups.push(x);
-            toAssign.push(x);
+    toMove.forEach((g) => {
+      if (g.allComplete) {
+        if (!g.hasChild) {
+          movedItems.push(g);
+          g.isSelected = false;
+        } else {
+          movedItems.push(g);
+        }
+      } else if (g.hasChild) {
+        g.groupsChild.forEach((child) => {
+          if (child.isSelected) {
+            movedItems.push(child);
           }
         });
       }
     });
-    console.log(toAssign);
-    toAssign.forEach((x) => {
-      const index = this.listUnassignGroups.findIndex((y) => y.pK_VehicleGroupID == x.pK_VehicleGroupID);
-      if (index > -1) {
-        this.listUnassignGroups.splice(index, 1);
+
+    // Cập nhật danh sách đích
+    toList.push(...movedItems);
+
+    // Xóa item chính khỏi danh sách nguồn
+    const isMoved = (item) => movedItems.includes(item);
+    // const isParentGroup = (item) => item.hasChild || item.groupsChild;
+
+    const updatedFromList = fromList.filter((g) => !isMoved(g));
+
+    // Xử lý nhóm con chưa được di chuyển hết
+    updatedFromList.forEach((g) => {
+      if (g.hasChild && !g.allComplete) {
+        const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
+        g.groupsChild = g.groupsChild.filter((x) => !selectedChildren.includes(x));
       }
     });
 
-    // this.listUnassignGroups = this.listUnassignGroups.filter((g) => !g.isSelected);
+    // Gán lại danh sách nguồn đã được lọc
+    const groupService = new GroupService();
+    const allRelatedGroups = groupService.flattenGroupTree(updatedFromList);
+    console.log('allRelatedGroups');
+    console.log(allRelatedGroups);
+
+    if (direction === 'assign') {
+      this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
+    } else {
+      this.listAssignGroups = groupService.buildHierarchy(allRelatedGroups);
+    }
+  }
+
+  private buildGroupTree(flatList: UserVehicleGroupView[]): UserVehicleGroupView[] {
+    const idMap = new Map<number, UserVehicleGroupView>();
+    const roots: UserVehicleGroupView[] = [];
+
+    // Khởi tạo
+    flatList.forEach((item) => {
+      item.groupsChild = []; // reset trước
+      idMap.set(item.pK_VehicleGroupID!, item);
+    });
+
+    flatList.forEach((item) => {
+      if (item.parentVehicleGroupId && idMap.has(item.parentVehicleGroupId)) {
+        const parent = idMap.get(item.parentVehicleGroupId)!;
+        parent.groupsChild.push(item);
+        parent.hasChild = true;
+      } else {
+        roots.push(item);
+      }
+    });
+
+    return roots;
+  }
+
+  assignGroups() {
+    this.moveGroups(this.listUnassignGroups, this.listAssignGroups, 'assign');
+    console.log('assign');
+    const groupService = new GroupService();
+    const _temp = this.listAssignGroups;
+    const allRelatedGroups = groupService.flattenGroupTree(_temp);
+    this.listAssignGroups = groupService.buildHierarchy(allRelatedGroups);
+
+    console.log(this.listAssignGroups);
   }
 
   unassignGroups() {
-    const toUnassign = this.listAssignGroups.filter((g) => g.isSelected);
-    toUnassign.forEach((g) => {
-      g.isSelected = false;
-      this.listUnassignGroups.push(g);
-    });
-    this.listAssignGroups = this.listAssignGroups.filter((g) => !g.isSelected);
+    this.moveGroups(this.listAssignGroups, this.listUnassignGroups, 'unassign');
+    console.log('assign');
+    const groupService = new GroupService();
+    const _temp = this.listUnassignGroups;
+    const allRelatedGroups = groupService.flattenGroupTree(_temp);
+    this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
   }
+  // assignGroups() {
+  //   const toAssign = this.listUnassignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
+  //   console.log('toAssign', toAssign);
+
+  //   const groupsToAssign = [];
+
+  //   toAssign.forEach((g) => {
+  //     if (g.allComplete) {
+  //       // Nếu không có child, trực tiếp gán
+  //       if (!g.hasChild) {
+  //         groupsToAssign.push(g);
+  //         g.isSelected = false;
+  //       } else {
+  //         groupsToAssign.push(g);
+  //       }
+  //     } else if (g.hasChild) {
+  //       // Nếu có child và chưa hoàn tất, duyệt qua child
+  //       g.groupsChild.forEach((x) => {
+  //         if (x.isSelected) {
+  //           groupsToAssign.push(x);
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   // Cập nhật lại listAssignGroups và listUnassignGroups
+  //   this.listAssignGroups.push(...groupsToAssign);
+  //   this.listUnassignGroups = this.listUnassignGroups.filter((g) => !groupsToAssign.includes(g));
+
+  //   // Cập nhật các nhóm con trong listUnassignGroups
+  //   this.listUnassignGroups.forEach((g) => {
+  //     if (g.hasChild && !g.allComplete) {
+  //       const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
+  //       g.groupsChild = g.groupsChild.filter((item) => !selectedChildren.includes(item));
+  //     }
+  //   });
+
+  //   // assignGroups() {
+  //   //   const toAssign = this.listUnassignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
+  //   //   console.log('toAssign', toAssign);
+
+  //   //   toAssign.forEach((g) => {
+  //   //     if (!g.hasChild && g.allComplete == true) {
+  //   //       this.listAssignGroups.push(g);
+  //   //       g.isSelected = false;
+  //   //     } else if (g.hasChild && g.allComplete == true) {
+  //   //       this.listAssignGroups.push(g);
+  //   //     } else if (g.hasChild && g.allComplete == false) {
+  //   //       console.log('ffff');
+
+  //   //       g.groupsChild.forEach((x) => {
+  //   //         if (x.isSelected == true) {
+  //   //           this.listAssignGroups.push(x);
+  //   //         }
+  //   //       });
+  //   //     }
+  //   //   });
+
+  //   //   this.listUnassignGroups = this.listUnassignGroups.filter((g) => !this.listAssignGroups.includes(g));
+  //   //   this.listUnassignGroups.forEach((g) => {
+  //   //     if (g.hasChild && g.allComplete == false) {
+  //   //       const _remore = g.groupsChild.filter((x) => x.isSelected == true);
+  //   //       g.groupsChild = g.groupsChild.filter((item) => !_remore.includes(item));
+  //   //     }
+  //   //   });
+  //   // console.log(toAssign);
+  //   // toAssign.forEach((x) => {
+  //   //   const index = this.listAssignGroups.findIndex((y) => y.pK_VehicleGroupID == x.pK_VehicleGroupID);
+  //   //   if (index > -1) {
+  //   //     this.listUnassignGroups.splice(index, 1);
+  //   //   }
+  //   // });
+
+  //   // this.listUnassignGroups = this.listUnassignGroups.filter((g) => !g.isSelected);
+  // }
+
+  // unassignGroups() {
+  //   const toUnassign = this.listAssignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
+  //   console.log('toUnassign', toUnassign);
+
+  //   const groupsToUnassign = [];
+
+  //   toUnassign.forEach((g) => {
+  //     if (g.allComplete) {
+  //       if (!g.hasChild) {
+  //         groupsToUnassign.push(g);
+  //         g.isSelected = false;
+  //       } else {
+  //         groupsToUnassign.push(g);
+  //       }
+  //     } else if (g.hasChild) {
+  //       g.groupsChild.forEach((x) => {
+  //         if (x.isSelected) {
+  //           groupsToUnassign.push(x);
+  //         }
+  //       });
+  //     }
+  //   });
+
+  //   // Đẩy về listUnassignGroups
+  //   this.listUnassignGroups.push(...groupsToUnassign);
+  //   this.listAssignGroups = this.listAssignGroups.filter((g) => !groupsToUnassign.includes(g));
+
+  //   // Cập nhật các nhóm con trong listAssignGroups
+  //   this.listAssignGroups.forEach((g) => {
+  //     if (g.hasChild && !g.allComplete) {
+  //       const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
+  //       g.groupsChild = g.groupsChild.filter((item) => !selectedChildren.includes(item));
+  //     }
+  //   });
+  // }
 
   save() {
     // console.log('Save:', {
