@@ -1,3 +1,5 @@
+import { UserVehicleGroupView } from './user-vehicle-group';
+
 export class Groups {
   pK_VehicleGroupID!: number | null;
   fK_CompanyID!: number | null;
@@ -10,9 +12,10 @@ export class Groups {
   isHide: boolean;
   level: number;
   allComplete!: boolean;
-  groupsChild!: Groups[];
+  groupsChild!: UserVehicleGroupView[];
 
   isSelected!: boolean | false;
+  isUiCheck: boolean = false;
   constructor(obj?: Partial<Groups>) {
     this.pK_VehicleGroupID = obj?.pK_VehicleGroupID || null;
     this.fK_CompanyID = obj?.fK_CompanyID || null;
@@ -43,8 +46,8 @@ export class GroupsFilter {
     this.fK_CompanyID = obj?.fK_CompanyID || null;
     this.parentVehicleGroupId = obj?.parentVehicleGroupId || null;
     this.name = obj?.name || '';
-    this.status = obj?.status || true;
-    this.isDeleted = obj?.isDeleted || false;
+    this.status = obj?.status || null;
+    this.isDeleted = obj?.isDeleted || null;
     this.pK_UserID = obj?.pK_UserID || '';
   }
 }

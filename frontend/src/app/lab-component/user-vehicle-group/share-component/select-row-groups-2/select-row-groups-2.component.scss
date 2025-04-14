@@ -1,44 +1,62 @@
-.form-check {
-  padding-left: 28px;
-}
+.attribute-item {
+  flex-wrap: nowrap;
 
-.form-check-input {
-  cursor: pointer;
-}
-
-.form-check-label {
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/*** Table ***/
-.attribute-section {
-  padding: 0px 10px;
-  margin-bottom: 5px;
-  .attribute-item:hover {
-    background-color: #caeffb;
+  .row-item {
+    margin-left: 5px;
   }
 
   .toggle-icon {
-    margin-left: 15px;
+    margin-left: 10px;
     transition: transform 0.3s ease-in-out;
     cursor: pointer;
+
+    .open {
+      transform: rotate(180deg);
+    }
   }
 
-  .toggle-icon.open {
-    transform: rotate(180deg);
+  .check {
+    // padding-left: 28px;
+
+    .attribute-item-child {
+      width: 100%;
+    }
+
+    .form-check-input1 {
+      cursor: pointer;
+    }
+
   }
 
-  .ms-4 {
-    // padding-left: 1rem; // tạo khoảng cách giữa cha và con
-    display: block;
-    margin-top: 20px;
+  .folder-icon {
+    // position: relative;
+    text-align: center;
+
+    img {
+      width: 18px;
+      // position: absolute;
+      bottom: 3px;
+
+    }
+
   }
 
-  // .form-check-input:checked {
-  //   font-weight: bold; // đổi màu hay độ đậm khi checkbox được chọn
-  // }
+  .form-check-label {
+
+    text-align: center;
+    cursor: pointer;
+    font-size: 15px;
+
+
+  }
+
 }
+
+.attribute-item:hover,
+.attribute-item-child:hover {
+  background-color: #caeffb;
+}
+
 
 $padding-value: 15px;
 

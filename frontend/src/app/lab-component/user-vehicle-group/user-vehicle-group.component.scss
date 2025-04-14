@@ -19,6 +19,18 @@
         padding: 17px 10px;
       }
 
+      .check-all {
+        padding: 0 0 8px 22px;
+
+
+        label {
+          text-align: center;
+          cursor: pointer;
+          font-size: 15px;
+          margin-left: 5px;
+        }
+      }
+
       .input-group {
         input {
           border-right: none;
@@ -54,122 +66,28 @@
       }
     }
   }
+
+  .container-assign {
+    .active {
+      background-color: #436a9f;
+    }
+
+
+    i {
+      padding: 4px 10px;
+      font-size: 1rem;
+      color: white;
+    }
+  }
 }
 
 .selected-row {
   background-color: #caeffb !important;
 }
 
-// ******************* table *******************
-$padding-value: 15px;
 
-.padding-0 {
-  padding-left: 0;
-}
-
-.padding-1 {
-  padding-left: $padding-value;
-}
-
-.padding-2 {
-  padding-left: $padding-value * 2;
-}
-
-.showHideIcon {
-  color: black;
-}
-
-.showHideIcon:hover {
-  cursor: pointer;
-  color: #7e7e7e;
-}
-
-.collapse {
-  color: black;
-  //font-weight: bold;
-}
-
-/*** Table ***/
-.task-table tr {
-  height: auto !important;
-}
-
-.table-with-border {
-  position: relative;
-}
-
-.table-with-border thead tr:first-child th {
-  position: sticky;
-  top: 0px;
-  background-color: gainsboro;
-  z-index: 10;
-}
-
-.table-with-border thead tr:nth-child(2) th {
-  position: sticky;
-  top: 33px;
-  background-color: gainsboro;
-  z-index: 10;
-}
-
-.table-with-border tfoot tr:first-child td {
-  position: sticky;
-  bottom: -10px;
-  background-color: gainsboro;
-  z-index: 10;
-}
-
-// .hide-row td *,
-// .hide-row th * {
-//   z-index: -1000;
-//   position: relative;
-// }
-
-tr td *,
-tr th * {
-  z-index: 1;
-  position: relative;
-  // display: none;
-}
-
-/*** Table ***/
 .attribute-section {
-  padding: 0px 10px;
-  margin-bottom: 5px;
-  .attribute-item:hover {
-    background-color: #caeffb;
-  }
+  padding: 0px 10px 0 2px;
+  margin-bottom: 10px;
 
-  .form-check {
-    padding-left: 28px;
-  }
-
-  .form-check-input {
-    cursor: pointer;
-  }
-
-  .form-check-label {
-    cursor: pointer;
-    font-size: 14px;
-  }
-
-  .toggle-icon {
-    margin-left: 15px;
-    transition: transform 0.3s ease-in-out;
-    cursor: pointer;
-  }
-
-  .toggle-icon.open {
-    transform: rotate(180deg);
-  }
-
-  .ms-4 {
-    // padding-left: 1rem; // tạo khoảng cách giữa cha và con
-    display: block;
-    margin-top: 20px;
-  }
-
-  // .form-check-input:checked {
-  //   font-weight: bold; // đổi màu hay độ đậm khi checkbox được chọn
-  // }
 }

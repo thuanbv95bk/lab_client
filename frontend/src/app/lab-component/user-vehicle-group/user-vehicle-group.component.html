@@ -35,57 +35,25 @@
         <!-- Chọn nhóm -->
         <div class="col-12 col-sm-auto flex-grow-1">
           <div class="card h-100">
-            <div class="card-header font-weight-bold form-title">Chọn nhóm cho người dùng ({{ listGroups.length }})</div>
+            <div class="card-header font-weight-bold form-title">Chọn nhóm cho người dùng ({{ listUnassignGroups.length }})</div>
             <div class="card-body">
               <div class="card-body-search input-group">
-                <input type="text" class="form-control" [(ngModel)]="availableGroupSearch" placeholder="Tìm nhóm phương tiện" />
+                <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
                 <div class="input-group-append">
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
               </div>
 
-              <div class="flex-grow-1">
-                <div class="overflow-auto" style="height: calc(100vh - 240px)">
-                  <div class="attribute-section" *ngFor="let attribute of listGroups">
-                    <app-select-row-groups-2 [attribute]="attribute"></app-select-row-groups-2>
-
-                    <!-- <div class="d-flex attribute-item">
-                      <i
-                        *ngIf="attribute.hasChild"
-                        [ngClass]="!attribute.isHide ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"
-                        (click)="toggleVisibility(attribute)"></i>
-                      <div class="form-check">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          [id]="'attribute-' + attribute.PK_VehicleGroupID"
-                          [checked]="attribute.allComplete"
-                          [indeterminate]="someComplete(attribute)"
-                          (change)="onCheckboxChange($event, attribute)" />
-                      </div>
-                      <label class="form-check-label fw-semibold">
-                        <i class="fa fa-folder"></i>
-                        {{ attribute.name }}
-                      </label>
-                    </div>
-   
-                    <div class="">
-                      <div class="form-check" *ngFor="let attributeValue of attribute.groupsChild">
-                        <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
-                          <input
-                            class="form-check-input"
-                            type="checkbox"
-                            [(ngModel)]="attributeValue.isSelected"
-                            [id]="'value-' + attributeValue.PK_VehicleGroupID"
-                            (ngModelChange)="updateAllComplete(attribute)" />
-                          <label class="form-check-label">
-                            <i class="fa fa-folder"></i>
-                            {{ attributeValue.name }}
-                          </label>
-                        </div>
-                      </div>
-                    </div> -->
-                  </div>
+              <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
+                <div class="check-all sticky-top bg-white" *ngIf="listUnassignGroups && listUnassignGroups.length > 0">
+                  <input type="checkbox" name="UnassignGroups" [checked]="allComplete" (change)="onCheckAll($event, listUnassignGroups)" />
+                  <label>Tất cả </label>
+                </div>
+                <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
+                  <app-select-row-groups-2
+                    [attribute]="attribute"
+                    [allSelected]="allComplete"
+                    (selectedChange)="onSelectedChange($event, listUnassignGroups)"></app-select-row-groups-2>
                 </div>
               </div>
             </div>
@@ -94,35 +62,34 @@
 
         <!-- Nút ở giữa -->
         <div class="col-auto d-flex align-items-center mx-auto justify-content-center">
-          <div class="text-center" style="width: max-content">
-            <button class="btn btn-secondary btn-sm mb-2 px-2" (click)="assignGroups()">&gt;</button><br />
-            <button class="btn btn-secondary btn-sm px-2" (click)="unassignGroups()">&lt;</button>
+          <div class="text-center container-assign">
+            <button class="btn btn-sm mb-2 px-2" [ngClass]="isBtnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="assignGroups()">
+              <i class="fa fa-chevron-right"></i></button
+            ><br />
+            <button class="btn btn-sm px-2" [ngClass]="isBtnUnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="unassignGroups()">
+              <i class="fa fa-chevron-left"></i>
+            </button>
           </div>
         </div>
 
         <!-- Nhóm đã gán -->
         <div class="col-12 col-sm-auto flex-grow-1">
           <div class="card h-100">
-            <div class="card-header font-weight-bold form-title">Nhóm đã gán cho người dùng ({{ listUserVehicleGroup.length }})</div>
+            <div class="card-header font-weight-bold form-title">Nhóm đã gán cho người dùng ({{ listAssignGroups.length }})</div>
             <div class="card-body">
               <div class="card-body-search input-group">
-                <input type="text" class="form-control" [(ngModel)]="assignedGroupSearch" placeholder="Tìm nhóm phương tiện" />
+                <input type="text" class="form-control" [(ngModel)]="assignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
                 <div class="input-group-append">
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
               </div>
-              <div class="flex-grow-1">
-                <!-- <div *ngFor="let group of assignedGroups | filter : assignedGroupSearch : 'name'">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" [(ngModel)]="group.selected" />
-                    <label class="form-check-label">{{ group.name }}</label>
-                  </div>
-                </div> -->
-
-                <div class="overflow-auto" style="height: calc(100vh - 240px)">
-                  <div class="attribute-section" *ngFor="let attribute of listUserVehicleGroup">
-                    <app-select-row-groups-2 [attribute]="attribute"></app-select-row-groups-2>
-                  </div>
+              <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
+                <div class="check-all" *ngIf="listAssignGroups && listAssignGroups.length > 0">
+                  <input type="checkbox" name="AssignGroups" [checked]="allComplete" (change)="onCheckAll($event, listAssignGroups)" />
+                  <label>Tất cả </label>
+                </div>
+                <div class="attribute-section" *ngFor="let attribute of listAssignGroups | filter : assignGroupsSearch : 'name'">
+                  <app-select-row-groups-2 [attribute]="attribute"></app-select-row-groups-2>
                 </div>
               </div>
             </div>

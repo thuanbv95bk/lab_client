@@ -672,7 +672,7 @@ namespace App.DataAccess
                     {
                         valueString = (bool)value ? "1" : "0";
                     }
-                    else if (property.PropertyType == typeof(string) )
+                    else if (property.PropertyType == typeof(string))
                     {
                         valueString = string.Format(" '{0}' ", value.ToString()) ;
                     }
