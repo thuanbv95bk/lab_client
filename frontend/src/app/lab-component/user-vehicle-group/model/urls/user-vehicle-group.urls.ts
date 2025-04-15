@@ -6,4 +6,5 @@ export const Urls = {
   addOrEdit: '/api/user-vehicle-group/addOrEdit',
   delete: '/api/user-vehicle-group/delete',
   getListAssignGroups: '/api/user-vehicle-group/GetListAssignGroups',
+  addOrEditList: '/api/user-vehicle-group/AddOrEditList',
 };

@@ -16,11 +16,15 @@ export class UserVehicleGroupService extends BaseDataService {
   _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
   _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
   _getListAssignGroupsUrl = AppConfig.apiEndpoint + Urls.getListAssignGroups;
+  _addOrEditListUrl = AppConfig.apiEndpoint + Urls.addOrEditList;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
 
   getListAssignGroups(filterModel: any, noLoadingMark = false): Promise<RespondData> {
     return this.postData(this._getListAssignGroupsUrl, filterModel, noLoadingMark);
+  }
+  addOrEditList(model: any, noLoadingMark = false): Promise<RespondData> {
+    return this.postData(this._addOrEditListUrl, model, noLoadingMark);
   }
 }

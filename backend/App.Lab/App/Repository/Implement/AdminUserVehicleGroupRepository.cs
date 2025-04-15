@@ -20,20 +20,33 @@ namespace App.Lab.Repository.Implement
 
         public string Create(AdminUserVehicleGroup obj)
         {
+
+
+
             string sql =
                "INSERT INTO [Admin.UserVehicleGroup] " +
                            "(" +
                                "FK_UserID, " +
                                "FK_VehicleGroupID, " +
                                "ParentVehicleGroupID, " +
-                               "IsDeleted, " +
+                               "CreatedByUser, " +
+                               "CreatedDate, " +
+                               "UpdateByUser, " +
+                               "UpdatedDate, " +
+                               "UpdatedByUser, " +
+                               "IsDeleted " +
                            ") " +
                            "VALUES " +
                            "(" +
-                               "@PK_UserID, " +
+                               "@FK_UserID, " +
                                "@FK_VehicleGroupID," +
                                "@ParentVehicleGroupID," +
-                               "@IsDeleted," +
+                               "@CreatedByUser," +
+                               "@CreatedDate," +
+                               "@UpdateByUser, " +
+                               "@UpdatedDate, " +
+                               "@UpdatedByUser, " +
+                               "@IsDeleted" +
                            "); ";
 
             var parameters = this.MapToSqlParameters(obj);
@@ -69,6 +82,22 @@ namespace App.Lab.Repository.Implement
             //    , Null.GetDBNull(UserName)
             //    , Null.GetDBNull(objId));
         }
+
+        public void DeleteSoft(AdminUserVehicleGroup item)
+        {
+
+            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 1 , UpdatedDate = @UpdatedDate" + " WHERE " +
+                                                                "FK_UserID = @FK_UserID " +
+                                                                " AND FK_VehicleGroupID = " +
+                                                                "@FK_VehicleGroupID " +
+                                                                " AND ParentVehicleGroupID = @ParentVehicleGroupID;";
+
+            var parameters = this.MapToSqlParameters(item);
+
+            this.ExecCommand(sql, parameters);
+           
+        }
+
 
         public AdminUserVehicleGroup GetById(string objId)
         {

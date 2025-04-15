@@ -1,11 +1,23 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnInit, Output, Renderer2 } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  Renderer2,
+  SimpleChanges,
+} from '@angular/core';
 import { Groups } from '../../model/groups';
 @Component({
   selector: 'app-select-row-groups-2',
   templateUrl: './select-row-groups-2.component.html',
   styleUrls: ['./select-row-groups-2.component.scss'],
 })
-export class SelectRowGroups2Component implements OnInit, AfterViewInit {
+export class SelectRowGroups2Component implements OnInit, AfterViewInit, OnChanges {
   @Input()
   attribute!: Groups;
 
@@ -16,6 +28,12 @@ export class SelectRowGroups2Component implements OnInit, AfterViewInit {
 
   ngOnInit() {
     // this.toggleSelectAll();
+  }
+  ngOnChanges(changes: SimpleChanges): void {
+    // console.log('data');
+    // if (changes['data']) {
+    //   this.toggleSelectAll();
+    // }
   }
   ngAfterViewInit(): void {
     this.cdRef.detectChanges(); // ✅ ép Angular kiểm tra lại
@@ -78,6 +96,6 @@ export class SelectRowGroups2Component implements OnInit, AfterViewInit {
   }
 
   toggleVisibility(attribute: Groups) {
-    attribute.isHide = !attribute.isHide; // Mở hoặc đóng
+    attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
   }
 }

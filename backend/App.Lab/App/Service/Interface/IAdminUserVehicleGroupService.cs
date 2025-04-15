@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Common.BaseService;
+using App.Common.Models;
 using App.Lab.Model;
+using Microsoft.VisualStudio.Services.Location;
+using ServiceStatus = App.Common.Models.ServiceStatus;
 
 namespace App.Lab.App.Service.Interface
 {
@@ -18,5 +21,6 @@ namespace App.Lab.App.Service.Interface
         List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter);
 
         List<UserVehicleGroupView> GetListAssignGroups(AdminUserVehicleGroupFilter filter);
+        ServiceStatus AddOrEditList(VehicleGroupModel item);
     }
 }

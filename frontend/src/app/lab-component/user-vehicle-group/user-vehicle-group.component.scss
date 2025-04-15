@@ -1,3 +1,11 @@
+.active {
+  background-color: #436a9f;
+}
+
+button[disabled="true"] {
+  color: rgb(238, 19, 19) !important;
+}
+
 .container-form {
   padding: 10px 10px;
   overflow: none;
@@ -14,6 +22,16 @@
 
     .card-body {
       padding: 0;
+
+      .no-data {
+        font-size: 18px;
+        font-weight: 500;
+        position: absolute;
+        bottom: 50%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+      }
 
       &-search {
         padding: 17px 10px;
@@ -67,11 +85,12 @@
     }
   }
 
-  .container-assign {
+  .container-btn {
+    padding: 0;
+
     .active {
       background-color: #436a9f;
     }
-
 
     i {
       padding: 4px 10px;

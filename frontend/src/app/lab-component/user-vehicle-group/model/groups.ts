@@ -97,17 +97,23 @@ export class GroupService {
   }
 
   // 3. Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
-  flattenGroupTree(tree: UserVehicleGroupView[]): UserVehicleGroupView[] {
+  flattenGroupTree(tree: UserVehicleGroupView[], pK_UserID: string = null): UserVehicleGroupView[] {
     const result: UserVehicleGroupView[] = [];
 
     const flatten = (group: UserVehicleGroupView) => {
       result.push(group); // Thêm phần tử cha vào kết quả
 
       // Đệ quy qua tất cả các nhóm con
-      group.groupsChild?.forEach((child) => flatten(child));
+      group.groupsChild?.forEach((child) => {
+        child.PK_UserID = pK_UserID ?? pK_UserID;
+        flatten(child);
+      });
     };
 
-    tree.forEach((g) => flatten(g)); // Bắt đầu với từng nhóm gốc trong cây
+    tree.forEach((g) => {
+      g.PK_UserID = pK_UserID ?? pK_UserID;
+      flatten(g);
+    }); // Bắt đầu với từng nhóm gốc trong cây
 
     return result;
   }
