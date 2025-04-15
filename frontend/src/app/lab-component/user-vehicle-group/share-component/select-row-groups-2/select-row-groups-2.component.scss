@@ -16,47 +16,37 @@
     }
   }
 
-  .check {
-
-
+  .check-input {
     // padding-left: 28px;
     .attribute-item-child {
       width: 100%;
     }
 
-    .form-check-input1 {
+    .check {
       cursor: pointer;
-
     }
-
   }
 
   .folder-icon {
-
-    position: relative;
-
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
     img {
       width: 19px;
-      position: absolute;
-      bottom: 2px;
     }
-
   }
 
   .form-check-label {
-
     cursor: pointer;
     font-size: 15px;
-    padding-left: 20px;
   }
-
 }
 
 .attribute-item:hover,
 .attribute-item-child:hover {
   background-color: #caeffb;
 }
-
 
 $padding-value: 15px;
 

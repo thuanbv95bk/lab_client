@@ -1,23 +1,22 @@
 .active {
   background-color: #436a9f;
 }
-
-button[disabled="true"] {
+.row-eq-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+button[disabled='true'] {
   color: rgb(238, 19, 19) !important;
 }
 
 .container-form {
   padding: 10px 10px;
-  overflow: none;
-
-  .form-title {
-    color: #436a9f;
-    font-size: 14px;
-  }
-
   .card {
     .card-header {
       padding: 0.75rem 1rem;
+      color: #436a9f;
+      font-size: 14px;
+      font-weight: bold;
     }
 
     .card-body {
@@ -39,7 +38,6 @@ button[disabled="true"] {
 
       .check-all {
         padding: 0 0 8px 22px;
-
 
         label {
           text-align: center;
@@ -87,13 +85,15 @@ button[disabled="true"] {
 
   .container-btn {
     padding: 0;
+    display: flex;
+    flex-direction: column;
 
     .active {
       background-color: #436a9f;
     }
 
     i {
-      padding: 4px 10px;
+      padding: 1px 5px;
       font-size: 1rem;
       color: white;
     }
@@ -104,9 +104,7 @@ button[disabled="true"] {
   background-color: #caeffb !important;
 }
 
-
 .attribute-section {
   padding: 0px 10px 0 2px;
   margin-bottom: 10px;
-
 }

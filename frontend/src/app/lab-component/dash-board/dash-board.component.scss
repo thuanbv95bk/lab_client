@@ -14,14 +14,13 @@
   overflow-x: auto;
 }
 
-.flex-grow-1 {
-  flex-grow: 1 !important;
-  width: 100%;
-  // max-width: max-content;
-}
+// .flex-grow-1 {
+//   flex-grow: 1 !important;
+//   width: 100%;
+//   // max-width: max-content;
+// }
 
-
-.g-2>[class^="col"] {
+.g-2 > [class^='col'] {
   padding: 0.5rem;
   /* tương đương g-2 trong BS5 */
 }

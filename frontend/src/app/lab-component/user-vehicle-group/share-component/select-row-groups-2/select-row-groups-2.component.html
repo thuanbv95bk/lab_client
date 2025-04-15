@@ -8,9 +8,9 @@
 
   <div *ngIf="!attribute.hasChild" style="width: 10px"></div>
 
-  <div class="check row-item">
+  <div class="check-input row-item">
     <input
-      class="form-check-input1"
+      class="check"
       type="checkbox"
       [id]="'attribute-' + attribute.pK_VehicleGroupID"
       [checked]="attribute.allComplete"
@@ -18,7 +18,7 @@
       (change)="onCheckboxChange($event, attribute)" />
   </div>
 
-  <div class="folder-icon row-item text-center">
+  <div class="folder-icon row-item">
     <img src="../assets/image/folder-icon.svg" alt="icon" />
   </div>
   <label class="form-check-label fw-semibold row-item">
@@ -27,10 +27,10 @@
 </div>
 
 <div *ngIf="attribute.groupsChild" [ngClass]="{ hidden: attribute.isHideChildren == false || !attribute.isHideChildren }">
-  <div class="check" *ngFor="let attributeValue of attribute.groupsChild" #child [style.padding-left.px]="20" ngClass="attribute-item-child">
+  <div class="check-input" *ngFor="let attributeValue of attribute.groupsChild" #child [style.padding-left.px]="20" ngClass="attribute-item-child">
     <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
       <input
-        class="form-check-input1 row-item"
+        class="check row-item"
         type="checkbox"
         [(ngModel)]="attributeValue.isSelected"
         [checked]="attributeValue.isSelected"
