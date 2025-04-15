@@ -2,7 +2,7 @@
   <h6 class="font-weight-bold form-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
   <div class="row">
     <!-- Danh sách người dùng -->
-    <div class="col-12 col-md-4">
+    <div class="col-12 col-sm-12 col-md-4">
       <div class="card h-100">
         <div class="card-header font-weight-bold form-title">Danh sách người dùng</div>
         <div class="card-body">
@@ -30,14 +30,15 @@
     </div>
 
     <!-- Hai cột nhóm: chọn + đã gán với nút ở giữa -->
-    <div class="col-12 col-md-8">
-      <div class="row" style="min-height: 100%">
+    <div class="col-12 col-sm-12 col-md-8 flex-grow-1">
+      <div class="row container-fluid" style="min-height: 100%">
         <!-- Chọn nhóm -->
-        <div class="col-12 col-sm-auto flex-grow-1">
+        <div class="col-12 col-sm-auto col-md-5">
           <div class="card h-100">
             <div class="card-header font-weight-bold form-title">Chọn nhóm cho người dùng ({{ listUnassignGroups.length }})</div>
-            <div class="card-body">
-              <div class="card-body-search input-group">
+            <div class="card-body position-relative">
+              <div class="no-data" *ngIf="!getIsDataUnAssignGroups">Không có dữ liệu</div>
+              <div class="card-body-search input-group" *ngIf="getIsDataUnAssignGroups">
                 <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
                 <div class="input-group-append">
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
@@ -45,14 +46,18 @@
               </div>
 
               <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
-                <div class="check-all sticky-top bg-white" *ngIf="listUnassignGroups && listUnassignGroups.length > 0">
-                  <input type="checkbox" name="UnassignGroups" [checked]="allComplete" (change)="onCheckAll($event, listUnassignGroups)" />
+                <div class="check-all sticky-top bg-white" *ngIf="getIsDataUnAssignGroups">
+                  <input
+                    type="checkbox"
+                    name="UnassignGroups"
+                    [checked]="allCompleteUnAssign"
+                    (change)="onCheckAll($event, listUnassignGroups, 'unassign')" />
                   <label>Tất cả </label>
                 </div>
                 <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
                   <app-select-row-groups-2
                     [attribute]="attribute"
-                    [allSelected]="allComplete"
+                    [allSelected]="allCompleteUnAssign"
                     (selectedChange)="onSelectedChange($event, listUnassignGroups)"></app-select-row-groups-2>
                 </div>
               </div>
@@ -61,35 +66,43 @@
         </div>
 
         <!-- Nút ở giữa -->
-        <div class="col-auto d-flex align-items-center mx-auto justify-content-center">
-          <div class="text-center container-assign">
-            <button class="btn btn-sm mb-2 px-2" [ngClass]="isBtnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="assignGroups()">
+        <div class="col-md-auto col-sm-1 d-flex align-items-center justify-content-center p-0">
+          <div class="text-center container-btn">
+            <button class="btn btn-sm mb-2" [ngClass]="getIsBtnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="assignGroups()">
               <i class="fa fa-chevron-right"></i></button
             ><br />
-            <button class="btn btn-sm px-2" [ngClass]="isBtnUnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="unassignGroups()">
+            <button class="btn btn-sm" [ngClass]="getIsBtnUnAssignGroupsActive == true ? 'active' : 'btn-secondary'" (click)="unassignGroups()">
               <i class="fa fa-chevron-left"></i>
             </button>
           </div>
         </div>
 
         <!-- Nhóm đã gán -->
-        <div class="col-12 col-sm-auto flex-grow-1">
+        <div class="col-12 col-sm-auto col-md-5">
           <div class="card h-100">
             <div class="card-header font-weight-bold form-title">Nhóm đã gán cho người dùng ({{ listAssignGroups.length }})</div>
-            <div class="card-body">
-              <div class="card-body-search input-group">
+            <div class="card-body position-relative">
+              <div class="no-data" *ngIf="!getIsDataAssignGroups">Không có dữ liệu</div>
+              <div class="card-body-search input-group" *ngIf="getIsDataAssignGroups">
                 <input type="text" class="form-control" [(ngModel)]="assignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
                 <div class="input-group-append">
                   <span class="input-group-text"><i class="fa fa-search"></i></span>
                 </div>
               </div>
               <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
-                <div class="check-all" *ngIf="listAssignGroups && listAssignGroups.length > 0">
-                  <input type="checkbox" name="AssignGroups" [checked]="allComplete" (change)="onCheckAll($event, listAssignGroups)" />
+                <div class="check-all" *ngIf="getIsDataAssignGroups">
+                  <input
+                    type="checkbox"
+                    name="AssignGroups"
+                    [checked]="allCompleteAssign"
+                    (change)="onCheckAll($event, listAssignGroups, 'assign')" />
                   <label>Tất cả </label>
                 </div>
                 <div class="attribute-section" *ngFor="let attribute of listAssignGroups | filter : assignGroupsSearch : 'name'">
-                  <app-select-row-groups-2 [attribute]="attribute"></app-select-row-groups-2>
+                  <app-select-row-groups-2
+                    [attribute]="attribute"
+                    [allSelected]="allCompleteAssign"
+                    (selectedChange)="onSelectedChange($event, listAssignGroups)"></app-select-row-groups-2>
                 </div>
               </div>
             </div>
@@ -101,7 +114,13 @@
 
   <!-- Footer buttons -->
   <div class="text-center mt-3">
-    <button class="btn btn-primary mr-2" (click)="save()">Lưu</button>
-    <button class="btn btn-secondary" (click)="cancel()">Hủy</button>
+    <button
+      class="btn mr-3 text-white"
+      (click)="save()"
+      [ngClass]="getIsBtnUnAssignGroupsActive == true ? 'active' : 'btn-secondary'"
+      [disabled]="false">
+      <i class="fa fa-save mr-2"></i>Lưu
+    </button>
+    <button class="btn btn-secondary active text-white" (click)="cancel()"><i class="fa fa-times mr-2"></i>Hủy</button>
   </div>
 </div>

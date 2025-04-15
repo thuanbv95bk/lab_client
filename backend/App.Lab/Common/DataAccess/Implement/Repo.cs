@@ -7,6 +7,7 @@ using App.Common.Helper;
 using Microsoft.Data.SqlClient;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace App.DataAccess
 {
@@ -493,54 +494,57 @@ namespace App.DataAccess
                 tableName = $"[{Schema}.{tableName}]";
 
             SqlParameter[] commandParameters = null;
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.Append(" SELECT ");
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append(" SELECT ");
+
+            // lst column select
             if (lstColumn == null || lstColumn.Length == 0)
             {
-                stringBuilder.Append(" * ");
+                queryBuilder.Append(" * ");
             }
             else if (lstColumn.Length == 1)
             {
-                stringBuilder.Append(string.Join(" , ", lstColumn));
+                queryBuilder.Append(string.Join(" , ", lstColumn));
             }
 
-            StringBuilder stringBuilder2 = stringBuilder;
-            StringBuilder stringBuilder3 = stringBuilder2;
-            StringBuilder.AppendInterpolatedStringHandler handler = new StringBuilder.AppendInterpolatedStringHandler(7, 1, stringBuilder2);
-            handler.AppendLiteral(" FROM ");
-            handler.AppendFormatted(tableName);
-            handler.AppendLiteral(" ");
-            stringBuilder3.Append(ref handler);
-            if (lstFilterOption != null && lstFilterOption.Length != 0)
+            // from
+            queryBuilder.Append($" FROM {tableName} ");
+
+            // Generate filter conditions
+            if (lstFilterOption != null && lstFilterOption.Length > 0)
             {
-                stringBuilder.Append(" WHERE 1=1 ");
-                foreach (FilterOption filterOption in lstFilterOption)
+                queryBuilder.Append(" WHERE 1=1 ");
+                foreach (var filter in lstFilterOption)
                 {
-                    stringBuilder2 = stringBuilder;
-                    StringBuilder stringBuilder4 = stringBuilder2;
-                    handler = new StringBuilder.AppendInterpolatedStringHandler(8, 3, stringBuilder2);
-                    handler.AppendLiteral(" AND ");
-                    handler.AppendFormatted(filterOption.Column);
-                    handler.AppendLiteral(" = ");
-                    handler.AppendFormatted(filterOption.Value);
-                    handler.AppendLiteral(" ");
-                    stringBuilder4.Append(ref handler);
+                    if (filter.ValueType == "bool" && filter.Value == "0")
+                    {
+                        queryBuilder.Append($" AND ( {filter.Column} {filter.Operator} {filter.Value} or {filter.Column} is null )");
+                    }
+                    else 
+                    {
+                        queryBuilder.Append($" AND {filter.Column} {filter.Operator} {filter.Value} ");
+                    }
+                        
                 }
             }
 
-            if (lstOrderOption != null && lstOrderOption.Length != 0)
+            // Generate sort configurations
+            if (lstOrderOption != null && lstOrderOption.Length > 0)
             {
-                stringBuilder.Append(" ORDER BY ");
-                stringBuilder.Append(string.Join(" , ", lstOrderOption.Select((OrderOption x) => x.ToString())));
+                queryBuilder.Append(" ORDER BY ");
+                queryBuilder.Append(string.Join(" , ", lstOrderOption.Select(x => x.ToString())));
             }
 
-            string text = stringBuilder.ToString();
+            var sqlCommand = queryBuilder.ToString();
+
             IDataReader dr = null;
             IDbTransaction trans = null;
             try
             {
-                _ExecCommand(out dr, out trans, text, commandParameters);
+                _ExecCommand(out dr, out trans, sqlCommand, commandParameters);
+
                 ret = CBO.FillList<T>(dr);
+
                 if (trans != null)
                 {
                     trans.Commit();
@@ -555,11 +559,82 @@ namespace App.DataAccess
                     trans.Rollback();
                     trans.Dispose();
                 }
-
-                throw new Exception("sqlCommand: " + text + ": " + ex.ToString());
+                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
         }
+        //public void UpdateSoft(string tableName, FilterOption[] lstColumn, FilterOption[] lstFilterOption = null)
+        //{
 
+        //    if (!string.IsNullOrEmpty(Schema))
+        //        tableName = $"[{Schema}.{tableName}]";
+
+        //    SqlParameter[] commandParameters = null;
+        //    StringBuilder stringBuilder = new StringBuilder();
+        //    stringBuilder.Append(" UPDATE ");
+        //    if (lstColumn == null || lstColumn.Length == 0)
+        //    {
+        //        stringBuilder.Append(" * ");
+        //    }
+        //    else if (lstColumn.Length == 1)
+        //    {
+        //        stringBuilder.Append(string.Join(" , ", lstColumn));
+        //    }
+
+        //    StringBuilder stringBuilder2 = stringBuilder;
+        //    StringBuilder stringBuilder3 = stringBuilder2;
+        //    StringBuilder.AppendInterpolatedStringHandler handler = new StringBuilder.AppendInterpolatedStringHandler(7, 1, stringBuilder2);
+        //    handler.AppendLiteral(" FROM ");
+        //    handler.AppendFormatted(tableName);
+        //    handler.AppendLiteral(" ");
+        //    stringBuilder3.Append(ref handler);
+        //    if (lstFilterOption != null && lstFilterOption.Length != 0)
+        //    {
+        //        stringBuilder.Append(" WHERE 1=1 ");
+        //        foreach (FilterOption filterOption in lstFilterOption)
+        //        {
+        //            stringBuilder2 = stringBuilder;
+        //            StringBuilder stringBuilder4 = stringBuilder2;
+        //            handler = new StringBuilder.AppendInterpolatedStringHandler(8, 3, stringBuilder2);
+        //            handler.AppendLiteral(" AND ");
+        //            handler.AppendFormatted(filterOption.Column);
+        //            handler.AppendLiteral(" = ");
+        //            handler.AppendFormatted(filterOption.Value);
+        //            handler.AppendLiteral(" ");
+        //            stringBuilder4.Append(ref handler);
+        //        }
+        //    }
+
+        //    if (lstOrderOption != null && lstOrderOption.Length != 0)
+        //    {
+        //        stringBuilder.Append(" ORDER BY ");
+        //        stringBuilder.Append(string.Join(" , ", lstOrderOption.Select((OrderOption x) => x.ToString())));
+        //    }
+
+        //    string text = stringBuilder.ToString();
+        //    IDataReader dr = null;
+        //    IDbTransaction trans = null;
+        //    try
+        //    {
+        //        _ExecCommand(out dr, out trans, text, commandParameters);
+        //        ret = CBO.FillList<T>(dr);
+        //        if (trans != null)
+        //        {
+        //            trans.Commit();
+        //            trans.Dispose();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        dr?.Close();
+        //        if (trans != null)
+        //        {
+        //            trans.Rollback();
+        //            trans.Dispose();
+        //        }
+
+        //        throw new Exception("sqlCommand: " + text + ": " + ex.ToString());
+        //    }
+        //}
         public void ExecCommand<T>(out List<T> ret, string sqlCommand, SqlParameter[] parameters)
         {
             IDataReader dr = null;
@@ -668,9 +743,11 @@ namespace App.DataAccess
                 if (value != null && !string.IsNullOrEmpty(value.ToString()))
                 {
                     string valueString;
+                    var isTypeBool = false;
                     if (property.PropertyType == typeof(bool) || property.PropertyType == typeof(bool?))
                     {
                         valueString = (bool)value ? "1" : "0";
+                        isTypeBool = true;
                     }
                     else if (property.PropertyType == typeof(string))
                     {
@@ -689,7 +766,8 @@ namespace App.DataAccess
                     {
                         Column = property.Name,
                         Value = valueString,
-                        ValueType = property.PropertyType.Name.ToLower()
+                        Operator =" = ",
+                        ValueType = isTypeBool==true?"bool": property.PropertyType.Name.ToLower()
                     });
                 }
             }

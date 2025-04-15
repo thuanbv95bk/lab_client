@@ -62,5 +62,33 @@ namespace App.Admin.Controllers
             return Success(ret);
         }
 
+        [HttpPost]
+        [Route("AddOrEditList")]
+        public async Task<IActionResult> AddOrEditList(VehicleGroupModel item)
+        {
+            //string id = "";
+            //id = await Task.Run(() => _service.AddOrEditList(items));
+            //return Success(id);
+            var ret = await Task.Run(() => _service.AddOrEditList(item));
+            return ret.IsSuccess ? Success(ret.Data) : Failure(ret.ErroMessage);
+        }
+
+
+        //[HttpPost]
+        //[Route("AddOrEditEx")]
+        //public async Task<IActionResult> AddOrEditEx(TS_YCTS item)
+        //{
+        //    dynamic ret;
+        //    if (!string.IsNullOrEmpty(item.TS_YCTS_Id))
+        //    {
+        //        ret = await Task.Run(() => _service.UpdateEx(item));
+        //    }
+        //    else
+        //    {
+        //        ret = await Task.Run(() => _service.CreateEx(item));
+        //    }
+        //    return ret.IsSuccess ? Success(ret.Data) : Failure(ret.ErroMessage);
+        //}
+
     }
 }

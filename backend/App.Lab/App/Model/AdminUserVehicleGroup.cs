@@ -33,5 +33,12 @@ namespace App.Lab.Model
         public string PK_UserID { get; set; }
         public override bool? IsDeleted { get; set; }
     }
-    
+
+    public class VehicleGroupModel
+    {
+        public string PK_UserID { get; set; }
+        public List<UserVehicleGroupView> listGroup { get; set; }
+
+    }
+
 }

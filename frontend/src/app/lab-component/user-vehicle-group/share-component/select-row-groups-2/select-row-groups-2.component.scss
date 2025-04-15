@@ -3,6 +3,7 @@
 
   .row-item {
     margin-left: 5px;
+    justify-items: center;
   }
 
   .toggle-icon {
@@ -16,38 +17,37 @@
   }
 
   .check {
-    // padding-left: 28px;
 
+
+    // padding-left: 28px;
     .attribute-item-child {
       width: 100%;
     }
 
     .form-check-input1 {
       cursor: pointer;
+
     }
 
   }
 
   .folder-icon {
-    // position: relative;
-    text-align: center;
+
+    position: relative;
 
     img {
-      width: 18px;
-      // position: absolute;
-      bottom: 3px;
-
+      width: 19px;
+      position: absolute;
+      bottom: 2px;
     }
 
   }
 
   .form-check-label {
 
-    text-align: center;
     cursor: pointer;
     font-size: 15px;
-
-
+    padding-left: 20px;
   }
 
 }
@@ -70,4 +70,8 @@ $padding-value: 15px;
 
 .padding-2 {
   padding-left: $padding-value * 2;
+}
+
+.hidden {
+  display: none;
 }

@@ -12,6 +12,7 @@ namespace App.Lab.Repository.Interface
         string Create(AdminUserVehicleGroup obj);
         void Update(AdminUserVehicleGroup obj);
         void Delete(string objId);
+        void DeleteSoft(AdminUserVehicleGroup item);
         AdminUserVehicleGroup GetById(string objId);
         List<AdminUserVehicleGroup> GetAll();
         List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter);

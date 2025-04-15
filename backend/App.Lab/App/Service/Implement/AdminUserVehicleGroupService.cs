@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Common.BaseService;
+using App.Common.Models;
 using App.DataAccess;
 using App.Lab.App.Model;
 using App.Lab.App.Repository.Interface;
@@ -39,12 +40,83 @@ namespace App.Lab.Service.Implement
             using (_uow.BeginTransaction())
             {
                 var id = _repo.Create(objinfo);
-                //if (string.IsNullOrEmpty(id))
-                //    return "có lỗi";
                 _uow.SaveChanges();
                 return id;
             }
         }
+        public ServiceStatus AddOrEditList(VehicleGroupModel items)
+        {
+   
+            if (string.IsNullOrEmpty(items.PK_UserID))
+                return ServiceStatus.Failure("Người dùng trống không thể cập nhật!");
+
+            try
+            {
+                var dbList = GetListAssignGroups(new AdminUserVehicleGroupFilter
+                {
+                    FK_UserID = items.PK_UserID
+                }) ;
+
+                var now = DateTime.Now;
+
+                var inputKeys = new HashSet<string>(
+                    items.listGroup.Select(i => $"{i.PK_UserID}_{i.PK_VehicleGroupID}"),
+                    StringComparer.InvariantCultureIgnoreCase
+                );
+
+                var dbKeys = new HashSet<string>(
+                    dbList.Select(d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}"),
+                    StringComparer.InvariantCultureIgnoreCase
+                );
+
+                using (_uow.BeginTransaction())
+                {
+                    // Thêm mới
+                    foreach (var item in items.listGroup)
+                    {
+                        var key = $"{item.PK_UserID}_{item.PK_VehicleGroupID}";
+                        if (!dbKeys.Contains(key))
+                        {
+                            _repo.Create(new AdminUserVehicleGroup
+                            {
+                                CreatedDate = now,
+                                IsDeleted = null,
+                                CreatedByUser = item.PK_UserID,
+                                ParentVehicleGroupID = item.ParentVehicleGroupId,
+                                FK_VehicleGroupID = item.PK_VehicleGroupID ?? 0,
+                                FK_UserID = item.PK_UserID
+                            });
+                        }
+                    }
+
+                    // Xóa mềm
+                    foreach (var dbItem in dbList)
+                    {
+                        var key = $"{dbItem.PK_UserID}_{dbItem.PK_VehicleGroupID}";
+                        if (!inputKeys.Contains(key))
+                        {
+                            _repo.DeleteSoft(new AdminUserVehicleGroup
+                            {
+                                UpdatedDate = now,
+                                IsDeleted = true,
+                                ParentVehicleGroupID = dbItem.ParentVehicleGroupId,
+                                FK_VehicleGroupID = dbItem.PK_VehicleGroupID ?? 0,
+                                FK_UserID = dbItem.PK_UserID
+                            });
+                        }
+                    }
+
+                    _uow.SaveChanges();
+                    return ServiceStatus.Success("Cập nhật thành công");
+                }
+            }
+            catch (Exception ex)
+            {
+                return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình cập nhật!");
+            }
+        }
+
+
 
         public void Update(AdminUserVehicleGroup objinfo)
         {
@@ -83,58 +155,56 @@ namespace App.Lab.Service.Implement
                 var userVehicleGroup = _IVehicleGroupsRepo.GetViewById(item.FK_VehicleGroupID);
                 userVehicleGroup.PK_UserID = filter.FK_UserID;
                 res.Add(userVehicleGroup);
-
-                //// Kiểm tra nếu mục có cấp cha
-                //if (item.ParentVehicleGroupID.HasValue && (item.ParentVehicleGroupID>0))
-                //{
-                //    var parentGroup = _IVehicleGroupsRepo.GetViewById(item.ParentVehicleGroupID.Value);
-                //    if (parentGroup != null)
-                //    {
-                //        parentGroup.PK_UserID = filter.FK_UserID;
-                //        res.Add(parentGroup);
-                //    }
-                //}
             }
-
-            //// Xây dựng lại cây cha con cho tất cả các nhóm
+           
             //var tempRes = new List<UserVehicleGroupView>(res);
             //foreach (var group in tempRes)
             //{
-            //    BuildChildGroups(group, res, processedGroups);
+            //    BuildChildGroups(group, res);
             //}
-            // Xây dựng lại cây cha con cho tất cả các nhóm
-            var tempRes = new List<UserVehicleGroupView>(res);
-            foreach (var group in tempRes)
-            {
-                BuildChildGroups(group, res);
-            }
             
             return res;
         }
-
-
         private void BuildChildGroups(UserVehicleGroupView parentGroup, List<UserVehicleGroupView> res)
         {
-            parentGroup.groupsChild = new List<VehicleGroups>();
-            var childGroupsToRemove = new List<UserVehicleGroupView>();
-
-            foreach (var childGroup in res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID))
+            var childGroups = res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID).ToList();
+            if (childGroups.Any())
             {
-                // Thêm nhóm con vào danh sách groupsChild của nhóm cha
-                parentGroup.groupsChild.Add(childGroup);
+                parentGroup.groupsChild = new List<VehicleGroups>();
 
-                // Đệ quy để xây dựng cây con cho nhóm con
-                BuildChildGroups(childGroup, res);
+                foreach (var child in childGroups)
+                {
+                    parentGroup.groupsChild.Add(child);
+                    BuildChildGroups(child, res); // Đệ quy xây cây tiếp
+                }
 
-                // Thêm nhóm con vào danh sách cần loại bỏ
-                childGroupsToRemove.Add(childGroup);
-            }
-
-            // Loại bỏ các nhóm con khỏi danh sách res
-            foreach (var childGroup in childGroupsToRemove)
-            {
-                res.Remove(childGroup);
+                // Xoá nhanh nhóm con khỏi danh sách res
+                res.RemoveAll(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID);
             }
         }
+
+        //private void BuildChildGroups(UserVehicleGroupView parentGroup, List<UserVehicleGroupView> res)
+        //{
+        //    parentGroup.groupsChild = new List<VehicleGroups>();
+        //    var childGroupsToRemove = new List<UserVehicleGroupView>();
+
+        //    foreach (var childGroup in res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID))
+        //    {
+        //        // Thêm nhóm con vào danh sách groupsChild của nhóm cha
+        //        parentGroup.groupsChild.Add(childGroup);
+
+        //        // Đệ quy để xây dựng cây con cho nhóm con
+        //        BuildChildGroups(childGroup, res);
+
+        //        // Thêm nhóm con vào danh sách cần loại bỏ
+        //        childGroupsToRemove.Add(childGroup);
+        //    }
+
+        //    // Loại bỏ các nhóm con khỏi danh sách res
+        //    foreach (var childGroup in childGroupsToRemove)
+        //    {
+        //        res.Remove(childGroup);
+        //    }
+        //}
     }
 }

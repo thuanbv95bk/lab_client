@@ -3,10 +3,11 @@ import { UserService } from './service/user.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { GroupsService } from './service/groups.service';
 import { Groups, GroupService, GroupsFilter } from './model/groups';
-import { UserVehicleGroupFilter, UserVehicleGroupView } from './model/user-vehicle-group';
+import { UserVehicleGroupFilter, UserVehicleGroupView, VehicleGroupModel } from './model/user-vehicle-group';
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
 import { User, UsersFilter } from './model/user';
 import { AppGlobals } from '../../common/app-global';
+import { CommonService } from '../../service/common.service';
 
 @Component({
   selector: 'app-user-vehicle-group',
@@ -32,10 +33,16 @@ export class UserVehicleGroupComponent implements OnInit {
   appGlobals!: AppGlobals;
   selectedId = new User();
 
-  allComplete: boolean = false;
+  allCompleteAssign: boolean = false;
+  allCompleteUnAssign: boolean = false;
   isBtnUnAssignGroupsActive: boolean = false;
   isBtnAssignGroupsActive: boolean = false;
-  constructor(private service: UserService, private groupsService: GroupsService, private userVehicleGroupService: UserVehicleGroupService) {}
+  constructor(
+    private service: UserService,
+    private groupsService: GroupsService,
+    private userVehicleGroupService: UserVehicleGroupService,
+    public commonService: CommonService
+  ) {}
 
   ngOnInit() {
     this.getMasterData();
@@ -47,12 +54,14 @@ export class UserVehicleGroupComponent implements OnInit {
   onClickRow(item: User) {
     if (this.selectedId != item) {
       this.selectedId = item;
+      if (!item || item.pK_UserID == '') return;
+      this.getListUnassignGroups(item.pK_UserID);
+      this.getListAssignGroups(item.pK_UserID);
     } else {
       this.selectedId = new User();
+      this.listUnassignGroups = [];
+      this.listAssignGroups = [];
     }
-    if (!item || item.pK_UserID == '') return;
-    this.getListUnassignGroups(item.pK_UserID);
-    this.getListAssignGroups(item.pK_UserID);
   }
   /**
    * Assigns groups
@@ -99,8 +108,6 @@ export class UserVehicleGroupComponent implements OnInit {
     // Gán lại danh sách nguồn đã được lọc
     const groupService = new GroupService();
     const allRelatedGroups = groupService.flattenGroupTree(updatedFromList);
-    console.log('allRelatedGroups');
-    console.log(allRelatedGroups);
 
     if (direction === 'assign') {
       this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
@@ -109,167 +116,52 @@ export class UserVehicleGroupComponent implements OnInit {
     }
   }
 
-  private buildGroupTree(flatList: UserVehicleGroupView[]): UserVehicleGroupView[] {
-    const idMap = new Map<number, UserVehicleGroupView>();
-    const roots: UserVehicleGroupView[] = [];
-
-    // Khởi tạo
-    flatList.forEach((item) => {
-      item.groupsChild = []; // reset trước
-      idMap.set(item.pK_VehicleGroupID!, item);
-    });
-
-    flatList.forEach((item) => {
-      if (item.parentVehicleGroupId && idMap.has(item.parentVehicleGroupId)) {
-        const parent = idMap.get(item.parentVehicleGroupId)!;
-        parent.groupsChild.push(item);
-        parent.hasChild = true;
-      } else {
-        roots.push(item);
-      }
-    });
-
-    return roots;
-  }
-
   assignGroups() {
     this.moveGroups(this.listUnassignGroups, this.listAssignGroups, 'assign');
-    console.log('assign');
     const groupService = new GroupService();
     const _temp = this.listAssignGroups;
     const allRelatedGroups = groupService.flattenGroupTree(_temp);
     this.listAssignGroups = groupService.buildHierarchy(allRelatedGroups);
-
-    console.log(this.listAssignGroups);
+    this.isBtnAssignGroupsActive = false;
+    this.isBtnUnAssignGroupsActive = !this.isBtnAssignGroupsActive;
   }
 
   unassignGroups() {
     this.moveGroups(this.listAssignGroups, this.listUnassignGroups, 'unassign');
-    console.log('assign');
     const groupService = new GroupService();
     const _temp = this.listUnassignGroups;
     const allRelatedGroups = groupService.flattenGroupTree(_temp);
     this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
+    this.isBtnUnAssignGroupsActive = true;
+    this.isBtnAssignGroupsActive = !this.isBtnUnAssignGroupsActive;
   }
-  // assignGroups() {
-  //   const toAssign = this.listUnassignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
-  //   console.log('toAssign', toAssign);
-
-  //   const groupsToAssign = [];
-
-  //   toAssign.forEach((g) => {
-  //     if (g.allComplete) {
-  //       // Nếu không có child, trực tiếp gán
-  //       if (!g.hasChild) {
-  //         groupsToAssign.push(g);
-  //         g.isSelected = false;
-  //       } else {
-  //         groupsToAssign.push(g);
-  //       }
-  //     } else if (g.hasChild) {
-  //       // Nếu có child và chưa hoàn tất, duyệt qua child
-  //       g.groupsChild.forEach((x) => {
-  //         if (x.isSelected) {
-  //           groupsToAssign.push(x);
-  //         }
-  //       });
-  //     }
-  //   });
-
-  //   // Cập nhật lại listAssignGroups và listUnassignGroups
-  //   this.listAssignGroups.push(...groupsToAssign);
-  //   this.listUnassignGroups = this.listUnassignGroups.filter((g) => !groupsToAssign.includes(g));
-
-  //   // Cập nhật các nhóm con trong listUnassignGroups
-  //   this.listUnassignGroups.forEach((g) => {
-  //     if (g.hasChild && !g.allComplete) {
-  //       const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
-  //       g.groupsChild = g.groupsChild.filter((item) => !selectedChildren.includes(item));
-  //     }
-  //   });
-
-  //   // assignGroups() {
-  //   //   const toAssign = this.listUnassignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
-  //   //   console.log('toAssign', toAssign);
-
-  //   //   toAssign.forEach((g) => {
-  //   //     if (!g.hasChild && g.allComplete == true) {
-  //   //       this.listAssignGroups.push(g);
-  //   //       g.isSelected = false;
-  //   //     } else if (g.hasChild && g.allComplete == true) {
-  //   //       this.listAssignGroups.push(g);
-  //   //     } else if (g.hasChild && g.allComplete == false) {
-  //   //       console.log('ffff');
-
-  //   //       g.groupsChild.forEach((x) => {
-  //   //         if (x.isSelected == true) {
-  //   //           this.listAssignGroups.push(x);
-  //   //         }
-  //   //       });
-  //   //     }
-  //   //   });
-
-  //   //   this.listUnassignGroups = this.listUnassignGroups.filter((g) => !this.listAssignGroups.includes(g));
-  //   //   this.listUnassignGroups.forEach((g) => {
-  //   //     if (g.hasChild && g.allComplete == false) {
-  //   //       const _remore = g.groupsChild.filter((x) => x.isSelected == true);
-  //   //       g.groupsChild = g.groupsChild.filter((item) => !_remore.includes(item));
-  //   //     }
-  //   //   });
-  //   // console.log(toAssign);
-  //   // toAssign.forEach((x) => {
-  //   //   const index = this.listAssignGroups.findIndex((y) => y.pK_VehicleGroupID == x.pK_VehicleGroupID);
-  //   //   if (index > -1) {
-  //   //     this.listUnassignGroups.splice(index, 1);
-  //   //   }
-  //   // });
-
-  //   // this.listUnassignGroups = this.listUnassignGroups.filter((g) => !g.isSelected);
-  // }
-
-  // unassignGroups() {
-  //   const toUnassign = this.listAssignGroups.filter((g) => g.isSelected || g.hasChild || g.allComplete);
-  //   console.log('toUnassign', toUnassign);
-
-  //   const groupsToUnassign = [];
-
-  //   toUnassign.forEach((g) => {
-  //     if (g.allComplete) {
-  //       if (!g.hasChild) {
-  //         groupsToUnassign.push(g);
-  //         g.isSelected = false;
-  //       } else {
-  //         groupsToUnassign.push(g);
-  //       }
-  //     } else if (g.hasChild) {
-  //       g.groupsChild.forEach((x) => {
-  //         if (x.isSelected) {
-  //           groupsToUnassign.push(x);
-  //         }
-  //       });
-  //     }
-  //   });
-
-  //   // Đẩy về listUnassignGroups
-  //   this.listUnassignGroups.push(...groupsToUnassign);
-  //   this.listAssignGroups = this.listAssignGroups.filter((g) => !groupsToUnassign.includes(g));
-
-  //   // Cập nhật các nhóm con trong listAssignGroups
-  //   this.listAssignGroups.forEach((g) => {
-  //     if (g.hasChild && !g.allComplete) {
-  //       const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
-  //       g.groupsChild = g.groupsChild.filter((item) => !selectedChildren.includes(item));
-  //     }
-  //   });
-  // }
 
   save() {
-    // console.log('Save:', {
-    //   user: this.selectedUser,
-    //   assignedGroups: this.listUserVehicleGroup.map((g) => g.name),
-    // });
-  }
+    // if (!this.listAssignGroups || this.listAssignGroups.length == 0) {
+    //   return this.commonService.showWarning('Danh sách trống!');
+    // }
+    const groupService = new GroupService();
+    const _temp = this.listAssignGroups;
+    const allRelatedGroups = groupService.flattenGroupTree(_temp, this.selectedId.pK_UserID);
+    const item = new VehicleGroupModel();
+    item.PK_UserID = this.selectedId.pK_UserID;
+    item.listGroup = allRelatedGroups;
 
+    this.addOrEditList(item);
+  }
+  addOrEditList(item: VehicleGroupModel) {
+    this.userVehicleGroupService.addOrEditList(item).then(
+      async (res) => {
+        if (!res.isSuccess) {
+          console.error(res);
+          this.commonService.showError(res.errorMessage + ' errCode: ' + res.statusCode + ' )');
+          return;
+        }
+        this.commonService.showSuccess('Cập nhật thành công');
+      },
+      (err) => this.commonService.showError('Cập nhật thất bại')
+    );
+  }
   cancel() {
     // this.selectedUser = null;
     // this.listUserVehicleGroup = [];
@@ -279,6 +171,7 @@ export class UserVehicleGroupComponent implements OnInit {
     this.getListUser();
     // this.getListGroups();
   }
+
   getListUser() {
     this.userFilter.FK_CompanyID = this.FK_CompanyID;
     this.userFilter.isLock = false;
@@ -289,7 +182,7 @@ export class UserVehicleGroupComponent implements OnInit {
           console.log(res);
           return;
         }
-        console.log(res.data);
+        console.log(res);
         this.listUser = res.data;
       },
       (err) => {
@@ -301,7 +194,7 @@ export class UserVehicleGroupComponent implements OnInit {
   getListUnassignGroups(pK_UserID: string) {
     this.groupsFilter.fK_CompanyID = this.FK_CompanyID;
     this.groupsFilter.pK_UserID = pK_UserID;
-    // this.groupsFilter.isDeleted = false;
+    this.groupsFilter.isDeleted = false;
     this.groupsService.getListUnassignGroups(this.groupsFilter).then(
       async (res) => {
         if (!res.isSuccess) {
@@ -316,8 +209,10 @@ export class UserVehicleGroupComponent implements OnInit {
       }
     );
   }
+
   getListAssignGroups(PK_UserID: string) {
     this.groupsViewFilter.fK_UserID = PK_UserID;
+    this.groupsViewFilter.isDeleted = false;
     this.userVehicleGroupService.getListAssignGroups(this.groupsViewFilter).then(
       async (res) => {
         if (!res.isSuccess) {
@@ -325,6 +220,10 @@ export class UserVehicleGroupComponent implements OnInit {
           return;
         }
         this.listAssignGroups = res.data;
+        const groupService = new GroupService();
+        // const _temp = this.listUnassignGroups;
+        // const allRelatedGroups = groupService.flattenGroupTree(_temp);
+        this.listAssignGroups = groupService.buildHierarchy(this.listAssignGroups);
       },
       (err) => {
         console.log(err);
@@ -332,49 +231,44 @@ export class UserVehicleGroupComponent implements OnInit {
     );
   }
 
-  //-----------------------------------------------------------------------------------//
-  // updateAllComplete(Attribute: Groups) {
-  //   Attribute.allComplete = Attribute.groupsChild != null && Attribute.groupsChild.every((t) => t.isSelected);
-  // }
-
-  // someComplete(node: Groups): boolean {
-  //   if (node.groupsChild == null) {
-  //     return false;
-  //   }
-  //   return node.groupsChild.filter((t) => t.isSelected).length > 0 && !node.allComplete;
-  // }
-  // onCheckboxChange(event: Event, attribute: any): void {
-  //   const isChecked = (event.target as HTMLInputElement).checked;
-  //   this.changeEditNode(isChecked, attribute);
-  // }
-  // changeEditNode(checked: boolean, Attribute: Groups) {
-  //   Attribute.allComplete = checked;
-  //   if (Attribute.groupsChild == null) {
-  //     return;
-  //   }
-  //   Attribute.groupsChild.forEach((t) => (t.isSelected = checked));
-  // }
-
-  // toggleVisibility(attribute: Groups) {
-  //   attribute.isHide = !attribute.isHide; // Mở hoặc đóng
-  // }
-
-  onCheckAll($event, list: Groups[]) {
-    this.allComplete = !this.allComplete;
-    console.log(this.allComplete);
-    console.log(list);
-    this.isBtnAssignGroupsActive = this.allComplete;
+  onCheckAll($event, list: Groups[], type: 'unassign' | 'assign') {
+    let status = false;
+    if (type == 'unassign') {
+      this.isBtnAssignGroupsActive = !this.isBtnAssignGroupsActive;
+      this.allCompleteUnAssign = !this.allCompleteUnAssign;
+      status = this.isBtnAssignGroupsActive;
+    } else {
+      this.isBtnUnAssignGroupsActive = !this.isBtnUnAssignGroupsActive;
+      this.allCompleteAssign = !this.allCompleteAssign;
+      status = this.isBtnUnAssignGroupsActive;
+    }
 
     list.forEach((x) => {
-      x.groupsChild.forEach((t) => (t.isSelected = this.allComplete));
-      x.isSelected = this.allComplete;
-      x.allComplete = this.allComplete;
+      x.groupsChild.forEach((t) => (t.isSelected = status));
+      x.isSelected = status;
+      x.allComplete = status;
     });
   }
+
   onSelectedChange(item: Groups, list: Groups[]) {
-    console.log('onSelectedChange');
-    console.log(item);
-    console.log(list);
     this.isBtnAssignGroupsActive = list.some((x) => x.isSelected == true) || item.isUiCheck;
+  }
+
+  get getIsBtnAssignGroupsActive() {
+    return this.isBtnAssignGroupsActive;
+  }
+
+  get getIsBtnUnAssignGroupsActive() {
+    return this.isBtnUnAssignGroupsActive;
+  }
+
+  get getIsDataUnAssignGroups() {
+    if (this.listUnassignGroups.length > 0) return true;
+    return false;
+  }
+
+  get getIsDataAssignGroups() {
+    if (this.listAssignGroups.length > 0) return true;
+    return false;
   }
 }

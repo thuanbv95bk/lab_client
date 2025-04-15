@@ -6,6 +6,7 @@ export interface RespondData {
   isSuccess: boolean;
   errorMessage: string;
   data: any;
+  statusCode: number;
 }
 
 export interface IBaseService {

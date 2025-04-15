@@ -1,10 +1,12 @@
 <div class="d-flex attribute-item text-center">
-  <i
-    class="row-item text-center"
-    *ngIf="attribute.hasChild"
-    [ngClass]="!attribute.isHide ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"
-    (click)="toggleVisibility(attribute)"></i>
-  <div *ngIf="!attribute.hasChild" style="width: 15px"></div>
+  <div class="row-item text-center">
+    <i
+      *ngIf="attribute.hasChild"
+      [ngClass]="!attribute.isHideChildren ? 'fa fa-caret-right' : 'fa fa-caret-down'"
+      (click)="toggleVisibility(attribute)"></i>
+  </div>
+
+  <div *ngIf="!attribute.hasChild" style="width: 10px"></div>
 
   <div class="check row-item">
     <input
@@ -24,7 +26,7 @@
   </label>
 </div>
 
-<div *ngIf="attribute.groupsChild">
+<div *ngIf="attribute.groupsChild" [ngClass]="{ hidden: attribute.isHideChildren == false || !attribute.isHideChildren }">
   <div class="check" *ngFor="let attributeValue of attribute.groupsChild" #child [style.padding-left.px]="20" ngClass="attribute-item-child">
     <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
       <input
