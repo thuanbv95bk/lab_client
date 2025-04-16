@@ -1,16 +1,18 @@
 .active {
   background-color: #436a9f;
 }
-.row-eq-height {
-  display: flex;
-  flex-wrap: wrap;
-}
-button[disabled='true'] {
-  color: rgb(238, 19, 19) !important;
-}
 
 .container-form {
+  overflow-x: hidden;
+
+  &-title {
+    color: #436a9f;
+    font-weight: bold;
+    font-size: 1rem;
+  }
+
   padding: 10px 10px;
+
   .card {
     .card-header {
       padding: 0.75rem 1rem;
@@ -22,8 +24,9 @@ button[disabled='true'] {
     .card-body {
       padding: 0;
 
+
       .no-data {
-        font-size: 18px;
+        font-size: 17px;
         font-weight: 500;
         position: absolute;
         bottom: 50%;
@@ -33,18 +36,28 @@ button[disabled='true'] {
       }
 
       &-search {
-        padding: 17px 10px;
+        padding: 10px 10px;
+      }
+
+      .attribute-section {
+        padding: 0px 10px 0 2px;
+        margin-bottom: 10px;
       }
 
       .check-all {
-        padding: 0 0 8px 22px;
+        padding: 0 20px 8px 22px;
+        background-color: white;
 
         label {
           text-align: center;
           cursor: pointer;
-          font-size: 15px;
+          font-size: 1rem;
           margin-left: 5px;
         }
+      }
+
+      .sticky-top {
+        top: -2px
       }
 
       .input-group {
@@ -67,9 +80,11 @@ button[disabled='true'] {
       }
 
       table {
+
         td {
           padding: 8px 10px !important;
           border: none;
+          font-size: 1rem;
         }
 
         tr:nth-child(even) {
@@ -98,13 +113,16 @@ button[disabled='true'] {
       color: white;
     }
   }
+
+
 }
+
+// .modal {
+//   .modal-title {
+//     font-size: 1rem;
+//   }
+// }
 
 .selected-row {
   background-color: #caeffb !important;
-}
-
-.attribute-section {
-  padding: 0px 10px 0 2px;
-  margin-bottom: 10px;
 }

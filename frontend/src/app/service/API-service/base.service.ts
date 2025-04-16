@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
 
 export interface RespondData {
   isSuccess: boolean;
@@ -17,23 +16,6 @@ export interface IBaseService {
 
 export class BaseService implements IBaseService {
   constructor(protected httpClient: HttpClient) {}
-
-  // private async handle<T>(request: Promise<RespondData>): Promise<RespondData> {
-  //   try {
-  //     const result = await request;
-  //     if (!result.IsSuccess) {
-  //       this.toastr.error(result.ErrorMessage || 'Có lỗi xảy ra', 'Thất bại');
-  //     }
-  //     return result;
-  //   } catch (error: any) {
-  //     this.toastr.error(error.message || 'Lỗi hệ thống', 'Lỗi');
-  //     return {
-  //       IsSuccess: false,
-  //       ErrorMessage: error.message || 'Lỗi hệ thống',
-  //       Data: null,
-  //     };
-  //   }
-  // }
 
   get(url: string, noLoadingMark = false): Promise<RespondData> {
     if (noLoadingMark) {
@@ -127,17 +109,4 @@ export class BaseService implements IBaseService {
     }
     return this.httpClient.get(url);
   }
-
-  // update(url: string, body: any, noLoadingMark = false): Promise<RespondData> {
-  //   const headers = new HttpHeaders({
-  //     'Content-Type': 'application/json; charset=utf-8',
-  //     ...(noLoadingMark ? { 'No-Loading-Mark': '1' } : {}),
-  //   });
-  //   return this.handle(firstValueFrom(this.httpClient.put<RespondData>(url, body, { headers })));
-  // }
-
-  // delete(url: string, params?: HttpParams, noLoadingMark = false): Promise<RespondData> {
-  //   const headers = noLoadingMark ? new HttpHeaders({ 'No-Loading-Mark': '1' }) : undefined;
-  //   return this.handle(firstValueFrom(this.httpClient.delete<RespondData>(url, { headers, params })));
-  // }
 }

@@ -36,26 +36,13 @@ public class Startup
                         .WithOrigins(AppConfig.LstFrontEndUrl.ToArray())
                     )
                 );
-        //services.AddCors(options =>
-        //{
-        //    options.AddPolicy("AllowAngular", policy =>
-        //    {
-        //        policy.WithOrigins("http://localhost:4200")
-        //              .AllowAnyHeader()
-        //              .AllowAnyMethod()
-        //              //.AllowCredentials()
-        //              ; // 👈 Bỏ comment dòng này nếu cần
-        //    });
-        //});
+
         services.AddSwaggerGen();
     }
 
     // Thiết lập middleware pipeline
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-
-
-        
 
         // Bắt buộc để hỗ trợ Minimal API
         app.UseRouting();
@@ -72,7 +59,7 @@ public class Startup
         app.UseAuthorization();
         app.UseEndpoints(endpoints =>
         {
-            endpoints.MapControllers();  // 👈 Cho phép hiển thị controller như AdminUsersController
+            endpoints.MapControllers();  
             
         });
        

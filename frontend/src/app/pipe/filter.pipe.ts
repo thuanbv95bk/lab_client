@@ -3,9 +3,25 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
   name: 'filter',
 })
+/**
+ * Bộ lọc theo text
+ *
+ * @example
+ * // <div *ngFor="let item of items | filter: 'searchText': 'fieldName'">{{ item }}</div>
+ *
+ * @export
+ * @class FilterPipe
+ */
 export class FilterPipe implements PipeTransform {
-  transform(items: any[], searchText: string, field: string): any[] {
+  transform(items: any[], searchText: string, field1: string, field2?: string): any[] {
     if (!items || !searchText) return items;
-    return items.filter((item) => item[field]?.toLowerCase().includes(searchText.toLowerCase()));
+
+    searchText = searchText.toLowerCase();
+
+    return items.filter((item) => {
+      const value1 = item[field1]?.toString().toLowerCase() || '';
+      const value2 = field2 ? item[field2]?.toString().toLowerCase() || '' : '';
+      return value1.includes(searchText) || value2.includes(searchText);
+    });
   }
 }

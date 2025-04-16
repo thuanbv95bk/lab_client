@@ -7,6 +7,13 @@ using App.Lab.App.Model;
 
 namespace App.Lab.Model
 {
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    /// <Modified>
+    /// Name       Date          Comments
+    /// thuanbv 4/16/2025 	nhóm phương tiện theo người dùng
+    /// </Modified>
     public class AdminUserVehicleGroup
     {
         public string FK_UserID { get; set; }
@@ -28,6 +35,13 @@ namespace App.Lab.Model
         public bool? IsDeleted { get; set; }
     }
 
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    /// <Modified>
+    /// Name       Date          Comments
+    /// thuanbv 4/16/2025 	nhóm phương tiện theo người dùng- hiển thị view
+    /// </Modified>
     public class UserVehicleGroupView : VehicleGroups
     {
         public string PK_UserID { get; set; }

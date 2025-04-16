@@ -1,5 +1,10 @@
 import { Groups } from './groups';
 
+/**
+ * User vehicle group
+ * class nhóm xe cho người dùng
+ * @author thuan.bv
+ */
 export class UserVehicleGroup {
   PK_UserID!: string | null;
   PK_VehicleGroupID!: number | null;
@@ -17,6 +22,11 @@ export class UserVehicleGroup {
   }
 }
 
+/**
+ * User vehicle group view
+ * Nhóm phương tiện của người dùng- để view ở UI
+ * @author thuan.bv
+ */
 export class UserVehicleGroupView extends Groups {
   PK_UserID!: string | null;
   declare isDeleted: boolean;
@@ -26,7 +36,10 @@ export class UserVehicleGroupView extends Groups {
     this.isDeleted = obj?.isDeleted || false;
   }
 }
-
+/**
+ * Nhóm phương tiện của người dùng
+ * dùng để thêm-update lên DB
+ */
 export class VehicleGroupModel {
   PK_UserID!: string | null;
   listGroup: UserVehicleGroupView[];
@@ -35,6 +48,11 @@ export class VehicleGroupModel {
     this.listGroup = obj?.listGroup || [];
   }
 }
+
+/**
+ * User vehicle group filter
+ * bộ lọc Nhóm phương tiện của người dùng
+ */
 export class UserVehicleGroupFilter {
   fK_UserID!: string;
   fK_VehicleGroupID: number | null;

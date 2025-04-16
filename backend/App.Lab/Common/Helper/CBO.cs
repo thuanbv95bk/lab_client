@@ -192,18 +192,6 @@ namespace App.Common.Helper
                             {
                                 throw new Exception(objPropertyInfo.Name + ". " + ex.Message, ex);
                             }
-
-                            //try
-                            //{
-                            //    // try implicit conversion first
-                            //    // objPropertyInfo.SetValue(objObject, objValue, null);
-                            //}
-                            //catch
-                            //{
-                            //    Console.WriteLine($"Can not implicit convert {objPropertyInfo.Name} value {objValue} to {objPropertyInfo.PropertyType}");
-                            //    // business object info class member data type does not match datareader member data type
-
-                            //}
                         }
                     }
                 }
@@ -346,21 +334,12 @@ namespace App.Common.Helper
             Type objType = typeof(T);
             T nullofT = (T)Null.GetNull<T>();
 
-            // get properties for type
-            //ArrayList objProperties = GetPropertyInfo(objType);
-
-            // get ordinal positions in datareader
-            //int[] arrOrdinals = GetOrdinals(objProperties, dr);
-
-            // iterate datareader
             while (dr.Read())
             {
-                // fill business object
-                //objFillObject = CreateObject(objType, dr, objProperties, arrOrdinals);
+
                 object objValue = dr.GetValue(dr.GetOrdinal(fieldname));
                 objFillCollection.Add(Null.DB_GetValue<T>(objValue, nullofT));
                 // add to collection
-
             }
 
             // close datareader

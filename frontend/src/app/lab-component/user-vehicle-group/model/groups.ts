@@ -1,5 +1,10 @@
 import { UserVehicleGroupView } from './user-vehicle-group';
 
+/**
+ * Groups
+ * @author thuan.bv
+ * Nhóm phương tiện
+ */
 export class Groups {
   pK_VehicleGroupID!: number | null;
   fK_CompanyID!: number | null;
@@ -32,6 +37,11 @@ export class Groups {
   }
 }
 
+/**
+ * Groups
+ * @author thuan.bv
+ * bộ lọc Nhóm phương tiện
+ */
 export class GroupsFilter {
   pK_VehicleGroupID!: number | null;
   fK_CompanyID!: number | null;
@@ -52,13 +62,18 @@ export class GroupsFilter {
   }
 }
 
+/**
+ * Group service
+ * Xây dựng cây -cha-con từ 1 danh sách
+ * ép cây-cha con về 1 list phẳng
+ */
 export class GroupService {
-  // 1. Tạo cây cha-con từ danh sách phẳng
+  // Tạo cây cha-con từ danh sách phẳng
   buildHierarchy(listItem: UserVehicleGroupView[]): UserVehicleGroupView[] {
     const map = new Map<number, UserVehicleGroupView>();
     const roots: UserVehicleGroupView[] = [];
 
-    // Bước 1: Gán mặc định và lưu vào map
+    // Gán mặc định và lưu vào map
     listItem.forEach((item) => {
       item.groupsChild = [];
       item.hasChild = false;
@@ -67,7 +82,7 @@ export class GroupService {
       map.set(item.pK_VehicleGroupID!, item);
     });
 
-    // Bước 2: Duyệt gán vào cây
+    // Duyệt gán vào cây
     listItem.forEach((item) => {
       if (item.parentVehicleGroupId && map.has(item.parentVehicleGroupId)) {
         const parent = map.get(item.parentVehicleGroupId)!;
@@ -75,28 +90,19 @@ export class GroupService {
         parent.groupsChild.push(item);
         parent.hasChild = true;
       } else {
-        roots.push(item); // Gốc (parentId == 0 hoặc null)
+        roots.push(item);
       }
     });
 
     return roots;
   }
 
-  // 2. Hàm đệ quy để tìm các nhóm con theo parentId
-  private getChildGroups(listItem: UserVehicleGroupView[], parentId: number | null, level: number): UserVehicleGroupView[] {
-    const children = listItem.filter((x) => x.parentVehicleGroupId === parentId);
-
-    for (const child of children) {
-      child.level = level;
-      child.groupsChild = this.getChildGroups(listItem, child.pK_VehicleGroupID, level + 1);
-      child.hasChild = child.groupsChild.length > 0;
-      child.isHide = false;
-    }
-
-    return children;
-  }
-
-  // 3. Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
+  /**
+   * Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
+   * @param tree
+   * @param [pK_UserID]
+   * @returns danh sách Group theo -cha-con
+   */
   flattenGroupTree(tree: UserVehicleGroupView[], pK_UserID: string = null): UserVehicleGroupView[] {
     const result: UserVehicleGroupView[] = [];
 

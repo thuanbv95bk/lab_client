@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 namespace App.Lab.Model
 {
 
+
     /// <summary>
     ///   <br />
     /// </summary>
     /// <Modified>
-    /// Name Date Comments
-    /// thuanbv 4/11/2025 created
+    /// Name       Date          Comments
+    /// thuanbv  4/16/2025       Class Danh sách người dùng  
     /// </Modified>
     public class Users
     {
@@ -29,6 +30,13 @@ namespace App.Lab.Model
     }
 
 
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    /// <Modified>
+    /// Name       Date          Comments
+    /// thuanbv   4/16/2025 	bộ lọc danh sách người dùng
+    /// </Modified>
     public class UsersFilter
     {
         public string PK_UserID { get; set; }

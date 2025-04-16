@@ -1,6 +1,13 @@
 ﻿
 namespace App.Lab.App.Model
 {
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    /// <Modified>
+    /// Name       Date          Comments
+    /// thuanbv 4/16/2025 	nhóm phương tiện
+    /// </Modified>
     public class VehicleGroups
     {
         public int? PK_VehicleGroupID { get; set; }
@@ -16,6 +23,13 @@ namespace App.Lab.App.Model
         public bool? isHide { get; set; }
     }
 
+    /// <summary>
+    ///   <br />
+    /// </summary>
+    /// <Modified>
+    /// Name       Date          Comments
+    /// thuanbv 4/16/2025 	Bộ lọc nhóm phương tiện
+    /// </Modified>
     public class VehicleGroupsFilter
     {
         public int? PK_VehicleGroupID { get; set; }

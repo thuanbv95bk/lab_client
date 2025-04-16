@@ -25,32 +25,14 @@ namespace App.Lab.App.Service.Implement
             _IAdminUserVehicleGroupService = IAdminUserVehicleGroupService;
         }
 
-        public string Create(VehicleGroups objinfo)
-        {
-            return _repo.Create(objinfo);
-        }
 
-        public void Update(VehicleGroups objinfo)
-        {
-            _repo.Update(objinfo);
-        }
-
-
-        public void Delete(string id)
-        {
-            _repo.Delete(id);
-        }
-
-        public VehicleGroups GetById(int id)
-        {
-            return _repo.GetById(id);
-        }
-
-        public List<VehicleGroups> GetAll()
-        {
-            return _repo.GetAll();
-        }
-
+        /// <summary>Gets the list.</summary>
+        /// <param name="filter">VehicleGroupsFilter</param>
+        /// <returns>List&lt;VehicleGroups&gt;</returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/16/2025 	Lấy ra danh sách nhóm phương tiện- wiew theo dạng cây
+        /// </Modified>
         public List<VehicleGroups> GetList(VehicleGroupsFilter filter)
         {
             var PK_UserID = filter.PK_UserID;
@@ -60,10 +42,16 @@ namespace App.Lab.App.Service.Implement
             if (!listItem.Any())
                 return null;
             return BuildHierarchy(listItem);
-            //return FlattenHierarchy(listItem); // Trả về danh sách phẳng với các phần 
 
         }
 
+        /// <summary>Gets the list unassign groups.</summary>
+        /// <param name="filter">VehicleGroupsFilter</param>
+        /// <returns>List&lt;VehicleGroups&gt;</returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/16/2025  Danh sách nhóm phương tiện chưa được gán
+        /// </Modified>
         public List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter)
         {
             var PK_UserID = filter.PK_UserID;
@@ -80,6 +68,15 @@ namespace App.Lab.App.Service.Implement
             return listAll;
         }
 
+        /// <summary>Builds the hierarchy.</summary>
+        /// <param name="listItem">The list item.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/16/2025  Đệ quy để xây cha-con
+        /// </Modified>
         public List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
             // Tìm các nhóm gốc (Level 1)
@@ -96,18 +93,7 @@ namespace App.Lab.App.Service.Implement
 
             return rootGroups;
         }
-        private List<VehicleGroups> FlattenHierarchy(List<VehicleGroups> listItem)
-        {
-            var result = new List<VehicleGroups>();
-            var rootGroups = listItem.Where(x => x.ParentVehicleGroupId == 0 || x.ParentVehicleGroupId == null).ToList();
 
-            foreach (var root in rootGroups)
-            {
-                AddGroupWithChildren(result, root);
-            }
-
-            return result;
-        }
         private void AddGroupWithChildren(List<VehicleGroups> result, VehicleGroups group)
         {
             result.Add(group); // Thêm phần tử hiện tại vào danh sách kết quả

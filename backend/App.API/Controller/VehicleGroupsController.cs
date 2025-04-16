@@ -17,29 +17,6 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-        [HttpPost]
-        [Route("GetById")]
-        public async Task<IActionResult> GetById(int id)
-        {
-            var ret = await Task.Run(() => _service.GetById(id));
-            return Success(ret);
-        }
-
-        [HttpPost]
-        [Route("Delete")]
-        public async Task<IActionResult> Delete(string id)
-        {
-            await Task.Run(() => _service.Delete(id));
-            return Success();
-        }
-
-        [HttpPost]
-        [Route("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            var ret = await Task.Run(() => _service.GetAll());
-            return Success(ret);
-        }
 
         [HttpPost]
         [Route("GetList")]

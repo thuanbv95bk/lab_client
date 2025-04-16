@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 using App.Common.BaseService;
 using App.Common.Models;
 using App.DataAccess;
@@ -117,33 +113,6 @@ namespace App.Lab.Service.Implement
         }
 
 
-
-        public void Update(AdminUserVehicleGroup objinfo)
-        {
-            _repo.Update(objinfo);
-        }
-
-        public void Delete(string id)
-        {
-            _repo.Delete(id);
-        }
-
-        public AdminUserVehicleGroup GetById(string id)
-        {
-            return _repo.GetById(id);
-        }
-
-
-        public List<AdminUserVehicleGroup> GetAll()
-        {
-            return _repo.GetAll();
-        }
-
-        public List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter)
-        {
-            return _repo.GetList(filter);
-        }
-
         public List<UserVehicleGroupView> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
             var res = new List<UserVehicleGroupView>();
@@ -182,29 +151,5 @@ namespace App.Lab.Service.Implement
                 res.RemoveAll(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID);
             }
         }
-
-        //private void BuildChildGroups(UserVehicleGroupView parentGroup, List<UserVehicleGroupView> res)
-        //{
-        //    parentGroup.groupsChild = new List<VehicleGroups>();
-        //    var childGroupsToRemove = new List<UserVehicleGroupView>();
-
-        //    foreach (var childGroup in res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID))
-        //    {
-        //        // Thêm nhóm con vào danh sách groupsChild của nhóm cha
-        //        parentGroup.groupsChild.Add(childGroup);
-
-        //        // Đệ quy để xây dựng cây con cho nhóm con
-        //        BuildChildGroups(childGroup, res);
-
-        //        // Thêm nhóm con vào danh sách cần loại bỏ
-        //        childGroupsToRemove.Add(childGroup);
-        //    }
-
-        //    // Loại bỏ các nhóm con khỏi danh sách res
-        //    foreach (var childGroup in childGroupsToRemove)
-        //    {
-        //        res.Remove(childGroup);
-        //    }
-        //}
     }
 }

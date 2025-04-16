@@ -10,10 +10,6 @@ namespace App.Lab.Repository.Interface
 
     public interface IAdminUsersRepository
     {
-        string Create(Users obj);
-        void Update(Users obj);
-        void Delete(string objId);
-        Users GetById(string objId);
         List<Users> GetAll();
         List<Users> GetList(UsersFilter filter);
     }

@@ -10,10 +10,4 @@ namespace App.Common.Models
         public object Data { get; set; }
 
     }
-
-    //public class CheckResult
-    //{
-    //    public string WarningMessage { get; set; }
-    //    public string ErrorMessage { get; set; }
-    //}
 }

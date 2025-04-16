@@ -26,12 +26,12 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { WidgetItemComponent } from './common/widget-item/widget-item.component';
 import { LoginComponent } from './lab-component/login/login.component';
 import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/user-vehicle-group.component';
-import { FilterPipe } from './pipe/filter.pipe';
+
 import { AppConfig, InitApp } from './app.config';
 import { DialogHandleErrorComponent } from './common/base-component/dialog-handle-error/dialog-handle-error.component';
 import { DialogService } from './service/dialog.service';
 import { SelectRowGroupsComponent } from './lab-component/user-vehicle-group/share-component/select-row-groups/select-row-groups.component';
-import { SelectRowGroups2Component } from './lab-component/user-vehicle-group/share-component/select-row-groups-2/select-row-groups-2.component';
+import { FilterPipe } from './pipe/filter.pipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -42,7 +42,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     AppComponent,
     DialogHandleErrorComponent,
     SelectRowGroupsComponent,
-    SelectRowGroups2Component,
     FilterPipe,
     MultiSelectComponent,
     WidthWidgetComponent,
@@ -85,7 +84,6 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     VehicleDataService,
     WidgetUpdateDataService,
     DialogService,
-    // TranslateService,
     TranslateService,
     {
       provide: APP_INITIALIZER,

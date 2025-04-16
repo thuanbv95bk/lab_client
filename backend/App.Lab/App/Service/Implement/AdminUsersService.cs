@@ -21,35 +21,6 @@ namespace App.Lab.Service.Implement
             _uow = uow;
         }
 
-        public string Create(Users objinfo)
-        {
-            using (_uow.BeginTransaction())
-            {
-                var id= _repo.Create(objinfo);
-                //if (string.IsNullOrEmpty(id))
-                //    return "có lỗi";
-                _uow.SaveChanges();
-                return id;
-            }
-               
-        }
-
-        public void Update(Users objinfo)
-        {
-            _repo.Update(objinfo);
-        }
-
-        public void Delete(string id)
-        {
-            _repo.Delete(id);
-        }
-
-        public Users GetById(string id)
-        {
-            return _repo.GetById(id);
-        }
-
-
         public List<Users> GetAll()
         {
             return _repo.GetAll();

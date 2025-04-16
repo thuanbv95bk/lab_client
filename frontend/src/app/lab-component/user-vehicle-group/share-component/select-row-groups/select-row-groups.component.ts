@@ -1,131 +1,97 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Groups } from '../../model/groups';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 @Component({
   selector: 'app-select-row-groups',
-  animations: [
-    trigger('openClose', [
-      state(
-        'open',
-        style({
-          transform: 'rotate(0deg)',
-        })
-      ),
-      state(
-        'closed',
-        style({
-          transform: 'rotate(90deg)',
-        })
-      ),
-      transition('open => closed', [animate('0.5s ease-out')]),
-      transition('closed => open', [animate('0.5s ease-in')]),
-    ]),
-    trigger('showHide', [
-      state(
-        'open',
-        style({
-          opacity: '1',
-        })
-      ),
-      state(
-        'closed',
-        style({
-          height: '0',
-          opacity: '0',
-        })
-      ),
-      transition('open => closed', [animate('0.5s ease-in')]),
-      transition('closed => open', [animate('0.5s ease-out')]),
-    ]),
-  ],
   templateUrl: './select-row-groups.component.html',
   styleUrls: ['./select-row-groups.component.scss'],
 })
-export class SelectRowGroupsComponent implements OnInit {
+export class SelectRowGroupsComponent implements AfterViewInit {
   @Input()
-  item!: Groups;
-  availableGroupSearch = '';
-  assignedGroupSearch = '';
-  constructor() {}
+  attribute!: Groups;
 
-  ngOnInit() {}
+  @Input() allSelected: boolean = false;
+  @Output() selectedChange = new EventEmitter<Groups>();
 
-  isExpandAll = false;
+  constructor(private cdRef: ChangeDetectorRef) {}
+
+  ngAfterViewInit(): void {
+    this.cdRef.detectChanges();
+  }
+
+  /**
+   * Toggles select all
+   * @description chọn/ bỏ chọn check all
+   * emit sự kiện ra ngoài: trả về danh sách
+   */
+  toggleSelectAll() {
+    if (this.allSelected) {
+      this.attribute.allComplete = true;
+      this.attribute.isSelected = true;
+      this.attribute.groupsChild.forEach((x) => (x.isSelected = true));
+    } else {
+      this.attribute.allComplete = false;
+      this.attribute.isSelected = false;
+      this.attribute.groupsChild.forEach((x) => (x.isSelected = false));
+    }
+    this.attribute.isUiCheck = this.allSelected;
+    this.selectedChange.emit(this.attribute);
+  }
+
+  /**
+   * Padding level
+   * Thêm padding cho item nếu nó là cấp con
+   * @param item
+   * @returns
+   */
   paddingLevel(item: Groups) {
     if (item.parentVehicleGroupId) {
-      return 'padding-1';
+      return 'padding-' + (item.level - 1);
     }
     return 'padding-0';
   }
 
-  toggleExpandAll() {
-    this.isExpandAll = !this.isExpandAll;
-    if (!this.isExpandAll) {
-      this.collapseAll();
-    } else {
-      this.expandAll();
-    }
-  }
-  // mở rộng
-  expandAll() {
-    for (let i = 0; i < this.item.groupsChild.length; i++) {
-      const element = this.item.groupsChild[i];
-      element.isHide = false;
-      element.isHideChildren = false;
-    }
-    // if (this.filteredTasks && Array.isArray(this.filteredTasks) && this.filteredTasks.length > 0) {
-    //   for (let i = 0; i < this.filteredTasks.length; i++) {
-    //     const element = this.filteredTasks[i];
-    //     element.IsHide = false;
-    //     element.IsHideChildren = false;
-    //   }
-    // }
+  /**
+   * Updates all complete
+   * chọn all từ 1 cấp cha
+   * @param Attribute
+   */
+  updateAllComplete(Attribute: Groups) {
+    Attribute.allComplete = Attribute.groupsChild != null && Attribute.groupsChild.every((t) => t.isSelected);
+    this.attribute.isSelected = Attribute.allComplete;
   }
 
-  collapseAll() {
-    for (let i = 0; i < this.item.groupsChild.length; i++) {
-      const element = this.item.groupsChild[i];
-      if (this.item.groupsChild.find((x) => x.pK_VehicleGroupID === element.parentVehicleGroupId)) {
-        element.isHide = true;
-      }
-      element.isHideChildren = true;
+  someComplete(node: Groups): boolean {
+    if (node.groupsChild == null) {
+      return false;
     }
-  }
-  showHideChildren(item: Groups) {
-    if (item.isHideChildren) {
-      this.showChildren1(item);
-    } else {
-      this.hideChildren1(item);
-    }
+
+    return node.groupsChild.filter((t) => t.isSelected).length > 0 && !node.allComplete;
   }
 
-  showChildren1(item: Groups) {
-    item.isHideChildren = false;
-    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.pK_VehicleGroupID);
-    if (!childRows) {
+  onCheckboxChange(event: Event, item: Groups): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    item.isSelected = isChecked;
+    this.changeEditNode(isChecked, item);
+    if (this.attribute.groupsChild.length == 1) this.attribute.isSelected = isChecked;
+    this.attribute.isUiCheck = isChecked;
+    this.selectedChange.emit(this.attribute);
+  }
+
+  changeEditNode(checked: boolean, Attribute: Groups) {
+    Attribute.allComplete = checked;
+    Attribute.isSelected = checked;
+    if (Attribute.groupsChild == null) {
       return;
     }
-    this.item.groupsChild.forEach((x) => {
-      if (x.parentVehicleGroupId === item.pK_VehicleGroupID) {
-        x.isHide = false;
-        x.isHideChildren = false;
-      }
-    });
-    this.showChildren1(childRows);
+    Attribute.groupsChild.forEach((t) => (t.isSelected = checked));
   }
 
-  hideChildren1(item: Groups) {
-    item.isHideChildren = true;
-    const childRows = this.item.groupsChild.find((x) => x.parentVehicleGroupId == item.pK_VehicleGroupID);
-    if (!childRows) {
-      return;
-    }
-    this.item.groupsChild.forEach((x) => {
-      if (x.parentVehicleGroupId === item.pK_VehicleGroupID) {
-        x.isHide = true;
-        x.isHideChildren = true;
-      }
-    });
-    this.hideChildren1(childRows);
+  /**
+   * Toggles visibility
+   * Mở / đóng 1 cây
+   * @param attribute
+   */
+  toggleVisibility(attribute: Groups) {
+    attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
   }
 }
