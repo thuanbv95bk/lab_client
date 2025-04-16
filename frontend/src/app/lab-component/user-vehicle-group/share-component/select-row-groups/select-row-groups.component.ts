@@ -15,7 +15,7 @@ export class SelectRowGroupsComponent implements AfterViewInit {
   constructor(private cdRef: ChangeDetectorRef) {}
 
   ngAfterViewInit(): void {
-    this.cdRef.detectChanges();
+    // this.cdRef.detectChanges();
   }
 
   /**
