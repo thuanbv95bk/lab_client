@@ -1,0 +1,37 @@
+{
+
+    "login": "ĐĂNG NHẬP",
+    "Save": "Cập nhật",
+    "Add": "Thêm mới",
+    "add": "Thêm mới",
+    "Back": "Quay lại",
+    "Search": "Tìm kiếm",
+    "search": "Tìm kiếm",
+    "Action": "Thao tác",
+    "action": "Thao tác",
+    "confirm": "Xác nhận",
+    "userName": "Tên đăng nhập",
+
+    "passWord": "Mật khẩu",
+
+    "remember":"Nhớ mật khẩu",
+    "forgot":"Quên mật khẩu?",
+    "scanCode":"Quét mã QR để cài app",
+    "error": "Lỗi",
+    "Close": "Đóng",
+    "Logout": "Đăng xuất",
+    "Change Password": "Đổi mật khẩu",
+    "Ok": "Đồng ý",
+    "btnDetail":"Chi tiết",
+
+    "menuHome":"Trang chủ",
+    "menuService":"Sản phẩm dịch vụ",
+    "menuNews":"Tin tức",
+    "menuPayFee":"Đóng phí",
+    "menuInstruct":"Hướng dẫn",
+    "menuNetwork":"Mạng lưới",
+    "menuAboutUs":"Về chúng tôi"
+
+
+    
+}

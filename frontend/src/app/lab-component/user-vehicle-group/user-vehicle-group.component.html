@@ -1,0 +1,152 @@
+<div class="container-fluid container-form" style="height: 98vh">
+  <h6 class="font-weight-bold container-form-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
+  <div class="row d-flex align-items-stretch">
+    <!-- Danh sách người dùng -->
+    <div class="col-md-5 d-flex flex-column mb-2 mb-md-0">
+      <div class="card flex-fill">
+        <div class="card-header">Danh sách người dùng</div>
+        <div class="card-body">
+          <div class="card-body-search input-group">
+            <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-search"></i></span>
+            </div>
+          </div>
+          <!-- Scrollable section -->
+          <div class="overflow-auto flex-grow-1" style="height: calc(100vh - 240px)">
+            <table class="table">
+              <tbody>
+                <tr
+                  *ngFor="let item of listUser | filter : userSearch : 'name' : 'fullName'; let i = index"
+                  id="{{ item.PK_UserID }}"
+                  [ngClass]="{ 'selected-row': selectedId && item == selectedId }"
+                  (click)="onClickRow(item)">
+                  <td>{{ item.fullName }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-7 d-flex flex-column">
+      <div class="d-flex flex-fill align-items-stretch justify-content-between">
+        <!-- Nhóm chưa gán -->
+        <div class="flex-grow-1 d-flex mr-2">
+          <div class="card flex-fill">
+            <div class="card-header">Chọn nhóm cho người dùng ({{ lengthUnassign }})</div>
+            <!-- <div class="card-header">{{ (listUnassignGroups | filter : unAssignGroupsSearch : 'name').length }}</div> -->
+            <div class="card-body position-relative">
+              <div class="no-data" *ngIf="!getIsDataUnAssignGroups">Không có dữ liệu</div>
+              <div class="card-body-search input-group" *ngIf="getIsDataUnAssignGroups">
+                <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+              </div>
+              <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
+                <div class="check-all sticky-top" *ngIf="getIsDataUnAssignGroups">
+                  <input type="checkbox" [checked]="allCompleteUnAssign" (change)="onCheckAllUnassignGroups()" />
+                  <label>Tất cả</label>
+                </div>
+                <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
+                  <app-select-row-groups
+                    [attribute]="attribute"
+                    [allSelected]="allCompleteUnAssign"
+                    (selectedChange)="onSelectedChange($event, listUnassignGroups, directionMoveGroupsEnum.Unassign)">
+                  </app-select-row-groups>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Nút chuyển -->
+
+        <div class="mx-2 justify-content-center container-btn">
+          <button
+            class="btn btn-sm mb-2"
+            [disabled]="!getIsBtnAssignGroupsActive"
+            [ngClass]="getIsBtnAssignGroupsActive ? 'active' : 'btn-secondary'"
+            (click)="assignGroups()">
+            <i class="fa fa-chevron-right"></i>
+          </button>
+          <button
+            class="btn btn-sm"
+            [disabled]="!getIsBtnUnAssignGroupsActive"
+            [ngClass]="getIsBtnUnAssignGroupsActive ? 'active' : 'btn-secondary'"
+            (click)="unassignGroups()">
+            <i class="fa fa-chevron-left"></i>
+          </button>
+        </div>
+        <!-- Nhóm đã gán -->
+        <div class="flex-grow-1 d-flex ml-2">
+          <div class="card flex-fill">
+            <div class="card-header">Nhóm đã gán cho người dùng ({{ lengthAssign }})</div>
+
+            <div class="card-body position-relative">
+              <div class="no-data" *ngIf="!getIsDataAssignGroups">Không có dữ liệu</div>
+              <div class="card-body-search input-group" *ngIf="getIsDataAssignGroups">
+                <input type="text" class="form-control" [(ngModel)]="assignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fa fa-search"></i></span>
+                </div>
+              </div>
+              <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 240px)">
+                <div class="check-all sticky-top" *ngIf="getIsDataAssignGroups">
+                  <input type="checkbox" [checked]="allCompleteAssign" (change)="onCheckAllAssignGroups()" />
+                  <label>Tất cả</label>
+                </div>
+                <div class="attribute-section" *ngFor="let attribute of listAssignGroups | filter : assignGroupsSearch : 'name'">
+                  <app-select-row-groups
+                    [attribute]="attribute"
+                    [allSelected]="allCompleteAssign"
+                    (selectedChange)="onSelectedChange($event, listAssignGroups, directionMoveGroupsEnum.Assign)">
+                  </app-select-row-groups>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="text-center mt-3">
+    <button
+      class="btn mr-3 text-white"
+      (click)="save()"
+      [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
+      [disabled]="!isAssignGroupsChanged">
+      <i class="fa fa-save mr-2"></i>Lưu
+    </button>
+    <button
+      class="btn text-white"
+      type="button"
+      [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
+      [disabled]="!isAssignGroupsChanged"
+      data-toggle="modal"
+      data-target="#exampleModal">
+      <i class="fa fa-times mr-2"></i>Hủy
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Bạn có chắc chắn muốn hủy các thay đổi?</h5>
+          <button type="button" class="close" #closeModal data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Thoát</button>
+          <button type="button" class="btn btn-primary" (click)="cancel()" id="closeModal">Đồng ý</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

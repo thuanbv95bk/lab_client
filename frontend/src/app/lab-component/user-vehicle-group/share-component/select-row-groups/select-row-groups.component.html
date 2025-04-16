@@ -1,0 +1,49 @@
+<div class="d-flex attribute-item text-center">
+  <div class="row-item text-center">
+    <i
+      *ngIf="attribute.hasChild"
+      [ngClass]="!attribute.isHideChildren ? 'fa fa-caret-right' : 'fa fa-caret-down'"
+      (click)="toggleVisibility(attribute)"></i>
+  </div>
+
+  <div *ngIf="!attribute.hasChild" style="width: 10px"></div>
+
+  <div class="check-input row-item">
+    <input
+      class="check"
+      type="checkbox"
+      [id]="'attribute-' + attribute.pK_VehicleGroupID"
+      [checked]="attribute.allComplete"
+      [indeterminate]="someComplete(attribute)"
+      (change)="onCheckboxChange($event, attribute)" />
+  </div>
+
+  <div class="folder-icon row-item">
+    <img src="../assets/image/folder-icon.svg" alt="icon" />
+  </div>
+  <label class="form-check-label fw-semibold row-item">
+    {{ attribute.name }}
+  </label>
+</div>
+
+<div *ngIf="attribute.groupsChild" [ngClass]="{ hidden: attribute.isHideChildren == false || !attribute.isHideChildren }">
+  <div class="check-input" *ngFor="let attributeValue of attribute.groupsChild" #child [style.padding-left.px]="20" ngClass="attribute-item-child">
+    <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
+      <input
+        class="check row-item"
+        type="checkbox"
+        [(ngModel)]="attributeValue.isSelected"
+        [checked]="attributeValue.isSelected"
+        [indeterminate]="someComplete(attributeValue)"
+        (change)="onCheckboxChange($event, attributeValue)"
+        [id]="'value-' + attributeValue.pK_VehicleGroupID"
+        (ngModelChange)="updateAllComplete(attribute)" />
+      <div class="folder-icon row-item text-center">
+        <img src="../assets/image/folder-icon.svg" alt="icon" />
+      </div>
+      <label class="form-check-label row-item">
+        {{ attributeValue.name }}
+      </label>
+    </div>
+  </div>
+</div>

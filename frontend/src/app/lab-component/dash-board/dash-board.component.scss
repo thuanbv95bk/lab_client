@@ -1,0 +1,58 @@
+.fs-14 {
+  font-size: 14px;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.fs-11 {
+  font-size: 11px;
+}
+
+.scrollable {
+  overflow-x: auto;
+}
+
+// .flex-grow-1 {
+//   flex-grow: 1 !important;
+//   width: 100%;
+//   // max-width: max-content;
+// }
+
+.g-2 > [class^='col'] {
+  padding: 0.5rem;
+  /* tương đương g-2 trong BS5 */
+}
+
+.g-2 {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
+.dash-board {
+  background-color: #eeefff;
+  overflow-x: hidden;
+  height: 100vh;
+
+  .widget-container {
+    .widget-item {
+      background: white;
+      border-radius: 2px;
+      padding: 5px;
+
+      .widget-title {
+        padding: 0 5px;
+      }
+
+      .btn {
+        background-color: #d2d2d2;
+        width: 25px;
+        height: 25px;
+        padding: 0;
+        margin-left: 10px;
+        border-radius: 3px;
+      }
+    }
+  }
+}

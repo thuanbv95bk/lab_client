@@ -1,0 +1,75 @@
+.attribute-item {
+  flex-wrap: nowrap;
+
+  .row-item {
+    margin-left: 5px;
+    justify-items: center;
+
+    i {
+      font-size: 18px;
+      width: 10px;
+    }
+  }
+
+  .toggle-icon {
+    margin-left: 10px;
+    transition: transform 0.3s ease-in-out;
+    cursor: pointer;
+
+    .open {
+      transform: rotate(180deg);
+    }
+  }
+
+  .check-input {
+
+    // padding-left: 28px;
+    .attribute-item-child {
+      width: 100%;
+    }
+
+    .check {
+      cursor: pointer;
+    }
+  }
+
+  .folder-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+
+    img {
+      width: 19px;
+    }
+  }
+
+  .form-check-label {
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: start
+  }
+}
+
+.attribute-item:hover,
+.attribute-item-child:hover {
+  background-color: #caeffb;
+}
+
+$padding-value: 15px;
+
+.padding-0 {
+  padding-left: 0;
+}
+
+.padding-1 {
+  padding-left: $padding-value;
+}
+
+.padding-2 {
+  padding-left: $padding-value * 2;
+}
+
+.hidden {
+  display: none;
+}
