@@ -89,6 +89,16 @@ namespace App.Lab.App.Service.Implement
         }
 
         // Hàm thêm nhóm và cha của nó nếu cần
+        /// <summary>Adds the group with optional parents.</summary>
+        /// <param name="group">The group.</param>
+        /// <param name="allGroupsDict">All groups dictionary.</param>
+        /// <param name="assignedIds">The assigned ids.</param>
+        /// <param name="resultDict">Danh sách nhóm phương tiện</param>
+        /// <param name="includeParentIfAssigned">if set to <c>true</c> [include parent if assigned].</param>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/17/2025 	Hàm thêm nhóm và cha của nó nếu cần
+        /// </Modified>
         private void AddGroupWithOptionalParents(
             VehicleGroups group,
             Dictionary<int, VehicleGroups> allGroupsDict,

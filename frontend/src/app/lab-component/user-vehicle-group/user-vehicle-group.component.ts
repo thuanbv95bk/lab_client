@@ -241,6 +241,7 @@ export class UserVehicleGroupComponent implements OnInit {
     this.userFilter.FK_CompanyID = this.companyID;
     this.userFilter.isLock = false;
     this.userFilter.isDeleted = false;
+    // this.userFilter.isActived = true;
     this.service.getList(this.userFilter).then(
       async (res) => {
         if (!res.isSuccess) {

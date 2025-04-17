@@ -1,11 +1,11 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Groups } from '../../model/groups';
 @Component({
   selector: 'app-select-row-groups',
   templateUrl: './select-row-groups.component.html',
   styleUrls: ['./select-row-groups.component.scss'],
 })
-export class SelectRowGroupsComponent implements AfterViewInit {
+export class SelectRowGroupsComponent {
   @Input()
   attribute!: Groups;
 
@@ -14,9 +14,9 @@ export class SelectRowGroupsComponent implements AfterViewInit {
 
   constructor(private cdRef: ChangeDetectorRef) {}
 
-  ngAfterViewInit(): void {
-    // this.cdRef.detectChanges();
-  }
+  // ngAfterViewInit(): void {
+  //   this.cdRef.detectChanges();
+  // }
 
   /**
    * Toggles select all
@@ -55,9 +55,9 @@ export class SelectRowGroupsComponent implements AfterViewInit {
    * chọn all từ 1 cấp cha
    * @param Attribute
    */
-  updateAllComplete(Attribute: Groups) {
-    Attribute.allComplete = Attribute.groupsChild != null && Attribute.groupsChild.every((t) => t.isSelected);
-    this.attribute.isSelected = Attribute.allComplete;
+  updateAllComplete(attribute: Groups) {
+    attribute.allComplete = attribute.groupsChild != null && attribute.groupsChild.every((t) => t.isSelected);
+    this.attribute.isSelected = attribute.allComplete;
   }
 
   someComplete(node: Groups): boolean {
@@ -77,13 +77,13 @@ export class SelectRowGroupsComponent implements AfterViewInit {
     this.selectedChange.emit(this.attribute);
   }
 
-  changeEditNode(checked: boolean, Attribute: Groups) {
-    Attribute.allComplete = checked;
-    Attribute.isSelected = checked;
-    if (Attribute.groupsChild == null) {
+  changeEditNode(checked: boolean, attribute: Groups) {
+    attribute.allComplete = checked;
+    attribute.isSelected = checked;
+    if (attribute.groupsChild == null) {
       return;
     }
-    Attribute.groupsChild.forEach((t) => (t.isSelected = checked));
+    attribute.groupsChild.forEach((t) => (t.isSelected = checked));
   }
 
   /**

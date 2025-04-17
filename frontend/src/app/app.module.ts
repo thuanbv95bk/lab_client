@@ -32,6 +32,7 @@ import { DialogHandleErrorComponent } from './common/base-component/dialog-handl
 import { DialogService } from './service/dialog.service';
 import { SelectRowGroupsComponent } from './lab-component/user-vehicle-group/share-component/select-row-groups/select-row-groups.component';
 import { FilterPipe } from './pipe/filter.pipe';
+import { VehicleGroupComponent } from './lab-component/user-vehicle-group/share-component/vehicle-group.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -54,6 +55,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     DashBoardComponent,
     WidgetItemComponent,
     LoginComponent,
+    VehicleGroupComponent,
     UserVehicleGroupComponent,
   ],
   imports: [

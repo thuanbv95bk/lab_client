@@ -40,7 +40,14 @@ namespace App.Lab.Service.Implement
                 return id;
             }
         }
-        
+
+        /// <summary>Adds the or edit list.</summary>
+        /// <param name="items">The items.</param>
+        /// <returns>ServiceStatus</returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/17/2025 	thêm, xóa mềm, cập nhật xóa mềm- active của danh sách nhóm phương tiện của user
+        /// </Modified>
         public ServiceStatus AddOrEditList(VehicleGroupModel items)
         {
             if (string.IsNullOrEmpty(items.PK_UserID))
@@ -148,6 +155,13 @@ namespace App.Lab.Service.Implement
             }
         }
 
+        /// <summary>Gets the list assign groups.</summary>
+        /// <param name="filter">AdminUserVehicleGroupFilter<br /></param>
+        /// <returns>List&lt;UserVehicleGroupView&gt;</returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/17/2025 	danh sách nhóm phương tiện đã gán cho user
+        /// </Modified>
         public List<UserVehicleGroupView> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
             var res = new List<UserVehicleGroupView>() { };
@@ -170,6 +184,7 @@ namespace App.Lab.Service.Implement
             
             return res;
         }
+
         private void BuildChildGroups(UserVehicleGroupView parentGroup, List<UserVehicleGroupView> res)
         {
             var childGroups = res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID).ToList();

@@ -1,0 +1,25 @@
+<div class="card">
+  <div class="card-header">{{ title }} ({{ lengthList }})</div>
+  <div class="card-body position-relative">
+    <div class="no-data" *ngIf="!getIsDataUnAssignGroups">Không có dữ liệu</div>
+    <div class="card-body-search input-group" *ngIf="getIsDataUnAssignGroups">
+      <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="fa fa-search"></i></span>
+      </div>
+    </div>
+    <div class="flex-grow-1 overflow-auto card-body-height">
+      <div class="check-all sticky-top" *ngIf="getIsDataUnAssignGroups">
+        <input type="checkbox" [checked]="allCompleteUnAssign" (change)="onCheckAllUnassignGroups()" />
+        <label>Tất cả</label>
+      </div>
+      <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
+        <app-select-row-groups
+          [attribute]="attribute"
+          [allSelected]="allCompleteUnAssign"
+          (selectedChange)="onSelectedChange($event, listUnassignGroups, directionMoveGroupsEnum.Unassign)">
+        </app-select-row-groups>
+      </div>
+    </div>
+  </div>
+</div>

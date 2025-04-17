@@ -20,7 +20,7 @@ namespace App.Admin.Controllers
         [Route("GetAll")]
         public async Task<IActionResult> GetAll()
         {
-            var ret = await Task.Run(() => _service.GetAll());
+            var ret = _service.GetAll();
             return Success(ret);
         }
 
@@ -28,7 +28,7 @@ namespace App.Admin.Controllers
         [Route("GetList")]
         public async Task<IActionResult> GetList(UsersFilter filter)
         {
-            var ret = await Task.Run(() => _service.GetList(filter));
+            var ret =  _service.GetList(filter);
             return Success(ret);
         }
 

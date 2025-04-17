@@ -27,6 +27,7 @@ export class UsersFilter {
   fullName!: string;
   isLock!: boolean;
   isDeleted!: boolean;
+  isActived!: boolean;
   constructor(obj?: Partial<UsersFilter>) {
     this.PK_UserID = obj?.PK_UserID || '';
     this.FK_CompanyID = obj?.FK_CompanyID || null;
