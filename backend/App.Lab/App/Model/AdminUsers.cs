@@ -19,7 +19,7 @@ namespace App.Lab.Model
     {
         public string PK_UserID { get; set; }
         public int? FK_CompanyID { get; set; }
-        public string Username { get; set; } 
+        public string UserName { get; set; } 
         public string UserNameLower { get; set; }
         public string fullName { get; set; } 
         public bool? IsLock { get; set; }
