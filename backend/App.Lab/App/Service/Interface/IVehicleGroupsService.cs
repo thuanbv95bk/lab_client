@@ -17,6 +17,6 @@ namespace App.Lab.App.Service.Interface
         //VehicleGroups GetById(int id);
         //List<VehicleGroups> GetAll();
         List<VehicleGroups> GetList(VehicleGroupsFilter filter);
-        List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter);
+        List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter, bool includeParentIfAssigned = false);
     }
 }

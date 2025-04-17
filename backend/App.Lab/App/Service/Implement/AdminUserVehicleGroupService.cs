@@ -40,18 +40,27 @@ namespace App.Lab.Service.Implement
                 return id;
             }
         }
+        
         public ServiceStatus AddOrEditList(VehicleGroupModel items)
         {
-   
             if (string.IsNullOrEmpty(items.PK_UserID))
                 return ServiceStatus.Failure("Người dùng trống không thể cập nhật!");
 
             try
             {
-                var dbList = GetListAssignGroups(new AdminUserVehicleGroupFilter
+                // Lấy bản ghi đã xóa mềm
+                var dbDeletedList = GetListAssignGroups(new AdminUserVehicleGroupFilter
                 {
-                    FK_UserID = items.PK_UserID
-                }) ;
+                    FK_UserID = items.PK_UserID,
+                    IsDeleted = true
+                });
+
+                // Lấy bản ghi đang tồn tại
+                var dbActiveList = GetListAssignGroups(new AdminUserVehicleGroupFilter
+                {
+                    FK_UserID = items.PK_UserID,
+                    IsDeleted = false
+                });
 
                 var now = DateTime.Now;
 
@@ -60,43 +69,69 @@ namespace App.Lab.Service.Implement
                     StringComparer.InvariantCultureIgnoreCase
                 );
 
-                var dbKeys = new HashSet<string>(
-                    dbList.Select(d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}"),
+                var dbActiveDict = dbActiveList.ToDictionary(
+                    d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}",
+                    StringComparer.InvariantCultureIgnoreCase
+                );
+
+                var dbDeletedDict = dbDeletedList.ToDictionary(
+                    d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}",
                     StringComparer.InvariantCultureIgnoreCase
                 );
 
                 using (_uow.BeginTransaction())
                 {
-                    // Thêm mới
+                    // Xử lý thêm mới hoặc phục hồi
                     foreach (var item in items.listGroup)
                     {
                         var key = $"{item.PK_UserID}_{item.PK_VehicleGroupID}";
-                        if (!dbKeys.Contains(key))
+
+                        if (dbActiveDict.ContainsKey(key))
                         {
+                            // Đã tồn tại, không cần làm gì
+                            continue;
+                        }
+
+                        if (dbDeletedDict.TryGetValue(key, out var deletedItem))
+                        {
+                            // Phục hồi từ xóa mềm
+                            _repo.Update(new AdminUserVehicleGroup
+                            {
+                                UpdatedDate = now,
+                                IsDeleted = false,
+                                ParentVehicleGroupID = deletedItem.ParentVehicleGroupId,
+                                FK_VehicleGroupID = deletedItem.PK_VehicleGroupID,
+                                FK_UserID = deletedItem.PK_UserID
+                            });
+                        }
+                        else
+                        {
+                            // Thêm mới
                             _repo.Create(new AdminUserVehicleGroup
                             {
                                 CreatedDate = now,
                                 IsDeleted = null,
                                 CreatedByUser = item.PK_UserID,
-                                ParentVehicleGroupID = item.ParentVehicleGroupId,
-                                FK_VehicleGroupID = item.PK_VehicleGroupID ?? 0,
+                                ParentVehicleGroupID = item.ParentVehicleGroupId ?? 0,
+                                FK_VehicleGroupID = item.PK_VehicleGroupID,
                                 FK_UserID = item.PK_UserID
                             });
                         }
                     }
 
-                    // Xóa mềm
-                    foreach (var dbItem in dbList)
+                    // Xử lý xóa mềm: các bản ghi trong dbActive nhưng không có trong input
+                    foreach (var dbItem in dbActiveList)
                     {
                         var key = $"{dbItem.PK_UserID}_{dbItem.PK_VehicleGroupID}";
+
                         if (!inputKeys.Contains(key))
                         {
-                            _repo.DeleteSoft(new AdminUserVehicleGroup
+                           _repo.DeleteSoft(new AdminUserVehicleGroup
                             {
                                 UpdatedDate = now,
                                 IsDeleted = true,
                                 ParentVehicleGroupID = dbItem.ParentVehicleGroupId,
-                                FK_VehicleGroupID = dbItem.PK_VehicleGroupID ?? 0,
+                                FK_VehicleGroupID = dbItem.PK_VehicleGroupID,
                                 FK_UserID = dbItem.PK_UserID
                             });
                         }
@@ -108,16 +143,17 @@ namespace App.Lab.Service.Implement
             }
             catch (Exception ex)
             {
+                // Có thể ghi log chi tiết ex tại đây
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình cập nhật!");
             }
         }
 
-
         public List<UserVehicleGroupView> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
-            var res = new List<UserVehicleGroupView>();
+            var res = new List<UserVehicleGroupView>() { };
 
             var listAssignGroups = _repo.GetList(filter);
+            if(listAssignGroups == null) return res;
 
             foreach (var item in listAssignGroups)
             {

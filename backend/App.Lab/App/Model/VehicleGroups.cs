@@ -10,7 +10,7 @@ namespace App.Lab.App.Model
     /// </Modified>
     public class VehicleGroups
     {
-        public int? PK_VehicleGroupID { get; set; }
+        public int PK_VehicleGroupID { get; set; }
         public int? FK_CompanyID { get; set; }
         public int? ParentVehicleGroupId { get; set; }
         public string Name { get; set; }
