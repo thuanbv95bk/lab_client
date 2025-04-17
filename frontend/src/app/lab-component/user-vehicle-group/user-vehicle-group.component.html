@@ -17,7 +17,7 @@
             <table class="table">
               <tbody>
                 <tr
-                  *ngFor="let item of listUser | filter : userSearch : 'name' : 'fullName'; let i = index"
+                  *ngFor="let item of listUser | filter : userSearch : 'userName' : 'fullName'; let i = index"
                   id="{{ item.PK_UserID }}"
                   [ngClass]="{ 'selected-row': selectedId && item == selectedId }"
                   (click)="onClickRow(item)">
