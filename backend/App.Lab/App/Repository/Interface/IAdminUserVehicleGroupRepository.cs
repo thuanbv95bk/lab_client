@@ -11,6 +11,7 @@ namespace App.Lab.Repository.Interface
     {
         string Create(AdminUserVehicleGroup obj);
         void DeleteSoft(AdminUserVehicleGroup item);
+        void Update(AdminUserVehicleGroup item);
         List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter);
        
     }

@@ -182,8 +182,7 @@
               "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\JsonBooleanConverter.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T10:56:46.861Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T10:56:46.861Z"
             },
             {
               "$type": "Document",
@@ -195,8 +194,7 @@
               "RelativeToolTip": "App.API\\Controller\\VehicleGroupsController.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAACAAAABDAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T02:56:02.02Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T02:56:02.02Z"
             },
             {
               "$type": "Document",
@@ -208,8 +206,7 @@
               "RelativeToolTip": "App.Lab\\App\\Service\\Implement\\AdminUserVehicleGroupService.cs",
               "ViewState": "AgIAAGoAAAAAAAAAAADwv3MAAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T04:11:51.827Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T04:11:51.827Z"
             },
             {
               "$type": "Document",
@@ -219,7 +216,7 @@
               "RelativeDocumentMoniker": "App.Lab\\App\\Service\\Implement\\VehicleGroupsService.cs",
               "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Service\\Implement\\VehicleGroupsService.cs",
               "RelativeToolTip": "App.Lab\\App\\Service\\Implement\\VehicleGroupsService.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAUwDMAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAACIAAAAAAAAAAAAgwDsAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-15T06:29:29.214Z",
               "EditorCaption": ""
@@ -234,8 +231,7 @@
               "RelativeToolTip": "App.Lab\\App\\Service\\Interface\\IAdminUserVehicleGroupService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T04:05:16.888Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T04:05:16.888Z"
             },
             {
               "$type": "Document",
@@ -247,8 +243,7 @@
               "RelativeToolTip": "App.Lab\\App\\Repository\\Implement\\AdminUserVehicleGroupRepository.cs",
               "ViewState": "AgIAAFQAAAAAAAAAAAAUwGcAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T02:28:48.783Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T02:28:48.783Z"
             },
             {
               "$type": "Document",
@@ -260,8 +255,7 @@
               "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T04:18:02.72Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-15T04:18:02.72Z"
             },
             {
               "$type": "Document",
@@ -345,8 +339,7 @@
               "RelativeToolTip": "App.Lab\\Startup.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAC4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-16T06:07:39.002Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-16T06:07:39.002Z"
             },
             {
               "$type": "Document",

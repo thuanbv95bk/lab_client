@@ -60,6 +60,20 @@ namespace App.Lab.Repository.Implement
             this.ExecCommand(sql, parameters);
             return "";
         }
+        public void Update(AdminUserVehicleGroup item)
+        {
+
+            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" + " WHERE " +
+                                                                "FK_UserID = @FK_UserID " +
+                                                                " AND FK_VehicleGroupID = " +
+                                                                "@FK_VehicleGroupID ;" 
+                                                                ;
+
+            var parameters = this.MapToSqlParameters(item);
+
+            this.ExecCommand(sql, parameters);
+
+        }
 
 
         /// <summary>Deletes the soft.</summary>

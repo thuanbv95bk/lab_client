@@ -52,21 +52,73 @@ namespace App.Lab.App.Service.Implement
         /// Name       Date          Comments
         /// thuanbv 4/16/2025  Danh sách nhóm phương tiện chưa được gán
         /// </Modified>
-        public List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter)
+        
+        public List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter, bool includeParentIfAssigned=true)
         {
             var PK_UserID = filter.PK_UserID;
             filter.PK_UserID = null;
-            var listItem = _repo.GetList(filter);
-            var filterAssignGroups = new AdminUserVehicleGroupFilter();
-            filterAssignGroups.FK_UserID = PK_UserID;
-            var listAssignGroups = _IAdminUserVehicleGroupService.GetListAssignGroups(filterAssignGroups);
-            var result = listItem.Where(x => !listAssignGroups.Any(y => y.PK_VehicleGroupID == x.PK_VehicleGroupID)).ToList();
-            if (!result.Any())
-                return null;
-            var listAll= BuildHierarchy(result);
+            filter.FK_CompanyID = 15076;
+            // Lấy toàn bộ nhóm
+            var listAllGroups = _repo.GetList(filter);
+            if (listAllGroups == null || !listAllGroups.Any()) return new List<VehicleGroups>();
 
-            return listAll;
+            // Lấy danh sách nhóm đã gán cho user
+            var assignedGroupFilter = new AdminUserVehicleGroupFilter { FK_UserID = PK_UserID, IsDeleted=false };
+            var assignedGroups = _IAdminUserVehicleGroupService.GetListAssignGroups(assignedGroupFilter);
+            var assignedIds = assignedGroups.Select(x => x.PK_VehicleGroupID).ToHashSet();
+
+            // Duyệt toàn bộ nhóm, tìm nhóm chưa được gán
+            var allGroupsDict = listAllGroups
+            .ToDictionary(x => x.PK_VehicleGroupID!, x => x);
+
+            var resultDict = new Dictionary<int, VehicleGroups>();
+
+            foreach (var group in listAllGroups)
+            {
+                if (!assignedIds.Contains(group.PK_VehicleGroupID))
+                {
+                    AddGroupWithOptionalParents(group, allGroupsDict, assignedIds, resultDict, includeParentIfAssigned);
+                }
+            }
+
+            // Xây cây cha-con
+            var flatList = resultDict.Values.ToList();
+            var tree = BuildHierarchy(flatList);
+
+            return tree;
         }
+
+        // Hàm thêm nhóm và cha của nó nếu cần
+        private void AddGroupWithOptionalParents(
+            VehicleGroups group,
+            Dictionary<int, VehicleGroups> allGroupsDict,
+            HashSet<int> assignedIds,
+            Dictionary<int, VehicleGroups> resultDict,
+            bool includeParentIfAssigned)
+        {
+            if (!resultDict.ContainsKey(group.PK_VehicleGroupID))
+            {
+                resultDict[group.PK_VehicleGroupID] = group;
+            }
+
+            // Nếu có cha
+            if (group.ParentVehicleGroupId.HasValue && group.ParentVehicleGroupId.Value != 0)
+            {
+                var parentId = group.ParentVehicleGroupId.Value;
+
+                if (allGroupsDict.TryGetValue(parentId, out var parentGroup))
+                {
+                    // Nếu cha đã được gán nhưng người dùng cho phép includeParentIfAssigned => vẫn thêm cha
+                    var shouldAddParent = includeParentIfAssigned || !assignedIds.Contains(parentId);
+
+                    if (shouldAddParent && !resultDict.ContainsKey(parentId))
+                    {
+                        AddGroupWithOptionalParents(parentGroup, allGroupsDict, assignedIds, resultDict, includeParentIfAssigned);
+                    }
+                }
+            }
+        }
+
 
         /// <summary>Builds the hierarchy.</summary>
         /// <param name="listItem">The list item.</param>
@@ -79,46 +131,45 @@ namespace App.Lab.App.Service.Implement
         /// </Modified>
         public List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
-            // Tìm các nhóm gốc (Level 1)
-            var rootGroups = listItem.Where(x => x.ParentVehicleGroupId == 0 || x.ParentVehicleGroupId == null).ToList();
+            var allIds = listItem
+                .Where(x => x.PK_VehicleGroupID != 0) 
+                .Select(x => x.PK_VehicleGroupID)
+                .ToHashSet();
+
+            // Gốc là: cha == 0 || cha == null || cha không tồn tại trong listItem
+            var rootGroups = listItem.Where(x =>
+                x.ParentVehicleGroupId == 0 ||
+                x.ParentVehicleGroupId == null ||
+                !allIds.Contains(x.ParentVehicleGroupId.Value)
+            ).ToList();
 
             foreach (var level1 in rootGroups)
             {
                 level1.Level = 1;
                 level1.groupsChild = GetChildGroups(listItem, level1.PK_VehicleGroupID, 2);
-                level1.hasChild = level1.groupsChild.Any(); // Kiểm tra nếu có con
+                level1.hasChild = level1.groupsChild.Any();
                 level1.isHide = false;
             }
-
 
             return rootGroups;
         }
 
-        private void AddGroupWithChildren(List<VehicleGroups> result, VehicleGroups group)
-        {
-            result.Add(group); // Thêm phần tử hiện tại vào danh sách kết quả
-
-            if (group.groupsChild != null && group.groupsChild.Any())
-            {
-                foreach (var child in group.groupsChild)
-                {
-                    AddGroupWithChildren(result, child); // Đệ quy thêm các phần tử con
-                }
-            }
-        }
         private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)
         {
-            var childGroups = listItem.Where(x => x.ParentVehicleGroupId == parentId).ToList();
+            var childGroups = listItem
+                .Where(x => x.ParentVehicleGroupId == parentId)
+                .ToList();
 
             foreach (var child in childGroups)
             {
                 child.Level = level;
                 child.groupsChild = GetChildGroups(listItem, child.PK_VehicleGroupID, level + 1);
-                child.hasChild = child.groupsChild.Any(); // Kiểm tra nếu có con
+                child.hasChild = child.groupsChild.Any();
                 child.isHide = false;
             }
 
             return childGroups;
         }
+
     }
 }

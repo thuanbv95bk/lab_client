@@ -4,7 +4,6 @@ import { GroupsService } from './service/groups.service';
 import { Groups, GroupService, GroupsFilter } from './model/groups';
 import { UserVehicleGroupFilter, UserVehicleGroupView, VehicleGroupModel } from './model/user-vehicle-group';
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
-import { AppGlobals } from '../../common/app-global';
 import { CommonService } from '../../service/common.service';
 import equal from 'fast-deep-equal';
 import { User, UsersFilter } from './model/admin-user';
@@ -70,13 +69,13 @@ export class UserVehicleGroupComponent implements OnInit {
    * @param item User
    * @returns danh sách của nhóm chưa gán, đã gán
    */
-  onClickRow(item: User) {
+  async onClickRow(item: User) {
     if (this.selectedId != item) {
       this.selectedId = item;
       if (!item || item.pK_UserID == '') return;
-      this.getListUnassignGroups(item.pK_UserID);
+      await this.getListUnassignGroups(item.pK_UserID);
       this.first = 0;
-      this.getListAssignGroups(item.pK_UserID);
+      await this.getListAssignGroups(item.pK_UserID);
     } else {
       this.selectedId = new User();
       this.listUnassignGroups = [];
@@ -110,7 +109,7 @@ export class UserVehicleGroupComponent implements OnInit {
         if (!g.hasChild) {
           movedItems.push(g);
           g.isSelected = false;
-          g.allComplete = false; //
+          // g.allComplete = false; //
         } else {
           movedItems.push(g);
         }
@@ -264,11 +263,11 @@ export class UserVehicleGroupComponent implements OnInit {
    * @param companyID = 15076
    */
 
-  getListUnassignGroups(pK_UserID: string) {
+  async getListUnassignGroups(pK_UserID: string) {
     this.groupsFilter.fK_CompanyID = this.companyID;
     this.groupsFilter.pK_UserID = pK_UserID;
     this.groupsFilter.isDeleted = false;
-    this.groupsService.getListUnassignGroups(this.groupsFilter).then(
+    await this.groupsService.getListUnassignGroups(this.groupsFilter).then(
       async (res) => {
         if (!res.isSuccess) {
           console.error(res);
@@ -363,7 +362,16 @@ export class UserVehicleGroupComponent implements OnInit {
    * @param type 'unassign' | 'assign'
    */
   onSelectedChange(item: Groups, list: Groups[], type: directionMoveGroupsEnum) {
-    const status = list.some((x) => x.isSelected == true) || item.isUiCheck;
+    let status = false;
+    if (
+      list.some((x) => x.isSelected == true) ||
+      item.isUiCheck == true ||
+      (item.hasChild == true && item.groupsChild.some((x) => x.isSelected == true))
+    ) {
+      status = true;
+    } else status = false;
+    console.log(item.isUiCheck);
+
     if (type == directionMoveGroupsEnum.Assign) this.isBtnUnAssignGroupsActive = status;
     else this.isBtnAssignGroupsActive = status;
   }
