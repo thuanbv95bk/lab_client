@@ -48,5 +48,6 @@ namespace App.Lab.Model
         public bool? isDeleted { get; set; }
         public bool? isActived { get; set; }
        
+
     }
 }
