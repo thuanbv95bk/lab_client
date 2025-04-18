@@ -6,9 +6,9 @@ SELECT a.PK_UserID,
 FROM [Admin.Users] a
 WHERE 1 = 1
       AND a.FK_CompanyID = 15076
-     AND ISNULL(a.IsLock, 0)=0
-      AND ISNULL(a.IsDeleted, 0)=0
-    
+      AND ISNULL(a.IsLock, 0) = 0
+      AND ISNULL(a.IsDeleted, 0) = 0;
+
 GO
 
 SELECT *
@@ -39,11 +39,6 @@ FROM dbo.[Vehicle.Groups] G
     JOIN dbo.[Admin.UserVehicleGroup] A
         ON A.FK_VehicleGroupID = G.PK_VehicleGroupID
 WHERE A.FK_UserID = 'C77386A5-30A2-4793-BEE4-50DFABDEBE91'
-      AND
-      (
-          G.IsDeleted IS NULL
-          OR G.IsDeleted = 0
-      )
       AND ISNULL(G.IsDeleted, 0) = 0
       AND ISNULL(A.IsDeleted, 0) = 0;
 
@@ -84,5 +79,41 @@ WHERE B.FK_UserID = 'C77386A5-30A2-4793-BEE4-50DFABDEBE91'
       AND ISNULL(B.IsDeleted, 0) = 0
       AND ISNULL(A.IsDeleted, 0) = 0
       AND A.FK_CompanyID = 15076;
+
+
+GO
+
+
+INSERT INTO [dbo].[Vehicle.VehicleGroups]
+(
+    [FK_CompanyID],
+    [FK_VehicleGroupID],
+    [FK_VehicleID],
+    [IsDeleted]
+)
+VALUES
+('', '', '', '');
+GO
+
+
+USE [GPS3_LAB]
+GO
+INSERT INTO [dbo].[Admin.UserVehicleGroup]
+(
+    [FK_UserID],
+    [FK_VehicleGroupID],
+    [ParentVehicleGroupID],
+    [CreatedByUser],
+    [CreatedDate],
+    [UpdateByUser],
+    [UpdatedDate],
+    [UpdatedByUser],
+    [IsDeleted]
+)
+VALUES
+('', '', '', '', '', '', '', '', '');
+GO
+
+
 
 
