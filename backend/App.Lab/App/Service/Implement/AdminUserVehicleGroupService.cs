@@ -20,15 +20,18 @@ namespace App.Lab.Service.Implement
 
         private readonly IVehicleGroupsRepository _IVehicleGroupsRepo;
 
+
         public AdminUserVehicleGroupService(
             IHttpContextAccessor accessor, 
             IAdminUserVehicleGroupRepository repo, 
             IUnitOfWork uow,
             IVehicleGroupsRepository vehicleGroupsRepo
+ 
         ) : base(accessor, repo)
         {
             _uow = uow;
             _IVehicleGroupsRepo = vehicleGroupsRepo;
+
         }
 
         public string Create(AdminUserVehicleGroup objinfo)
@@ -50,20 +53,18 @@ namespace App.Lab.Service.Implement
         /// </Modified>
         public ServiceStatus AddOrEditList(VehicleGroupModel items)
         {
-            if (string.IsNullOrEmpty(items.PK_UserID))
-                return ServiceStatus.Failure("Người dùng trống không thể cập nhật!");
 
             try
             {
                 // Lấy bản ghi đã xóa mềm
-                var dbDeletedList = GetListAssignGroups(new AdminUserVehicleGroupFilter
+                var dbDeletedList = _repo.GetList(new AdminUserVehicleGroupFilter
                 {
                     FK_UserID = items.PK_UserID,
                     IsDeleted = true
                 });
 
                 // Lấy bản ghi đang tồn tại
-                var dbActiveList = GetListAssignGroups(new AdminUserVehicleGroupFilter
+                var dbActiveList = _repo.GetList(new AdminUserVehicleGroupFilter
                 {
                     FK_UserID = items.PK_UserID,
                     IsDeleted = false
@@ -77,12 +78,12 @@ namespace App.Lab.Service.Implement
                 );
 
                 var dbActiveDict = dbActiveList.ToDictionary(
-                    d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}",
+                    d => $"{d.FK_UserID}_{d.FK_VehicleGroupID}",
                     StringComparer.InvariantCultureIgnoreCase
                 );
 
                 var dbDeletedDict = dbDeletedList.ToDictionary(
-                    d => $"{d.PK_UserID}_{d.PK_VehicleGroupID}",
+                    d => $"{d.FK_UserID}_{d.FK_VehicleGroupID}",
                     StringComparer.InvariantCultureIgnoreCase
                 );
 
@@ -106,9 +107,9 @@ namespace App.Lab.Service.Implement
                             {
                                 UpdatedDate = now,
                                 IsDeleted = false,
-                                ParentVehicleGroupID = deletedItem.ParentVehicleGroupId,
-                                FK_VehicleGroupID = deletedItem.PK_VehicleGroupID,
-                                FK_UserID = deletedItem.PK_UserID
+                                ParentVehicleGroupID = deletedItem.ParentVehicleGroupID,
+                                FK_VehicleGroupID = deletedItem.FK_VehicleGroupID,
+                                FK_UserID = deletedItem.FK_UserID
                             });
                         }
                         else
@@ -129,7 +130,7 @@ namespace App.Lab.Service.Implement
                     // Xử lý xóa mềm: các bản ghi trong dbActive nhưng không có trong input
                     foreach (var dbItem in dbActiveList)
                     {
-                        var key = $"{dbItem.PK_UserID}_{dbItem.PK_VehicleGroupID}";
+                        var key = $"{dbItem.FK_UserID}_{dbItem.FK_VehicleGroupID}";
 
                         if (!inputKeys.Contains(key))
                         {
@@ -137,9 +138,9 @@ namespace App.Lab.Service.Implement
                             {
                                 UpdatedDate = now,
                                 IsDeleted = true,
-                                ParentVehicleGroupID = dbItem.ParentVehicleGroupId,
-                                FK_VehicleGroupID = dbItem.PK_VehicleGroupID,
-                                FK_UserID = dbItem.PK_UserID
+                                ParentVehicleGroupID = dbItem.ParentVehicleGroupID,
+                                FK_VehicleGroupID = dbItem.FK_VehicleGroupID,
+                                FK_UserID = dbItem.FK_UserID
                             });
                         }
                     }
@@ -150,7 +151,6 @@ namespace App.Lab.Service.Implement
             }
             catch (Exception ex)
             {
-                // Có thể ghi log chi tiết ex tại đây
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình cập nhật!");
             }
         }
@@ -162,45 +162,68 @@ namespace App.Lab.Service.Implement
         /// Name       Date          Comments
         /// thuanbv 4/17/2025 	danh sách nhóm phương tiện đã gán cho user
         /// </Modified>
-        public List<UserVehicleGroupView> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
+        public ServiceStatus GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
-            var res = new List<UserVehicleGroupView>() { };
-
-            var listAssignGroups = _repo.GetList(filter);
-            if(listAssignGroups == null) return res;
-
-            foreach (var item in listAssignGroups)
+            try
             {
-                var userVehicleGroup = _IVehicleGroupsRepo.GetViewById(item.FK_VehicleGroupID);
-                userVehicleGroup.PK_UserID = filter.FK_UserID;
-                res.Add(userVehicleGroup);
+                var listFlatten = new List<VehicleGroups>();
+
+                var listAssignGroups = _repo.GetListView(filter);
+                if (listAssignGroups == null) return ServiceStatus.Success(listFlatten);
+                
+                // Build the hierarchy tree
+                var tree = BuildHierarchy(listAssignGroups);
+                return ServiceStatus.Success(tree);
             }
-           
-            //var tempRes = new List<UserVehicleGroupView>(res);
-            //foreach (var group in tempRes)
-            //{
-            //    BuildChildGroups(group, res);
-            //}
+            catch (Exception ex)
+            {
+                return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình lấy danh sách nhóm đã gán!");
+            }
             
-            return res;
+            
         }
 
-        private void BuildChildGroups(UserVehicleGroupView parentGroup, List<UserVehicleGroupView> res)
+        private List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
-            var childGroups = res.Where(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID).ToList();
-            if (childGroups.Any())
+            var allIds = listItem
+                .Where(x => x.PK_VehicleGroupID != 0)
+                .Select(x => x.PK_VehicleGroupID)
+                .ToHashSet();
+
+            // Gốc là: cha == 0 || cha == null || cha không tồn tại trong listItem
+            var rootGroups = listItem.Where(x =>
+                x.ParentVehicleGroupId == 0 ||
+                x.ParentVehicleGroupId == null ||
+                !allIds.Contains(x.ParentVehicleGroupId.Value)
+            ).ToList();
+
+            foreach (var level1 in rootGroups)
             {
-                parentGroup.groupsChild = new List<VehicleGroups>();
-
-                foreach (var child in childGroups)
-                {
-                    parentGroup.groupsChild.Add(child);
-                    BuildChildGroups(child, res); // Đệ quy xây cây tiếp
-                }
-
-                // Xoá nhanh nhóm con khỏi danh sách res
-                res.RemoveAll(g => g.ParentVehicleGroupId == parentGroup.PK_VehicleGroupID);
+                level1.Level = 1;
+                level1.GroupsChild = GetChildGroups(listItem, level1.PK_VehicleGroupID, 2);
+                level1.HasChild = level1.GroupsChild.Any();
+                level1.IsHide = false;
             }
+
+            return rootGroups;
         }
+
+        private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)
+        {
+            var childGroups = listItem
+                .Where(x => x.ParentVehicleGroupId == parentId)
+                .ToList();
+
+            foreach (var child in childGroups)
+            {
+                child.Level = level;
+                child.GroupsChild = GetChildGroups(listItem, child.PK_VehicleGroupID, level + 1);
+                child.HasChild = child.GroupsChild.Any();
+                child.IsHide = false;
+            }
+
+            return childGroups;
+        }
+
     }
 }

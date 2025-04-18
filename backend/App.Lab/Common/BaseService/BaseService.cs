@@ -8,7 +8,6 @@ namespace App.Common.BaseService
         public BaseService(IHttpContextAccessor accessor) : base(accessor) { }
     }
 
-
     public class BaseService<TRepository> : BaseService
     {
         protected readonly TRepository _repo;

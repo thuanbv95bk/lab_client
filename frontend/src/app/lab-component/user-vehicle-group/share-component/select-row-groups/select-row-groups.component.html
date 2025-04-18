@@ -1,8 +1,8 @@
-<div class="d-flex attribute-item text-center">
+<div class="d-flex attribute-item text-center" [ngClass]="{ 'attribute-item-active': attribute.isNewItem == true }">
   <div class="row-item text-center">
     <i
       *ngIf="attribute.hasChild"
-      [ngClass]="!attribute.isHideChildren ? 'fa fa-caret-right' : 'fa fa-caret-down'"
+      [ngClass]="!attribute.isHideChildren ? 'fa fa-caret-down ' : 'fa fa-caret-right'"
       (click)="toggleVisibility(attribute)"></i>
   </div>
 
@@ -21,13 +21,18 @@
   <div class="folder-icon row-item">
     <img src="../assets/image/folder-icon.svg" alt="icon" />
   </div>
-  <label class="form-check-label fw-semibold row-item">
+  <label class="form-check-label fw-semibold row-item" [for]="'attribute-' + attribute.pK_VehicleGroupID">
     {{ attribute.name }}
   </label>
 </div>
 
-<div *ngIf="attribute.groupsChild" [ngClass]="{ hidden: attribute.isHideChildren == false || !attribute.isHideChildren }">
-  <div class="check-input" *ngFor="let attributeValue of attribute.groupsChild" #child [style.padding-left.px]="20" ngClass="attribute-item-child">
+<div *ngIf="attribute.groupsChild" [ngClass]="{ hidden: attribute.isHideChildren == true }">
+  <div
+    class="check-input"
+    *ngFor="let attributeValue of attribute.groupsChild"
+    [style.padding-left.px]="20"
+    [ngClass]="{ 'attribute-item-active': attribute.isNewItem == true }"
+    class="attribute-item-child">
     <div class="d-flex attribute-item" [ngClass]="paddingLevel(attributeValue)">
       <input
         class="check row-item"
@@ -41,7 +46,7 @@
       <div class="folder-icon row-item text-center">
         <img src="../assets/image/folder-icon.svg" alt="icon" />
       </div>
-      <label class="form-check-label row-item">
+      <label class="form-check-label row-item" [for]="'value-' + attributeValue.pK_VehicleGroupID">
         {{ attributeValue.name }}
       </label>
     </div>

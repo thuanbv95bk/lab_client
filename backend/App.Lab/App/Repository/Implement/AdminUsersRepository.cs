@@ -15,28 +15,6 @@ namespace App.Lab.Repository.Implement
         public AdminUsersRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Admin"; }
         public AdminUsersRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Admin"; }
 
-        /// <summary>Gets all.</summary>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025  Lấy ra tất cả data của bảng User
-        /// </Modified>
-        public List<Users> GetAll()
-        {
-            var listOrderOption = new OrderOption[] {
-            new OrderOption {
-                Column = "UserNameLower",
-                OrderType = "ASC",
-            }};
-            this.GetTableData
-            (
-            out List<Users> ret
-                , "Users", null, null, listOrderOption
-            );
-            return ret;
-        }
 
         /// <summary>Gets the list.</summary>
         /// <param name="filter">UsersFilter</param>
@@ -49,10 +27,10 @@ namespace App.Lab.Repository.Implement
         /// </Modified>
         public List<Users> GetList(UsersFilter filter)
         {
-            
+
             var listOrderOption = new OrderOption[] {
             new OrderOption {
-                Column = "UserNameLower",
+                Column = "Fullname",
                 OrderType = "ASC",
             }};
             var listFilter = MapFilterToOptions(filter);

@@ -14,24 +14,24 @@ namespace App.Admin.Controllers
         {
             _service = service;
         }
-       
 
+        /// <summary>Gets the list.</summary>
+        /// <param name="filter">UsersFilter filter</param>
+        /// <returns>List<Users></returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/18/2025 	API lấy danh sách người dùng
+        /// </Modified>
         [HttpPost]
-        [Route("GetAll")]
-        public async Task<IActionResult> GetAll()
-        {
-            var ret = _service.GetAll();
-            return Success(ret);
-        }
-
-        [HttpPost]
-        [Route("GetList")]
+        [Route("get-list")]
         public async Task<IActionResult> GetList(UsersFilter filter)
         {
-            var ret =  _service.GetList(filter);
+            if (filter == null)
+            {
+                return Failure("Phải nhập tiêu chí tìm kiếm");
+            }
+            var ret = _service.GetList(filter);
             return Success(ret);
         }
-
-
     }
 }

@@ -1,8 +1,8 @@
 export const Urls = {
-  getById: '/api/user/getById',
-  getAll: '/api/user/getAll',
-  getList: '/api/user/getList',
-  getPaging: '/api/user/getPaging',
-  addOrEdit: '/api/user/addOrEdit',
+  getById: '/api/user/get-by-id',
+  getAll: '/api/user/getall',
+  getList: '/api/user/get-list',
+  getPaging: '/api/user/get-paging',
+  addOrEdit: '/api/user/add-or-edit',
   delete: '/api/user/delete',
 };

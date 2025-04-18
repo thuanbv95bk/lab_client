@@ -30,6 +30,8 @@ export class UserVehicleGroup {
 export class UserVehicleGroupView extends Groups {
   PK_UserID!: string | null;
   declare isDeleted: boolean;
+  groupType: string;
+  isNewItem: boolean = false;
   constructor(obj?: Partial<UserVehicleGroupView>) {
     super();
     this.PK_UserID = obj?.PK_UserID || null;

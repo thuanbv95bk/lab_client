@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Groups } from '../../model/groups';
+import { UserVehicleGroupView } from '../../model/user-vehicle-group';
 @Component({
   selector: 'app-select-row-groups',
   templateUrl: './select-row-groups.component.html',
@@ -7,16 +8,10 @@ import { Groups } from '../../model/groups';
 })
 export class SelectRowGroupsComponent {
   @Input()
-  attribute!: Groups;
+  attribute!: UserVehicleGroupView;
 
   @Input() allSelected: boolean = false;
-  @Output() selectedChange = new EventEmitter<Groups>();
-
-  constructor(private cdRef: ChangeDetectorRef) {}
-
-  // ngAfterViewInit(): void {
-  //   this.cdRef.detectChanges();
-  // }
+  @Output() selectedChange = new EventEmitter<UserVehicleGroupView>();
 
   /**
    * Toggles select all
@@ -43,7 +38,7 @@ export class SelectRowGroupsComponent {
    * @param item
    * @returns
    */
-  paddingLevel(item: Groups) {
+  paddingLevel(item: UserVehicleGroupView) {
     if (item.parentVehicleGroupId) {
       return 'padding-' + (item.level - 1);
     }
@@ -55,12 +50,12 @@ export class SelectRowGroupsComponent {
    * chọn all từ 1 cấp cha
    * @param Attribute
    */
-  updateAllComplete(attribute: Groups) {
+  updateAllComplete(attribute: UserVehicleGroupView) {
     attribute.allComplete = attribute.groupsChild != null && attribute.groupsChild.every((t) => t.isSelected);
     this.attribute.isSelected = attribute.allComplete;
   }
 
-  someComplete(node: Groups): boolean {
+  someComplete(node: UserVehicleGroupView): boolean {
     if (node.groupsChild == null) {
       return false;
     }
@@ -68,7 +63,7 @@ export class SelectRowGroupsComponent {
     return node.groupsChild.filter((t) => t.isSelected).length > 0 && !node.allComplete;
   }
 
-  onCheckboxChange(event: Event, item: Groups): void {
+  onCheckboxChange(event: Event, item: UserVehicleGroupView): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     item.isSelected = isChecked;
     this.changeEditNode(isChecked, item);
@@ -77,7 +72,7 @@ export class SelectRowGroupsComponent {
     this.selectedChange.emit(this.attribute);
   }
 
-  changeEditNode(checked: boolean, attribute: Groups) {
+  changeEditNode(checked: boolean, attribute: UserVehicleGroupView) {
     attribute.allComplete = checked;
     attribute.isSelected = checked;
     if (attribute.groupsChild == null) {
@@ -91,7 +86,7 @@ export class SelectRowGroupsComponent {
    * Mở / đóng 1 cây
    * @param attribute
    */
-  toggleVisibility(attribute: Groups) {
+  toggleVisibility(attribute: UserVehicleGroupView) {
     attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
   }
 }

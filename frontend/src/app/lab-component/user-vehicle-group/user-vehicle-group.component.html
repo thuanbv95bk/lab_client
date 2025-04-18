@@ -1,118 +1,10 @@
 <div class="container-fluid container-form">
   <h6 class="font-weight-bold container-form-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
-  <!-- <h6 class="font-weight-bold container-form-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
-  <div class="row d-flex align-items-stretch">
-
-    <div class="col-md-5 d-flex flex-column mb-2 mb-md-0">
-      <div class="card flex-fill">
-        <div class="card-header">Danh sách người dùng</div>
-        <div class="card-body">
-          <div class="card-body-search input-group">
-            <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
-            <div class="input-group-append">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-            </div>
-          </div>
-          <div class="overflow-auto flex-grow-1 card-body-height">
-            <table class="table">
-              <tbody>
-                <tr
-                  *ngFor="let item of listUser | filter : userSearch : 'userName' : 'fullName'; let i = index"
-                  id="{{ item.PK_UserID }}"
-                  [ngClass]="{ 'selected-row': selectedId && item == selectedId }"
-                  (click)="onClickRow(item)">
-                  <td>{{ item.fullName }}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-7 d-flex flex-column">
-      <div class="d-flex flex-fill align-items-stretch justify-content-between">
-        <div class="flex-grow-1 d-flex mr-2">
-          <div class="card flex-fill">
-            <div class="card-header">Chọn nhóm cho người dùng ({{ lengthUnassign }})</div>
-            <div class="card-body position-relative">
-              <div class="no-data" *ngIf="!getIsDataUnAssignGroups">Không có dữ liệu</div>
-              <div class="card-body-search input-group" *ngIf="getIsDataUnAssignGroups">
-                <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="fa fa-search"></i></span>
-                </div>
-              </div>
-              <div class="flex-grow-1 overflow-auto" style="height: calc(100vh - 200px)">
-                <div class="check-all sticky-top" *ngIf="getIsDataUnAssignGroups">
-                  <input type="checkbox" [checked]="allCompleteUnAssign" (change)="onCheckAllUnassignGroups()" />
-                  <label>Tất cả</label>
-                </div>
-                <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
-                  <app-select-row-groups
-                    [attribute]="attribute"
-                    [allSelected]="allCompleteUnAssign"
-                    (selectedChange)="onSelectedChange($event, listUnassignGroups, directionMoveGroupsEnum.Unassign)">
-                  </app-select-row-groups>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mx-2 justify-content-center container-btn">
-          <button
-            class="btn btn-sm mb-2"
-            [disabled]="!getIsBtnAssignGroupsActive"
-            [ngClass]="getIsBtnAssignGroupsActive ? 'active' : 'btn-secondary'"
-            (click)="assignGroups()">
-            <i class="fa fa-chevron-right"></i>
-          </button>
-          <button
-            class="btn btn-sm"
-            [disabled]="!getIsBtnUnAssignGroupsActive"
-            [ngClass]="getIsBtnUnAssignGroupsActive ? 'active' : 'btn-secondary'"
-            (click)="unassignGroups()">
-            <i class="fa fa-chevron-left"></i>
-          </button>
-        </div>
-  
-        <div class="flex-grow-1 d-flex ml-2">
-          <div class="card flex-fill">
-            <div class="card-header">Nhóm đã gán cho người dùng ({{ lengthAssign }})</div>
-
-            <div class="card-body position-relative">
-              <div class="no-data" *ngIf="!getIsDataAssignGroups">Không có dữ liệu</div>
-              <div class="card-body-search input-group" *ngIf="getIsDataAssignGroups">
-                <input type="text" class="form-control" [(ngModel)]="assignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="fa fa-search"></i></span>
-                </div>
-              </div>
-              <div class="flex-grow-1 overflow-auto card-body-height">
-                <div class="check-all sticky-top" *ngIf="getIsDataAssignGroups">
-                  <input type="checkbox" [checked]="allCompleteAssign" (change)="onCheckAllAssignGroups()" />
-                  <label>Tất cả</label>
-                </div>
-                <div class="attribute-section" *ngFor="let attribute of listAssignGroups | filter : assignGroupsSearch : 'name'">
-                  <app-select-row-groups
-                    [attribute]="attribute"
-                    [allSelected]="allCompleteAssign"
-                    (selectedChange)="onSelectedChange($event, listAssignGroups, directionMoveGroupsEnum.Assign)">
-                  </app-select-row-groups>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div> -->
 
   <div class="row row-cols-1 row-cols-md-2">
     <div class="col-md-5 mb-4">
       <div class="card h-100">
-        <div class="card-header">Danh sách người dùng</div>
+        <div class="card-header">Danh sách người dùng ({{ listUser?.length || 0 }})</div>
         <div class="card-body">
           <div class="card-body-search input-group">
             <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
@@ -143,77 +35,34 @@
           <div class="row body-groups">
             <div class="d-flex flex-fill">
               <div class="col">
-                <app-vehicle-group [title]="'Chọn nhóm cho người dùng'"></app-vehicle-group>
-                <!-- <div class="card">
-                  <div class="card-header">Chọn nhóm cho người dùng ({{ lengthUnassign }})</div>
-                
-                  <div class="card-body position-relative">
-                    <div class="no-data" *ngIf="!getIsDataUnAssignGroups">Không có dữ liệu</div>
-                    <div class="card-body-search input-group" *ngIf="getIsDataUnAssignGroups">
-                      <input type="text" class="form-control" [(ngModel)]="unAssignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
-                      <div class="input-group-append">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
-                      </div>
-                    </div>
-                    <div class="flex-grow-1 overflow-auto card-body-height">
-                      <div class="check-all sticky-top" *ngIf="getIsDataUnAssignGroups">
-                        <input type="checkbox" [checked]="allCompleteUnAssign" (change)="onCheckAllUnassignGroups()" />
-                        <label>Tất cả</label>
-                      </div>
-                      <div class="attribute-section" *ngFor="let attribute of listUnassignGroups | filter : unAssignGroupsSearch : 'name'">
-                        <app-select-row-groups
-                          [attribute]="attribute"
-                          [allSelected]="allCompleteUnAssign"
-                          (selectedChange)="onSelectedChange($event, listUnassignGroups, directionMoveGroupsEnum.Unassign)">
-                        </app-select-row-groups>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
+                <app-vehicle-group
+                  [title]="'Chọn nhóm cho người dùng'"
+                  [listItem]="listUnassignGroups"
+                  [isTree]="true"
+                  (isChangeBtn)="isBtnAssignGroupsActive = $event"></app-vehicle-group>
               </div>
               <div class="mx-2 justify-content-center container-btn">
                 <button
                   class="btn btn-sm mb-2"
-                  [disabled]="!getIsBtnAssignGroupsActive"
-                  [ngClass]="getIsBtnAssignGroupsActive ? 'active' : 'btn-secondary'"
+                  [disabled]="!isBtnAssignGroupsActive"
+                  [ngClass]="isBtnAssignGroupsActive ? 'active' : 'btn-secondary'"
                   (click)="assignGroups()">
                   <i class="fa fa-chevron-right"></i>
                 </button>
                 <button
                   class="btn btn-sm"
-                  [disabled]="!getIsBtnUnAssignGroupsActive"
-                  [ngClass]="getIsBtnUnAssignGroupsActive ? 'active' : 'btn-secondary'"
+                  [disabled]="!isBtnUnAssignGroupsActive"
+                  [ngClass]="isBtnUnAssignGroupsActive ? 'active' : 'btn-secondary'"
                   (click)="unassignGroups()">
                   <i class="fa fa-chevron-left"></i>
                 </button>
               </div>
               <div class="col">
-                <app-vehicle-group [title]="'Nhóm đã gán cho người dùng'"></app-vehicle-group>
-                <!-- <div class="card">
-                  <div class="card-header">Nhóm đã gán cho người dùng ({{ lengthAssign }})</div>
-                  <div class="card-body position-relative">
-                    <div class="no-data" *ngIf="!getIsDataAssignGroups">Không có dữ liệu</div>
-                    <div class="card-body-search input-group" *ngIf="getIsDataAssignGroups">
-                      <input type="text" class="form-control" [(ngModel)]="assignGroupsSearch" placeholder="Tìm nhóm phương tiện" />
-                      <div class="input-group-append">
-                        <span class="input-group-text"><i class="fa fa-search"></i></span>
-                      </div>
-                    </div>
-                    <div class="overflow-auto card-body-height">
-                      <div class="check-all sticky-top" *ngIf="getIsDataAssignGroups">
-                        <input type="checkbox" [checked]="allCompleteAssign" (change)="onCheckAllAssignGroups()" />
-                        <label>Tất cả</label>
-                      </div>
-                      <div class="attribute-section" *ngFor="let attribute of listAssignGroups | filter : assignGroupsSearch : 'name'">
-                        <app-select-row-groups
-                          [attribute]="attribute"
-                          [allSelected]="allCompleteAssign"
-                          (selectedChange)="onSelectedChange($event, listAssignGroups, directionMoveGroupsEnum.Assign)">
-                        </app-select-row-groups>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
+                <app-vehicle-group
+                  [title]="'Nhóm đã gán cho người dùng'"
+                  [listItem]="listAssignGroups"
+                  [isTree]="true"
+                  (isChangeBtn)="isBtnUnAssignGroupsActive = $event"></app-vehicle-group>
               </div>
             </div>
           </div>

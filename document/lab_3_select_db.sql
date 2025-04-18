@@ -6,17 +6,9 @@ SELECT a.PK_UserID,
 FROM [Admin.Users] a
 WHERE 1 = 1
       AND a.FK_CompanyID = 15076
-      AND
-      (
-          a.IsLock IS NULL
-          OR a.IsLock = 0
-      )
-      AND
-      (
-          a.IsDeleted IS NULL
-          OR a.IsDeleted = 0
-      )
-      AND (a.IsActived = 1);
+     AND ISNULL(a.IsLock, 0)=0
+      AND ISNULL(a.IsDeleted, 0)=0
+    
 GO
 
 SELECT *

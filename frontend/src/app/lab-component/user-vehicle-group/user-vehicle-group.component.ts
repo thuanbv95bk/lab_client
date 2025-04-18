@@ -73,9 +73,9 @@ export class UserVehicleGroupComponent implements OnInit {
     if (this.selectedId != item) {
       this.selectedId = item;
       if (!item || item.pK_UserID == '') return;
-      await this.getListUnassignGroups(item.pK_UserID);
       this.first = 0;
-      await this.getListAssignGroups(item.pK_UserID);
+      this.getListAssignGroups(item.pK_UserID);
+      this.getListUnassignGroups(item.pK_UserID);
     } else {
       this.selectedId = new User();
       this.listUnassignGroups = [];
@@ -100,12 +100,17 @@ export class UserVehicleGroupComponent implements OnInit {
    * @param toList UserVehicleGroupView/ Groups
    * @param direction chiều chuyển: 'assign' | 'unassign'
    */
-  private moveGroups(fromList: any[], toList: any[], direction: directionMoveGroupsEnum) {
+  private moveGroups(
+    fromList: UserVehicleGroupView[],
+    toList: UserVehicleGroupView[],
+    direction: directionMoveGroupsEnum
+  ) {
     const toMove = fromList.filter((g) => g.isSelected || g.hasChild || g.allComplete);
-    const movedItems = [];
+    let movedItems: UserVehicleGroupView[] = [];
 
     toMove.forEach((g) => {
       if (g.allComplete) {
+        //
         if (!g.hasChild) {
           movedItems.push(g);
           g.isSelected = false;
@@ -124,11 +129,16 @@ export class UserVehicleGroupComponent implements OnInit {
       }
     });
 
-    // Cập nhật danh sách đích
-    toList.push(...movedItems);
-
     // Xóa item chính khỏi danh sách nguồn
     const isMoved = (item) => movedItems.includes(item);
+
+    // movedItems.forEach((x) => {
+    //   x.allComplete = false;
+    //   x.isSelected = false;
+    // });
+
+    // Cập nhật danh sách đích
+    toList.push(...movedItems);
     // const isParentGroup = (item) => item.hasChild || item.groupsChild;
 
     const updatedFromList = fromList.filter((g) => !isMoved(g));
@@ -142,16 +152,16 @@ export class UserVehicleGroupComponent implements OnInit {
     });
 
     // Gán lại danh sách nguồn đã được lọc
-    const groupService = new GroupService();
-    const allRelatedGroups = groupService.flattenGroupTree(updatedFromList);
+    // const groupService = new GroupService();
+    const allRelatedGroups = this.groupsService.flattenGroupTree(updatedFromList);
 
     if (direction === directionMoveGroupsEnum.Assign) {
-      this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
-      this.lengthUnassign = allRelatedGroups?.length || 0;
+      this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
+      // this.lengthUnassign = allRelatedGroups?.length || 0;
     } else {
       this.lengthAssign = allRelatedGroups?.length || 0;
       this.currentGroupIdsStr = this.getSortedIdString(allRelatedGroups, 'pK_VehicleGroupID');
-      this.listAssignGroups = groupService.buildHierarchy(allRelatedGroups);
+      this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
     }
   }
 
@@ -162,14 +172,16 @@ export class UserVehicleGroupComponent implements OnInit {
    */
   assignGroups() {
     this.moveGroups(this.listUnassignGroups, this.listAssignGroups, directionMoveGroupsEnum.Assign);
-    const groupService = new GroupService();
+
     const tempList = this.listAssignGroups;
-    const allRelatedGroups = groupService.flattenGroupTree(tempList);
-    this.lengthAssign = allRelatedGroups?.length || 0;
+    const allRelatedGroups = this.groupsService.flattenGroupTree(tempList);
+    // this.lengthAssign = allRelatedGroups?.length || 0;
     this.currentGroupIdsStr = this.getSortedIdString(allRelatedGroups, 'pK_VehicleGroupID');
-    this.listAssignGroups = groupService.buildHierarchy(allRelatedGroups);
+    this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
+    console.log('this.isBtnAssignGroupsActive:' + this.isBtnAssignGroupsActive);
+    console.log('this.isBtnUnAssignGroupsActive:' + this.isBtnUnAssignGroupsActive);
+
     this.isBtnAssignGroupsActive = false;
-    this.isBtnUnAssignGroupsActive = !this.isBtnAssignGroupsActive;
   }
 
   /**
@@ -178,13 +190,14 @@ export class UserVehicleGroupComponent implements OnInit {
    * Xây lại cây cha-con
    */
   unassignGroups() {
-    this.moveGroups(this.listAssignGroups, this.listUnassignGroups, directionMoveGroupsEnum.Unassign);
-    const groupService = new GroupService();
+    this.moveGroups(this.listAssignGroups, this.listUnassignGroups, directionMoveGroupsEnum.UnAssign);
     const _temp = this.listUnassignGroups;
-    const allRelatedGroups = groupService.flattenGroupTree(_temp);
-    this.lengthUnassign = allRelatedGroups?.length || 0;
-    this.listUnassignGroups = groupService.buildHierarchy(allRelatedGroups);
+    const allRelatedGroups = this.groupsService.flattenGroupTree(_temp);
+    // this.lengthUnassign = allRelatedGroups?.length || 0;
+    this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
     this.isBtnUnAssignGroupsActive = false;
+    console.log('this.isBtnAssignGroupsActive:' + this.isBtnAssignGroupsActive);
+    console.log('this.isBtnUnAssignGroupsActive:' + this.isBtnUnAssignGroupsActive);
   }
 
   /**
@@ -192,9 +205,8 @@ export class UserVehicleGroupComponent implements OnInit {
    * Lưu lại giá trị nhóm đã gán vào DB
    */
   save() {
-    const groupService = new GroupService();
     const _temp = this.listAssignGroups;
-    const allRelatedGroups = groupService.flattenGroupTree(_temp, this.selectedId.pK_UserID);
+    const allRelatedGroups = this.groupsService.flattenGroupTree(_temp, this.selectedId.pK_UserID);
     const item = new VehicleGroupModel();
     item.PK_UserID = this.selectedId.pK_UserID;
     item.listGroup = allRelatedGroups;
@@ -210,7 +222,7 @@ export class UserVehicleGroupComponent implements OnInit {
           this.commonService.showError(res.errorMessage + ' errCode: ' + res.statusCode + ' )');
           return;
         }
-        await this.commonService.showSuccess('Cập nhật thành công');
+        this.commonService.showSuccess('Cập nhật thành công');
         this.getListAssignGroups(this.selectedId.pK_UserID);
         this.getListUnassignGroups(this.selectedId.pK_UserID);
         this.refreshAllBottom();
@@ -241,7 +253,7 @@ export class UserVehicleGroupComponent implements OnInit {
     this.userFilter.FK_CompanyID = this.companyID;
     this.userFilter.isLock = false;
     this.userFilter.isDeleted = false;
-    // this.userFilter.isActived = true;
+
     this.service.getList(this.userFilter).then(
       async (res) => {
         if (!res.isSuccess) {
@@ -268,22 +280,18 @@ export class UserVehicleGroupComponent implements OnInit {
     this.groupsFilter.fK_CompanyID = this.companyID;
     this.groupsFilter.pK_UserID = pK_UserID;
     this.groupsFilter.isDeleted = false;
-    await this.groupsService.getListUnassignGroups(this.groupsFilter).then(
+    this.groupsService.getListUnassignGroups(this.groupsFilter).then(
       async (res) => {
         if (!res.isSuccess) {
           console.error(res);
+          this.commonService.showError(res.errorMessage);
           return;
         }
         this.listUnassignGroups = res.data;
-        this.lengthUnassign = this.listUnassignGroups?.length || 0;
-        if (this.listUnassignGroups.length > 0) {
-          const groupService = new GroupService();
-          const temp = this.listUnassignGroups;
-          this.lengthUnassign = groupService.flattenGroupTree(temp)?.length || 0;
-        }
       },
       (err) => {
         console.log(err);
+        // this.commonService.showError(err);
       }
     );
   }
@@ -302,9 +310,10 @@ export class UserVehicleGroupComponent implements OnInit {
     this.groupsViewFilter.fK_UserID = PK_UserID;
     this.groupsViewFilter.isDeleted = false;
     this.userVehicleGroupService.getListAssignGroups(this.groupsViewFilter).then(
-      async (res) => {
+      (res) => {
         if (!res.isSuccess) {
           console.error(res);
+
           return;
         }
         this.listAssignGroups = res.data;
@@ -314,67 +323,11 @@ export class UserVehicleGroupComponent implements OnInit {
           this.currentGroupIdsStr = this.originalGroupIdsStr;
           this.first++;
         }
-        const groupService = new GroupService();
-        this.listAssignGroups = groupService.buildHierarchy(this.listAssignGroups);
       },
       (err) => {
         console.log(err);
       }
     );
-  }
-
-  /**
-   * Determines whether check all unassign groups on
-   * @event click vào check all nhóm chưa gán
-   */
-
-  onCheckAllUnassignGroups() {
-    this.allCompleteUnAssign = !this.allCompleteUnAssign;
-    this.isBtnAssignGroupsActive = this.allCompleteUnAssign;
-
-    this.listUnassignGroups.forEach((x) => {
-      x.groupsChild.forEach((t) => (t.isSelected = this.allCompleteUnAssign));
-      x.isSelected = this.allCompleteUnAssign;
-      x.allComplete = this.allCompleteUnAssign;
-    });
-  }
-
-  /**
-   * Determines whether check all assign groups on
-   * @event click vào check all nhóm đã gán
-   */
-
-  onCheckAllAssignGroups() {
-    this.allCompleteAssign = !this.allCompleteAssign;
-    this.isBtnUnAssignGroupsActive = this.allCompleteAssign;
-
-    this.listAssignGroups.forEach((x) => {
-      x.groupsChild.forEach((t) => (t.isSelected = this.allCompleteAssign));
-      x.isSelected = this.allCompleteAssign;
-      x.allComplete = this.allCompleteAssign;
-    });
-  }
-
-  /**
-   * Determines whether selected change on
-   * @event outEvent khi người dùng chọn 1 item của các nhóm
-   * @param item Groups
-   * @param list Groups[]
-   * @param type 'unassign' | 'assign'
-   */
-  onSelectedChange(item: Groups, list: Groups[], type: directionMoveGroupsEnum) {
-    let status = false;
-    if (
-      list.some((x) => x.isSelected == true) ||
-      item.isUiCheck == true ||
-      (item.hasChild == true && item.groupsChild.some((x) => x.isSelected == true))
-    ) {
-      status = true;
-    } else status = false;
-    console.log(item.isUiCheck);
-
-    if (type == directionMoveGroupsEnum.Assign) this.isBtnUnAssignGroupsActive = status;
-    else this.isBtnAssignGroupsActive = status;
   }
 
   /**
@@ -404,23 +357,23 @@ export class UserVehicleGroupComponent implements OnInit {
     return _return;
   }
 
-  get getIsBtnAssignGroupsActive() {
-    return this.isBtnAssignGroupsActive;
-  }
+  // get getIsBtnAssignGroupsActive() {
+  //   return this.isBtnAssignGroupsActive;
+  // }
 
-  get getIsBtnUnAssignGroupsActive() {
-    return this.isBtnUnAssignGroupsActive;
-  }
+  // get getIsBtnUnAssignGroupsActive() {
+  //   return this.isBtnUnAssignGroupsActive;
+  // }
 
-  get getIsDataUnAssignGroups() {
-    if (this.listUnassignGroups.length > 0) return true;
-    return false;
-  }
+  // get getIsDataUnAssignGroups() {
+  //   if (this.listUnassignGroups.length > 0) return true;
+  //   return false;
+  // }
 
-  get getIsDataAssignGroups() {
-    if (this.listAssignGroups.length > 0) return true;
-    return false;
-  }
+  // get getIsDataAssignGroups() {
+  //   if (this.listAssignGroups.length > 0) return true;
+  //   return false;
+  // }
 
   /**
    * Tạo chuỗi ID sau khi sort
@@ -440,13 +393,13 @@ export class UserVehicleGroupComponent implements OnInit {
       .join(',');
   }
 
-  filterItems(items: any[], searchText: string, field1: string, field2?: string): any[] {
-    if (!items || !searchText) return items;
-    searchText = searchText.toLowerCase();
-    return items.filter((item) => {
-      const value1 = item[field1]?.toString().toLowerCase() || '';
-      const value2 = field2 ? item[field2]?.toString().toLowerCase() || '' : '';
-      return value1.includes(searchText) || value2.includes(searchText);
-    });
-  }
+  // filterItems(items: any[], searchText: string, field1: string, field2?: string): any[] {
+  //   if (!items || !searchText) return items;
+  //   searchText = searchText.toLowerCase();
+  //   return items.filter((item) => {
+  //     const value1 = item[field1]?.toString().toLowerCase() || '';
+  //     const value2 = field2 ? item[field2]?.toString().toLowerCase() || '' : '';
+  //     return value1.includes(searchText) || value2.includes(searchText);
+  //   });
+  // }
 }

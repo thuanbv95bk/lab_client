@@ -17,21 +17,25 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-
+        /// <summary>Gets the list unassign groups.</summary>
+        /// <param name="filter">VehicleGroupsFilter</param>
+        /// <returns>Danh sách nhóm chưa gán theo user</returns>
+        /// <Modified>
+        /// Name       Date          Comments
+        /// thuanbv 4/18/2025 Danh sách các nhóm chưa được gán theo user
+        /// </Modified>
         [HttpPost]
-        [Route("GetList")]
-        public async Task<IActionResult> GetList(VehicleGroupsFilter filter)
-        {
-            var ret = await Task.Run(() => _service.GetList(filter));
-            return Success(ret);
-        }
-
-        [HttpPost]
-        [Route("GetListUnassignGroups")]
+        [Route("get-list-unassign-groups")]
         public async Task<IActionResult> GetListUnassignGroups(VehicleGroupsFilter filter)
         {
-            var ret = await Task.Run(() => _service.GetListUnassignGroups(filter));
-            return Success(ret);
+
+            if (filter.PK_UserID.Length == 0 || string.IsNullOrEmpty(filter.PK_UserID))
+            {
+                return Failure("Phải chọn người dùng");
+            }
+            var ret = _service.GetListUnassignGroups(filter);
+            return ret.IsSuccess ? Success(ret.Data) : Failure(ret.ErroMessage);
+
         }
 
     }

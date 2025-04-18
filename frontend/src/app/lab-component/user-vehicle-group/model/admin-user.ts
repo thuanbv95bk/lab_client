@@ -7,7 +7,7 @@ export class User {
   userType!: number;
   isLock!: boolean;
   isDeleted!: boolean;
-  isActivated!: boolean;
+  isActived!: boolean;
   constructor(obj?: Partial<User>) {
     this.pK_UserID = obj?.pK_UserID || '';
     this.FK_CompanyID = obj?.FK_CompanyID || null;
@@ -36,5 +36,6 @@ export class UsersFilter {
     this.fullName = obj?.fullName || '';
     this.isLock = obj?.isLock || false;
     this.isDeleted = obj?.isDeleted || false;
+    this.isActived = obj?.isActived || null;
   }
 }

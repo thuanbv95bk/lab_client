@@ -1,4 +1,4 @@
 export enum directionMoveGroupsEnum {
   Assign = 'assign',
-  Unassign = 'unassign',
+  UnAssign = 'unassign',
 }
