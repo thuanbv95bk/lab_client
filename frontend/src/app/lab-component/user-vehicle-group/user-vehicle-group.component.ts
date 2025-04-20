@@ -16,9 +16,8 @@ import { directionMoveGroupsEnum } from './enum/vehicle-group.enum';
 })
 export class UserVehicleGroupComponent implements OnInit {
   companyID: number = 15076; // ID công ty mặc định
+  keyId: string = 'pK_VehicleGroupID';
   userSearch = ''; // filter User
-  unAssignGroupsSearch = ''; // filter nhóm chưa gán
-  assignGroupsSearch = ''; // filter nhóm đã gán
 
   listUser: User[] = []; // danh sách người dùng
   userFilter = new UsersFilter(); // filter người dùng
@@ -27,24 +26,17 @@ export class UserVehicleGroupComponent implements OnInit {
   groupsViewFilter = new UserVehicleGroupFilter(); // filter nhóm đã gán
 
   listUnassignGroups: UserVehicleGroupView[] = []; // nhóm chưa gán
-  lengthUnassign = 0;
   listAssignGroups: UserVehicleGroupView[] = []; // nhóm đã gán
-  lengthAssign = 0;
 
-  // selectedUser: User | null = null;
-  // appGlobals!: AppGlobals;
   selectedId = new User(); // useKey chon người dùng
   first: number = 0; // kiểm tra- lấy dữ liệu lần đầu cho nhóm
   currentGroupIdsStr = ''; // string-key check sự thay đổi của các nhóm
   originalGroupIdsStr = ''; // string-key-original check sự thay đổi của các nhóm
 
-  allCompleteAssign: boolean = false; // check-all nhóm đã gán
-  allCompleteUnAssign: boolean = false; // check-all nhóm chưa gán
   isBtnUnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm chưa gán
   isBtnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm đã gán
 
   @ViewChild('closeModal') closeModal;
-  directionMoveGroupsEnum = directionMoveGroupsEnum;
 
   constructor(
     private service: UserService,
@@ -64,6 +56,7 @@ export class UserVehicleGroupComponent implements OnInit {
   getMasterData() {
     this.getListUser();
   }
+
   /**
    * sự kiện click vào row chọn người dùng
    * @param item User
@@ -90,79 +83,9 @@ export class UserVehicleGroupComponent implements OnInit {
    * @param fromList
    * @param key string-key
    */
-  markOriginal(fromList: any[], key: string) {
-    this.originalGroupIdsStr = this.getSortedIdString(fromList, key);
-  }
-
-  /**
-   * Hàm chuyển các item giữa các nhóm  với nhau, và build lại cây cha-con
-   * @param fromList UserVehicleGroupView/ Groups
-   * @param toList UserVehicleGroupView/ Groups
-   * @param direction chiều chuyển: 'assign' | 'unassign'
-   */
-  private moveGroups(
-    fromList: UserVehicleGroupView[],
-    toList: UserVehicleGroupView[],
-    direction: directionMoveGroupsEnum
-  ) {
-    const toMove = fromList.filter((g) => g.isSelected || g.hasChild || g.allComplete);
-    let movedItems: UserVehicleGroupView[] = [];
-
-    toMove.forEach((g) => {
-      if (g.allComplete) {
-        //
-        if (!g.hasChild) {
-          movedItems.push(g);
-          g.isSelected = false;
-          // g.allComplete = false; //
-        } else {
-          movedItems.push(g);
-        }
-      } else if (g.hasChild) {
-        g.groupsChild.forEach((child) => {
-          if (child.isSelected) {
-            // child.allComplete = false; //
-            // child.isSelected = false; //
-            movedItems.push(child);
-          }
-        });
-      }
-    });
-
-    // Xóa item chính khỏi danh sách nguồn
-    const isMoved = (item) => movedItems.includes(item);
-
-    // movedItems.forEach((x) => {
-    //   x.allComplete = false;
-    //   x.isSelected = false;
-    // });
-
-    // Cập nhật danh sách đích
-    toList.push(...movedItems);
-    // const isParentGroup = (item) => item.hasChild || item.groupsChild;
-
-    const updatedFromList = fromList.filter((g) => !isMoved(g));
-
-    // Xử lý nhóm con chưa được di chuyển hết
-    updatedFromList.forEach((g) => {
-      if (g.hasChild && !g.allComplete) {
-        const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
-        g.groupsChild = g.groupsChild.filter((x) => !selectedChildren.includes(x));
-      }
-    });
-
-    // Gán lại danh sách nguồn đã được lọc
-    // const groupService = new GroupService();
-    const allRelatedGroups = this.groupsService.flattenGroupTree(updatedFromList);
-
-    if (direction === directionMoveGroupsEnum.Assign) {
-      this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-      // this.lengthUnassign = allRelatedGroups?.length || 0;
-    } else {
-      this.lengthAssign = allRelatedGroups?.length || 0;
-      this.currentGroupIdsStr = this.getSortedIdString(allRelatedGroups, 'pK_VehicleGroupID');
-      this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-    }
+  markOriginal(fromList: UserVehicleGroupView[], key: string) {
+    this.originalGroupIdsStr = this.groupsService.getSortedIdString(fromList, key);
+    this.currentGroupIdsStr = this.originalGroupIdsStr;
   }
 
   /**
@@ -171,15 +94,12 @@ export class UserVehicleGroupComponent implements OnInit {
    * Xây lại cây cha-con
    */
   assignGroups() {
-    this.moveGroups(this.listUnassignGroups, this.listAssignGroups, directionMoveGroupsEnum.Assign);
+    this.listUnassignGroups = this.groupsService.moveGroups(this.listUnassignGroups, this.listAssignGroups);
 
     const tempList = this.listAssignGroups;
     const allRelatedGroups = this.groupsService.flattenGroupTree(tempList);
-    // this.lengthAssign = allRelatedGroups?.length || 0;
-    this.currentGroupIdsStr = this.getSortedIdString(allRelatedGroups, 'pK_VehicleGroupID');
+    this.currentGroupIdsStr = this.groupsService.getSortedIdString(allRelatedGroups, this.keyId);
     this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-    console.log('this.isBtnAssignGroupsActive:' + this.isBtnAssignGroupsActive);
-    console.log('this.isBtnUnAssignGroupsActive:' + this.isBtnUnAssignGroupsActive);
 
     this.isBtnAssignGroupsActive = false;
   }
@@ -190,14 +110,19 @@ export class UserVehicleGroupComponent implements OnInit {
    * Xây lại cây cha-con
    */
   unassignGroups() {
-    this.moveGroups(this.listAssignGroups, this.listUnassignGroups, directionMoveGroupsEnum.UnAssign);
-    const _temp = this.listUnassignGroups;
-    const allRelatedGroups = this.groupsService.flattenGroupTree(_temp);
-    // this.lengthUnassign = allRelatedGroups?.length || 0;
+    this.listAssignGroups = this.groupsService.moveGroups(this.listAssignGroups, this.listUnassignGroups);
+
+    const tempListUn = this.listUnassignGroups;
+
+    const allRelatedGroups = this.groupsService.flattenGroupTree(tempListUn);
     this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
+
+    this.currentGroupIdsStr = this.groupsService.getSortedIdString(
+      this.groupsService.flattenGroupTree(this.listAssignGroups),
+      this.keyId
+    );
+
     this.isBtnUnAssignGroupsActive = false;
-    console.log('this.isBtnAssignGroupsActive:' + this.isBtnAssignGroupsActive);
-    console.log('this.isBtnUnAssignGroupsActive:' + this.isBtnUnAssignGroupsActive);
   }
 
   /**
@@ -205,12 +130,11 @@ export class UserVehicleGroupComponent implements OnInit {
    * Lưu lại giá trị nhóm đã gán vào DB
    */
   save() {
-    const _temp = this.listAssignGroups;
-    const allRelatedGroups = this.groupsService.flattenGroupTree(_temp, this.selectedId.pK_UserID);
+    const tempList = this.listAssignGroups;
+    const allRelatedGroups = this.groupsService.flattenGroupTree(tempList, this.selectedId.pK_UserID);
     const item = new VehicleGroupModel();
-    item.PK_UserID = this.selectedId.pK_UserID;
+    item.pK_UserID = this.selectedId.pK_UserID;
     item.listGroup = allRelatedGroups;
-
     this.addOrEditList(item);
   }
 
@@ -250,7 +174,7 @@ export class UserVehicleGroupComponent implements OnInit {
    * Người dùng có isLock = false và isDeleted = false;
    */
   getListUser() {
-    this.userFilter.FK_CompanyID = this.companyID;
+    this.userFilter.fK_CompanyID = this.companyID;
     this.userFilter.isLock = false;
     this.userFilter.isDeleted = false;
 
@@ -291,7 +215,6 @@ export class UserVehicleGroupComponent implements OnInit {
       },
       (err) => {
         console.log(err);
-        // this.commonService.showError(err);
       }
     );
   }
@@ -313,15 +236,16 @@ export class UserVehicleGroupComponent implements OnInit {
       (res) => {
         if (!res.isSuccess) {
           console.error(res);
-
           return;
         }
         this.listAssignGroups = res.data;
-        this.lengthAssign = this.listAssignGroups?.length || 0;
         if (this.first == 0) {
-          this.markOriginal(this.listAssignGroups, 'pK_VehicleGroupID');
-          this.currentGroupIdsStr = this.originalGroupIdsStr;
-          this.first++;
+          const allRelatedGroups = this.groupsService.flattenGroupTree(
+            this.listAssignGroups,
+            this.selectedId.pK_UserID
+          );
+          this.markOriginal(allRelatedGroups, this.keyId);
+          this.first = 1;
         }
       },
       (err) => {
@@ -335,8 +259,6 @@ export class UserVehicleGroupComponent implements OnInit {
    * bỏ đi các giá trị active của các bottom
    */
   refreshAllBottom() {
-    this.allCompleteAssign = false;
-    this.allCompleteUnAssign = false;
     this.isBtnUnAssignGroupsActive = false;
     this.isBtnAssignGroupsActive = false;
     this.first = 0;
@@ -350,56 +272,10 @@ export class UserVehicleGroupComponent implements OnInit {
    */
 
   get isAssignGroupsChanged(): boolean {
-    let _return = false;
+    let outPut = false;
     if (this.first == 0) return false;
 
-    _return = !equal(this.currentGroupIdsStr, this.originalGroupIdsStr);
-    return _return;
+    outPut = !equal(this.currentGroupIdsStr, this.originalGroupIdsStr);
+    return outPut;
   }
-
-  // get getIsBtnAssignGroupsActive() {
-  //   return this.isBtnAssignGroupsActive;
-  // }
-
-  // get getIsBtnUnAssignGroupsActive() {
-  //   return this.isBtnUnAssignGroupsActive;
-  // }
-
-  // get getIsDataUnAssignGroups() {
-  //   if (this.listUnassignGroups.length > 0) return true;
-  //   return false;
-  // }
-
-  // get getIsDataAssignGroups() {
-  //   if (this.listAssignGroups.length > 0) return true;
-  //   return false;
-  // }
-
-  /**
-   * Tạo chuỗi ID sau khi sort
-   */
-  /**
-   * Gets sorted id string
-   * sắp xếp - Tạo chuỗi string-key ID theo key
-   * để so sách kiểm tra có sự thay đổi của  nhóm
-   * @param groups
-   * @param key
-   * @returns sorted id string
-   */
-  public getSortedIdString(groups: any[], key: string): string {
-    return [...groups]
-      .map((g) => String(g[key]))
-      .sort((a, b) => a.localeCompare(b))
-      .join(',');
-  }
-
-  // filterItems(items: any[], searchText: string, field1: string, field2?: string): any[] {
-  //   if (!items || !searchText) return items;
-  //   searchText = searchText.toLowerCase();
-  //   return items.filter((item) => {
-  //     const value1 = item[field1]?.toString().toLowerCase() || '';
-  //     const value2 = field2 ? item[field2]?.toString().toLowerCase() || '' : '';
-  //     return value1.includes(searchText) || value2.includes(searchText);
-  //   });
-  // }
 }

@@ -5,6 +5,7 @@ import { Widget, WidgetSizeConfig } from '../../model/dashboard/dashboard.model'
 import { WidgetItemComponent } from '../../common/widget-item/widget-item.component';
 import { WidgetUpdateDataService } from '../../service/vehicle-data/widget-update-data.service';
 import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.service';
+import { AuthService } from '../../common/auth/auth.service';
 
 @Component({
   selector: 'app-dash-board',
@@ -39,10 +40,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   @ViewChildren(WidgetItemComponent)
   WidgetItem!: QueryList<WidgetItemComponent>;
 
-  constructor(
-    private vehicleService: VehicleDataService,
-    private widgetUpdateDataService: WidgetUpdateDataService
-  ) {
+  constructor(private vehicleService: VehicleDataService, private widgetUpdateDataService: WidgetUpdateDataService) {
     this.widgetOverView = new Widget(
       {
         orderValue: 1,

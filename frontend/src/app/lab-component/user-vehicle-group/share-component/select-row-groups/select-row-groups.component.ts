@@ -7,30 +7,10 @@ import { UserVehicleGroupView } from '../../model/user-vehicle-group';
   styleUrls: ['./select-row-groups.component.scss'],
 })
 export class SelectRowGroupsComponent {
-  @Input()
-  attribute!: UserVehicleGroupView;
+  @Input() attribute!: UserVehicleGroupView;
 
   @Input() allSelected: boolean = false;
   @Output() selectedChange = new EventEmitter<UserVehicleGroupView>();
-
-  /**
-   * Toggles select all
-   * @description chọn/ bỏ chọn check all
-   * emit sự kiện ra ngoài: trả về danh sách
-   */
-  toggleSelectAll() {
-    if (this.allSelected) {
-      this.attribute.allComplete = true;
-      this.attribute.isSelected = true;
-      this.attribute.groupsChild.forEach((x) => (x.isSelected = true));
-    } else {
-      this.attribute.allComplete = false;
-      this.attribute.isSelected = false;
-      this.attribute.groupsChild.forEach((x) => (x.isSelected = false));
-    }
-    this.attribute.isUiCheck = this.allSelected;
-    this.selectedChange.emit(this.attribute);
-  }
 
   /**
    * Padding level

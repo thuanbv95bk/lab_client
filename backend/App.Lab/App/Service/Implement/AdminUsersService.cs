@@ -21,7 +21,7 @@ namespace App.Lab.Service.Implement
             _uow = uow;
         }
 
-        public List<Users> GetList(UsersFilter filter)
+        public List<Users> GetList(Users filter)
         {
             return _repo.GetList(filter);
         }

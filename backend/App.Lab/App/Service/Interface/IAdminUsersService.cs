@@ -6,6 +6,6 @@ namespace App.Lab.Service.Interface
 {
     public interface IAdminUsersService : IBaseService
     {
-        List<Users> GetList(UsersFilter filter);
+        List<Users> GetList(Users filter);
     }
 }

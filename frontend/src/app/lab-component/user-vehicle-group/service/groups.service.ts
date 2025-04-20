@@ -89,14 +89,14 @@ export class GroupsService extends BaseDataService {
 
       // Đệ quy qua tất cả các nhóm con
       group.groupsChild?.forEach((child) => {
-        child.PK_UserID = pK_UserID ?? pK_UserID;
+        child.pK_UserID = pK_UserID ?? pK_UserID;
 
         flatten(child);
       });
     };
 
     tree.forEach((g) => {
-      g.PK_UserID = pK_UserID ?? pK_UserID;
+      g.pK_UserID = pK_UserID ?? pK_UserID;
       if (g.isSelected == true) {
         g.isNewItem = true;
       }
@@ -104,5 +104,90 @@ export class GroupsService extends BaseDataService {
     }); // Bắt đầu với từng nhóm gốc trong cây
 
     return result;
+  }
+
+  /**
+   * Hàm chuyển các item giữa các nhóm  với nhau, và build lại cây cha-con
+   * @param fromList UserVehicleGroupView/ Groups
+   * @param toList UserVehicleGroupView/ Groups
+   * @param direction chiều chuyển: 'assign' | 'unassign'
+   */
+  public moveGroups(fromList: UserVehicleGroupView[], toList: UserVehicleGroupView[]) {
+    const toMove = fromList.filter((g) => g.isSelected == true || g.hasChild == true || g.allComplete == true);
+    let movedItems: UserVehicleGroupView[] = [];
+
+    toMove.forEach((g) => {
+      if (g.allComplete) {
+        if (!g.hasChild) {
+          movedItems.push(g);
+          g.isSelected = false;
+        } else {
+          movedItems.push(g);
+        }
+      } else if (g.hasChild) {
+        g.groupsChild.forEach((child) => {
+          if (child.isSelected) {
+            movedItems.push(child);
+          }
+        });
+      }
+    });
+
+    // Xóa item chính khỏi danh sách nguồn
+    const isMoved = (item) => movedItems.includes(item);
+    // const isMoved = (item) => movedItems.some((x) => x.pK_VehicleGroupID === item.pK_VehicleGroupID);
+    // Cập nhật trạng thái trước khi chuyển sang toList
+
+    // movedItems.forEach((item) => {
+    //   item.isNewItem = true;
+    //   item.isSelected = false;
+    //   item.allComplete = false;
+    //   if (item.hasChild) {
+    //     item.groupsChild.forEach((x) => {
+    //       x.allComplete = false;
+    //       x.isSelected = false;
+    //       x.isNewItem = false;
+    //     });
+    //   }
+    // });
+    // Cập nhật danh sách đích
+    toList.unshift(...movedItems);
+    const updatedFromList = fromList.filter((g) => !isMoved(g));
+    // Xử lý nhóm con chưa được di chuyển hết
+    updatedFromList.forEach((g) => {
+      if (g.hasChild && !g.allComplete) {
+        const selectedChildren = g.groupsChild.filter((x) => x.isSelected);
+        g.groupsChild = g.groupsChild.filter((x) => !selectedChildren.includes(x));
+      }
+    });
+
+    // Gán lại danh sách nguồn đã được lọc
+    const allRelatedGroups = this.flattenGroupTree(updatedFromList);
+    return this.buildHierarchy(allRelatedGroups);
+
+    // if (direction === directionMoveGroupsEnum.Assign) {
+    //   this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
+    // } else {
+    //   this.currentGroupIdsStr = this.groupsService.getSortedIdString(allRelatedGroups, this.keyId);
+    //   this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
+    // }
+  }
+
+  /**
+   * Tạo chuỗi ID sau khi sort
+   */
+  /**
+   * Gets sorted id string
+   * sắp xếp - Tạo chuỗi string-key ID theo key
+   * để so sách kiểm tra có sự thay đổi của  nhóm
+   * @param groups
+   * @param key
+   * @returns sorted id string
+   */
+  public getSortedIdString(groups: UserVehicleGroupView[], key: string): string {
+    return [...groups]
+      .map((g) => String(g[key]))
+      .sort((a, b) => a.localeCompare(b))
+      .join(',');
   }
 }

@@ -1,0 +1,22 @@
+<div class="toolbar-user-container">
+  <div class="dropdown">
+    <button
+      class="btn no-border cursor-pointer h-100 d-flex align-items-center"
+      id="dropdownUserMenu"
+      data-toggle="dropdown"
+      aria-haspopup="true"
+      aria-expanded="false">
+      <div class="row">
+        <span class="name">{{ this.user.userName }}</span>
+        <div class="avatar align-items-center text-center">
+          <i class="fa fa-user"></i>
+        </div>
+      </div>
+    </button>
+
+    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownUserMenu">
+      <div class="dropdown-divider"></div>
+      <a class="dropdown-item" (click)="logOut()">Đăng xuất</a>
+    </div>
+  </div>
+</div>

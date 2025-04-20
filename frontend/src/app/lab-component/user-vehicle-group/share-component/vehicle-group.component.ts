@@ -11,33 +11,28 @@ import { GroupsService } from '../service/groups.service';
   styleUrls: ['./vehicle-group.component.scss'],
 })
 export class VehicleGroupComponent implements OnChanges {
-  @Input() title: string = '';
+  @Input() title: string = ''; // tiêu đề
+  @Input() userId: string = '';
   @Input() listItem: UserVehicleGroupView[]; //danh sách nhóm phương tiện- cha-con
-  @Input() isTree: boolean = false;
-  @Input() groupType: directionMoveGroupsEnum;
-  @Output() eventChange = new EventEmitter<{ listItem: UserVehicleGroupView[]; groupType: directionMoveGroupsEnum }>();
+  @Input() isTree: boolean = false; // đã được build cha-con hay chưa
   @Output() isChangeBtn = new EventEmitter<boolean>();
-  listItemFlatten: UserVehicleGroupView[]; //danh sách nhóm phương tiện- làm phẳng
+  listItemFlatten: UserVehicleGroupView[]; //danh sách nhóm phương tiện- làm phẳng. k có cha-con
   lengthList: number = 0;
 
   directionMoveGroupsEnum = directionMoveGroupsEnum; // enum
   stringSearch: string;
 
-  // selectedId = new User(); // useKey chon người dùng
-  // first: number = 0; // kiểm tra- lấy dữ liệu lần đầu cho nhóm
-  // currentGroupIdsStr = ''; // string-key check sự thay đổi của các nhóm
-  // originalGroupIdsStr = ''; // string-key-original check sự thay đổi của các nhóm
-
-  // allCompleteAssign: boolean = false; // check-all nhóm đã gán
-  isAllItem: boolean = false; // check-all nhóm chưa gán
-
-  isBtnActive: boolean = false; // check có sự thay đổi của nhóm chưa gán
-  // isBtnUnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm chưa gán
-  // isBtnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm đã gán
+  isAllItem: boolean = false; // check-all
+  isBtnActive: boolean = false; // check có sự thay đổi của nhóm
 
   constructor(private groupsService: GroupsService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['userId']) {
+      this.isAllItem = false;
+      this.stringSearch = null;
+    }
+
     if (changes['listItem']) {
       if (!this.listItem) {
         this.lengthList = 0;
@@ -66,7 +61,6 @@ export class VehicleGroupComponent implements OnChanges {
       x.isSelected = this.isAllItem;
       x.allComplete = this.isAllItem;
     });
-    console.log('this.isBtnActive:' + this.isBtnActive);
     this.isChangeBtn.emit(this.isBtnActive);
   }
 
@@ -75,7 +69,6 @@ export class VehicleGroupComponent implements OnChanges {
    * @event outEvent khi người dùng chọn 1 item của các nhóm
    * @param item Groups
    * @param list Groups[]
-   * @param type 'unassign' | 'assign'
    */
   onSelectedChange(item: Groups, list: Groups[]) {
     let status = false;
@@ -88,7 +81,6 @@ export class VehicleGroupComponent implements OnChanges {
     } else status = false;
 
     this.isBtnActive = status;
-
     this.isChangeBtn.emit(this.isBtnActive);
   }
 }

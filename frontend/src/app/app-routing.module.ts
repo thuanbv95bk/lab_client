@@ -4,17 +4,22 @@ import { VehicleListComponent } from './common/shared-component/vehicle-list/veh
 import { DashBoardComponent } from './lab-component/dash-board/dash-board.component';
 import { LoginComponent } from './lab-component/login/login.component';
 import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/user-vehicle-group.component';
+import { LayoutComponent } from './layout/layout.component';
+import { AuthGuard } from './common/auth/auth.guard';
 
 const routes: Routes = [
+  { path: 'login', component: LoginComponent },
+
   {
     path: '',
-    redirectTo: 'user-vehicle-group',
-    pathMatch: 'full',
+    component: LayoutComponent,
+    canActivate: [AuthGuard],
+    children: [
+      { path: 'dash-board', component: DashBoardComponent, canActivate: [AuthGuard] },
+      { path: 'user-vehicle-group', component: UserVehicleGroupComponent, canActivate: [AuthGuard] },
+    ],
   },
-  { path: 'dash-board', component: DashBoardComponent },
-  { path: 'vehicle-list', component: VehicleListComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'user-vehicle-group', component: UserVehicleGroupComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
 ];
 
 @NgModule({

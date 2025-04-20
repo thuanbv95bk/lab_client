@@ -33,7 +33,8 @@
 .dash-board {
   background-color: #eeefff;
   overflow-x: hidden;
-  height: 100vh;
+  // overflow-y: auto;
+  // height: 100vh;
 
   .widget-container {
     .widget-item {

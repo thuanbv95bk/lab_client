@@ -10,6 +10,6 @@ namespace App.Lab.Repository.Interface
 
     public interface IAdminUsersRepository
     {
-        List<Users> GetList(UsersFilter filter);
+        List<Users> GetList(Users filter);
     }
 }

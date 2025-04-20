@@ -26,14 +26,15 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { WidgetItemComponent } from './common/widget-item/widget-item.component';
 import { LoginComponent } from './lab-component/login/login.component';
 import { UserVehicleGroupComponent } from './lab-component/user-vehicle-group/user-vehicle-group.component';
-
 import { AppConfig, InitApp } from './app.config';
-import { DialogHandleErrorComponent } from './common/base-component/dialog-handle-error/dialog-handle-error.component';
-import { DialogService } from './service/dialog.service';
 import { SelectRowGroupsComponent } from './lab-component/user-vehicle-group/share-component/select-row-groups/select-row-groups.component';
 import { FilterPipe } from './pipe/filter.pipe';
 import { VehicleGroupComponent } from './lab-component/user-vehicle-group/share-component/vehicle-group.component';
-
+import { LayoutComponent } from './layout/layout.component';
+import { ToolbarMenuComponent } from './layout/toolbar-menu/toolbar-menu.component';
+import { UserMenuComponent } from './layout/user-menu/user-menu.component';
+import { CookieService } from 'ngx-cookie-service';
+import { TextSearchComponent } from './lab-component/user-vehicle-group/share-component/text-search/text-search.component';
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }
@@ -41,7 +42,9 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 @NgModule({
   declarations: [
     AppComponent,
-    DialogHandleErrorComponent,
+    LayoutComponent,
+    ToolbarMenuComponent,
+    UserMenuComponent,
     SelectRowGroupsComponent,
     FilterPipe,
     MultiSelectComponent,
@@ -56,6 +59,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     WidgetItemComponent,
     LoginComponent,
     VehicleGroupComponent,
+    TextSearchComponent,
     UserVehicleGroupComponent,
   ],
   imports: [
@@ -85,8 +89,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ChartScrollService,
     VehicleDataService,
     WidgetUpdateDataService,
-    DialogService,
     TranslateService,
+    CookieService,
     {
       provide: APP_INITIALIZER,
       useFactory: InitApp,

@@ -1,0 +1,13 @@
+<div class="container-search">
+  <div class="input-group">
+    <input
+      type="text"
+      class="form-control"
+      [(ngModel)]="searchField"
+      (ngModelChange)="changeInput()"
+      [placeholder]="placeholder" />
+    <div class="input-group-append">
+      <span class="input-group-text"><i class="fa fa-search"></i></span>
+    </div>
+  </div>
+</div>

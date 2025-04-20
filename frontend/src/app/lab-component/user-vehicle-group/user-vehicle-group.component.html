@@ -1,23 +1,22 @@
 <div class="container-fluid container-form">
   <h6 class="font-weight-bold container-form-title">QUẢN TRỊ NHÓM PHƯƠNG TIỆN</h6>
 
-  <div class="row row-cols-1 row-cols-md-2">
-    <div class="col-md-5 mb-4">
+  <div class="row row-cols-1 row-cols-md-2 col-items">
+    <div class="col-md-4">
       <div class="card h-100">
         <div class="card-header">Danh sách người dùng ({{ listUser?.length || 0 }})</div>
-        <div class="card-body">
-          <div class="card-body-search input-group">
-            <input type="text" class="form-control" [(ngModel)]="userSearch" placeholder="Tìm người dùng" />
-            <div class="input-group-append">
-              <span class="input-group-text"><i class="fa fa-search"></i></span>
-            </div>
-          </div>
-          <!-- Scrollable section -->
+        <div class="card-body position-relative">
+          <div class="no-data" *ngIf="listUser?.length == 0">Không có dữ liệu</div>
+          <app-text-search
+            *ngIf="listUser?.length > 0"
+            [placeholder]="'Tìm người dùng'"
+            (searchFieldChange)="userSearch = $event"></app-text-search>
+
           <div class="overflow-auto flex-grow-1 card-body-height">
             <table class="table">
               <tbody>
                 <tr
-                  *ngFor="let item of listUser | filter : userSearch : 'userName' : 'fullName'; let i = index"
+                  *ngFor="let item of listUser | filter : userSearch : ['userName', 'fullName']; let i = index"
                   id="{{ item.PK_UserID }}"
                   [ngClass]="{ 'selected-row': selectedId && item == selectedId }"
                   (click)="onClickRow(item)">
@@ -29,19 +28,20 @@
         </div>
       </div>
     </div>
-    <div class="col-md-7 mb-4">
+    <div class="col-md-8">
       <div class="card h-100 border-0">
         <div class="card-body">
           <div class="row body-groups">
-            <div class="d-flex flex-fill">
+            <div class="d-flex flex-fill justify-content-evenly">
               <div class="col">
                 <app-vehicle-group
                   [title]="'Chọn nhóm cho người dùng'"
+                  [userId]="this.selectedId.pK_UserID"
                   [listItem]="listUnassignGroups"
                   [isTree]="true"
                   (isChangeBtn)="isBtnAssignGroupsActive = $event"></app-vehicle-group>
               </div>
-              <div class="mx-2 justify-content-center container-btn">
+              <div class="col-auto mx-2 justify-content-center container-btn">
                 <button
                   class="btn btn-sm mb-2"
                   [disabled]="!isBtnAssignGroupsActive"
@@ -71,23 +71,25 @@
     </div>
   </div>
 
-  <div class="text-center mt-3">
-    <button
-      class="btn mr-3 text-white"
-      (click)="save()"
-      [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
-      [disabled]="!isAssignGroupsChanged">
-      <i class="fa fa-save mr-2"></i>Lưu
-    </button>
-    <button
-      class="btn text-white"
-      type="button"
-      [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
-      [disabled]="!isAssignGroupsChanged"
-      data-toggle="modal"
-      data-target="#exampleModal">
-      <i class="fa fa-times mr-2"></i>Hủy
-    </button>
+  <div class="d-flex justify-content-center align-items-center">
+    <div class="footer">
+      <button
+        class="btn mr-3 text-white"
+        (click)="save()"
+        [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
+        [disabled]="!isAssignGroupsChanged">
+        <i class="fa fa-save mr-2"></i>Lưu
+      </button>
+      <button
+        class="btn text-white"
+        type="button"
+        [ngClass]="isAssignGroupsChanged == true ? 'active' : 'btn-secondary'"
+        [disabled]="!isAssignGroupsChanged"
+        data-toggle="modal"
+        data-target="#exampleModal">
+        <i class="fa fa-times mr-2"></i>Hủy
+      </button>
+    </div>
   </div>
 
   <!-- Modal -->
