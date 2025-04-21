@@ -1,5 +1,9 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
+
+# Ignore toàn bộ .vs folder
 backend/.vs/
 
+# Ignore obj folder và file trong đó
+backend/App.Lab/obj/
