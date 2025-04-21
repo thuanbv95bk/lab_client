@@ -86,6 +86,7 @@ export class AuthService {
       this.router.navigate(['/dash-board']);
       return true;
     } else {
+      this.commonService.showError('Tài khoản hoặc mật khẩu không đúng');
       return false;
     }
   }
