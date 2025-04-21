@@ -2,6 +2,7 @@ $toolbar-height: 54px;
 
 .navbar {
   height: $toolbar-height !important;
+
   .nav-link {
     font-weight: 500;
     font-size: 15px;
@@ -20,29 +21,6 @@ $toolbar-height: 54px;
     font-weight: bold;
   }
 
-  .call-phone {
-    font-size: 14px;
-  }
-
-  .select-lang {
-    position: relative;
-    display: inline-block;
-    max-width: 150px;
-    justify-content: start;
-    margin-right: 10px;
-    font-size: 13px;
-
-    .dropdown-menu {
-      left: -26%;
-    }
-
-    .flag-icon {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
-  }
 }
 
 /* modal Menu*/
@@ -66,6 +44,7 @@ $toolbar-height: 54px;
     }
   }
 }
+
 .is-active-router {
   color: #333 !important;
 }
