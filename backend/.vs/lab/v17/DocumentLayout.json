@@ -182,21 +182,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 5,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\appsettings.json",
-              "RelativeDocumentMoniker": "App.API\\appsettings.json",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\appsettings.json",
-              "RelativeToolTip": "App.API\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-04-21T01:02:54.188Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Document",
               "DocumentIndex": 8,
@@ -260,6 +247,32 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "app.config",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config",
+              "RelativeDocumentMoniker": "App.API\\app.config",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config",
+              "RelativeToolTip": "App.API\\app.config",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAA7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2025-04-16T01:05:22.659Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\appsettings.json",
+              "RelativeDocumentMoniker": "App.API\\appsettings.json",
+              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\appsettings.json",
+              "RelativeToolTip": "App.API\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-04-21T01:02:54.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 5,
               "Title": "AdminUserVehicleGroupRepository.cs",
               "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.Lab\\App\\Repository\\Implement\\AdminUserVehicleGroupRepository.cs",
@@ -269,19 +282,6 @@
               "ViewState": "AgIAAHYAAAAAAAAAAADwv34AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-15T02:28:48.783Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "app.config",
-              "DocumentMoniker": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config",
-              "RelativeDocumentMoniker": "App.API\\app.config",
-              "ToolTip": "D:\\2.lab\\2.labDashboard\\backend\\App.API\\app.config*",
-              "RelativeToolTip": "App.API\\app.config*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAOAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
-              "WhenOpened": "2025-04-16T01:05:22.659Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",
@@ -509,7 +509,8 @@
               "RelativeToolTip": "App.Lab\\Common\\DataAccess\\Implement\\Repo.cs",
               "ViewState": "AgIAAIIAAAAAAAAAAAAAAEwAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T04:18:02.72Z"
+              "WhenOpened": "2025-04-15T04:18:02.72Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
