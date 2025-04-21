@@ -1,0 +1,19 @@
+.input-group {
+  padding: 10px 10px;
+  input {
+    border-right: none;
+  }
+
+  .form-control:focus {
+    box-shadow: none;
+    border-color: #ced4da;
+    outline: none;
+    /* giữ viền giống trạng thái bình thường */
+  }
+
+  .input-group-text {
+    background-color: white;
+    padding: 0.375rem 0.5rem;
+    border-left: none !important;
+  }
+}

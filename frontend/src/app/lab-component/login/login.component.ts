@@ -212,7 +212,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     // this.startAutoSlide();
-    this.authService.checkLoggedIn();
+    // this.authService.checkLoggedIn();
   }
 
   ngOnDestroy() {

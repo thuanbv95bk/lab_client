@@ -16,11 +16,11 @@ namespace App.Lab.App.Model
         public string Name { get; set; }
         public virtual bool? IsDeleted { get; set; }
         public bool? Status { get; set; }
-        public List<VehicleGroups>? groupsChild { get; set; }
+        public List<VehicleGroups>? GroupsChild { get; set; }
         public int? Level { get; set; }
-        public bool? hasChild { get; set; }
-        public bool? isHideChildren { get; set; }
-        public bool? isHide { get; set; }
+        public bool? HasChild { get; set; }
+        public bool? IsHideChildren { get; set; } = false;
+        public bool? IsHide { get; set; }
     }
 
     /// <summary>

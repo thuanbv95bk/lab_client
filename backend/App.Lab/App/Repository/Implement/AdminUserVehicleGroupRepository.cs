@@ -1,5 +1,6 @@
 ﻿using App.Common.Helper;
 using App.DataAccess;
+using App.Lab.App.Model;
 using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
@@ -66,7 +67,7 @@ namespace App.Lab.Repository.Implement
             string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" + " WHERE " +
                                                                 "FK_UserID = @FK_UserID " +
                                                                 " AND FK_VehicleGroupID = " +
-                                                                "@FK_VehicleGroupID ;" 
+                                                                "@FK_VehicleGroupID ;"
                                                                 ;
 
             var parameters = this.MapToSqlParameters(item);
@@ -94,7 +95,7 @@ namespace App.Lab.Repository.Implement
             var parameters = this.MapToSqlParameters(item);
 
             this.ExecCommand(sql, parameters);
-           
+
         }
 
         /// <summary>Gets the list.</summary>
@@ -121,6 +122,39 @@ namespace App.Lab.Repository.Implement
                 , "UserVehicleGroup", null, listFilter
             );
             return ret;
+
+        }
+
+        public List<VehicleGroups> GetListView(AdminUserVehicleGroupFilter filter)
+        {
+
+            string sql = 
+                "SELECT G.* FROM dbo.[Vehicle.Groups] G " +
+                    "JOIN dbo.[Admin.UserVehicleGroup] A ON A.FK_VehicleGroupID = G.PK_VehicleGroupID" +
+                " WHERE A.FK_UserID = @FK_UserID  " +
+                    "AND ISNULL(G.IsDeleted, 0) = 0 " +
+                    "AND ISNULL(A.IsDeleted, 0) = 0;";
+            
+
+            var parameters = this.MapToSqlParameters(filter);
+
+            this.ExecCommand<VehicleGroups>(out var retList, sql, parameters);
+            return retList;
+
+
+            //var listOrderOption = new OrderOption[] {
+            //new OrderOption {
+            //    Column = "FK_VehicleGroupID",
+            //    OrderType = "ASC",
+            //}};
+            //var listFilter = MapFilterToOptions(filter);
+
+            //this.GetTableData
+            //(
+            //    out List<VehicleGroups> ret
+            //    , "UserVehicleGroup", null, listFilter
+            //);
+            //return ret;
 
         }
 

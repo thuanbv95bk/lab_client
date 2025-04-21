@@ -1,16 +1,16 @@
 export class User {
   pK_UserID: string;
-  FK_CompanyID!: number;
+  fK_CompanyID!: number;
   userName!: string;
   userNameLower!: string;
   fullName!: string;
   userType!: number;
   isLock!: boolean;
   isDeleted!: boolean;
-  isActivated!: boolean;
+  isActived!: boolean;
   constructor(obj?: Partial<User>) {
     this.pK_UserID = obj?.pK_UserID || '';
-    this.FK_CompanyID = obj?.FK_CompanyID || null;
+    this.fK_CompanyID = obj?.fK_CompanyID || null;
     this.userName = obj?.userName || '';
     this.userNameLower = obj?.userNameLower || '';
     this.fullName = obj?.fullName || '';
@@ -20,20 +20,22 @@ export class User {
 }
 
 export class UsersFilter {
-  PK_UserID!: string;
-  FK_CompanyID!: number | null;
+  pK_UserID!: string;
+  fK_CompanyID!: number | null;
   userName!: string;
   userNameLower!: string;
   fullName!: string;
   isLock!: boolean;
   isDeleted!: boolean;
+  isActived!: boolean;
   constructor(obj?: Partial<UsersFilter>) {
-    this.PK_UserID = obj?.PK_UserID || '';
-    this.FK_CompanyID = obj?.FK_CompanyID || null;
+    this.pK_UserID = obj?.pK_UserID || '';
+    this.fK_CompanyID = obj?.fK_CompanyID || null;
     this.userName = obj?.userName || '';
     this.userNameLower = obj?.userNameLower || '';
     this.fullName = obj?.fullName || '';
     this.isLock = obj?.isLock || false;
     this.isDeleted = obj?.isDeleted || false;
+    this.isActived = obj?.isActived || null;
   }
 }

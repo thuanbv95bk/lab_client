@@ -6,15 +6,15 @@ import { Groups } from './groups';
  * @author thuan.bv
  */
 export class UserVehicleGroup {
-  PK_UserID!: string | null;
-  PK_VehicleGroupID!: number | null;
+  pK_UserID!: string | null;
+  pK_VehicleGroupID!: number | null;
   parentVehicleGroupId!: number | 0;
   isDeleted!: boolean;
   createdByUser!: string | null;
   createdDate!: Date | null;
   constructor(obj?: Partial<UserVehicleGroup>) {
-    this.PK_UserID = obj?.PK_UserID || null;
-    this.PK_VehicleGroupID = obj?.PK_VehicleGroupID || null;
+    this.pK_UserID = obj?.pK_UserID || null;
+    this.pK_VehicleGroupID = obj?.pK_VehicleGroupID || null;
     this.parentVehicleGroupId = obj?.parentVehicleGroupId || 0;
     this.isDeleted = obj?.isDeleted || false;
     this.createdByUser = obj?.createdByUser || '';
@@ -28,11 +28,13 @@ export class UserVehicleGroup {
  * @author thuan.bv
  */
 export class UserVehicleGroupView extends Groups {
-  PK_UserID!: string | null;
+  pK_UserID!: string | null;
   declare isDeleted: boolean;
+  groupType: string;
+  isNewItem: boolean = false;
   constructor(obj?: Partial<UserVehicleGroupView>) {
     super();
-    this.PK_UserID = obj?.PK_UserID || null;
+    this.pK_UserID = obj?.pK_UserID || null;
     this.isDeleted = obj?.isDeleted || false;
   }
 }
@@ -41,10 +43,10 @@ export class UserVehicleGroupView extends Groups {
  * dùng để thêm-update lên DB
  */
 export class VehicleGroupModel {
-  PK_UserID!: string | null;
+  pK_UserID!: string | null;
   listGroup: UserVehicleGroupView[];
   constructor(obj?: Partial<VehicleGroupModel>) {
-    this.PK_UserID = obj?.PK_UserID || null;
+    this.pK_UserID = obj?.pK_UserID || null;
     this.listGroup = obj?.listGroup || [];
   }
 }

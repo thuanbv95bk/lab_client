@@ -16,17 +16,12 @@ namespace App.Lab.Service.Implement
     {
         private readonly IUnitOfWork _uow;
 
-        public AdminUsersService(IHttpContextAccessor accessor, IAdminUsersRepository repo, IUnitOfWork uow): base(accessor, repo)
+        public AdminUsersService(IHttpContextAccessor accessor, IAdminUsersRepository repo, IUnitOfWork uow) : base(accessor, repo)
         {
             _uow = uow;
         }
 
-        public List<Users> GetAll()
-        {
-            return _repo.GetAll();
-        }
-
-        public List<Users> GetList(UsersFilter filter)
+        public List<Users> GetList(Users filter)
         {
             return _repo.GetList(filter);
         }

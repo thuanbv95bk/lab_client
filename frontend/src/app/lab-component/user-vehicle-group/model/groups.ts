@@ -21,6 +21,7 @@ export class Groups {
 
   isSelected!: boolean | false;
   isUiCheck: boolean = false;
+
   constructor(obj?: Partial<Groups>) {
     this.pK_VehicleGroupID = obj?.pK_VehicleGroupID || null;
     this.fK_CompanyID = obj?.fK_CompanyID || null;
@@ -69,58 +70,4 @@ export class GroupsFilter {
  */
 export class GroupService {
   // Tạo cây cha-con từ danh sách phẳng
-  buildHierarchy(listItem: UserVehicleGroupView[]): UserVehicleGroupView[] {
-    const map = new Map<number, UserVehicleGroupView>();
-    const roots: UserVehicleGroupView[] = [];
-
-    // Gán mặc định và lưu vào map
-    listItem.forEach((item) => {
-      item.groupsChild = [];
-      item.hasChild = false;
-      item.isHide = false;
-      item.level = 1;
-      map.set(item.pK_VehicleGroupID!, item);
-    });
-
-    // Duyệt gán vào cây
-    listItem.forEach((item) => {
-      if (item.parentVehicleGroupId && map.has(item.parentVehicleGroupId)) {
-        const parent = map.get(item.parentVehicleGroupId)!;
-        item.level = parent.level + 1;
-        parent.groupsChild.push(item);
-        parent.hasChild = true;
-      } else {
-        roots.push(item);
-      }
-    });
-
-    return roots;
-  }
-
-  /**
-   * Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
-   * @param tree
-   * @param [pK_UserID]
-   * @returns danh sách Group theo -cha-con
-   */
-  flattenGroupTree(tree: UserVehicleGroupView[], pK_UserID: string = null): UserVehicleGroupView[] {
-    const result: UserVehicleGroupView[] = [];
-
-    const flatten = (group: UserVehicleGroupView) => {
-      result.push(group); // Thêm phần tử cha vào kết quả
-
-      // Đệ quy qua tất cả các nhóm con
-      group.groupsChild?.forEach((child) => {
-        child.PK_UserID = pK_UserID ?? pK_UserID;
-        flatten(child);
-      });
-    };
-
-    tree.forEach((g) => {
-      g.PK_UserID = pK_UserID ?? pK_UserID;
-      flatten(g);
-    }); // Bắt đầu với từng nhóm gốc trong cây
-
-    return result;
-  }
 }

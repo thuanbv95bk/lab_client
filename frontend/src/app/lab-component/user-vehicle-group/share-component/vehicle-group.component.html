@@ -1,0 +1,24 @@
+<div class="card">
+  <div class="card-header">{{ title }} ({{ lengthList }})</div>
+  <div class="card-body position-relative">
+    <div class="no-data" *ngIf="this.lengthList == 0">Không có dữ liệu</div>
+
+    <app-text-search
+      *ngIf="this.lengthList > 0"
+      [placeholder]="'Tìm nhóm phương tiện'"
+      (searchFieldChange)="stringSearch = $event"></app-text-search>
+    <div class="overflow-auto card-body-height">
+      <div class="check-all sticky-top" *ngIf="this.lengthList > 0">
+        <input type="checkbox" [checked]="isAllItem" (change)="onCheckAll()" />
+        <label>Tất cả</label>
+      </div>
+      <div class="attribute-section" *ngFor="let attribute of listItem | filter : stringSearch : ['name']">
+        <app-select-row-groups
+          [attribute]="attribute"
+          [allSelected]="isAllItem"
+          (selectedChange)="onSelectedChange($event, listItem)">
+        </app-select-row-groups>
+      </div>
+    </div>
+  </div>
+</div>

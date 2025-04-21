@@ -1,4 +1,5 @@
 ﻿using App.Common.BaseService;
+using App.Common.Models;
 using App.Lab.App.Model;
 using App.Lab.Model;
 using System;
@@ -11,12 +12,8 @@ namespace App.Lab.App.Service.Interface
 {
     public interface IVehicleGroupsService : IBaseService
     {
-        //string Create(VehicleGroups obj);
-        //void Update(VehicleGroups obj);
-        //void Delete(string id);
-        //VehicleGroups GetById(int id);
-        //List<VehicleGroups> GetAll();
-        List<VehicleGroups> GetList(VehicleGroupsFilter filter);
-        List<VehicleGroups> GetListUnassignGroups(VehicleGroupsFilter filter, bool includeParentIfAssigned = false);
+
+        ServiceStatus GetListUnassignGroups(VehicleGroupsFilter filter, bool includeParentIfAssigned = false);
+        List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem);
     }
 }

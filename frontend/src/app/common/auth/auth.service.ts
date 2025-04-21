@@ -4,39 +4,45 @@ import { HttpClient } from '@angular/common/http';
 import { TokenStorage } from './token.storage';
 import { CommonService } from '../../service/common.service';
 import { UserInfo } from '../../model/app-model';
+import { CookieService } from 'ngx-cookie-service';
+import { User } from '../../lab-component/user-vehicle-group/model/admin-user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(public commonService: CommonService, protected httpClient: HttpClient, private router: Router) {
-    this.listenEvent();
-  }
+  constructor(
+    public commonService: CommonService,
+    protected httpClient: HttpClient,
+    private router: Router,
+    private cookieService: CookieService
+  ) {}
 
-  /**
-   * Listens event: Tạo sự kiện để lắng nghe
-   * Khi người dùng đăng xuất -> các tab đã đăng nhập bị logout
-   * Khi người dùng đóng 1 trình duyệt
-   */
-  private listenEvent() {
-    window.addEventListener('storage', (event) => {
-      if (event.key == TokenStorage.HANDELOGOUT) {
-        sessionStorage.removeItem(TokenStorage.ISLOGGEDIN);
-        this.router.navigate(['/login']);
-      }
-    });
-    // Lắng nghe sự kiện đóng trình duyệt để xóa HANDELOGIN
-    window.addEventListener('beforeunload', () => {
-      localStorage.removeItem(TokenStorage.HANDELOGIN);
-    });
-  }
+  // /**
+  //  * Listens event: Tạo sự kiện để lắng nghe
+  //  * Khi người dùng đăng xuất -> các tab đã đăng nhập bị logout
+  //  * Khi người dùng đóng 1 trình duyệt
+  //  */
+  // private listenEvent() {
+  //   window.addEventListener('storage', (event) => {
+  //     if (event.key == TokenStorage.HandelLogout) {
+  //       sessionStorage.removeItem(TokenStorage.IsLoggedIn);
+  //       this.router.navigate(['login']);
+  //     }
+  //   });
+  //   // Lắng nghe sự kiện đóng trình duyệt để xóa HANDELOGIN
+  //   window.addEventListener('beforeunload', () => {
+  //     localStorage.removeItem(TokenStorage.HandelLogin);
+  //   });
+  // }
 
   /**
    * Go page home
    * Chuyển đến trạng mặc định
    */
   private goPageHome() {
-    this.router.navigateByUrl('');
+    this.router.navigateByUrl('dash-board');
+    // console.log('/dash-board');
   }
 
   /**
@@ -54,69 +60,62 @@ export class AuthService {
    * @param [isRememberMe] true/false trạng thái ghi nhớ đăng nhập
    * @returns true- đăng nhập thành công và ngược lại
    */
-  async signIn(userName: string, passWord: string, isRememberMe: boolean = false) {
-    try {
-      const use = new UserInfo();
-      use.userName = userName;
-      use.passWord = passWord;
-      use.isRememberMe = isRememberMe;
+  async signIn(userName: string, passWord: string, isRemembered: boolean = false) {
+    const use = new UserInfo();
+    use.userName = userName;
+    use.passWord = passWord;
+    use.isRememberMe = isRemembered;
 
-      if (use.userName == 'admin' && use.passWord == 'admin@123') {
-        if (isRememberMe == true) {
-          localStorage.setItem(TokenStorage.ISLOGGEDIN, 'true');
-          localStorage.setItem(TokenStorage.ISREMBERME, 'true');
-        } else {
-          localStorage.removeItem(TokenStorage.ISREMBERME);
-        }
-        sessionStorage.setItem(TokenStorage.ISLOGGEDIN, 'true');
-        localStorage.setItem(TokenStorage.HANDELOGIN, Date.now().toString());
-        localStorage.removeItem(TokenStorage.HANDELOGOUT);
-        this.goPageHome();
-        this.commonService.showSuccess('Đăng nhập thành công');
+    if (use.userName == 'admin' && use.passWord == 'admin@123') {
+      // Lưu thông tin đăng nhập
+      if (isRemembered) {
+        localStorage.setItem(TokenStorage.User, JSON.stringify(use));
+        localStorage.setItem(TokenStorage.IsRememberMe, 'true');
       } else {
-        this.commonService.showError('Tài khoản hoặc và mật khẩu không đúng.');
+        this.cookieService.set(
+          TokenStorage.User,
+          JSON.stringify(use),
+          undefined, // Session cookie (hết hạn khi đóng trình duyệt)
+          '/',
+          undefined,
+          false,
+          'Lax'
+        );
       }
-    } catch (err) {
-      alert(err);
+
+      this.router.navigate(['/dash-board']);
+      return true;
+    } else {
       return false;
     }
-    return true;
   }
-
   /**
    * Signs out đăng xuất
    * Trả về Page Login hệ thống
    */
   signOut() {
     TokenStorage.clearToken();
+
     // Gửi tín hiệu logout cho các tab khác
-    localStorage.setItem(TokenStorage.HANDELOGOUT, Date.now().toString());
+    this.cookieService.delete(TokenStorage.User);
+    this.router.navigate(['/login']);
     this.goPageLogin();
   }
 
   /**
-   * Checks logged in: kiểm tra trạng thái đăng nhập
-   * @returns  Về page Mặc định hoặc về lại page login nếu mất quyền truy cập
+   * Kiểm tra đăng nhập từ localStorage hoặc cookie
+   * @returns true if authenticated
    */
-  checkLoggedIn() {
-    //Khôi phục session từ localStorage
-    if (localStorage.getItem(TokenStorage.ISLOGGEDIN)) {
-      sessionStorage.setItem(TokenStorage.ISLOGGEDIN, 'true');
-    }
+  isAuthenticated(): boolean {
+    return localStorage.getItem(TokenStorage.User) !== null || this.cookieService.check(TokenStorage.User);
+  }
 
-    if (sessionStorage.getItem(TokenStorage.ISLOGGEDIN)) {
-      this.goPageHome();
-      return;
-    }
-    // Nếu localStorage có handelLogin từ tab khác, khôi phục sessionStorage
-    if (localStorage.getItem(TokenStorage.HANDELOGIN)) {
-      sessionStorage.setItem(TokenStorage.ISLOGGEDIN, 'true');
-    }
-
-    if (sessionStorage.getItem(TokenStorage.ISLOGGEDIN) == 'true') {
-      this.goPageHome();
-    } else {
-      this.goPageLogin();
-    }
+  /**
+   * Lấy thông tin user lưu trong localStorage ||cookieService
+   * @returns current user
+   */
+  getCurrentUser(): UserInfo {
+    const userData = localStorage.getItem(TokenStorage.User) || this.cookieService.get(TokenStorage.User);
+    return userData ? JSON.parse(userData) : null;
   }
 }

@@ -1,4 +1,5 @@
-﻿using App.Lab.Model;
+﻿using App.Lab.App.Model;
+using App.Lab.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,8 @@ namespace App.Lab.Repository.Interface
         void DeleteSoft(AdminUserVehicleGroup item);
         void Update(AdminUserVehicleGroup item);
         List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter);
-       
+        List<VehicleGroups> GetListView(AdminUserVehicleGroupFilter filter);
+
+
     }
 }

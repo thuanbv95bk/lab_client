@@ -70,7 +70,7 @@ export class WidgetSizeConfig {
       large: 'col-12',
     },
     [LocationEnum.TaiCang]: {
-      auto: 'd-flex p-0 w-100 col-12 col-md-4 col-lg-4 flex-grow-1',
+      auto: 'col-12 col-md-4 col-lg-12 flex-grow-1',
       small: 'col-12 col-md-4',
       medium: 'col-12 col-md-8',
       large: 'col-12',

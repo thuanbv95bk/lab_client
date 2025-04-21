@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace App.Lab.Repository.Implement
 {
-    
+
     public class VehicleGroupsRepository : Repo, IVehicleGroupsRepository
     {
         public VehicleGroupsRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Vehicle"; }

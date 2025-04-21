@@ -1,41 +1,16 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Groups } from '../../model/groups';
+import { UserVehicleGroupView } from '../../model/user-vehicle-group';
 @Component({
   selector: 'app-select-row-groups',
   templateUrl: './select-row-groups.component.html',
   styleUrls: ['./select-row-groups.component.scss'],
 })
-export class SelectRowGroupsComponent implements AfterViewInit {
-  @Input()
-  attribute!: Groups;
+export class SelectRowGroupsComponent {
+  @Input() attribute!: UserVehicleGroupView;
 
   @Input() allSelected: boolean = false;
-  @Output() selectedChange = new EventEmitter<Groups>();
-
-  constructor(private cdRef: ChangeDetectorRef) {}
-
-  ngAfterViewInit(): void {
-    // this.cdRef.detectChanges();
-  }
-
-  /**
-   * Toggles select all
-   * @description chọn/ bỏ chọn check all
-   * emit sự kiện ra ngoài: trả về danh sách
-   */
-  toggleSelectAll() {
-    if (this.allSelected) {
-      this.attribute.allComplete = true;
-      this.attribute.isSelected = true;
-      this.attribute.groupsChild.forEach((x) => (x.isSelected = true));
-    } else {
-      this.attribute.allComplete = false;
-      this.attribute.isSelected = false;
-      this.attribute.groupsChild.forEach((x) => (x.isSelected = false));
-    }
-    this.attribute.isUiCheck = this.allSelected;
-    this.selectedChange.emit(this.attribute);
-  }
+  @Output() selectedChange = new EventEmitter<UserVehicleGroupView>();
 
   /**
    * Padding level
@@ -43,7 +18,7 @@ export class SelectRowGroupsComponent implements AfterViewInit {
    * @param item
    * @returns
    */
-  paddingLevel(item: Groups) {
+  paddingLevel(item: UserVehicleGroupView) {
     if (item.parentVehicleGroupId) {
       return 'padding-' + (item.level - 1);
     }
@@ -55,12 +30,12 @@ export class SelectRowGroupsComponent implements AfterViewInit {
    * chọn all từ 1 cấp cha
    * @param Attribute
    */
-  updateAllComplete(Attribute: Groups) {
-    Attribute.allComplete = Attribute.groupsChild != null && Attribute.groupsChild.every((t) => t.isSelected);
-    this.attribute.isSelected = Attribute.allComplete;
+  updateAllComplete(attribute: UserVehicleGroupView) {
+    attribute.allComplete = attribute.groupsChild != null && attribute.groupsChild.every((t) => t.isSelected);
+    this.attribute.isSelected = attribute.allComplete;
   }
 
-  someComplete(node: Groups): boolean {
+  someComplete(node: UserVehicleGroupView): boolean {
     if (node.groupsChild == null) {
       return false;
     }
@@ -68,7 +43,7 @@ export class SelectRowGroupsComponent implements AfterViewInit {
     return node.groupsChild.filter((t) => t.isSelected).length > 0 && !node.allComplete;
   }
 
-  onCheckboxChange(event: Event, item: Groups): void {
+  onCheckboxChange(event: Event, item: UserVehicleGroupView): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     item.isSelected = isChecked;
     this.changeEditNode(isChecked, item);
@@ -77,13 +52,13 @@ export class SelectRowGroupsComponent implements AfterViewInit {
     this.selectedChange.emit(this.attribute);
   }
 
-  changeEditNode(checked: boolean, Attribute: Groups) {
-    Attribute.allComplete = checked;
-    Attribute.isSelected = checked;
-    if (Attribute.groupsChild == null) {
+  changeEditNode(checked: boolean, attribute: UserVehicleGroupView) {
+    attribute.allComplete = checked;
+    attribute.isSelected = checked;
+    if (attribute.groupsChild == null) {
       return;
     }
-    Attribute.groupsChild.forEach((t) => (t.isSelected = checked));
+    attribute.groupsChild.forEach((t) => (t.isSelected = checked));
   }
 
   /**
@@ -91,7 +66,7 @@ export class SelectRowGroupsComponent implements AfterViewInit {
    * Mở / đóng 1 cây
    * @param attribute
    */
-  toggleVisibility(attribute: Groups) {
+  toggleVisibility(attribute: UserVehicleGroupView) {
     attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
   }
 }
