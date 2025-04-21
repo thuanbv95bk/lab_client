@@ -27,7 +27,7 @@ namespace App.Lab.Repository.Implement
         /// Name       Date          Comments
         /// thuanbv 4/16/2025 	Thêm mới 1 nhóm phương tiện theo user
         /// </Modified>
-        public string Create(AdminUserVehicleGroup obj)
+        public Task Create(AdminUserVehicleGroup obj)
         {
 
             string sql =
@@ -58,22 +58,18 @@ namespace App.Lab.Repository.Implement
 
             var parameters = this.MapToSqlParameters(obj);
 
-            this.ExecCommand(sql, parameters);
-            return "";
+            return Task.Run(() => this.ExecCommand(sql, parameters));
+           
         }
-        public void Update(AdminUserVehicleGroup item)
+        public Task Update(AdminUserVehicleGroup item)
         {
-
-            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" + " WHERE " +
-                                                                "FK_UserID = @FK_UserID " +
-                                                                " AND FK_VehicleGroupID = " +
-                                                                "@FK_VehicleGroupID ;"
-                                                                ;
+            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" +
+                         " WHERE FK_UserID = @FK_UserID " +
+                         " AND FK_VehicleGroupID = @FK_VehicleGroupID;";
 
             var parameters = this.MapToSqlParameters(item);
 
-            this.ExecCommand(sql, parameters);
-
+            return Task.Run(() => this.ExecCommand(sql, parameters));
         }
 
 
@@ -83,7 +79,7 @@ namespace App.Lab.Repository.Implement
         /// Name       Date          Comments
         /// thuanbv 4/16/2025 	Xóa mềm 1 nhóm phương tiện theo user
         /// </Modified>
-        public void DeleteSoft(AdminUserVehicleGroup item)
+        public Task DeleteSoft(AdminUserVehicleGroup item)
         {
 
             string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 1 , UpdatedDate = @UpdatedDate" + " WHERE " +
@@ -94,7 +90,7 @@ namespace App.Lab.Repository.Implement
 
             var parameters = this.MapToSqlParameters(item);
 
-            this.ExecCommand(sql, parameters);
+            return Task.Run(() => this.ExecCommand(sql, parameters));
 
         }
 

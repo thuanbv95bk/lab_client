@@ -26,13 +26,13 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [Route("get-list-assign-groups")]
-        public async Task<IActionResult> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
+        public  IActionResult GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
             if (filter.FK_UserID.Length == 0)
             {
                 return Failure("Phải chọn người dùng");
             }
-            var ret = _service.GetListAssignGroups(filter);
+            var ret =  _service.GetListAssignGroups(filter);
 
             return ret.IsSuccess ? Success(ret.Data) : Failure(ret.ErroMessage);
         }
@@ -47,14 +47,23 @@ namespace App.Admin.Controllers
         /// </Modified>
         [HttpPost]
         [Route("add-or-edit-list")]
-        public async Task<IActionResult> AddOrEditList(VehicleGroupModel item)
+        public  async Task<IActionResult> AddOrEditList(VehicleGroupModel item)
         {
-            if (item.PK_UserID.Length == 0 || string.IsNullOrEmpty(item.PK_UserID))
+            try
             {
-                return Failure("Người dùng trống không thể cập nhật");
+                if (item.PK_UserID.Length == 0 || string.IsNullOrEmpty(item.PK_UserID))
+                {
+                    return Failure("Người dùng trống không thể cập nhật");
+                }
+
+                var ret = await _service.AddOrEditListAsync(item);
+                return ret.IsSuccess ? Success() : Failure(ret.ErroMessage);
             }
-            var ret = _service.AddOrEditList(item);
-            return ret.IsSuccess ? Success() : Failure(ret.ErroMessage);
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+           
         }
 
     }

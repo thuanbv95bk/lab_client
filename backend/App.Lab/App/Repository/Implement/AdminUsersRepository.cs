@@ -25,7 +25,7 @@ namespace App.Lab.Repository.Implement
         /// Name       Date          Comments
         /// thuanbv 4/16/2025 	get danh sách user theo bộ lọc UsersFilter
         /// </Modified>
-        public List<Users> GetList(Users filter)
+        public  List<Users>  GetList(Users filter)
         {
 
             var listOrderOption = new OrderOption[] {
