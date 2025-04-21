@@ -7,6 +7,7 @@ using App.Lab.App.Service.Interface;
 using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
+using System.Collections.Immutable;
 
 namespace App.Lab.App.Service.Implement
 {
@@ -70,8 +71,8 @@ namespace App.Lab.App.Service.Implement
                 }
 
                 // Xây cây cha-con
-                var flatList = resultDict.Values.ToList();
-                var tree = BuildHierarchy(flatList);
+                var flatList = resultDict.Values;
+                var tree = BuildHierarchy(flatList.ToList());
 
                 return ServiceStatus.Success(tree); 
             }
@@ -145,7 +146,7 @@ namespace App.Lab.App.Service.Implement
                 x.ParentVehicleGroupId == 0 ||
                 x.ParentVehicleGroupId == null ||
                 !allIds.Contains(x.ParentVehicleGroupId.Value)
-            ).ToList();
+            ).OrderBy(o => o.Name);
 
             foreach (var level1 in rootGroups)
             {
@@ -155,7 +156,7 @@ namespace App.Lab.App.Service.Implement
                 level1.IsHide = false;
             }
 
-            return rootGroups;
+            return rootGroups.ToList();
         }
 
         private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)

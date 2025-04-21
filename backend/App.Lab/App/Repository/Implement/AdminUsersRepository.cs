@@ -30,7 +30,7 @@ namespace App.Lab.Repository.Implement
 
             var listOrderOption = new OrderOption[] {
             new OrderOption {
-                Column = "Fullname",
+                Column = "Fullname", 
                 OrderType = "ASC",
             }};
             var listFilter = MapFilterToOptions(filter);

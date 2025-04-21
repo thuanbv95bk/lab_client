@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Http;
 
 
 namespace App.Lab.Service.Implement
-{ 
+{
 
     public class AdminUserVehicleGroupService : BaseService<IAdminUserVehicleGroupRepository>, IAdminUserVehicleGroupService
     {
@@ -22,11 +22,11 @@ namespace App.Lab.Service.Implement
 
 
         public AdminUserVehicleGroupService(
-            IHttpContextAccessor accessor, 
-            IAdminUserVehicleGroupRepository repo, 
+            IHttpContextAccessor accessor,
+            IAdminUserVehicleGroupRepository repo,
             IUnitOfWork uow,
             IVehicleGroupsRepository vehicleGroupsRepo
- 
+
         ) : base(accessor, repo)
         {
             _uow = uow;
@@ -134,7 +134,7 @@ namespace App.Lab.Service.Implement
 
                         if (!inputKeys.Contains(key))
                         {
-                           _repo.DeleteSoft(new AdminUserVehicleGroup
+                            _repo.DeleteSoft(new AdminUserVehicleGroup
                             {
                                 UpdatedDate = now,
                                 IsDeleted = true,
@@ -170,7 +170,7 @@ namespace App.Lab.Service.Implement
 
                 var listAssignGroups = _repo.GetListView(filter);
                 if (listAssignGroups == null) return ServiceStatus.Success(listFlatten);
-                
+
                 // Build the hierarchy tree
                 var tree = BuildHierarchy(listAssignGroups);
                 return ServiceStatus.Success(tree);
@@ -179,8 +179,8 @@ namespace App.Lab.Service.Implement
             {
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình lấy danh sách nhóm đã gán!");
             }
-            
-            
+
+
         }
 
         private List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
@@ -190,12 +190,11 @@ namespace App.Lab.Service.Implement
                 .Select(x => x.PK_VehicleGroupID)
                 .ToHashSet();
 
-            // Gốc là: cha == 0 || cha == null || cha không tồn tại trong listItem
             var rootGroups = listItem.Where(x =>
                 x.ParentVehicleGroupId == 0 ||
                 x.ParentVehicleGroupId == null ||
                 !allIds.Contains(x.ParentVehicleGroupId.Value)
-            ).ToList();
+            ).OrderBy(o => o.Name);
 
             foreach (var level1 in rootGroups)
             {
@@ -205,14 +204,14 @@ namespace App.Lab.Service.Implement
                 level1.IsHide = false;
             }
 
-            return rootGroups;
+            return rootGroups.ToList();
         }
 
         private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)
         {
             var childGroups = listItem
                 .Where(x => x.ParentVehicleGroupId == parentId)
-                .ToList();
+                ;
 
             foreach (var child in childGroups)
             {
@@ -222,7 +221,7 @@ namespace App.Lab.Service.Implement
                 child.IsHide = false;
             }
 
-            return childGroups;
+            return childGroups.ToList();
         }
 
     }
