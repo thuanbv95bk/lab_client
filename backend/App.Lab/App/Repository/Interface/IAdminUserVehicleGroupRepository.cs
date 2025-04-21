@@ -10,9 +10,9 @@ namespace App.Lab.Repository.Interface
 {
     public interface IAdminUserVehicleGroupRepository
     {
-        string Create(AdminUserVehicleGroup obj);
-        void DeleteSoft(AdminUserVehicleGroup item);
-        void Update(AdminUserVehicleGroup item);
+        Task Create(AdminUserVehicleGroup obj);
+        Task DeleteSoft(AdminUserVehicleGroup item);
+        Task Update(AdminUserVehicleGroup item);
         List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter);
         List<VehicleGroups> GetListView(AdminUserVehicleGroupFilter filter);
 

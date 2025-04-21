@@ -34,15 +34,15 @@ namespace App.Lab.Service.Implement
 
         }
 
-        public string Create(AdminUserVehicleGroup objinfo)
-        {
-            using (_uow.BeginTransaction())
-            {
-                var id = _repo.Create(objinfo);
-                _uow.SaveChanges();
-                return id;
-            }
-        }
+        //public Task Create(AdminUserVehicleGroup objinfo)
+        //{
+        //    using (_uow.BeginTransaction())
+        //    {
+        //        var id = _repo.Create(objinfo);
+        //        _uow.SaveChanges();
+        //        return Task.FromResult(id);
+        //    }
+        //}
 
         /// <summary>Adds the or edit list.</summary>
         /// <param name="items">The items.</param>
@@ -51,9 +51,8 @@ namespace App.Lab.Service.Implement
         /// Name       Date          Comments
         /// thuanbv 4/17/2025 	thêm, xóa mềm, cập nhật xóa mềm- active của danh sách nhóm phương tiện của user
         /// </Modified>
-        public ServiceStatus AddOrEditList(VehicleGroupModel items)
+        public async Task<ServiceStatus> AddOrEditListAsync(VehicleGroupModel items)
         {
-
             try
             {
                 // Lấy bản ghi đã xóa mềm
@@ -103,7 +102,7 @@ namespace App.Lab.Service.Implement
                         if (dbDeletedDict.TryGetValue(key, out var deletedItem))
                         {
                             // Phục hồi từ xóa mềm
-                            _repo.Update(new AdminUserVehicleGroup
+                            await _repo.Update(new AdminUserVehicleGroup
                             {
                                 UpdatedDate = now,
                                 IsDeleted = false,
@@ -115,7 +114,7 @@ namespace App.Lab.Service.Implement
                         else
                         {
                             // Thêm mới
-                            _repo.Create(new AdminUserVehicleGroup
+                            await _repo.Create(new AdminUserVehicleGroup
                             {
                                 CreatedDate = now,
                                 IsDeleted = null,
@@ -134,7 +133,7 @@ namespace App.Lab.Service.Implement
 
                         if (!inputKeys.Contains(key))
                         {
-                            _repo.DeleteSoft(new AdminUserVehicleGroup
+                            await _repo.DeleteSoft(new AdminUserVehicleGroup
                             {
                                 UpdatedDate = now,
                                 IsDeleted = true,
@@ -169,7 +168,8 @@ namespace App.Lab.Service.Implement
                 var listFlatten = new List<VehicleGroups>();
 
                 var listAssignGroups = _repo.GetListView(filter);
-                if (listAssignGroups == null) return ServiceStatus.Success(listFlatten);
+                if (listAssignGroups == null)
+                    return ServiceStatus.Success(listFlatten);
 
                 // Build the hierarchy tree
                 var tree = BuildHierarchy(listAssignGroups);
@@ -179,8 +179,6 @@ namespace App.Lab.Service.Implement
             {
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình lấy danh sách nhóm đã gán!");
             }
-
-
         }
 
         private List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
