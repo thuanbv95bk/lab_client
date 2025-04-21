@@ -26,7 +26,7 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [Route("get-list-assign-groups")]
-        public  IActionResult GetListAssignGroups(AdminUserVehicleGroupFilter filter)
+        public async Task<IActionResult> GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
             if (filter.FK_UserID.Length == 0)
             {
@@ -47,7 +47,7 @@ namespace App.Admin.Controllers
         /// </Modified>
         [HttpPost]
         [Route("add-or-edit-list")]
-        public  IActionResult AddOrEditList(VehicleGroupModel item)
+        public async Task<IActionResult> AddOrEditList(VehicleGroupModel item)
         {
             if (item.PK_UserID.Length == 0 || string.IsNullOrEmpty(item.PK_UserID))
             {

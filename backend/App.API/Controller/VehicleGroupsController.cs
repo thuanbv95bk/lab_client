@@ -26,7 +26,7 @@ namespace App.Admin.Controllers
         /// </Modified>
         [HttpPost]
         [Route("get-list-unassign-groups")]
-        public IActionResult GetListUnassignGroups(VehicleGroupsFilter filter)
+        public async Task<IActionResult> GetListUnassignGroups(VehicleGroupsFilter filter)
         {
 
             if (filter.PK_UserID.Length == 0 || string.IsNullOrEmpty(filter.PK_UserID))
