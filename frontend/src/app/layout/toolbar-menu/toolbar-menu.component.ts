@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Menu } from '../../model/app-model';
 import { Router } from '@angular/router';
 
@@ -9,6 +9,8 @@ import { Router } from '@angular/router';
 })
 export class ToolbarMenuComponent implements OnInit {
   selectedId: string;
+  isCollapsed = true;
+  isMobileView = false;
 
   /**
    * List menu of toolbar menu component
@@ -45,6 +47,23 @@ export class ToolbarMenuComponent implements OnInit {
    * Set mặc định về trang dash-board
    */
   ngOnInit() {
+    this.checkViewport();
     this.selectedId = '/dash-board';
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    this.checkViewport();
+  }
+
+  checkViewport() {
+    this.isMobileView = window.innerWidth < 992; // Bootstrap lg breakpoint
+    if (!this.isMobileView) {
+      this.isCollapsed = true; // Đảm bảo menu đóng khi chuyển sang desktop
+    }
+  }
+
+  toggleMenu() {
+    this.isCollapsed = !this.isCollapsed;
   }
 }

@@ -1,7 +1,9 @@
 .toolbar-user-container {
   display: flex;
+  float: inline-end;
   align-items: center;
   height: 100%;
+
   .btn {
     box-shadow: none;
     outline: none;
@@ -16,6 +18,7 @@
   width: 35px;
   height: 35px;
   border-radius: 50%;
+
   i {
     font-size: 30px;
     color: #0c0c0c91;
