@@ -24,7 +24,7 @@ namespace App.Admin.Controllers
         /// </Modified>
         [HttpPost]
         [Route("get-list")]
-        public IActionResult GetList(Users filter)
+        public async Task<IActionResult> GetList(Users filter)
         {
             if (filter == null)
             {
