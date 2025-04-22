@@ -16,6 +16,13 @@ export class TextSearchComponent {
    * Changes input
    * emit sự kiên ra ngoài khi ng dùng gõ input
    */
+  /**
+   * Changes input
+   */
+  /**
+   * Changes input
+   * @author (Set the text for this tag by adding docthis.authorName to your settings file.)
+   */
   changeInput() {
     this.searchFieldChange.emit(this.searchField);
   }

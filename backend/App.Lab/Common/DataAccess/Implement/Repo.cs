@@ -1,10 +1,9 @@
 ﻿
+using System.Data;
+using System.Text;
 using App.Common.Helper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using System.Data;
-using System.Text;
-using System.Text.Json;
 
 
 namespace App.DataAccess
@@ -14,15 +13,15 @@ namespace App.DataAccess
         private readonly IUnitOfWork _unitOfWork;
         public string Schema;
 
-        private static readonly JsonSerializerOptions jsonSerializeroptions = new JsonSerializerOptions
-        {
-            Converters =
-        {
-                new BooleanConverter(),
-                new NullableBooleanConverter()
-        },
-            PropertyNameCaseInsensitive = true
-        };
+        //private static readonly JsonSerializerOptions jsonSerializeroptions = new JsonSerializerOptions
+        //{
+        //    Converters =
+        //{
+        //        new BooleanConverter(),
+        //        new NullableBooleanConverter()
+        //},
+        //    PropertyNameCaseInsensitive = true
+        //};
 
         public Repo(IUnitOfWork unitOfWork)
         {
@@ -40,132 +39,148 @@ namespace App.DataAccess
         }
 
         #region "data helper"
-        public void ExecNonQuery(string spName, params object[] parameterValues)
+        public int ExecuteNonQuery(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
-            //if (!string.IsNullOrEmpty(Schema))
-            //    spName = $"{Schema}.{spName}";
+            IDbTransaction trans = null;
+            int affectedRows = 0;
 
-            if (_unitOfWork.GetDbContext().IsSqlServer())
+            try
             {
-                IDbTransaction trans = null;
-                try
+                // Xử lý schema cho stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
                 {
+                    commandText = $"{Schema}.{commandText}";
+                }
+
+                // Lấy connection từ UnitOfWork
+                var connection = _unitOfWork.GetDbContext().Connection;
+
+                // Mở kết nối nếu chưa mở
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                // Tạo command
+                using (var cmd = connection.CreateCommand())
+                {
+                    // Thiết lập transaction
+                    trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                    cmd.Transaction = trans;
+
+                    // Thiết lập command
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = commandType;
+
+                    // Thêm parameters nếu có
+                    if (parameters != null)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+
+                    // Thực thi command
+                    affectedRows = cmd.ExecuteNonQuery();
+
+                    // Commit transaction nếu là transaction mới tạo
                     if (_unitOfWork.GetTransaction() == null)
                     {
-                        trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                        var ret = SqlHelper.ExecuteNonQuery((SqlTransaction)trans, spName, parameterValues);
                         trans.Commit();
-                        trans.Dispose();
-                    }
-                    else
-                    {
-                        SqlHelper.ExecuteNonQuery((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
                     }
                 }
-                catch (Exception ex)
+
+                return affectedRows;
+            }
+            catch (Exception ex)
+            {
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
                 {
-                    if (trans != null)
-                    {
-                        trans.Rollback();
-                        trans.Dispose();
-                    }
-                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                    trans.Rollback();
+                }
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
+            }
+            finally
+            {
+                // Dispose transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null)
+                {
+                    trans?.Dispose();
                 }
             }
         }
-        //public void ExecNonQuery(string spName, params object[] parameterValues)
-        //{
-        //    if (!string.IsNullOrEmpty(Schema))
-        //        spName = $"{Schema}.{spName}";
-
-        //    if (_unitOfWork.GetDbContext().IsSqlServer())
-        //    {
-        //        IDbTransaction trans = null;
-        //        try
-        //        {
-        //            if (_unitOfWork.GetTransaction() == null)
-        //            {
-        //                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-        //                var ret = SqlHelper.ExecuteNonQuery((SqlTransaction)trans, spName, parameterValues);
-        //                trans.Commit();
-        //                trans.Dispose();
-        //            }
-        //            else
-        //            {
-        //                SqlHelper.ExecuteNonQuery((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            if (trans != null)
-        //            {
-        //                trans.Rollback();
-        //                trans.Dispose();
-        //            }
-        //            throw new Exception(ErrorMessage(ex, spName, parameterValues));
-        //        }
-        //    }
-        //}
-        public object ExecuteScalar(string spName, params object[] parameterValues)
+        public T ExecuteScalar<T>(string commandText, CommandType commandType = CommandType.StoredProcedure, object parameters = null)
         {
-            //if (!string.IsNullOrEmpty(Schema))
-            //    spName = $"{Schema}.{spName}";
-
-            object ret = null;
-            IDataReader dr = null;
             IDbTransaction trans = null;
+            object result = null;
+
             try
             {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                if (dr != null)
+                // Xử lý schema cho stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
                 {
-                    ret = CBO.FillString(dr);
-                    dr.Close();
+                    commandText = $"{Schema}.{commandText}";
                 }
 
-                if (trans != null)
+                // Lấy connection
+                var connection = _unitOfWork.GetDbContext().Connection;
+
+                // Mở kết nối nếu chưa mở
+                if (connection.State != ConnectionState.Open)
                 {
-                    trans.Commit();
-                    trans.Dispose();
+                    connection.Open();
+                }
+
+                using (var cmd = connection.CreateCommand())
+                {
+                    // Thiết lập transaction
+                    trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                    cmd.Transaction = trans;
+
+                    // Thiết lập command
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = commandType;
+
+                    // Thêm parameters
+                    if (parameters != null)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+
+                    // Thực thi và lấy kết quả
+                    result = cmd.ExecuteScalar();
+
+                    // Commit nếu là transaction mới
+                    if (_unitOfWork.GetTransaction() == null)
+                    {
+                        trans.Commit();
+                    }
+
+                    // Xử lý kết quả null
+                    if (result == DBNull.Value || result == null)
+                    {
+                        return default(T);
+                    }
+
+                    return (T)Convert.ChangeType(result, typeof(T));
                 }
             }
             catch (Exception ex)
             {
-                dr?.Close();
-                if (trans != null)
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
                 {
                     trans.Rollback();
-                    trans.Dispose();
                 }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
             }
-
-            return ret;
-        }
-
-        public T ExecuteScalarAs<T>(string spName, params object[] parameterValues)
-        {
-
-
-            Type type = typeof(T);
-
-            var allowedTypes = new[]
+            finally
             {
-                typeof(bool), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort),
-                typeof(int), typeof(uint), typeof(long), typeof(ulong),
-                typeof(float), typeof(double), typeof(decimal), typeof(char),
-                typeof(string), typeof(DateTime)
-            };
-
-            if (Array.IndexOf(allowedTypes, type) < 0)
-            {
-                throw new InvalidOperationException($"The type {type} is not a supported primitive type.");
+                // Dispose transaction nếu là transaction mới
+                if (_unitOfWork.GetTransaction() == null)
+                {
+                    trans?.Dispose();
+                }
             }
-
-            var retstr = ExecuteScalar(spName, parameterValues);
-            var ret = (T)Convert.ChangeType(retstr, typeof(T));
-            return ret;
         }
 
         public List<T> ExecuteReader<T>(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
@@ -238,285 +253,77 @@ namespace App.DataAccess
             }
         }
 
-       
-
-
-        public void ExecuteReader<T>(out T ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillObject<T>(dr);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public void ExecuteReaderJson<T>(out T ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            var data = ExecuteScalar(spName, parameterValues);
-            if (string.IsNullOrEmpty(data?.ToString()))
-                ret = default;
-            else
-                ret = JsonSerializer.Deserialize<T>(data.ToString(), jsonSerializeroptions);
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillList<T>(dr);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public void ExecuteReaderJson<T>(out List<T> ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            var data = ExecuteScalar(spName, parameterValues);
-            if (string.IsNullOrEmpty(data?.ToString()))
-                ret = default;
-            else
-                ret = JsonSerializer.Deserialize<List<T>>(data.ToString(), jsonSerializeroptions);
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, out int TotalCount, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillList<T>(dr, "TotalCount", out TotalCount);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public void ExecuteReader<T>(out T ret, List<string> objProperties, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillObject<T>(dr, objProperties);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, List<string> objProperties, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillList<T>(dr, objProperties);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public DataSet ExecuteDataset(string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            DataSet ds = null;
-            IDbTransaction trans = null;
-            try
-            {
-                ExecDataset(out ds, out trans, spName, parameterValues);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                ds?.Dispose();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        private string ErrorMessage(Exception ex, string spName, params object[] parameterValues)
-        {
-            return ">>>>>>> " + spName + " " + string.Join(", ", parameterValues.Select(p =>
-                    string.IsNullOrEmpty(p?.ToString()) ? "NULL" :
-                    p is string ? $"'{p}'" :
-                    p is DateTime dt ? $"'{dt:yyyy-MM-dd HH:mm:ss}'" :
-                    p.ToString())) + " >>>>>>> "
-                + ex.ToString() + " >>>>>>>";
-        }
-
-        private void Exec(out IDataReader dr, out IDbTransaction trans, string spName, params object[] parameterValues)
-        {
-            dr = null;
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, spName, parameterValues);
-
-            }
-            else
-            {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-
-            }
-        }
-
-        private void ExecDataset(out DataSet ds, out IDbTransaction trans, string spName, params object[] parameterValues)
-        {
-            ds = null;
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    ds = SqlHelper.ExecuteDataset((SqlTransaction)trans, spName, parameterValues);
-            }
-            else
-            {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    ds = SqlHelper.ExecuteDataset((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-            }
-        }
-
         private void _ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
         {
             dr = null;
             trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, sqlCommand, commandParameters);
 
-                else
-                    throw new NotImplementedException();
+            // Lấy đối tượng database context
+            var dbContext = _unitOfWork.GetDbContext();
+
+            // Kiểm tra loại database
+            if (!dbContext.IsSqlServer())
+            {
+                throw new NotImplementedException("Chỉ hỗ trợ SQL Server");
+            }
+
+            // Ép kiểu connection sang SqlConnection
+            var sqlConnection = dbContext.Connection as SqlConnection;
+            if (sqlConnection == null)
+            {
+                throw new InvalidCastException("Kết nối không phải SqlConnection");
+            }
+
+            // Kiểm tra transaction hiện có
+            var existingTrans = _unitOfWork.GetTransaction() as SqlTransaction;
+
+            if (existingTrans == null)
+            {
+                // TẠO TRANSACTION MỚI
+                // Đảm bảo kết nối đã mở
+                if (sqlConnection.State != ConnectionState.Open)
+                {
+                    sqlConnection.Open(); // Mở kết nối nếu chưa mở
+                }
+
+                // Bắt đầu transaction mới
+                trans = sqlConnection.BeginTransaction();
             }
             else
             {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), CommandType.Text, sqlCommand, commandParameters);
+                // SỬ DỤNG TRANSACTION CÓ SẴN
+                trans = existingTrans;
+            }
 
-                else
-                    throw new NotImplementedException();
+            // TẠO VÀ CẤU HÌNH COMMAND
+            var cmd = sqlConnection.CreateCommand();
+            cmd.Transaction = trans as SqlTransaction; // Gán transaction
+            cmd.CommandText = sqlCommand; // Câu lệnh SQL
+            cmd.CommandType = CommandType.Text; // Loại command
+
+            // THÊM PARAMETERS NẾU CÓ
+            if (commandParameters != null && commandParameters.Length > 0)
+            {
+                cmd.Parameters.AddRange(commandParameters); // Thêm tất cả parameters
+            }
+
+            try
+            {
+                // THỰC THI VÀ TRẢ VỀ DATA READER
+                dr = cmd.ExecuteReader(CommandBehavior.Default);
+
+                // Giữ kết nối mở cho các thao tác tiếp theo
+                // Sử dụng CommandBehavior.Default để không đóng kết nối
+            }
+            catch (Exception ex)
+            {
+                // XỬ LÝ NGOẠI LỆ
+                if (existingTrans == null) // Chỉ rollback nếu tạo transaction mới
+                {
+                    trans.Rollback();
+                    sqlConnection.Close(); // Đóng kết nối nếu tự mở
+                }
+                throw new Exception("Lỗi thực thi command", ex);
             }
         }
 
@@ -624,33 +431,6 @@ namespace App.DataAccess
             }
         }
 
-        public void ExecCommand(string sqlCommand)
-        {
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                _ExecCommand(out dr, out trans, sqlCommand, null);
-
-                dr?.Close();
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
-            }
-        }
         public void ExecCommand(string sqlCommand, SqlParameter[] commandParameters)
         {
             IDataReader dr = null;
@@ -714,10 +494,7 @@ namespace App.DataAccess
                     {
                         valueString = string.Format(" '{0}' ", value.ToString());
                     }
-                    //else if (property.PropertyType == typeof(int))
-                    //{
-                    //    valueString = string.Format(" '{0}' ", value.ToString());
-                    //}
+
                     else
                     {
                         valueString = value.ToString();
@@ -813,7 +590,5 @@ namespace App.DataAccess
             return $"{Column} {OrderType}";
         }
     }
-
-
 
 }

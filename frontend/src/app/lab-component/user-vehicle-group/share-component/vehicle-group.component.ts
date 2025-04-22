@@ -70,6 +70,7 @@ export class VehicleGroupComponent implements OnChanges {
    * @param item Groups
    * @param list Groups[]
    */
+
   onSelectedChange(item: Groups, list: Groups[]) {
     let status = false;
     if (

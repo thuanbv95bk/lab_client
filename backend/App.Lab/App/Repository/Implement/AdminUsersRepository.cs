@@ -23,26 +23,26 @@ namespace App.Lab.Repository.Implement
         public List<Users> GetList(Users filter)
         {
 
-            //var listOrderOption = new OrderOption[] {
-            //new OrderOption {
-            //    Column = "Fullname", 
-            //    OrderType = "ASC",
-            //}};
-            //var listFilter = MapFilterToOptions(filter);
-            //this.GetTableData
-            //(
-            //    out List<Users> ret
-            //    , "Users", null, listFilter, listOrderOption
-            //);
-            //return ret;
-
-            var ret = ExecuteReader<Users>
+            var listOrderOption = new OrderOption[] {
+            new OrderOption {
+                Column = "Fullname",
+                OrderType = "ASC",
+            }};
+            var listFilter = MapFilterToOptions(filter);
+            this.GetTableData
             (
-                "SELECT * FROM [Admin.Users] WHERE FK_CompanyID = @FK_CompanyID AND IsDeleted = @IsDeleted AND IsLock = @IsLock ORDER BY Fullname",
-            CommandType.Text,
-                new { FK_CompanyID = filter.FK_CompanyID, IsDeleted = filter.IsDeleted, IsLock= filter.IsLock }
+                out List<Users> ret
+                , "Users", null, listFilter, listOrderOption
             );
             return ret;
+
+            //var ret = ExecuteReader<Users>
+            //(
+            //    "SELECT * FROM [Admin.Users] WHERE FK_CompanyID = @FK_CompanyID AND IsDeleted = @IsDeleted AND IsLock = @IsLock ORDER BY Fullname",
+            //CommandType.Text,
+            //    new { FK_CompanyID = filter.FK_CompanyID, IsDeleted = filter.IsDeleted, IsLock= filter.IsLock }
+            //);
+            //return ret;
         }
     }
 

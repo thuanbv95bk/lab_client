@@ -3,11 +3,6 @@ namespace App.Common.Helper
 {
     public class Null
     {
-
-        //public static const DateTime NULL_DATE = DateTime.MinValue ;
-        //public static const DateTime MIN_DATE = new DateTime(1753, 1, 1);
-        //public static const DateTime MAX_DATE = new DateTime(9999, 12, 31);
-
         //  define application encoded null values 
 
         #region "property"
