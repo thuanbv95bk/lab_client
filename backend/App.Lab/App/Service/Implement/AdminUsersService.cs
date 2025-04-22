@@ -21,6 +21,11 @@ namespace App.Lab.Service.Implement
             _uow = uow;
         }
 
+        /// <summary>Lấy danh sách user</summary>
+        /// <param name="filter">Bộ lọc theo User</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         public List<Users> GetList(Users filter)
         {
             return _repo.GetList(filter);

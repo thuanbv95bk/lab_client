@@ -15,13 +15,12 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-        /// <summary>Gets the list.</summary>
-        /// <param name="filter">UsersFilter filter</param>
-        /// <returns>List<Users></returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/18/2025 	API lấy danh sách người dùng
-        /// </Modified>
+
+        /// <summary>API lấy danh sách người dùng</summary>
+        /// <param name="filter">Bộ lọc theo User</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("get-list")]
         public IActionResult GetList(Users filter)

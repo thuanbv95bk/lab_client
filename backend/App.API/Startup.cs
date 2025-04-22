@@ -20,7 +20,7 @@ public class Startup
 
         // https://www.tutorialsteacher.com/core/dependency-injection-in-aspnet-core
 
-        services.AddControllers(); // 👈 Bắt buộc có
+        services.AddControllers(); // 
 
         App.Lab.Startup.RegisterDependency(services);
         services.AddEndpointsApiExplorer();

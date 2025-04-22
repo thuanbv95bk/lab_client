@@ -16,14 +16,13 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-        /// <summary>Gets the list assign groups.</summary>
-        /// <param name="filter">AdminUserVehicleGroupFilter</param>
-        /// <returns>Danh sách nhóm đã gán</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/18/2025 API lấy danh sách nhóm đã gán theo user
-        /// </Modified>
 
+
+        /// <summary>API lấy danh sách nhóm đã gán theo user</summary>
+        /// <param name="filter">Bộ lọc nhóm phương tiện theo user</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("get-list-assign-groups")]
         public  IActionResult GetListAssignGroups(AdminUserVehicleGroupFilter filter)
@@ -38,13 +37,11 @@ namespace App.Admin.Controllers
         }
 
 
-        /// <summary>Adds the or edit list.</summary>
-        /// <param name="item">VehicleGroupModel</param>
-        /// <returns>Status</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/18/2025 Thêm mới/ Cập nhật danh sách nhóm theo người dùng
-        /// </Modified>
+        /// <summary>Thêm mới/ Cập nhật danh sách nhóm theo người dùng</summary>
+        /// <param name="item">model thêm mới danh sách phương tiện theo user</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("add-or-edit-list")]
         public  async Task<IActionResult> AddOrEditList(VehicleGroupModel item)

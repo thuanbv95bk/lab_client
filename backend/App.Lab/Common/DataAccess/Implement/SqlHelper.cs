@@ -410,10 +410,10 @@ namespace App.DataAccess
                 AssignParameterValues(commandParameters, parameterValues);
 
                 // Call the overload that takes an array of SqlParameters
-                return ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName, commandParameters);
+                return ExecuteNonQuery(transaction, CommandType.Text, spName, commandParameters);
             }
             else
-                return ExecuteNonQuery(transaction, CommandType.StoredProcedure, spName);
+                return ExecuteNonQuery(transaction, CommandType.Text, spName);
         } // ExecuteNonQuery
 
 
@@ -998,10 +998,10 @@ namespace App.DataAccess
 
                 AssignParameterValues(commandParameters, parameterValues);
 
-                return ExecuteReader(transaction, CommandType.StoredProcedure, spName, commandParameters);
+                return ExecuteReader(transaction, CommandType.Text, spName, commandParameters);
             }
             else
-                return ExecuteReader(transaction, CommandType.StoredProcedure, spName);
+                return ExecuteReader(transaction, CommandType.Text, spName);
         } // ExecuteReader
 
 
