@@ -4,10 +4,14 @@ using StackExchange.Redis;
 
 namespace App.Cache
 {
-    public class RedisCacheProvider :IDisposable
+    public class RedisCacheProvider : IDisposable
     {
         private static ConnectionMultiplexer RedisConnections;
-        // ngắt kết nối DB
+
+        /// <summary>Ngắt kết nối với DB</summary>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void Dispose()
         {
             if (RedisConnections != null)

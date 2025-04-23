@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
 namespace App.Common.Helper
 {
+    /// <summary>define application encoded null values </summary>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public class Null
     {
-        //  define application encoded null values 
-
         #region "property"
         public static short NullShort
         {
@@ -89,6 +91,13 @@ namespace App.Common.Helper
 
         #region "funtion"
 
+        /// <summary>Determines whether the specified object field is null.</summary>
+        /// <param name="objField">The object field.</param>
+        /// <returns>
+        ///   <c>true</c> if the specified object field is null; otherwise, <c>false</c>.</returns>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static bool IsNull(object objField)
         {
             if (objField == null)
@@ -141,7 +150,12 @@ namespace App.Common.Helper
             return false;
         }
 
-        // sets a field to an application encoded null value ( used in BLL layer )
+        /// <summary>Sets the null.  sets a field to an application encoded null value ( used in BLL layer )
+        /// </summary>
+        /// <param name="objPropertyInfo">The object property information.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object SetNull(PropertyInfo objPropertyInfo)
         {
             switch (objPropertyInfo.PropertyType.ToString().ToLower())
@@ -224,6 +238,11 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Gets the null.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object GetNull<T>()
         {
             if (Nullable.GetUnderlyingType(typeof(T)) != null)
@@ -314,6 +333,12 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Databases the get value.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objField">The object field.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static T DB_GetValue<T>(object objField)
         {
             if (((objField == DBNull.Value)
@@ -329,6 +354,13 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Databases the get value.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objField">The object field.</param>
+        /// <param name="objDefault">The object default.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static T DB_GetValue<T>(object objField, T objDefault)
         {
             if (((objField == DBNull.Value)
@@ -343,6 +375,11 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Gets the database null.</summary>
+        /// <param name="objectValue">The object value.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object GetDBNull(object objectValue)
         {
 

@@ -18,9 +18,13 @@ export class VehicleListComponent implements OnInit {
 
   constructor(private vehicleService: VehicleDataService) {}
 
+  /** Lấy danh sách Vehicles
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
   ngOnInit(): void {
     this.vehicles = this.vehicleService.getVehicles();
-
     this.filteredVehicles = [...this.vehicles];
     this.numberVehicle = this.filteredVehicles.length;
   }

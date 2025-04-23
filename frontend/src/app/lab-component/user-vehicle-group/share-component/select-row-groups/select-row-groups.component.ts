@@ -1,5 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core';
-import { Groups } from '../../model/groups';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { UserVehicleGroupView } from '../../model/user-vehicle-group';
 @Component({
   selector: 'app-select-row-groups',

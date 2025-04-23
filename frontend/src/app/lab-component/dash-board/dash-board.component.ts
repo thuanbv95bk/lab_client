@@ -23,15 +23,15 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   setOverViewClass = 'col-12 col-sm-4'; //
 
   /** widget tổng quan công ty */
-  widgetOverView!: Widget; //
+  widgetOverView!: Widget;
   /** widget tại cửa khẩu */
-  widgetBorderGate!: Widget; //
+  widgetBorderGate!: Widget;
   /** widget trên đường */
-  widgetOnTheRoad!: Widget; //
+  widgetOnTheRoad!: Widget;
   /** widget tại nhà máy */
-  widgetAtTheFactory!: Widget; //
+  widgetAtTheFactory!: Widget;
   /** widget tại cảng */
-  widgetAtThePort!: Widget; //
+  widgetAtThePort!: Widget;
 
   widgetSizeConfig = WidgetSizeConfig;
   sizeEnum = SizeEnum;
@@ -41,8 +41,8 @@ export class DashBoardComponent implements OnInit, OnDestroy {
    * @Created 23/04/2025
    * @Modified date - user - description
    */
-
-  intervalRefresh: number = 300000; //5000
+  intervalRefresh: number = 300000;
+  /** intervalId  */
   intervalId: any;
 
   @ViewChildren(WidgetItemComponent)

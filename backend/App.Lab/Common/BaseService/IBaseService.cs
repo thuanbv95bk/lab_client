@@ -2,7 +2,5 @@
 {
     public interface IBaseService
     {
-        string OrgId { get; }
-        string UserName { get; }
     }
 }

@@ -19,7 +19,7 @@ namespace App.Admin.Controllers
         /// <summary>API lấy danh sách người dùng</summary>
         /// <param name="filter">Bộ lọc theo User</param>
         /// Author: thuanbv
-        /// Created: 4/22/2025
+        /// Created: 22/04/2025
         /// Modified: date - user - description
         [HttpPost]
         [Route("get-list")]

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { User } from '../model/admin-user';
 import { UserVehicleGroupView } from '../model/user-vehicle-group';
 import { directionMoveGroupsEnum } from '../enum/vehicle-group.enum';
 import { Groups } from '../model/groups';

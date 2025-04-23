@@ -22,6 +22,12 @@ export class MultiSelectComponent implements OnInit {
   isOpen: boolean = false;
 
   constructor(private elementRef: ElementRef) {}
+
+  /** kiểm tra allSelected để set, và cập nhật bộ lọc
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
   ngOnInit(): void {
     if (this.allSelected == true) {
       this.toggleSelectAll();
@@ -29,6 +35,12 @@ export class MultiSelectComponent implements OnInit {
       this.filteredItems = this.vehicles;
     }
   }
+
+  /** focus vào ô input sau khi init
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   ngAfterViewInit() {
     if (this.searchInput) {

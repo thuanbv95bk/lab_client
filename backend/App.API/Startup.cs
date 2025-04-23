@@ -14,7 +14,11 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // Đăng ký dịch vụ
+    /// <summary> Đăng ký dịch vụ. </summary>
+    /// <param name="services">The services.</param>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public void ConfigureServices(IServiceCollection services)
     {
 
@@ -40,7 +44,13 @@ public class Startup
         services.AddSwaggerGen();
     }
 
-    // Thiết lập middleware pipeline
+
+    /// <summary>Configures the specified application. Thiết lập middleware pipeline</summary>
+    /// <param name="app">The application.</param>
+    /// <param name="env">The env.</param>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
 

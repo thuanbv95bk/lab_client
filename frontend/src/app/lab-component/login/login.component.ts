@@ -83,7 +83,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     },
     {
       index: 3,
-      imageUrl: '../assets/image/Staxi_Tinh_nang_moi.jpg',
+      imageUrl: '../assets/image/staci_Tinh_nang_moi.jpg',
       title: 'Giám sát phương tiện theo ĐIỂM - VÙNG hiệu quả',
       shortContent:
         'Giám sát phương tiện theo điểm - vùng giúp doanh nghiệp vận tải theo dõi hành trình xe, tối ưu lộ trình, kiểm soát thời gian dừng đỗ và nâng cao hiệu quả quản lý..',

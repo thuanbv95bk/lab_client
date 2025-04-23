@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "App.Lab", "App.Lab\App.Lab.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab.API", "App.API\lab.API.csproj", "{97A2584B-C9FB-06E1-3CD4-54AE9A0508A6}"
 EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseLab3", "DatabaseLab3\DatabaseLab3.sqlproj", "{689C4292-298C-4C62-831F-DCCAFE0E38AB}"
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "DatabaseLab", "DatabaseLab3\DatabaseLab.sqlproj", "{689C4292-298C-4C62-831F-DCCAFE0E38AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

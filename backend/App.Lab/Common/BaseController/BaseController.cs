@@ -8,7 +8,13 @@ namespace App.Common.BaseControllers
     public class BaseController : ControllerBase
     {
 
+        /// <summary>Successes the specified data.</summary>
+        /// <param name="data">The data.</param>
+        /// Author: thuan.bv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         [NonAction]
+        
         public IActionResult Success(object data = null)
         {
             ReponseData ret = new()
@@ -21,7 +27,14 @@ namespace App.Common.BaseControllers
             return Ok(ret);
         }
 
+        /// <summary>Failures the specified error message.</summary>
+        /// <param name="ErrorMessage">The error message.</param>
+        /// <param name="data">The data.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         [NonAction]
+
         public IActionResult Failure(string ErrorMessage = null, object data = null)
         {
             ReponseData ret = new()

@@ -18,13 +18,8 @@
 // DEALINGS IN THE SOFTWARE.
 // 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-using System.Diagnostics;
+using System.Text;
 using System.Reflection;
 using Microsoft.VisualBasic;
 using System.Xml;
@@ -51,6 +46,11 @@ namespace App.Common.Helper
 
     public class CBO
     {
+        /// <summary>Gets the property information.</summary>
+        /// <param name="objType">Type of the object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static ArrayList GetPropertyInfo(Type objType)
         {
 
@@ -63,6 +63,13 @@ namespace App.Common.Helper
             return objProperties;
         }
 
+
+        /// <summary>Gets the ordinals.</summary>
+        /// <param name="objProperties">The object properties.</param>
+        /// <param name="dr">The dr.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private static int[] GetOrdinals(ArrayList objProperties, IDataReader dr)
         {
             int[] arrOrdinals = new int[objProperties.Count + 1];
@@ -86,6 +93,13 @@ namespace App.Common.Helper
             return arrOrdinals;
         }
 
+
+        /// <summary>Gets the ordinals.</summary>
+        /// <param name="objProperties">The object properties.</param>
+        /// <param name="dr">IDataReader </param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private static int[] GetOrdinals(List<string> objProperties, IDataReader dr)
         {
             int[] arrOrdinals = new int[objProperties.Count + 1];
@@ -109,6 +123,13 @@ namespace App.Common.Helper
             return arrOrdinals;
         }
 
+        /// <summary>Creates the object.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objProperties">The object properties.</param>
+        /// <param name="arrOrdinals">The arr ordinals.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private static object CreateObject(IDataReader dr, List<string> objProperties, int[] arrOrdinals)
         {
             object objValue;
@@ -141,6 +162,17 @@ namespace App.Common.Helper
             return objObject;
         }
 
+
+        /// <summary>Creates the object.</summary>
+        /// <param name="objType">Type of the object.</param>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objProperties">The object properties.</param>
+        /// <param name="arrOrdinals">The arr ordinals.</param>
+        /// <exception cref="System.Exception">Can not convert {objPropertyInfo.Name}={objValue} to {objPropertyType} (objPropertyType.Name: {objPropertyType.Name})
+        /// or</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private static object CreateObject(Type objType, IDataReader dr, ArrayList objProperties, int[] arrOrdinals)
         {
             PropertyInfo objPropertyInfo;
@@ -199,6 +231,11 @@ namespace App.Common.Helper
             return objObject;
         }
 
+        /// <summary>Fills the string.</summary>
+        /// <param name="dr">The dr.  IDataReader</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static string FillString(IDataReader dr)
         {
             var isNull = true;
@@ -212,22 +249,50 @@ namespace App.Common.Helper
             return isNull ? null : result.ToString();
         }
 
+        /// <summary>Fills the object.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static T FillObject<T>(IDataReader dr)
         {
             Type objType = typeof(T);
             return (T)FillObject(dr, objType, true);
         }
 
+
+        /// <summary>Fills the object.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objProperties">The object properties.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static T FillObject<T>(IDataReader dr, List<string> objProperties)
         {
             return (T)FillObject(dr, objProperties, true);
         }
 
+        /// <summary>Fills the object.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objType">Type of the object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object FillObject(IDataReader dr, Type objType)
         {
             return FillObject(dr, objType, true);
         }
 
+
+        /// <summary>Fills the object.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objType">Type of the object.</param>
+        /// <param name="ManageDataReader">if set to <c>true</c> [manage data reader].</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object FillObject(IDataReader dr, Type objType, bool ManageDataReader)
         {
             object objFillObject;
@@ -265,6 +330,13 @@ namespace App.Common.Helper
             return objFillObject;
         }
 
+        /// <summary>Fills the object.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objProperties">The object properties.</param>
+        /// <param name="ManageDataReader">if set to <c>true</c> [manage data reader].</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object FillObject(IDataReader dr, List<string> objProperties, bool ManageDataReader)
         {
             object objFillObject;
@@ -299,6 +371,12 @@ namespace App.Common.Helper
             return objFillObject;
         }
 
+        /// <summary>Fills the collection.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objType">Type of the object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static ArrayList FillCollection(IDataReader dr, Type objType)
         {
             ArrayList objFillCollection = new ArrayList();
@@ -326,6 +404,13 @@ namespace App.Common.Helper
             return objFillCollection;
         }
 
+        /// <summary>Fills the list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// <param name="fieldname">The fieldname.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static List<T> FillList<T>(IDataReader dr, string fieldname)
         {
             List<T> objFillCollection = new List<T>();
@@ -349,6 +434,13 @@ namespace App.Common.Helper
             return objFillCollection;
         }
 
+        /// <summary>Fills the list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objProperties">The object properties.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static List<T> FillList<T>(IDataReader dr, List<string> objProperties)
         {
             var objFillCollection = new List<T>();
@@ -387,6 +479,12 @@ namespace App.Common.Helper
             return objFillCollection;
         }
 
+        /// <summary>Fills the list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static List<T> FillList<T>(IDataReader dr)
         {
             var objFillCollection = new List<T>();
@@ -442,6 +540,13 @@ namespace App.Common.Helper
             return objFillCollection;
         }
 
+        /// <summary>Fills the two list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static Tuple<List<T>, List<A>> FillTwoList<T, A>(IDataReader dr)
         {
             List<T> objFillCollection = new List<T>();
@@ -498,6 +603,14 @@ namespace App.Common.Helper
             return result;
         }
 
+        /// <summary>Fills the three list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="A"></typeparam>
+        /// <typeparam name="B"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static Tuple<List<T>, List<A>, List<B>> FillThreeList<T, A, B>(IDataReader dr)
         {
             List<T> objFillCollection = new List<T>();
@@ -569,6 +682,15 @@ namespace App.Common.Helper
             return result;
         }
 
+        /// <summary>Fills the list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// <param name="total_record_field">The total record field.</param>
+        /// <param name="total_record">The total record.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static List<T> FillList<T>(IDataReader dr, string total_record_field, out int total_record)
         {
             List<T> objFillCollection = new List<T>();
@@ -603,6 +725,16 @@ namespace App.Common.Helper
         }
 
 
+        /// <summary>Fills the two list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="A"></typeparam>
+        /// <param name="dr">The dr.</param>
+        /// <param name="total_record_field">The total record field.</param>
+        /// <param name="total_record">The total record.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static Tuple<List<T>, List<A>> FillTwoList<T, A>(IDataReader dr, string total_record_field, out int total_record)
         {
             List<T> objFillCollection = new List<T>();
@@ -654,6 +786,13 @@ namespace App.Common.Helper
         }
 
 
+        /// <summary>Fills the collection.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="objType">Type of the object.</param>
+        /// <param name="objToFill">The object to fill.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static IList FillCollection(IDataReader dr, Type objType, ref IList objToFill)
         {
             object objFillObject;
@@ -678,6 +817,12 @@ namespace App.Common.Helper
             return objToFill;
         }
 
+        /// <summary>Initializes the object.</summary>
+        /// <param name="objObject">The object object.</param>
+        /// <param name="objType">Type of the object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object InitializeObject(object objObject, Type objType)
         {
             PropertyInfo objPropertyInfo;
@@ -701,6 +846,11 @@ namespace App.Common.Helper
             return objObject;
         }
 
+        /// <summary>Clones the object.</summary>
+        /// <param name="objObject">The object object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static object CloneObject(object objObject)
         {
             Type objType = objObject.GetType();
@@ -716,6 +866,13 @@ namespace App.Common.Helper
             return objReturn;
         }
 
+        /// <summary>Maps the object.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="SourceObject">The source object.</param>
+        /// <param name="DesObject">The DES object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static void MapObject<T>(object SourceObject, ref T DesObject)
         {
             Type objDesType = DesObject.GetType();
@@ -736,6 +893,13 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Maps the list.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sourceList">The source list.</param>
+        /// <param name="destinationList">The destination list.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static void MapList<T>(List<object> sourceList, ref List<T> destinationList)
         {
             foreach (object sourceObject in sourceList)
@@ -746,6 +910,11 @@ namespace App.Common.Helper
             }
         }
 
+        /// <summary>Serializes the specified object object.</summary>
+        /// <param name="objObject">The object object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static XmlDocument Serialize(object objObject)
         {
             XmlSerializer objXmlSerializer = new XmlSerializer(objObject.GetType());
@@ -766,6 +935,11 @@ namespace App.Common.Helper
             return xmlSerializedObject;
         }
 
+        /// <summary>Deeps the copy.</summary>
+        /// <param name="original">The original.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public static ExpandoObject DeepCopy(ExpandoObject original)
         {
             var clone = new ExpandoObject();

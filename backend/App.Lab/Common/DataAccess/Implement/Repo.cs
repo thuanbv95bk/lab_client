@@ -33,12 +33,24 @@ namespace App.DataAccess
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>Gets the database information.</summary>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public string GetDbInfo()
         {
             return _unitOfWork.GetDbContext().Connection.ConnectionString;
         }
 
         #region "data helper"
+        /// <summary>Executes the non query.</summary>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public int ExecuteNonQuery(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
             IDbTransaction trans = null;
@@ -107,7 +119,18 @@ namespace App.DataAccess
                     trans?.Dispose();
                 }
             }
+
         }
+
+        /// <summary>Executes the scalar.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public T ExecuteScalar<T>(string commandText, CommandType commandType = CommandType.StoredProcedure, object parameters = null)
         {
             IDbTransaction trans = null;
@@ -183,6 +206,16 @@ namespace App.DataAccess
             }
         }
 
+
+        /// <summary>Executes the reader.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public List<T> ExecuteReader<T>(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
             IDataReader dr = null;
@@ -253,6 +286,17 @@ namespace App.DataAccess
             }
         }
 
+        /// <summary>Executes the command.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="trans">The trans.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="commandParameters">The command parameters.</param>
+        /// <exception cref="System.NotImplementedException">Chỉ hỗ trợ SQL Server</exception>
+        /// <exception cref="System.InvalidCastException">Kết nối không phải SqlConnection</exception>
+        /// <exception cref="System.Exception">Lỗi thực thi command</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private void _ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
         {
             dr = null;
@@ -327,6 +371,18 @@ namespace App.DataAccess
             }
         }
 
+
+        /// <summary>Gets the table data.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ret">The ret.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="lstColumn">The LST column.</param>
+        /// <param name="lstFilterOption">The LST filter option.</param>
+        /// <param name="lstOrderOption">The LST order option.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void GetTableData<T>(out List<T> ret, string tableName, string[] lstColumn = null, FilterOption[] lstFilterOption = null, OrderOption[] lstOrderOption = null)
         {
 
@@ -403,6 +459,15 @@ namespace App.DataAccess
             }
         }
 
+        /// <summary>Executes the command.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ret">The ret.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void ExecCommand<T>(out List<T> ret, string sqlCommand, SqlParameter[] parameters)
         {
             IDataReader dr = null;
@@ -431,6 +496,13 @@ namespace App.DataAccess
             }
         }
 
+        /// <summary>Executes the command.</summary>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="commandParameters">The command parameters.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void ExecCommand(string sqlCommand, SqlParameter[] commandParameters)
         {
             IDataReader dr = null;
@@ -458,6 +530,12 @@ namespace App.DataAccess
                 throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
         }
+        /// <summary>Maps to SQL parameters.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj">The object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public SqlParameter[] MapToSqlParameters<T>(T obj)
         {
             var properties = typeof(T).GetProperties();
@@ -473,6 +551,12 @@ namespace App.DataAccess
         }
 
 
+        /// <summary>Maps the filter to options.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter">The filter.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public FilterOption[] MapFilterToOptions<T>(T filter)
         {
             var filterOptions = new List<FilterOption>();
@@ -513,6 +597,12 @@ namespace App.DataAccess
             return filterOptions.ToArray();
         }
 
+        /// <summary>Adds the parameters.</summary>
+        /// <param name="cmd">The command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private void AddParameters(IDbCommand cmd, object parameters)
         {
             if (parameters is IDictionary<string, object> dictionary)
@@ -540,6 +630,13 @@ namespace App.DataAccess
             }
         }
 
+        /// <summary>Errors the message.</summary>
+        /// <param name="ex">The ex.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private string ErrorMessage(Exception ex, string commandText, object parameters)
         {
             var sb = new StringBuilder();
@@ -571,15 +668,25 @@ namespace App.DataAccess
         #endregion
     }
 
+    /// <summary> Filter Filed column mapping Db column </summary>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public class FilterOption
     {
         public string Column { get; set; }
+
+        /// <summary> value =" = " exam A=B</summary>
         public string Operator { get; set; }
         public string Value { get; set; }
         public string ValueType { get; set; }
         public int OrderValue { get; set; }
     }
 
+    /// <summary> order by Column ASC/DESC </summary>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public class OrderOption
     {
         public string Column { get; set; }

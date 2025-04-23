@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonService } from '../../service/common.service';
 import { UserService } from './service/user.service';
 import { GroupsService } from './service/groups.service';
-import { Groups, GroupService, GroupsFilter } from './model/groups';
+import { GroupsFilter } from './model/groups';
 import { UserVehicleGroupFilter, UserVehicleGroupView, VehicleGroupModel } from './model/user-vehicle-group';
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
-import { CommonService } from '../../service/common.service';
 import equal from 'fast-deep-equal';
 import { User, UsersFilter } from './model/admin-user';
-import { directionMoveGroupsEnum } from './enum/vehicle-group.enum';
 
 @Component({
   selector: 'app-user-vehicle-group',
@@ -69,6 +68,12 @@ export class UserVehicleGroupComponent implements OnInit {
     private userVehicleGroupService: UserVehicleGroupService,
     public commonService: CommonService
   ) {}
+
+  /** lấy dữ liệu masterData
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   ngOnInit() {
     this.getMasterData();

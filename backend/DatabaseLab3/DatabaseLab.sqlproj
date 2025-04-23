@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <Name>DatabaseLab3</Name>
+    <Name>DatabaseLab</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
     <ProjectGuid>{689c4292-298c-4c62-831f-dccafe0e38ab}</ProjectGuid>
@@ -68,6 +68,8 @@
     <Build Include="dbo\Tables\Company.Companies.sql" />
     <Build Include="dbo\Tables\Admin.UserVehicleGroup.sql" />
     <Build Include="dbo\Tables\Admin.Users.sql" />
+    <Build Include="dbo\Tables\HRM.Employees.sql" />
+    <Build Include="dbo\Tables\BCA.LicenseTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\Solution\Query\select User.sql" />
