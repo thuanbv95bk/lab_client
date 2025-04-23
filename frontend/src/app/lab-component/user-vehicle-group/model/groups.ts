@@ -1,10 +1,11 @@
 import { UserVehicleGroupView } from './user-vehicle-group';
 
-/**
- * Groups
- * @author thuan.bv
- * Nhóm phương tiện
+/** thông tin của  Nhóm phương tiện
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
+
 export class Groups {
   pK_VehicleGroupID!: number | null;
   fK_CompanyID!: number | null;
@@ -38,11 +39,12 @@ export class Groups {
   }
 }
 
-/**
- * Groups
- * @author thuan.bv
- * bộ lọc Nhóm phương tiện
+/** bộ lọc để lấy ra các Nhóm phương tiện
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
+
 export class GroupsFilter {
   pK_VehicleGroupID!: number | null;
   fK_CompanyID!: number | null;

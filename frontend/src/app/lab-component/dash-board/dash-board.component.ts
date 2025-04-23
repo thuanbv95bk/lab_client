@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { LocationEnum, SizeEnum, TypeChartEnum } from '../../enum/location.enum';
-import { Vehicle } from '../../enum/vehicle.model';
-import { Widget, WidgetSizeConfig } from '../../model/dashboard/dashboard.model';
-import { WidgetItemComponent } from '../../common/widget-item/widget-item.component';
-import { WidgetUpdateDataService } from '../../service/vehicle-data/widget-update-data.service';
-import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.service';
-import { AuthService } from '../../common/auth/auth.service';
+import { WidgetItemComponent } from './share-component/widget-item/widget-item.component';
+import { WidgetUpdateDataService } from './service/vehicle-data/widget-update-data.service';
+import { VehicleDataService } from './service/vehicle-data/vehicle-data.service';
+import { Vehicle } from './model/vehicle.model';
+import { LocationEnum, SizeEnum, TypeChartEnum } from './enum/location.enum';
+import { Widget, WidgetSizeConfig } from './model/dashboard.model';
 
 @Component({
   selector: 'app-dash-board',
@@ -13,25 +12,34 @@ import { AuthService } from '../../common/auth/auth.service';
   styleUrl: './dash-board.component.scss',
 })
 export class DashBoardComponent implements OnInit, OnDestroy {
-  vehicles: Vehicle[] = []; // Danh sách xe
-  filteredVehicles: Vehicle[] = []; // danh sách xe được chọn
+  /** Danh sách xe */
+  vehicles: Vehicle[] = [];
+  /** danh sách xe được chọn */
+  filteredVehicles: Vehicle[] = [];
+  /** Chọn all xe */
   isAllSelectedVehicles: boolean = false;
 
-  setOverViewClass = 'col-12 col-sm-4'; // class mặc định cho widget tổng quan công ty
+  /** class mặc định cho widget tổng quan công ty */
+  setOverViewClass = 'col-12 col-sm-4'; //
 
-  widgetOverView!: Widget; // widget tổng quan công ty
-  widgetBorderGate!: Widget; // widget tại cửa khẩu
-  widgetOnTheRoad!: Widget; // widget trên đường
-  widgetAtTheFactory!: Widget; // widget tại nhà máy
-  widgetAtThePort!: Widget; // widget tại cảng
+  /** widget tổng quan công ty */
+  widgetOverView!: Widget; //
+  /** widget tại cửa khẩu */
+  widgetBorderGate!: Widget; //
+  /** widget trên đường */
+  widgetOnTheRoad!: Widget; //
+  /** widget tại nhà máy */
+  widgetAtTheFactory!: Widget; //
+  /** widget tại cảng */
+  widgetAtThePort!: Widget; //
 
   widgetSizeConfig = WidgetSizeConfig;
   sizeEnum = SizeEnum;
 
-  /**
-   * Interval refresh of dash board component
-   * @description Thời gian để tải lại dữ liệu
-   * @value Mặc đinh 5 phút
+  /**Thời gian để tải lại dữ liệu, Mặc đinh 5 phút
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   intervalRefresh: number = 300000; //5000
@@ -41,6 +49,11 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   WidgetItem!: QueryList<WidgetItemComponent>;
 
   constructor(private vehicleService: VehicleDataService, private widgetUpdateDataService: WidgetUpdateDataService) {
+    /** Set các giá trị cho các Widget
+     * @Author thuan.bv
+     * @Created 23/04/2025
+     * @Modified date - user - description
+     */
     this.widgetOverView = new Widget(
       {
         orderValue: 1,
@@ -125,10 +138,10 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     this.widgetAtThePort.destroy(); // Hủy đăng ký Observable khi component bị hủy
   }
 
-  /**
-   * Inits data
-   * @description Khởi tạo dữ liệu của danh sách xe
-   * @author thuan.bv
+  /** Khởi tạo dữ liệu của danh sách xe
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   async initData() {
@@ -136,21 +149,24 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     this.filteredVehicles = [...this.vehicles];
   }
 
-  /**
-   * Updates filtered vehicles
-   * Cập nhật danh sách của xe để loading về cho các widget
+  /** Cập nhật danh sách của xe để loading về cho các widget
    * @param listVehicles  danh sách xe muốn truyền đi
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   updateFilteredVehicles(listVehicles: Vehicle[]) {
     this.widgetUpdateDataService.updateFilteredVehicles(listVehicles);
     this.WidgetItem.forEach((x) => x.setDashboardToComponent());
   }
 
-  /**
-   * Starts interval
-   * @description Bật time để cho loading dữ liệu :
-   * Theo thời gian : intervalRefresh : 5 phút
+  /** Bật time để cho loading dữ liệu :
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   startInterval() {
     this.intervalId = setInterval(async () => {
       await this.initData();
@@ -158,22 +174,25 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     }, this.intervalRefresh);
   }
 
-  /**
-   * Stops interval
-   * Xóa interval
+  /**  Xóa interval
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   stopInterval() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
   }
 
-  /**
-   * Determines whether selected change vehicle on
-   * @description event khi chọn xe từ select màn hình
+  /** Hàm này đồng thời tính toán dữ liệu để đẩy sang đồng bộ với các widget, event khi chọn xe từ select màn hình
    * @param selectedItems : danh sách xe đã chọn/click ở màn hình
-   * @description Hàm này đồng thời tính toán dữ liệu để đẩy sang đồng bộ với các widget
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   onSelectedChangeVehicle(selectedItems: Vehicle[]) {
     if (selectedItems.length == 0) {
       selectedItems = [...this.vehicles];
@@ -183,11 +202,12 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     this.updateFilteredVehicles(this.filteredVehicles);
   }
 
-  /**
-   * @event sự kiện click chọn option thay đỗi kích
-   * thước màn hình của các widget
-   * @param selectWidth
-   * @param locationEnum vị trí tương ứng định nghĩa ở enum location
+  /** sự kiện click chọn option thay đỗi kích
+   * @param selectWidth  kích thước
+   * @param locationEnum  vị trí tương ứng định nghĩa ở enum location
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   changeWidthSelected(widget: Widget, size: SizeEnum) {
@@ -195,12 +215,13 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     this.widgetSizeConfig.setCurrentSize(widget.location, size);
   }
 
-  /**
-   * Gets widget class
-   * set class lại cho col
+  /** set class lại cho col
    * @param location LocationEnum
-   * @returns widget class
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   getWidgetClass(location: LocationEnum): string {
     return this.widgetSizeConfig.getClass(location);
   }

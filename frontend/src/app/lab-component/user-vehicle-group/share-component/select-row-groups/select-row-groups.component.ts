@@ -7,17 +7,20 @@ import { UserVehicleGroupView } from '../../model/user-vehicle-group';
   styleUrls: ['./select-row-groups.component.scss'],
 })
 export class SelectRowGroupsComponent {
+  /** 1 nhóm cụ thể */
   @Input() attribute!: UserVehicleGroupView;
-
+  /** có chọn all hay không? true:all */
   @Input() allSelected: boolean = false;
+  /** Event sự kiện:  */
   @Output() selectedChange = new EventEmitter<UserVehicleGroupView>();
 
-  /**
-   * Padding level
-   * Thêm padding cho item nếu nó là cấp con
-   * @param item
-   * @returns
+  /**  Thêm padding cho item nếu nó là cấp con
+   * @param item nhóm group
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   paddingLevel(item: UserVehicleGroupView) {
     if (item.parentVehicleGroupId) {
       return 'padding-' + (item.level - 1);
@@ -25,15 +28,24 @@ export class SelectRowGroupsComponent {
     return 'padding-0';
   }
 
-  /**
-   * Updates all complete
-   * chọn all từ 1 cấp cha
-   * @param Attribute
+  /** chọn all từ 1 cấp cha
+   * @param attribute 1 nhóm
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   updateAllComplete(attribute: UserVehicleGroupView) {
     attribute.allComplete = attribute.groupsChild != null && attribute.groupsChild.every((t) => t.isSelected);
     this.attribute.isSelected = attribute.allComplete;
   }
+
+  /** get selected trạng thái của 1 node trong nhóm
+   * @param node 1 nhóm
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   someComplete(node: UserVehicleGroupView): boolean {
     if (node.groupsChild == null) {
@@ -42,6 +54,15 @@ export class SelectRowGroupsComponent {
 
     return node.groupsChild.filter((t) => t.isSelected).length > 0 && !node.allComplete;
   }
+
+  /** get trang thái selected của 1 node trong nhóm, set vào checkbox
+   * và emit sự kiện ra ngoài
+   * @param event Event
+   * @param item 1 nhóm- node
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   onCheckboxChange(event: Event, item: UserVehicleGroupView): void {
     const isChecked = (event.target as HTMLInputElement).checked;
@@ -52,6 +73,14 @@ export class SelectRowGroupsComponent {
     this.selectedChange.emit(this.attribute);
   }
 
+  /** set các trạng thái của 1 node
+   * @param checked trạng thái muốn set
+   * @param attribute 1 node cần set
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
+
   changeEditNode(checked: boolean, attribute: UserVehicleGroupView) {
     attribute.allComplete = checked;
     attribute.isSelected = checked;
@@ -61,11 +90,13 @@ export class SelectRowGroupsComponent {
     attribute.groupsChild.forEach((t) => (t.isSelected = checked));
   }
 
-  /**
-   * Toggles visibility
-   * Mở / đóng 1 cây
-   * @param attribute
+  /** Mở / đóng 1 cây
+   * @param param1 node muốn set
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   toggleVisibility(attribute: UserVehicleGroupView) {
     attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
   }

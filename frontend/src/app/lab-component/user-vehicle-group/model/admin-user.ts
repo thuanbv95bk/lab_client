@@ -1,3 +1,8 @@
+/** Thông tin của User
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
+ */
 export class User {
   pK_UserID: string;
   fK_CompanyID!: number;
@@ -18,6 +23,12 @@ export class User {
     this.isDeleted = obj?.isDeleted || false;
   }
 }
+
+/** Bộ lọc để lấy ra danh sách User
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
+ */
 
 export class UsersFilter {
   pK_UserID!: string;

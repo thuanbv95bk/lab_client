@@ -5,11 +5,14 @@ import { BaseDataService } from '../../../service/API-service/base-data.service'
 import { Urls } from '../model/urls/groups.urls';
 import { RespondData } from '../../../service/API-service/base.service';
 import { UserVehicleGroupView } from '../model/user-vehicle-group';
+import { GroupsFilter } from '../model/groups';
 
-/**
- * Injectable
- * Service GỌI API của nhóm phương tiện
+/**  Service GỌI API của nhóm phương tiện
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
+
 @Injectable({
   providedIn: 'root',
 })
@@ -24,16 +27,24 @@ export class GroupsService extends BaseDataService {
     super(httpClient);
   }
 
-  /**
-   * Gets list unassign groups
-   * gọi API lấy về danh sách nhóm chưa gán
+  /** gọi API lấy về danh sách nhóm chưa gán
    * @param filterModel bộ lọc nhóm phương tiện theo user
-   * @param [noLoadingMark]
-   * @returns list unassign groups
+   * @param param2 Mô tả param 2
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
-  getListUnassignGroups(filterModel: any, noLoadingMark = false): Promise<RespondData> {
-    return this.postData(this._getListUnassignGroupsUrl, filterModel, noLoadingMark);
+
+  getListUnassignGroups(filterModel: GroupsFilter): Promise<RespondData> {
+    return this.postData(this._getListUnassignGroupsUrl, filterModel, false);
   }
+
+  /** Xây cây cha-con từ danh sách nhóm
+   * @param listItem danh sách nhóm
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   buildHierarchy(listItem: UserVehicleGroupView[]): UserVehicleGroupView[] {
     const map = new Map<number, UserVehicleGroupView>();
@@ -70,23 +81,20 @@ export class GroupsService extends BaseDataService {
     return roots;
   }
 
-  /**
-   * Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
-   * @param tree
-   * @param [pK_UserID]
-   * @returns danh sách Group theo -cha-con
+  /** Gom 1 nhóm và toàn bộ con cháu vào 1 mảng phẳng
+   * @param tree danh sách Group theo -cha-con
+   * @param pK_UserID chèn pK_UserID vào từng nhóm nếu có
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   flattenGroupTree(tree: UserVehicleGroupView[], pK_UserID: string = null): UserVehicleGroupView[] {
     const result: UserVehicleGroupView[] = [];
 
     const flatten = (group: UserVehicleGroupView) => {
-      // if (group.isSelected == true) {
-      //   group.isNewItem = true;
-      // }
-      // item.isSelected = false; //
-      // item.allComplete = false; //
-      result.push(group); // Thêm phần tử cha vào kết quả
-
+      // Thêm phần tử cha vào kết quả
+      result.push(group);
       // Đệ quy qua tất cả các nhóm con
       group.groupsChild?.forEach((child) => {
         child.pK_UserID = pK_UserID ?? pK_UserID;
@@ -101,17 +109,19 @@ export class GroupsService extends BaseDataService {
         g.isNewItem = true;
       }
       flatten(g);
-    }); // Bắt đầu với từng nhóm gốc trong cây
-
+    });
+    // Bắt đầu với từng nhóm gốc trong cây
     return result;
   }
 
-  /**
-   * Hàm chuyển các item giữa các nhóm  với nhau, và build lại cây cha-con
-   * @param fromList UserVehicleGroupView/ Groups
-   * @param toList UserVehicleGroupView/ Groups
-   * @param direction chiều chuyển: 'assign' | 'unassign'
+  /** Hàm chuyển các item giữa các nhóm  với nhau, và build lại cây cha-con
+   * @param fromList  UserVehicleGroupView/ Groups nhóm cần chuyển
+   * @param param2 UserVehicleGroupView/ Groups nhóm được chuyển
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   public moveGroups(fromList: UserVehicleGroupView[], toList: UserVehicleGroupView[]) {
     const toMove = fromList.filter((g) => g.isSelected == true || g.hasChild == true || g.allComplete == true);
     let movedItems: UserVehicleGroupView[] = [];
@@ -135,21 +145,7 @@ export class GroupsService extends BaseDataService {
 
     // Xóa item chính khỏi danh sách nguồn
     const isMoved = (item) => movedItems.includes(item);
-    // const isMoved = (item) => movedItems.some((x) => x.pK_VehicleGroupID === item.pK_VehicleGroupID);
-    // Cập nhật trạng thái trước khi chuyển sang toList
 
-    // movedItems.forEach((item) => {
-    //   item.isNewItem = true;
-    //   item.isSelected = false;
-    //   item.allComplete = false;
-    //   if (item.hasChild) {
-    //     item.groupsChild.forEach((x) => {
-    //       x.allComplete = false;
-    //       x.isSelected = false;
-    //       x.isNewItem = false;
-    //     });
-    //   }
-    // });
     // Cập nhật danh sách đích
     toList.unshift(...movedItems);
     const updatedFromList = fromList.filter((g) => !isMoved(g));
@@ -164,26 +160,16 @@ export class GroupsService extends BaseDataService {
     // Gán lại danh sách nguồn đã được lọc
     const allRelatedGroups = this.flattenGroupTree(updatedFromList);
     return this.buildHierarchy(allRelatedGroups);
-
-    // if (direction === directionMoveGroupsEnum.Assign) {
-    //   this.listUnassignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-    // } else {
-    //   this.currentGroupIdsStr = this.groupsService.getSortedIdString(allRelatedGroups, this.keyId);
-    //   this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-    // }
   }
 
-  /**
-   * Tạo chuỗi ID sau khi sort
+  /** Tạo chuỗi ID sau khi và sort data asc
+   * @param groups danh sách nhóm
+   * @param ket key để lấy value
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
-  /**
-   * Gets sorted id string
-   * sắp xếp - Tạo chuỗi string-key ID theo key
-   * để so sách kiểm tra có sự thay đổi của  nhóm
-   * @param groups
-   * @param key
-   * @returns sorted id string
-   */
+
   public getSortedIdString(groups: UserVehicleGroupView[], key: string): string {
     return [...groups]
       .map((g) => String(g[key]))

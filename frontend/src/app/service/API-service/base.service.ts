@@ -1,6 +1,12 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
 
+/** interface RespondData chưa thông tin API trả về
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
+ */
+
 export interface RespondData {
   isSuccess: boolean;
   errorMessage: string;
@@ -8,11 +14,23 @@ export interface RespondData {
   statusCode: number;
 }
 
+/** interface định nghĩa các phương thức cơ bản của Res API
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
+ */
+
 export interface IBaseService {
   post(url: string): Promise<any>;
   postData(url: string, data: any): Promise<any>;
   postParams(url: string, params: HttpParams): Promise<any>;
 }
+
+/** BaseService các phương thức của API
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
+ */
 
 export class BaseService implements IBaseService {
   constructor(protected httpClient: HttpClient) {}

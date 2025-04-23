@@ -4,9 +4,10 @@ import { BaseDataService } from '../../../service/API-service/base-data.service'
 import { HttpClient } from '@angular/common/http';
 import { Urls } from '../model/urls/user.urls';
 
-/**
- * Injectable
- * Service GỌI API người dùng
+/**Service GỌI API User
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
 
 @Injectable({

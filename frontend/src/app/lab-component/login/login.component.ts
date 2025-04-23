@@ -1,11 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-
 import { Router } from '@angular/router';
-import { Branch, Languages, Menu, News } from '../../model/app-model';
 import { CommonService } from '../../service/common.service';
-import { AppGlobals } from '../../common/app-global';
-import { AuthService } from '../../common/auth/auth.service';
+import { AppGlobals } from '../../app-global';
+import { AuthService } from '../../auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
+import { Menu, News, Branch, Languages } from './model/app-model';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,10 +13,12 @@ import { TranslateService } from '@ngx-translate/core';
 export class LoginComponent implements OnInit, OnDestroy {
   //#region Khởi tạo dữ liệu MasterData
 
-  /**
-   * List menu of layout grid component
-   * @class Menu danh sách menu hiển thị
+  /** Khởi tạo các giá trị cho Menu
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   listMenu: Menu[] = [
     {
       href: 'https://bagps.vn/',
@@ -49,10 +50,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     },
   ];
 
-  /**
-   * List new of layout grid component
-   * @class Danh sách các trang tin tức, và link của tin
+  /** Danh sách các trang tin tức, và link của tin
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   listNew: News[] = [
     {
       index: 0,
@@ -96,10 +99,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     },
   ];
 
-  /**
-   * Listbranch  of layout grid component
-   * @class danh sách của các chi nhanh hiện ở footer
+  /**danh sách của các chi nhanh hiện ở footer
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   Listbranch: Branch[] = [
     {
       index: 0,
@@ -169,10 +174,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     },
   ];
 
-  /**
-   * List languages of layout grid component
-   * Danh sách ngôn ngữ hiển thị: để 2 ngôn ngữ
+  /**  List languages of layout grid component
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   listLanguages: Languages[] = [
     { code: 'vi', name: 'Tiếng Việt', flag: 'https://flagcdn.com/w40/vn.png' },
     { code: 'en', name: 'English', flag: 'https://flagcdn.com/w40/gb.png' },
@@ -181,23 +188,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   //#endregion
 
   //#region Khởi tạo biến
+
+  /**Lưu userName */
   userName: string = '';
+  /**Lưu passWord */
   passWord: string = '';
+  /**Lưu isRememberMe ghi nhớ mật khẩu */
   isRememberMe: boolean = false;
+  /** Ngôn ngử */
   getLanguages: string;
   selectedLang: Languages = new Languages();
-  /**
-   * Current slide of layout grid component
-   * thứ tự của slide hiện tại
-   */
+
+  /**thứ tự của slide hiện tại*/
   currentSlide: number = 0;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   intervalId: any;
 
-  /**
-   * Interval slide of layout grid component
-   * thời gian để chuyển sang 1 slide mới
-   */
+  /** thời gian để chuyển sang 1 slide mới */
   intervalSlide: number = 5000; // 5s
   //#endregion
 
@@ -211,38 +218,42 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.switchLanguage(this.getLanguages);
   }
   ngOnInit(): void {
-    // this.startAutoSlide();
-    // this.authService.checkLoggedIn();
+    this.startAutoSlide();
   }
 
   ngOnDestroy() {
     this.stopAutoSlide();
   }
 
-  /**
-   * Logins layout grid component
-   * đăng nhập hệ thống
-   * @requires userName
-   * @requires passWord
-   * @returns goto đến page mặc định nêu đăng nhập đúng
+  /** đăng nhập hệ thống
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   async login() {
     await this.authService.signIn(this.userName, this.passWord, this.isRememberMe);
   }
 
-  /**
-   * Selects language
-   * @param lang vi/en code của 1 ngôn ngử đươc chọn
+  /** Selects language
+   * @param lang vi/en code của 1 ngôn ngử chọn
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   selectedLanguage(lang: string) {
     this.switchLanguage(lang);
     AppGlobals.setLang(lang); // Lưu vào localStorage
   }
 
-  /**
-   * Switchs language setting lại ngôn ngữ khi người dùng chọn từ giao diện
-   * @param lang vi/en code của 1 ngôn ngử đươc chọn
+  /**  Switch language setting lại ngôn ngữ khi người dùng chọn từ giao diện
+   * @param lang vi/en code của 1 ngôn ngử được chọn
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   switchLanguage(lang: string) {
     this.translate.use(lang);
     const _index = this.listLanguages.findIndex((x) => x.code == this.getLanguages);
@@ -251,16 +262,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  //#region  Funtion Slide
+  //#region
 
-  /**
-   * Starts auto slide start chạy slide
+  /** start chạy slide
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   startAutoSlide() {
     this.intervalId = setInterval(() => {
       this.nextSlide();
     }, this.intervalSlide);
   }
+
+  /**
+   * Stop chạy slide
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   stopAutoSlide() {
     if (this.intervalId) {
@@ -268,14 +289,28 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  /** chuyển slide
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
   updateSlide(index: number) {
     this.currentSlide = index;
   }
 
+  /** chuyển slide kê tiếp
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
   nextSlide() {
     this.currentSlide = (this.currentSlide + 1) % this.listNew.length;
   }
-
+  /** lùi slide kê tiếp
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
   prevSlide() {
     this.currentSlide = (this.currentSlide - 1 + this.listNew.length) % this.listNew.length;
   }
@@ -285,6 +320,14 @@ export class LoginComponent implements OnInit, OnDestroy {
    * Go tab page mở tab chuyển đến trang yêu cầu
    * @param event link của trang cần mở
    */
+
+  /**  mở tab chuyển đến trang yêu cầu
+   * @Author thuan.bv
+   * @param event link
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
+
   goTabPage(event: string) {
     window.open(event, '_blank');
   }
