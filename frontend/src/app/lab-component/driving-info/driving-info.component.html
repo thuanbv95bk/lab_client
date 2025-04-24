@@ -7,14 +7,23 @@
     <div class="col">
       <app-multi-select-dropdown
         [title]="'Lái xe'"
-        [item]="this.lstDriver"
+        [items]="this.lstDriver"
+        [displayField1]="'displayName'"
+        [displayField2]="'driverLicense'"
         [allSelected]="false"
         [placeholder]="'Chọn lái xe'"
         [search]="true"
         [selectAll]="true"></app-multi-select-dropdown>
     </div>
     <div class="col">
-      <app-multi-select-dropdown [title]="'Loại bằng'"></app-multi-select-dropdown>
+      <app-multi-select-dropdown
+        [title]="'Loại bằng'"
+        [items]="this.listLicenseTypes"
+        [displayField1]="'name'"
+        [allSelected]="false"
+        [placeholder]="'Chọn loại bằng'"
+        [search]="true"
+        [selectAll]="true"></app-multi-select-dropdown>
     </div>
     <div class="col-auto d-flex flex-column align-items-center p-2">
       <div class="mt-auto">

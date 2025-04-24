@@ -11,6 +11,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { HrmEmployeesCbx } from '../../model/hrm-employees.model';
+import { BehaviorSubject, ReplaySubject, Subject, takeUntil } from 'rxjs';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-multi-select-dropdown',
@@ -21,24 +23,41 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   /**  tiêu đề */
   @Input() title: string = 'Tìm kiếm';
 
-  @Input() item: HrmEmployeesCbx[] = [];
+  @Input() displayField1: string = '';
+  @Input() displayField2: string = '';
+  @Input() separate: string = ' - ';
+
+  @Input()
+  set items(value) {
+    this._data.next(value);
+  }
+  get items() {
+    return this._data.getValue();
+  }
+  private _items: any[];
+  // @Input() items: any[] = [];
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
   @Input() allSelected: boolean = false;
-  @Output() selectedChange = new EventEmitter<HrmEmployeesCbx[]>();
+  @Output() selectedChange = new EventEmitter<any[]>();
 
   @ViewChild('searchInput') searchInput!: ElementRef;
 
-  selectedItems: HrmEmployeesCbx[] = [];
-  filteredItems: HrmEmployeesCbx[] = [];
-  searchQuery: string = '';
+  selectedItems: any[] = [];
+  // filteredItems: any[] = [];
+  searchField: string = '';
   isOpen: boolean = false;
 
+  // private _items: any[];
+  private _data = new BehaviorSubject<any[]>([]);
+  public filteredItems: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  private _onDestroy = new Subject<void>();
+  FilterCtrl: FormControl = new FormControl();
   constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['item']) {
+    if (changes['items']) {
       this.initData();
     }
   }
@@ -52,12 +71,45 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.initData();
   }
   initData() {
-    if (this.allSelected == true) {
-      this.toggleSelectAll();
-    } else {
-      this.filteredItems = this.item;
+    console.log(this.items);
+
+    this._data.pipe(takeUntil(this._onDestroy)).subscribe((x) => {
+      this._items = this.items;
+      this.filteredItems.next(this.items);
+    });
+    // listen for search field value changes
+    this.FilterCtrl.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+      this.filterItems();
+    });
+    console.log(this._items);
+  }
+  /** lọc danh sách khi người dùng tìm kiếm ở ô chọn
+   * @Author thuan.bv
+   * @Created 24/04/2025
+   * @Modified date - user - description
+   */
+  protected filterItems() {
+    if (!this._items) {
+      return;
     }
-    console.log(this.filteredItems);
+    // get the search keyword
+    let search = this.FilterCtrl.value;
+    if (!search) {
+      this.filteredItems.next(this._items.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter items
+    this.filteredItems.next(
+      this._items.filter((itm) => {
+        // tim kiem tren ca field2
+        return (
+          (this.displayField1 && itm[this.displayField1].toString().toLowerCase().indexOf(search) > -1) ||
+          (this.displayField2 && itm[this.displayField2].toString().toLowerCase().indexOf(search) > -1)
+        );
+      })
+    );
   }
 
   /** focus vào ô input sau khi init
@@ -82,7 +134,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      this.filterList();
+      // this.filterList();
       setTimeout(() => {
         if (this.searchInput) {
           this.searchInput.nativeElement.focus();
@@ -105,18 +157,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     }
   }
 
-  /** lọc danh sách xe khi người dùng tìm kiếm ở ô chọn
-   * @Author thuan.bv
-   * @Created 23/04/2025
-   * @Modified date - user - description
-   */
-
-  filterList() {
-    // this.filteredItems = this.item.filter((item?) =>
-    //   item.DisplayName.toLowerCase().includes(this.searchQuery.toLowerCase())
-    // );
-  }
-
   /** chọn/ bỏ chọn 1 xe
    * @param item Vehicle : xe được chọn
    * @Author thuan.bv
@@ -124,7 +164,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
    * @Modified date - user - description
    */
 
-  toggleList(item: HrmEmployeesCbx) {
+  toggleList(item: any) {
     const index = this.selectedItems.indexOf(item);
     if (index == -1) {
       this.selectedItems.push(item);
@@ -132,7 +172,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
       this.selectedItems.splice(index, 1);
     }
     this.selectedChange.emit(this.selectedItems);
-    this.allSelected = this.selectedItems.length === this.item.length;
+    this.allSelected = this.selectedItems.length === this.items.length;
   }
 
   /** xóa xe đã chọn
@@ -143,13 +183,13 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
    * @Modified date - user - description
    */
 
-  removeItem(item: HrmEmployeesCbx) {
+  removeItem(item: any) {
     const index = this.selectedItems.indexOf(item);
     if (index !== -1) {
       this.selectedItems.splice(index, 1);
       this.selectedChange.emit(this.selectedItems);
     }
-    this.allSelected = this.selectedItems.length === this.item.length;
+    this.allSelected = this.selectedItems.length === this.items.length;
   }
 
   /** chọn/ bỏ chọn check all
@@ -161,7 +201,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
 
   toggleSelectAll() {
     if (this.allSelected) {
-      this.selectedItems = [...this.item];
+      this.selectedItems = [...this.items];
     } else {
       this.selectedItems = [];
     }
@@ -175,7 +215,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
    * @Modified date - user - description
    */
 
-  isSelected(item: HrmEmployeesCbx): boolean {
+  isSelected(item: any): boolean {
     return this.selectedItems.includes(item);
   }
 
@@ -188,7 +228,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
 
   getDisplayText(): string {
     if (this.allSelected == true) {
-      return `Tất cả (${this.item.length})`;
+      return `Tất cả (${this.items.length})`;
     }
     if (this.selectedItems.length == 0) return '';
     return `${this.selectedItems.length} được chọn`;

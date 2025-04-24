@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AppGlobals } from '../../../../app-global';
 
 @Component({
   selector: 'app-pagination',
@@ -12,8 +13,8 @@ export class PaginationComponent {
   @Input() isLoading: boolean = false;
   @Output() pageChange = new EventEmitter<number>();
   @Output() itemsPerPageChange = new EventEmitter<number>();
-
   @Output() reload = new EventEmitter<void>();
+  appGlobals = AppGlobals;
   Math = Math; // Add this line to make Math available in template
 
   get totalPages(): number {

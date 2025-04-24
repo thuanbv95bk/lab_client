@@ -24,6 +24,7 @@ export interface IBaseService {
   post(url: string): Promise<any>;
   postData(url: string, data: any): Promise<any>;
   postParams(url: string, params: HttpParams): Promise<any>;
+  get(url: string): Promise<any>;
 }
 
 /** BaseService các phương thức của API

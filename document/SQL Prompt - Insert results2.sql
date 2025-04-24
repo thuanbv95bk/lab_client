@@ -1,5 +1,5 @@
-CREATE TABLE #temptable ( [PK_LicenseTypeID] int, [Name] nvarchar(500), [Code] nvarchar(200), [IsActived] bit, [IsDeteted] bit, [CreatedByUser] uniqueidentifier, [CreatedDate] datetime, [UpdatedByUser] uniqueidentifier, [UpdatedDate] datetime )
-INSERT INTO #temptable
+--CREATE TABLE [BCA.LicenseTypes] ( [PK_LicenseTypeID] int, [Name] nvarchar(500), [Code] nvarchar(200), [IsActived] bit, [IsDeteted] bit, [CreatedByUser] uniqueidentifier, [CreatedDate] datetime, [UpdatedByUser] uniqueidentifier, [UpdatedDate] datetime )
+INSERT INTO [BCA.LicenseTypes]
 VALUES
 ( 1, N'A1', N'A1', 1, 0, '{00000000-0000-0000-0000-000000000000}', N'2024-12-28T11:49:48.87', NULL, NULL ), 
 ( 2, N'A2', N'A2', 1, 0, '{00000000-0000-0000-0000-000000000000}', N'2024-12-30T14:56:05.113', NULL, NULL ), 
@@ -33,4 +33,4 @@ VALUES
 ( 30, N'D2E', N'D2E', 0, 0, '{00000000-0000-0000-0000-000000000000}', N'2025-03-06T08:36:43.537', NULL, NULL ), 
 ( 31, N'DE', N'DE', 1, 1, '{00000000-0000-0000-0000-000000000000}', N'2025-03-06T08:36:43.537', NULL, NULL )
 
-DROP TABLE #temptable
+DROP TABLE [BCA.LicenseTypes]

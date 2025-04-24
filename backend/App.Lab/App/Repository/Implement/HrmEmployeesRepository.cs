@@ -30,15 +30,15 @@ namespace App.Lab.Repository.Implement
         /// Modified: date - user - description
         public List<HrmEmployeesCbx> GetListCbx(int FkCompanyID)
         {
-            var listItem = new List < HrmEmployeesCbx >(){};
+            var listItem = new List<HrmEmployeesCbx>() { };
 
             listItem = ExecuteReader<HrmEmployeesCbx>
             (
-                "SELECT DisplayName, DriverLicense  FROM [HRM.Employees] WHERE ISNULL(IsDeleted, 0) =0 AND ISNULL(IsLocked, 0) =0 AND FK_CompanyID = @FK_CompanyID ",
+                "SELECT DisplayName, DriverLicense FROM [HRM.Employees] WHERE ISNULL(IsDeleted, 0) =0 AND ISNULL(IsLocked, 0) =0 AND FK_CompanyID = @FK_CompanyID ;",
             CommandType.Text,
                 new { FK_CompanyID = FkCompanyID }
             );
-    
+
             return listItem;
         }
     }

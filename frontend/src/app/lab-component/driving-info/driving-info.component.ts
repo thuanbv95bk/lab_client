@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { HrmEmployeesService } from './service/hrm-employees.service';
 import { HrmEmployeesCbx } from './model/hrm-employees.model';
+import { BcaLicenseTypes } from './model/bca-license-types';
+import { BcaLicenseTypesService } from './service/bca-license-types.service';
 
 @Component({
   selector: 'app-driving-info',
@@ -13,13 +15,18 @@ export class DrivingInfoComponent implements OnInit {
   FkCompanyID: number = 15076;
 
   lstDriver: HrmEmployeesCbx[] = [];
+  listLicenseTypes: BcaLicenseTypes[] = [];
 
   currentPage = 1;
   itemsPerPage = 10;
   totalItems = 150; // This should come from your API response
   isLoading: false;
 
-  constructor(private fb: FormBuilder, private employeesService: HrmEmployeesService) {
+  constructor(
+    private fb: FormBuilder,
+    private employeesService: HrmEmployeesService,
+    private licenseTypesService: BcaLicenseTypesService
+  ) {
     this.form = this.fb.group({
       drivers: this.fb.array([]),
     });
@@ -30,6 +37,7 @@ export class DrivingInfoComponent implements OnInit {
   ngOnInit() {
     /** Lấy về danh sách lái xe to CBX */
     this.getListEmployeesToCbx();
+    this.getListLicenseTypes();
   }
 
   getListEmployeesToCbx() {
@@ -40,6 +48,21 @@ export class DrivingInfoComponent implements OnInit {
           return;
         }
         this.lstDriver = res.data || [];
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  }
+  getListLicenseTypes() {
+    this.licenseTypesService.getListActive().then(
+      async (res) => {
+        if (!res.isSuccess) {
+          console.error(res);
+          return;
+        }
+        this.listLicenseTypes = res.data || [];
+        console.log(this.listLicenseTypes);
       },
       (err) => {
         console.log(err);

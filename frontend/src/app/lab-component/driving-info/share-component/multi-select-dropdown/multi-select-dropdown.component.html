@@ -16,8 +16,7 @@
         #searchInput
         type="text"
         class="border-0 p-0 search-input form-control"
-        [(ngModel)]="searchQuery"
-        (input)="filterList()"
+        [formControl]="FilterCtrl"
         [placeholder]="placeholder" />
       <div class="input-group-append">
         <i class="dropdown-icon" [ngClass]="!isOpen ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"></i>
@@ -28,18 +27,20 @@
     <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="isOpen">
       <div class="select-all p-2 border-bottom" *ngIf="selectAll">
         <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
-        <label class="form-check-label p-1">Tất cả ({{ item.length }})</label>
+        <label class="form-check-label p-1">Tất cả ({{ items.length }})</label>
       </div>
 
       <!-- Danh sách các tùy chọn -->
       <div class="options" style="max-height: 15rem; overflow-y: auto">
         <div
-          *ngFor="let option of filteredItems"
+          *ngFor="let item of filteredItems | async"
           class="option d-flex align-items-center p-2 border-bottom form-check"
-          [class.bg-light]="isSelected(option)"
-          (click)="toggleList(option)">
-          <input type="checkbox" [checked]="isSelected(option)" />
-          <label class="form-check-label p-1">{{ option.displayName }}</label>
+          [class.bg-light]="isSelected(item)"
+          (click)="toggleList(item)">
+          <input type="checkbox" [checked]="isSelected(item)" />
+          <label class="form-check-label p-1">
+            {{ item[displayField1] }}{{ displayField2 && item[displayField2] ? separate + item[displayField2] : '' }}
+          </label>
         </div>
       </div>
     </div>

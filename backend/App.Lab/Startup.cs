@@ -66,6 +66,9 @@ namespace App.Lab
             services.AddTransient<IHrmEmployeesRepository, HrmEmployeesRepository>();
             services.AddTransient<IHrmEmployeesService, HrmEmployeesService>();
 
+            services.AddTransient<IBcaLicenseTypesRepository, BcaLicenseTypesRepository>();
+            services.AddTransient<IBcaLicenseTypesService, BcaLicenseTypesService>();
+
             services.AddMvcCore();
         }
 
