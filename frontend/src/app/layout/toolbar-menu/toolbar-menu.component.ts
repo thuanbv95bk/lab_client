@@ -31,6 +31,10 @@ export class ToolbarMenuComponent implements OnInit {
       href: '/user-vehicle-group',
       code: 'Nhóm phương tiện',
     },
+    {
+      href: '/driving-info',
+      code: 'Thông tin lái xe',
+    },
   ];
   constructor(private router: Router) {}
 

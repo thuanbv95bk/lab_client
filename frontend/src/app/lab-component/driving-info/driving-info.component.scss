@@ -1,0 +1,46 @@
+.driving-form {
+    .btn-sm {
+        background-color: #0959A0;
+    }
+
+    // .g-2>[class^='btn-sm'] {
+    //     padding: 0.5rem;
+    //     /* tương đương g-2 trong BS5 */
+    // }
+
+    .g-2 {
+        margin-left: -0.5rem;
+        margin-right: -0.5rem;
+    }
+
+    // padding: 10px;
+
+    &-title {
+        color: #436a9f;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+
+    .table-responsive {
+        .head-light {
+            background-color: #2D9CDB !important;
+            color: white;
+            align-items: center;
+            text-align: center;
+        }
+
+        .col-required {
+            color: red;
+        }
+
+    }
+
+    // &-search {
+    //     .btn-sm {
+    //         background-color: #0959A0;
+    //     }
+
+    // }
+
+
+}

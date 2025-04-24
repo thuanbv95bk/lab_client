@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.initTranslate();
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dash-board']);
+      this.router.navigate(['/driving-info']);
     }
   }
 

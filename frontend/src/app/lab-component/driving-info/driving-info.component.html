@@ -1,0 +1,96 @@
+<div class="container-fluid driving-form p-0">
+  <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
+  <div class="driving-form-search row w-100">
+    <div class="col">
+      <app-input-search-option></app-input-search-option>
+    </div>
+    <div class="col">
+      <app-multi-select-dropdown
+        [title]="'Lái xe'"
+        [item]="this.lstDriver"
+        [allSelected]="false"
+        [placeholder]="'Chọn lái xe'"
+        [search]="true"
+        [selectAll]="true"></app-multi-select-dropdown>
+    </div>
+    <div class="col">
+      <app-multi-select-dropdown [title]="'Loại bằng'"></app-multi-select-dropdown>
+    </div>
+    <div class="col-auto d-flex flex-column align-items-center p-2">
+      <div class="mt-auto">
+        <button class="btn-sm text-white"><i class="fa fa-search"></i> Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+  <div class="d-flex float-right mt-1 g-2">
+    <button class="btn-sm text-white"><i class="fa fa-save"></i> Lưu thông tin</button>
+    <button class="btn-sm text-white ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
+    <button class="btn-sm text-white"><i class="fa fa-file-excel"></i></button>
+  </div>
+  <form [formGroup]="form">
+    <div class="table-responsive pt-2">
+      <table class="table table-bordered table-sm mb-0">
+        <thead class="head-light">
+          <tr>
+            <th>STT</th>
+            <th>Họ và tên <span class="col-required">*</span></th>
+            <th>Số điện thoại</th>
+            <th>Số giấy phép lái xe <span class="col-required">*</span></th>
+            <th>Ngày cấp <span class="col-required">*</span></th>
+            <th>Ngày hết hạn <span class="col-required">*</span></th>
+            <th>Nơi cấp <span class="col-required">*</span></th>
+            <th>Loại bằng <span class="col-required">*</span></th>
+            <th>Ngày cập nhật</th>
+            <th>Xóa</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="drivers">
+          <tr *ngFor="let driver of driversForm.controls; let i = index" [formGroupName]="i">
+            <td>{{ i + 1 }}</td>
+            <td><input formControlName="fullName" class="form-control form-control-sm" /></td>
+            <td><input formControlName="phone" class="form-control form-control-sm" /></td>
+            <td><input formControlName="licenseNumber" class="form-control form-control-sm" /></td>
+            <td><input type="date" formControlName="issueDate" class="form-control form-control-sm" /></td>
+            <td><input type="date" formControlName="expireDate" class="form-control form-control-sm" /></td>
+            <td><input formControlName="issuePlace" class="form-control form-control-sm" /></td>
+            <td>
+              <select formControlName="licenseType" class="form-control form-control-sm">
+                <option value="">Chọn loại bằng</option>
+                <option *ngFor="let type of licenseTypes" [value]="type">{{ type }}</option>
+              </select>
+            </td>
+            <td>{{ today | date : 'HH:mm dd/MM/yyyy' }}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="removeDriver(i)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </form>
+
+  <app-pagination
+    [currentPage]="currentPage"
+    [itemsPerPage]="itemsPerPage"
+    [totalItems]="totalItems"
+    [isLoading]="isLoading"
+    (pageChange)="onPageChange($event)"
+    (itemsPerPageChange)="onItemsPerPageChange($event)">
+  </app-pagination>
+
+  <!-- Pagination -->
+
+  <!-- <div class="d-flex justify-content-between align-items-center px-2">
+    <div>
+      <select class="form-control form-control-sm d-inline-block w-auto">
+        <option>10</option>
+        <option>20</option>
+        <option>50</option>
+      </select>
+      dòng mỗi trang
+    </div>
+ 
+  </div> -->
+</div>

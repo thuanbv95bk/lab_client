@@ -2,7 +2,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { MultiSelectComponent } from './lab-component/dash-board/share-component/multi-select/multi-select.component';
@@ -35,6 +35,10 @@ import { ToolbarMenuComponent } from './layout/toolbar-menu/toolbar-menu.compone
 import { UserMenuComponent } from './layout/user-menu/user-menu.component';
 import { CookieService } from 'ngx-cookie-service';
 import { TextSearchComponent } from './lab-component/user-vehicle-group/share-component/text-search/text-search.component';
+import { DrivingInfoComponent } from './lab-component/driving-info/driving-info.component';
+import { InputSearchOptionComponent } from './lab-component/driving-info/share-component/input-search-option/input-search-option.component';
+import { MultiSelectDropdownComponent } from './lab-component/driving-info/share-component/multi-select-dropdown/multi-select-dropdown.component';
+import { PaginationComponent } from './lab-component/driving-info/share-component/pagination/pagination.component';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -44,6 +48,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
   declarations: [
     AppComponent,
     LayoutComponent,
+
     ToolbarMenuComponent,
     UserMenuComponent,
     SelectRowGroupsComponent,
@@ -62,12 +67,17 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     VehicleGroupComponent,
     TextSearchComponent,
     UserVehicleGroupComponent,
+    InputSearchOptionComponent,
+    MultiSelectDropdownComponent,
+    PaginationComponent,
+    DrivingInfoComponent,
   ],
   imports: [
     HttpClientModule,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     NgChartsModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({

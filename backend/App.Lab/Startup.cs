@@ -63,6 +63,9 @@ namespace App.Lab
             services.AddTransient<IAdminUserVehicleGroupRepository, AdminUserVehicleGroupRepository>();
             services.AddTransient<IAdminUserVehicleGroupService, AdminUserVehicleGroupService>();
 
+            services.AddTransient<IHrmEmployeesRepository, HrmEmployeesRepository>();
+            services.AddTransient<IHrmEmployeesService, HrmEmployeesService>();
+
             services.AddMvcCore();
         }
 

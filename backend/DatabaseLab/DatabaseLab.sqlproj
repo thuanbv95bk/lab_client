@@ -6,13 +6,13 @@
     <Name>DatabaseLab</Name>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectVersion>4.1</ProjectVersion>
-    <ProjectGuid>{689c4292-298c-4c62-831f-dccafe0e38ab}</ProjectGuid>
+    <ProjectGuid>{cf250674-e553-4396-bacd-487cac54a6e9}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>DatabaseLab3</RootNamespace>
-    <AssemblyName>DatabaseLab3</AssemblyName>
+    <RootNamespace>DatabaseLab</RootNamespace>
+    <AssemblyName>DatabaseLab</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -58,20 +58,15 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
-    <Folder Include="dbo\Solution" />
-    <Folder Include="dbo\Solution\Query" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Vehicle.Vehicles.sql" />
     <Build Include="dbo\Tables\Vehicle.VehicleGroups.sql" />
     <Build Include="dbo\Tables\Vehicle.Groups.sql" />
+    <Build Include="dbo\Tables\HRM.Employees.sql" />
     <Build Include="dbo\Tables\Company.Companies.sql" />
+    <Build Include="dbo\Tables\BCA.LicenseTypes.sql" />
     <Build Include="dbo\Tables\Admin.UserVehicleGroup.sql" />
     <Build Include="dbo\Tables\Admin.Users.sql" />
-    <Build Include="dbo\Tables\HRM.Employees.sql" />
-    <Build Include="dbo\Tables\BCA.LicenseTypes.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="dbo\Solution\Query\select User.sql" />
   </ItemGroup>
 </Project>

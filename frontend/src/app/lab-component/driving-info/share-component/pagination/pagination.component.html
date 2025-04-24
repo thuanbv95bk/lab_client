@@ -1,0 +1,115 @@
+<!-- <div class="d-flex justify-content-start align-items-center container-pagination mx-auto">
+  <nav aria-label="Page navigation">
+    <ul class="pagination pagination-sm p-2 align-items-center m-0">
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="#" (click)="goToPage(1, $event)" aria-label="First">
+          <span aria-hidden="true"><i class="fa fa-step-backward"></i></span>
+        </a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="#" (click)="goToPage(currentPage - 1, $event)" aria-label="Previous">
+          <span aria-hidden="true"><i class="fa fa-caret-left"></i></span>
+        </a>
+      </li>
+
+      <li class="page-item" *ngFor="let page of getVisiblePages()" [class.active]="page === currentPage">
+        <a class="page-link" href="#" (click)="goToPage(page, $event)">{{ page }}</a>
+      </li>
+
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="#" (click)="goToPage(currentPage + 1, $event)" aria-label="Next">
+          <span aria-hidden="true"><i class="fa fa-caret-right"></i></span>
+        </a>
+      </li>
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="#" (click)="goToPage(totalPages, $event)" aria-label="Last">
+          <span aria-hidden="true"><i class="fa fa-step-forward"></i></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="d-flex align-items-center">
+    <select class="form-control form-control-sm" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+      <option value="10">10</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+    <span class="ml-2 page-text">dòng mỗi trang</span>
+  </div>
+
+
+  <div class="d-flex align-items-center ml-auto">
+    <span class="text-muted mr-2 page-text"> {{ itemRange }} dòng </span>
+
+    <button class="btn btn-sm border-0" (click)="reloadData()" [disabled]="isLoading">
+      <i class="fa fa-refresh icon-loading" [class.fa-spin]="isLoading"></i>
+    </button>
+  </div>
+</div> -->
+<div class="d-flex justify-content-start align-items-center container-pagination mx-auto">
+  <nav aria-label="Page navigation">
+    <ul class="pagination pagination-sm p-2 align-items-center m-0">
+      <!-- First Page -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="#" (click)="goToFirstPage($event)" aria-label="First">
+          <span aria-hidden="true"><i class="fa fa-step-backward"></i></span>
+        </a>
+      </li>
+
+      <!-- Previous Page -->
+      <li class="page-item" [class.disabled]="currentPage === 1">
+        <a class="page-link" href="#" (click)="goToPrevPage($event)" aria-label="Previous">
+          <span aria-hidden="true"><i class="fa fa-caret-left"></i></span>
+        </a>
+      </li>
+
+      <!-- Page Numbers -->
+      <ng-container *ngFor="let page of getPages()">
+        <li
+          class="page-item text-center item-select"
+          [class.active]="page === currentPage"
+          [class.disabled]="page === '...'">
+          <a class="page-link" href="#" (click)="goToPage(page, $event)" *ngIf="page !== '...'; else ellipsis">
+            {{ page }}
+          </a>
+          <ng-template #ellipsis>
+            <span class="page-link">...</span>
+          </ng-template>
+        </li>
+      </ng-container>
+
+      <!-- Next Page -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="#" (click)="goToNextPage($event)" aria-label="Next">
+          <span aria-hidden="true"><i class="fa fa-caret-right"></i></span>
+        </a>
+      </li>
+
+      <!-- Last Page -->
+      <li class="page-item" [class.disabled]="currentPage === totalPages">
+        <a class="page-link" href="#" (click)="goToLastPage($event)" aria-label="Last">
+          <span aria-hidden="true"><i class="fa fa-step-forward"></i></span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="d-flex align-items-center">
+    <select class="form-control form-control-sm" [(ngModel)]="itemsPerPage" (change)="onItemsPerPageChange()">
+      <option value="10">10</option>
+      <option value="20">20</option>
+      <option value="50">50</option>
+      <option value="100">100</option>
+    </select>
+    <span class="ml-2 page-text">dòng mỗi trang</span>
+  </div>
+
+  <div class="d-flex align-items-center ml-auto">
+    <span class="text-muted mr-2 page-text"> {{ itemRange }} dòng </span>
+
+    <button class="btn btn-sm border-0" (click)="reloadData()" [disabled]="isLoading">
+      <i class="fa fa-refresh icon-loading" [class.fa-spin]="isLoading"></i>
+    </button>
+  </div>
+</div>

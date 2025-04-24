@@ -24,19 +24,19 @@
   <!-- Dropdown menu -->
   <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="isOpen">
     <div class="select-all p-2 border-bottom" *ngIf="selectAll">
-      <input type="checkbox" class="form-check-input" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
-      <label class="form-check-label ms-2">Tất cả ({{ vehicles.length }})</label>
+      <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
+      <label class="form-check-label p-1">Tất cả ({{ vehicles.length }})</label>
     </div>
 
     <!-- Danh sách các tùy chọn -->
     <div class="options" style="max-height: 15rem; overflow-y: auto">
       <div
         *ngFor="let option of filteredItems"
-        class="option d-flex align-items-center p-2 border-bottom"
+        class="option d-flex align-items-center p-2 border-bottom form-check"
         [class.bg-light]="isSelected(option)"
         (click)="toggleList(option)">
-        <input type="checkbox" class="form-check-input me-2" [checked]="isSelected(option)" />
-        <label class="form-check-label">{{ option.code }}</label>
+        <input type="checkbox" [checked]="isSelected(option)" />
+        <label class="form-check-label p-1">{{ option.code }}</label>
       </div>
     </div>
   </div>
