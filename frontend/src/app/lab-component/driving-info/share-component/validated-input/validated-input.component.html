@@ -1,0 +1,28 @@
+<!-- validated-input.component.html -->
+<div class="position-relative">
+  <div class="input-group">
+    <input
+      [formControl]="inputControl"
+      [type]="inputType === 'date' ? 'text' : inputType"
+      [class]="'form-control ' + borderClass + ' ' + inputClass"
+      [title]="errorMessage"
+      (keydown)="inputType === 'date' ? onDateKeydown($event) : null"
+      (blur)="validate()"
+      placeholder=" " />
+
+    <!-- Placeholder ảo -->
+    <div class="custom-placeholder" *ngIf="inputType === 'date' && !inputControl.value">
+      {{ placeholder }}
+    </div>
+
+    <!-- Icon calendar -->
+    <span *ngIf="inputType === 'date'" class="input-group-text" (click)="toggleDatePicker()">
+      <i class="bi bi-calendar"></i>
+    </span>
+  </div>
+
+  <!-- Date Picker -->
+  <div class="date-picker-popover" *ngIf="showDatePicker">
+    <ngb-datepicker [(ngModel)]="dateModel" (dateSelect)="onDateSelect($event)"></ngb-datepicker>
+  </div>
+</div>

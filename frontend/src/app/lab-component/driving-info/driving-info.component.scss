@@ -1,55 +1,52 @@
 .driving-form {
-    .btn-sm {
-        background-color: #0959A0;
+  .btn-sm {
+    background-color: #0959a0;
+  }
+
+  // .g-2>[class^='btn-sm'] {
+  //     padding: 0.5rem;
+  //     /* tương đương g-2 trong BS5 */
+  // }
+
+  .g-2 {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+  }
+
+  // padding: 10px;
+
+  &-title {
+    color: #436a9f;
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+
+  .table-responsive {
+    overflow: auto;
+    max-height: calc(100vh - 242px);
+
+    .head-light {
+      background-color: #2d9cdb !important;
+      color: white;
+      align-items: center;
+      text-align: center;
     }
 
-    // .g-2>[class^='btn-sm'] {
-    //     padding: 0.5rem;
-    //     /* tương đương g-2 trong BS5 */
-    // }
-
-    .g-2 {
-        margin-left: -0.5rem;
-        margin-right: -0.5rem;
+    .sticky-thead {
+      position: sticky;
+      top: -9px;
+      z-index: 10000;
     }
 
-    // padding: 10px;
-
-    &-title {
-        color: #436a9f;
-        font-weight: bold;
-        font-size: 0.9rem;
+    .col-required {
+      color: red;
     }
+  }
 
-    .table-responsive {
-        overflow: auto;
-        max-height: calc(100vh - 242px);
+  // &-search {
+  //     .btn-sm {
+  //         background-color: #0959A0;
+  //     }
 
-        .head-light {
-            background-color: #2D9CDB !important;
-            color: white;
-            align-items: center;
-            text-align: center;
-        }
-
-        .sticky-thead {
-            position: sticky;
-            top: -9px;
-            z-index: 1;
-        }
-
-        .col-required {
-            color: red;
-        }
-
-    }
-
-    // &-search {
-    //     .btn-sm {
-    //         background-color: #0959A0;
-    //     }
-
-    // }
-
-
+  // }
 }

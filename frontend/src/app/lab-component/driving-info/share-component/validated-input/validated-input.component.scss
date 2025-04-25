@@ -1,0 +1,65 @@
+/* validated-input.component.scss */
+.custom-placeholder {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #6c757d;
+  z-index: 1;
+}
+
+input[type='text']::placeholder {
+  color: transparent;
+}
+
+.border-danger {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.border-success {
+  border-left: 4px solid #28a745 !important;
+}
+
+.border-danger {
+  border-left: 4px solid #dc3545 !important;
+}
+
+.bg-warning {
+  background-color: #fff3cd !important;
+}
+
+.date-picker-popover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.input-group-text {
+  background-color: white;
+  border-left: none;
+  cursor: pointer;
+  i {
+    color: #6c757d;
+  }
+}
+
+// Ẩn placeholder thật, hiển thị placeholder ảo
+input[type='text']::placeholder {
+  color: transparent;
+}
+
+// Hiển thị placeholder tùy chỉnh
+.input-group:after {
+  content: attr(data-placeholder);
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 1;
+}

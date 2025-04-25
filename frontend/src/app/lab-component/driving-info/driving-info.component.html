@@ -61,9 +61,23 @@
         <tr *ngFor="let item of listEmployeesGrid; let i = index">
           <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
           <td>{{ item.displayName }}</td>
-          <td>{{ item.mobile }}</td>
+          <td>
+            <app-validated-input
+              [initialValue]="item.mobile"
+              [inputType]="'text'"
+              [required]="false"
+              [minLength]="1"
+              [maxLength]="12"
+              (valueChange)="onValueChange($event, item.pkEmployeeId)"></app-validated-input>
+          </td>
           <td>{{ item.driverLicense }}</td>
-          <td>{{ item.issueLicenseDate }}</td>
+          <td>
+            <app-validated-input
+              [initialValue]="item.expireLicenseDate"
+              [inputType]="'date'"
+              [required]="true"
+              (valueChange)="onValueChange($event, item.pkEmployeeId)"></app-validated-input>
+          </td>
           <td>{{ item.expireLicenseDate }}</td>
           <td>{{ item.issueLicensePlace }}</td>
           <td>

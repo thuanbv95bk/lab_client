@@ -39,6 +39,8 @@ import { DrivingInfoComponent } from './lab-component/driving-info/driving-info.
 import { InputSearchOptionComponent } from './lab-component/driving-info/share-component/input-search-option/input-search-option.component';
 import { MultiSelectDropdownComponent } from './lab-component/driving-info/share-component/multi-select-dropdown/multi-select-dropdown.component';
 import { PaginationComponent } from './lab-component/driving-info/share-component/pagination/pagination.component';
+import { ValidatedInputComponent } from './lab-component/driving-info/share-component/validated-input/validated-input.component';
+import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -70,6 +72,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     InputSearchOptionComponent,
     MultiSelectDropdownComponent,
     PaginationComponent,
+    ValidatedInputComponent,
     DrivingInfoComponent,
   ],
   imports: [
@@ -80,6 +83,8 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     ReactiveFormsModule,
     NgChartsModule,
     BrowserAnimationsModule,
+    NgbDatepickerModule,
+    NgbModule,
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',

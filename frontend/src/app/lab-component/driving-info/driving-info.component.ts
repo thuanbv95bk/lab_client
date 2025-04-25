@@ -26,7 +26,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   totalItems = 150; // This should come from your API response
   isLoading: false;
   @ViewChild(PaginationComponent) paginator: PaginationComponent;
-
+  changedRows: Set<number> = new Set();
   constructor(
     // private fb: FormBuilder,
     private employeesService: HrmEmployeesService,
@@ -121,5 +121,24 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   }
   searchOptionChange(event) {
     console.log(event);
+  }
+
+  onValueChange(value: string, rowId: number) {
+    // this.changedRows.add(rowId);
+  }
+
+  get hasChanges(): boolean {
+    return this.changedRows.size > 0;
+  }
+
+  saveChanges() {
+    const changedData = this.listEmployeesGrid.filter((row) => this.changedRows.has(row.pkEmployeeId));
+    console.log('Lưu các dòng:', changedData);
+    this.changedRows.clear();
+  }
+
+  cancelChanges() {
+    this.changedRows.clear();
+    // Reset giá trị về ban đầu nếu cần
   }
 }
