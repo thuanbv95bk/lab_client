@@ -22,11 +22,20 @@
     }
 
     .table-responsive {
+        overflow: auto;
+        max-height: calc(100vh - 242px);
+
         .head-light {
             background-color: #2D9CDB !important;
             color: white;
             align-items: center;
             text-align: center;
+        }
+
+        .sticky-thead {
+            position: sticky;
+            top: -9px;
+            z-index: 1;
         }
 
         .col-required {

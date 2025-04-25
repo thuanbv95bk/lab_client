@@ -1,11 +1,25 @@
 import { AppGlobals } from '../app-global';
 
+/** Bộ lọc phân trang
+ * @Author thuan.bv
+ * @Created 25/04/2025
+ * @Modified date - user - description
+ */
+
 export class PagingModel {
-  PageIndex: number = 0;
-  PageSize: number = AppGlobals.pageSizeOptions[0];
+  /** trang hiện tại: giá trị mặc định = 1 */
+  pageIndex: number = 1;
+  /** số phần tử 1 trang, mặc định = 20 , định nghĩ trong AppGlobals.pageSizeOptions */
+  pageSize: number = AppGlobals.pageSizeOptions[1];
+  length: number = 0;
 }
 
-export declare class PageEvent {
+/** PageEvent : dùng để lưu các thông tin của page hiện tại
+ * @Author thuan.bv
+ * @Created 25/04/2025
+ * @Modified date - user - description
+ */
+export class PageEvent {
   /** The current page index. */
   pageIndex: number;
   /**
@@ -17,4 +31,16 @@ export declare class PageEvent {
   pageSize: number;
   /** The current total number of items being paged */
   length: number;
+}
+
+/** dùng để lưu dữ liệu Paging khi gọi về từ API chức năng phân trang
+ * @Author thuan.bv
+ * @Created 25/04/2025
+ * @Modified date - user - description
+ */
+export interface PagingResult {
+  /** Tổng số item */
+  totalCount: number;
+  /** Data để chứa dữ liệu */
+  data: any[];
 }

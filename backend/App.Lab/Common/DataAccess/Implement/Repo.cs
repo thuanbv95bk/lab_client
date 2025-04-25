@@ -286,6 +286,78 @@ namespace App.DataAccess
             }
         }
 
+        public void ExecuteReader<T>(out List<T> ret, out int TotalCount, string commandText, CommandType commandType = CommandType.Text, object parameters = null)
+        {
+            IDataReader dr = null;
+            IDbTransaction trans = null;
+            List<T> result = null;
+
+            try
+            {
+                // Xử lý schema nếu là stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
+                {
+                    commandText = $"{Schema}.{commandText}";
+                }
+
+                // Mở kết nối nếu chưa mở
+                var connection = _unitOfWork.GetDbContext().Connection;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                // Tạo command
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = commandText;
+                cmd.CommandType = commandType;
+
+                // Thêm transaction nếu có
+                trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                cmd.Transaction = trans;
+
+                // Thêm parameters nếu có
+                if (parameters != null)
+                {
+                    AddParameters(cmd, parameters);
+                }
+
+                // Thực thi
+                dr = cmd.ExecuteReader();
+             
+
+                // Map kết quả
+                ret = CBO.FillList<T>(dr, "TotalCount", out TotalCount);
+                //result = CBO.FillList<T>(dr);
+
+                // Commit transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null && trans != null)
+                {
+                    trans.Commit();
+                }
+
+               
+            }
+            catch (Exception ex)
+            {
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
+                {
+                    trans.Rollback();
+                }
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
+            }
+            finally
+            {
+                dr?.Close();
+                // Dispose transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null)
+                {
+                    trans?.Dispose();
+                }
+            }
+        }
+
         /// <summary>Executes the command.</summary>
         /// <param name="dr">The dr.</param>
         /// <param name="trans">The trans.</param>
@@ -612,7 +684,7 @@ namespace App.DataAccess
                 {
                     var param = cmd.CreateParameter();
                     param.ParameterName = item.Key.StartsWith("@") ? item.Key : "@" + item.Key;
-                    param.Value = item.Value ?? DBNull.Value;
+                    param.Value = Null.GetDBNull(item.Value);
                     cmd.Parameters.Add(param);
                 }
             }
@@ -624,7 +696,7 @@ namespace App.DataAccess
                 {
                     var param = cmd.CreateParameter();
                     param.ParameterName = "@" + prop.Name;
-                    param.Value = prop.GetValue(parameters) ?? DBNull.Value;
+                    param.Value = Null.GetDBNull(prop.GetValue(parameters)) ;
                     cmd.Parameters.Add(param);
                 }
             }

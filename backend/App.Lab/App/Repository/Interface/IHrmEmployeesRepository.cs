@@ -1,4 +1,5 @@
-﻿using App.Lab.Model;
+﻿using App.Common.Models;
+using App.Lab.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,5 +22,13 @@ namespace App.Lab.Repository.Interface
         /// Created: 24/04/2025
         /// Modified: date - user - description
         List<HrmEmployeesCbx> GetListCbx(int FkCompanyID);
+
+
+        /// <summary>Interface Lấy danh sách lái xe theo điều kiện và theo Paging </summary>
+        /// <param name="filter">HrmEmployeesFilter: bộ lọc để lấy dữ liệu</param>
+        /// Author: thuanbv
+        /// Created: 25/04/2025
+        /// Modified: date - user - description
+        PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter);
     }
 }

@@ -35,7 +35,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     return this._data.getValue();
   }
   private _items: any[];
-  // @Input() items: any[] = [];
+
   @Input() placeholder: string = 'Select';
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
@@ -70,9 +70,8 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.initData();
   }
-  initData() {
-    console.log(this.items);
 
+  initData() {
     this._data.pipe(takeUntil(this._onDestroy)).subscribe((x) => {
       this._items = this.items;
       this.filteredItems.next(this.items);
@@ -81,7 +80,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.FilterCtrl.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
       this.filterItems();
     });
-    console.log(this._items);
   }
   /** lọc danh sách khi người dùng tìm kiếm ở ô chọn
    * @Author thuan.bv

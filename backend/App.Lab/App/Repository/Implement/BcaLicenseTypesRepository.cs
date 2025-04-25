@@ -28,7 +28,7 @@ namespace App.Lab.Repository.Implement
 
             listItem = ExecuteReader<BcaLicenseTypes>
             (
-                "SELECT PK_LicenseTypeID , Code, Name, IsActived, IsDeteted " +
+                "SELECT PK_LicenseTypeID AS PkLicenseTypeId , Code, Name, IsActived, IsDeteted " +
                     "FROM  [BCA.LicenseTypes] " +
                     "WHERE  ISNULL(IsDeteted, 0) = 0 " +
                             "AND IsActived = 1 " +

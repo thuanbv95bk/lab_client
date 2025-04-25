@@ -34,5 +34,17 @@ namespace App.Admin.Controllers
             var ret = _service.GetListCbx(FkCompanyID);
             return Success(ret);
         }
+
+        [HttpPost]
+        [Route("get-paging-to-edit")]
+        public IActionResult GetPagingToEdit(HrmEmployeesFilter filter)
+        {
+            if (filter.FkCompanyId <= 0)
+            {
+                return Failure("Phải nhập tiêu chí tìm kiếm");
+            }
+            var ret = _service.GetPagingToEdit(filter);
+            return Success(ret);
+        }
     }
 }

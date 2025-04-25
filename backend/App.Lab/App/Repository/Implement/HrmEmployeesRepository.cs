@@ -1,13 +1,11 @@
-﻿using App.DataAccess;
+﻿using App.Common.Helper;
+using App.Common.Models;
+using App.DataAccess;
 using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 
 namespace App.Lab.Repository.Implement
@@ -34,12 +32,57 @@ namespace App.Lab.Repository.Implement
 
             listItem = ExecuteReader<HrmEmployeesCbx>
             (
-                "SELECT DisplayName, DriverLicense FROM [HRM.Employees] WHERE ISNULL(IsDeleted, 0) =0 AND ISNULL(IsLocked, 0) =0 AND FK_CompanyID = @FK_CompanyID ;",
+                "SELECT PK_EmployeeID as PkEmployeeID , DisplayName, DriverLicense FROM [HRM.Employees] WHERE ISNULL(IsDeleted, 0) = 0 AND ISNULL(IsLocked, 0) = 0 AND FK_CompanyID = @FK_CompanyID ;",
             CommandType.Text,
                 new { FK_CompanyID = FkCompanyID }
             );
 
             return listItem;
+        }
+
+        /// <summary>Lấy danh sách lái xe theo điều kiện và theo Paging </summary>
+        /// <param name="filter">HrmEmployeesFilter: bộ lọc để lấy dữ liệu</param>
+        /// Author: thuanbv
+        /// Created: 25/04/2025
+        /// Modified: date - user - description
+        public PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter)
+        {
+
+            this.ExecuteReader
+            (
+                out List<HrmEmployees> listItem
+                , out int TotalCount
+                , "SELECT A.PK_EmployeeID AS PkEmployeeID," +
+                          "A.*, " +
+                          "COUNT(*) OVER () AS TotalCount " +
+                    "FROM dbo.[HRM.Employees] A " +
+                    "WHERE A.FK_CompanyID = @FK_CompanyID " +
+                           "AND ISNULL(A.IsDeleted, 0) = 0 " +
+                           "AND ISNULL(A.IsLocked, 0) = 0 " +
+                           "AND (@DisplayName IS NULL OR LOWER(A.DisplayName) LIKE '%' + LOWER(@DisplayName) + '%')" +
+                           "AND (@DriverLicense IS NULL OR LOWER(A.DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%')" +
+                           "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(A.LicenseType AS NVARCHAR) + ',%' )" +
+                           "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(A.PK_EmployeeID AS NVARCHAR) + ',%' )" +
+                    "ORDER BY A.DisplayName OFFSET @pageSize * (@pageIndex-1) ROWS FETCH NEXT @pageSize ROWS ONLY"
+                , CommandType.Text
+                , new { FK_CompanyID = filter.FkCompanyId,
+                        DisplayName = filter.DisplayName,
+                        DriverLicense = filter.DriverLicense,
+                        ListStringLicenseTypesId = filter.ListStringLicenseTypesId,
+                        ListStringEmployeesId =filter.ListStringEmployeesId,
+
+                        pageSize = filter.PageSize ,
+                        pageIndex = filter.PageIndex
+                }
+
+            );
+
+            var ret = new PagingResult<HrmEmployees>()
+            {
+                TotalCount = TotalCount,
+                Data = listItem,
+            };
+            return ret;
         }
     }
 }

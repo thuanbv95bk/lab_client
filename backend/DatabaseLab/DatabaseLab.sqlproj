@@ -58,6 +58,7 @@
     <Folder Include="Properties" />
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\script" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Vehicle.Vehicles.sql" />
@@ -68,5 +69,8 @@
     <Build Include="dbo\Tables\BCA.LicenseTypes.sql" />
     <Build Include="dbo\Tables\Admin.UserVehicleGroup.sql" />
     <Build Include="dbo\Tables\Admin.Users.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\script\getPaggingEmployees.sql" />
   </ItemGroup>
 </Project>

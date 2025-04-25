@@ -1,61 +1,85 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AppGlobals } from '../../../../app-global';
+import { PageEvent, PagingModel } from '../../../../app-model/paging';
 
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
 })
-export class PaginationComponent {
-  @Input() currentPage: number = 1;
-  @Input() itemsPerPage: number = 20;
-  @Input() totalItems: number = 0;
-  @Input() isLoading: boolean = false;
-  @Output() pageChange = new EventEmitter<number>();
-  @Output() itemsPerPageChange = new EventEmitter<number>();
+export class PaginationComponent implements OnChanges {
+  // pageIndex: number = 1;
+  // pageSize: number = 20;
+
+  @Input() pagingModel: PagingModel;
+  isLoading: boolean = false;
+
+  pageEvent = new PagingModel();
+  @Output() page = new EventEmitter<PagingModel>();
+
   @Output() reload = new EventEmitter<void>();
+
   appGlobals = AppGlobals;
+
   Math = Math; // Add this line to make Math available in template
 
+  constructor() {
+    // this.pageEvent.pageSize = this.pageSize;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['pagingModel']) {
+      // console.log(this.pagingModel);
+
+      // this.pageIndex = this.pagingModel.pageIndex;
+      // this.pagingModel.pageSize = this.pagingModel.pageSize;
+
+      this.pageEvent.pageSize = this.pagingModel.pageSize;
+      // this.totalItems = this.pagingModel.length;
+      this.totalPages;
+      this.itemRange;
+    }
+  }
   get totalPages(): number {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
+    const total = Math.ceil(this.pagingModel.length / this.pagingModel.pageSize);
+    this.pageEvent.length = total;
+    return total;
   }
 
   // Tính toán range hiển thị
   get itemRange(): string {
-    const start = (this.currentPage - 1) * this.itemsPerPage + 1;
-    const end = Math.min(this.currentPage * this.itemsPerPage, this.totalItems);
-    return `${start}-${end}/${this.totalItems}`;
+    const start = (this.pagingModel.pageIndex - 1) * this.pagingModel.pageSize + 1;
+    const end = Math.min(this.pagingModel.pageIndex * this.pagingModel.pageSize, this.pagingModel.length);
+    return `${start}-${end}/${this.pagingModel.length}`;
   }
 
   onItemsPerPageChange(): void {
-    this.currentPage = 1; // Reset to first page when items per page changes
-    this.itemsPerPageChange.emit(this.itemsPerPage);
-    this.pageChange.emit(1);
+    this.pagingModel.pageIndex = 1; // Reset to first page when items per page changes
+    this.pageEvent.pageSize = this.pagingModel.pageSize;
+    // console.log('this.itemsPerPage:' + this.pagingModel.pageSize);
+    this.page.emit({ ...this.pageEvent });
   }
+
   reloadData() {
-    if (!this.isLoading) {
-      this.reload.emit();
-    }
+    this.reload.emit();
   }
 
   getPages(): (number | string)[] {
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
     const halfVisible = Math.floor(maxVisiblePages / 2);
-    console.log('halfVisible ' + halfVisible);
 
     // Luôn hiển thị trang đầu
-    if (this.currentPage < 5) pages.push(1);
+    if (this.pagingModel.pageIndex < 5) pages.push(1);
 
     // Tính toán range hiển thị
-    let startPage = Math.max(2, this.currentPage - halfVisible);
-    let endPage = Math.min(this.totalPages - 1, this.currentPage + halfVisible);
+    let startPage = Math.max(2, this.pagingModel.pageIndex - halfVisible);
+    let endPage = Math.min(this.totalPages - 1, this.pagingModel.pageIndex + halfVisible);
 
     // Đảm bảo luôn hiển thị đủ 5 trang (nếu đủ)
-    if (this.currentPage <= halfVisible + 1) {
+    if (this.pagingModel.pageIndex <= halfVisible + 1) {
       endPage = Math.min(maxVisiblePages, this.totalPages - 1);
-    } else if (this.currentPage >= this.totalPages - halfVisible) {
+    } else if (this.pagingModel.pageIndex >= this.totalPages - halfVisible) {
       startPage = Math.max(2, this.totalPages - maxVisiblePages + 1);
     }
 
@@ -66,8 +90,6 @@ export class PaginationComponent {
 
     // Thêm các trang trong khoảng
     for (let i = startPage; i <= endPage; i++) {
-      console.log(pages.length);
-
       if (pages.length >= 5) break;
       else pages.push(i);
     }
@@ -88,9 +110,10 @@ export class PaginationComponent {
 
   goToPage(page: number | string, event: Event): void {
     event.preventDefault();
-    if (typeof page === 'number' && page !== this.currentPage) {
-      this.currentPage = page;
-      this.pageChange.emit(page);
+    if (typeof page === 'number' && page !== this.pagingModel.pageIndex) {
+      this.pagingModel.pageIndex = page;
+      this.pageEvent.pageIndex = this.pagingModel.pageIndex;
+      this.page.emit({ ...this.pageEvent });
     }
   }
 
@@ -103,12 +126,12 @@ export class PaginationComponent {
   }
 
   goToNextPage(event: Event): void {
-    const nextPage = Math.min(this.currentPage + 1, this.totalPages);
+    const nextPage = Math.min(this.pagingModel.pageIndex + 1, this.totalPages);
     this.goToPage(nextPage, event);
   }
 
   goToPrevPage(event: Event): void {
-    const prevPage = Math.max(this.currentPage - 1, 1);
+    const prevPage = Math.max(this.pagingModel.pageIndex - 1, 1);
     this.goToPage(prevPage, event);
   }
 }

@@ -1,54 +1,26 @@
-<!-- <div class="container-search d-flex flex-column">
-  <div>Tìm kiếm</div>
-  <div class="input-group align-items-center">
-    <input type="text" class="form-control" />
-    <div class="input-group-append">
-      <span class="input-group-text cancel-icon"><i class="fa fa-times"></i></span>
-      <span class="input-group-text"><i class="fa fa-search"></i></span>
-      <div class="input-group-append">
-        <button class="btn select-option dropdown-toggle" type="button" data-toggle="dropdown">Tên lái xe</button>
-        <div class="dropdown-menu dropdown-menu-right">
-          <a class="dropdown-item" *ngFor="let driver of filteredDrivers" (click)="selectDriver(driver)">
-            <div class="d-flex justify-content-between">
-              <span>{{ driver.code }}</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="container-search d-flex flex-column">
-  <div>Tìm kiếm</div>
+  <div>{{ placeholder }}</div>
   <div class="mt-auto">
     <div class="align-items-center bg-white input-group">
-      <input type="text" class="form-control" />
+      <input type="text" class="form-control" [(ngModel)]="searchOption.value" (ngModelChange)="changeKeySearch()" />
       <div class="input-group-append">
-        <span class="input-group-text cancel-icon"><i class="fa fa-times"></i></span>
+        <span *ngIf="searchOption.value" class="input-group-text cancel-icon"
+          ><i class="fa fa-times" (click)="searchOption.value = ''"></i
+        ></span>
         <span class="input-group-text"><i class="fa fa-search"></i></span>
         <div class="input-group-append">
-          <button class="btn select-option dropdown-toggle" type="button" data-toggle="dropdown">Tên lái xe</button>
+          <button class="btn select-option dropdown-toggle" type="button" data-toggle="dropdown">
+            {{ selectedOption.name }}
+          </button>
           <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" *ngFor="let driver of filteredDrivers" (click)="selectDriver(driver)">
+            <a class="dropdown-item" *ngFor="let item of listOption" (click)="selectDriver(item)">
               <div class="d-flex justify-content-between">
-                <span>{{ driver.code }}</span>
+                <span>{{ item.name }}</span>
               </div>
             </a>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="true">
-      <div class="options" style="max-height: 15rem; overflow-y: auto">
-        <div
-          *ngFor="let driver of filteredDrivers"
-          class="option d-flex align-items-center p-2 border-bottom form-check">
-          <input type="checkbox" />
-          <label class="form-check-label p-1">{{ driver.code }}</label>
-        </div>
-      </div>
-    </div> -->
   </div>
 </div>

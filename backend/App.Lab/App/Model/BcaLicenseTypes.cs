@@ -8,7 +8,7 @@ namespace App.Lab.Model
 {
     public class BcaLicenseTypes
     {
-        public int PK_LicenseTypeID { get; set; }
+        public int PkLicenseTypeId { get; set; }
         public string Name { get; set; }
         public string Code { get; set; }
         public bool IsActived { get; set; }
