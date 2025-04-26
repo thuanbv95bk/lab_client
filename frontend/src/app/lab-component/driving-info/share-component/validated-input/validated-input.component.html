@@ -1,28 +1,42 @@
 <!-- validated-input.component.html -->
-<div class="position-relative">
-  <div class="input-group">
-    <input
-      [formControl]="inputControl"
-      [type]="inputType === 'date' ? 'text' : inputType"
-      [class]="'form-control ' + borderClass + ' ' + inputClass"
-      [title]="errorMessage"
-      (keydown)="inputType === 'date' ? onDateKeydown($event) : null"
-      (blur)="validate()"
-      placeholder=" " />
+<div class="">
+  <div class="input-group input-group-sm position-relative">
+    <!-- <input [formControl]="inputControl"
+      [type]="inputType === 'date' ? 'text' : (inputType === 'phone' ? 'tel' : 'text')"
+      [class]="'form-control ' + borderClass + ' ' + inputClass" [title]="errorMessage" (input)="onDateInput($event)"
+      (keydown)="inputType === 'date' ? onDateKeydown($event) : (inputType === 'phone' ? onPhoneKeydown($event) : (inputType === 'text' ? onTextKeydown($event) : null))"
+      (blur)="validate()" placeholder=" " /> -->
 
-    <!-- Placeholder ảo -->
+    <ng-container [ngSwitch]="inputType">
+      <!-- Select -->
+      <select *ngSwitchCase="'select'" class="form-control form-control-sm {{borderClass}} {{inputClass}}"
+        [formControl]="inputControl">
+        <option value="">Chọn loại bằng</option>
+        <option *ngFor="let opt of selectOptions" [ngValue]="opt">
+          {{ opt[selectLabel] }}
+        </option>
+      </select>
+      <!-- Các input khác giữ nguyên -->
+      <input *ngSwitchDefault [formControl]="inputControl"
+        [type]="inputType === 'date' ? 'text' : (inputType === 'phone' ? 'tel' : 'text')"
+        [class]="'form-control ' + borderClass + ' ' + inputClass" [title]="errorMessage" (input)="onDateInput($event)"
+        (keydown)="inputType === 'date' ? onDateKeydown($event) : (inputType === 'phone' ? onPhoneKeydown($event) : (inputType === 'text' ? onTextKeydown($event) : null))"
+        (blur)="validate()" placeholder=" " />
+    </ng-container>
+    <div class="input-group-prepend">
+      <span *ngIf="inputType === 'date'" class="input-group-text" (click)="toggleDatePicker()">
+        <i class="bi bi-calendar"></i>
+      </span>
+    </div>
+
+    <div class="date-picker-popover" *ngIf="showDatePicker">
+      <ngb-datepicker [ngModel]="dateModel" [startDate]="dateModel" (dateSelect)="onDateSelect($event)">
+      </ngb-datepicker>
+    </div>
+
     <div class="custom-placeholder" *ngIf="inputType === 'date' && !inputControl.value">
       {{ placeholder }}
     </div>
 
-    <!-- Icon calendar -->
-    <span *ngIf="inputType === 'date'" class="input-group-text" (click)="toggleDatePicker()">
-      <i class="bi bi-calendar"></i>
-    </span>
-  </div>
-
-  <!-- Date Picker -->
-  <div class="date-picker-popover" *ngIf="showDatePicker">
-    <ngb-datepicker [(ngModel)]="dateModel" (dateSelect)="onDateSelect($event)"></ngb-datepicker>
   </div>
 </div>

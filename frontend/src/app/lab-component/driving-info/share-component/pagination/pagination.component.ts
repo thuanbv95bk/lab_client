@@ -29,13 +29,7 @@ export class PaginationComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pagingModel']) {
-      // console.log(this.pagingModel);
-
-      // this.pageIndex = this.pagingModel.pageIndex;
-      // this.pagingModel.pageSize = this.pagingModel.pageSize;
-
       this.pageEvent.pageSize = this.pagingModel.pageSize;
-      // this.totalItems = this.pagingModel.length;
       this.totalPages;
       this.itemRange;
     }

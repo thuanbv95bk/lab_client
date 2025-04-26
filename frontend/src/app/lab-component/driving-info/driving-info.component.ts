@@ -27,6 +27,10 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   isLoading: false;
   @ViewChild(PaginationComponent) paginator: PaginationComponent;
   changedRows: Set<number> = new Set();
+
+  selectOpen = false;
+  dateNow = new Date();
+  new: Date;
   constructor(
     // private fb: FormBuilder,
     private employeesService: HrmEmployeesService,
@@ -114,17 +118,27 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.filterEmployeesGrid.listStringEmployeesId = this.employeesService.getSortedIdString(event, 'pkEmployeeId');
   }
   onSelectedChangeLicenseTypes(event) {
-    this.filterEmployeesGrid.listStringLicenseTypesId = this.employeesService.getSortedIdString(
-      event,
-      'pkLicenseTypeId'
-    );
+    this.filterEmployeesGrid.listStringLicenseTypesId = this.employeesService.getSortedIdString(event, 'pkLicenseTypeId');
   }
   searchOptionChange(event) {
     console.log(event);
   }
 
-  onValueChange(value: string, rowId: number) {
-    // this.changedRows.add(rowId);
+  // onValueChange(value: string | Date, rowId: HrmEmployees) {
+  //   // this.changedRows.add(rowId);
+  //   console.log(rowId);
+  // }
+
+  onValueChangeDate($event, item: HrmEmployees) {
+    console.log('$event');
+    console.log($event);
+    item.issueLicenseDate = this.parseDateValue($event);
+    console.log(item);
+  }
+
+  private parseDateValue(value: string): Date {
+    const [day, month, year] = value.split('/');
+    return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
   }
 
   get hasChanges(): boolean {

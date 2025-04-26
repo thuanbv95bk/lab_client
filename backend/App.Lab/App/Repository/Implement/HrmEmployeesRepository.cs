@@ -52,18 +52,25 @@ namespace App.Lab.Repository.Implement
             (
                 out List<HrmEmployees> listItem
                 , out int TotalCount
-                , "SELECT A.PK_EmployeeID AS PkEmployeeID," +
-                          "A.*, " +
-                          "COUNT(*) OVER () AS TotalCount " +
-                    "FROM dbo.[HRM.Employees] A " +
-                    "WHERE A.FK_CompanyID = @FK_CompanyID " +
-                           "AND ISNULL(A.IsDeleted, 0) = 0 " +
-                           "AND ISNULL(A.IsLocked, 0) = 0 " +
-                           "AND (@DisplayName IS NULL OR LOWER(A.DisplayName) LIKE '%' + LOWER(@DisplayName) + '%')" +
-                           "AND (@DriverLicense IS NULL OR LOWER(A.DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%')" +
-                           "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(A.LicenseType AS NVARCHAR) + ',%' )" +
-                           "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(A.PK_EmployeeID AS NVARCHAR) + ',%' )" +
-                    "ORDER BY A.DisplayName OFFSET @pageSize * (@pageIndex-1) ROWS FETCH NEXT @pageSize ROWS ONLY"
+                , "SELECT PK_EmployeeID AS PkEmployeeID" +
+                          ",CASE WHEN UpdatedDate IS NULL THEN CreatedDate ELSE UpdatedDate END [UpdatedDate]" +
+                          ",DisplayName" +
+                          ",Mobile" +
+                          ",DriverLicense" +
+                          ",IssueLicenseDate" +
+                          ",ExpireLicenseDate" +
+                          ",IssueLicensePlace" +
+                          ",LicenseType" +
+                          ",COUNT(*) OVER () AS TotalCount " +
+                    "FROM dbo.[HRM.Employees] " +
+                    "WHERE FK_CompanyID = @FK_CompanyID " +
+                           "AND ISNULL(IsDeleted, 0) = 0 " +
+                           "AND ISNULL(IsLocked, 0) = 0 " +
+                           "AND (@DisplayName IS NULL OR LOWER(DisplayName) LIKE '%' + LOWER(@DisplayName) + '%')" +
+                           "AND (@DriverLicense IS NULL OR LOWER(DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%')" +
+                           "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%' )" +
+                           "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(PK_EmployeeID AS NVARCHAR) + ',%' )" +
+                    "ORDER BY DisplayName OFFSET @pageSize * (@pageIndex-1) ROWS FETCH NEXT @pageSize ROWS ONLY"
                 , CommandType.Text
                 , new { FK_CompanyID = filter.FkCompanyId,
                         DisplayName = filter.DisplayName,

@@ -2,43 +2,29 @@
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
   <div class="driving-form-search row w-100">
     <div class="col">
-      <app-input-search-option
-        [placeholder]="'Tìm kiếm'"
+      <app-input-search-option [placeholder]="'Tìm kiếm'"
         [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
     <div class="col">
-      <app-multi-select-dropdown
-        [title]="'Lái xe'"
-        [items]="this.lstDriver"
-        [displayField1]="'displayName'"
-        [displayField2]="'driverLicense'"
-        [allSelected]="false"
-        [placeholder]="'Chọn lái xe'"
-        [search]="true"
-        [selectAll]="true"
-        (selectedChange)="onSelectedChangeDriver($event)"></app-multi-select-dropdown>
+      <app-multi-select-dropdown [title]="'Lái xe'" [items]="this.lstDriver" [displayField1]="'displayName'"
+        [displayField2]="'driverLicense'" [allSelected]="false" [placeholder]="'Chọn lái xe'" [search]="true"
+        [selectAll]="true" (selectedChange)="onSelectedChangeDriver($event)"></app-multi-select-dropdown>
     </div>
     <div class="col">
-      <app-multi-select-dropdown
-        [title]="'Loại bằng'"
-        [items]="this.listLicenseTypes"
-        [displayField1]="'name'"
-        [allSelected]="false"
-        [placeholder]="'Chọn loại bằng'"
-        [search]="true"
-        [selectAll]="true"
+      <app-multi-select-dropdown [title]="'Loại bằng'" [items]="this.listLicenseTypes" [displayField1]="'name'"
+        [allSelected]="false" [placeholder]="'Chọn loại bằng'" [search]="true" [selectAll]="true"
         (selectedChange)="onSelectedChangeLicenseTypes($event)"></app-multi-select-dropdown>
     </div>
     <div class="col-auto d-flex flex-column align-items-center p-2">
       <div class="mt-auto">
-        <button class="btn-sm text-white" (click)="searchPagingToEdit()"><i class="fa fa-search"></i> Tìm kiếm</button>
+        <button type="button" class="btn" (click)="searchPagingToEdit()"><i class="fa fa-search"></i> Tìm kiếm</button>
       </div>
     </div>
   </div>
   <div class="d-flex float-right mt-1 g-2">
-    <button class="btn-sm text-white"><i class="fa fa-save"></i> Lưu thông tin</button>
-    <button class="btn-sm text-white ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
-    <button class="btn-sm text-white"><i class="fa fa-file-excel"></i></button>
+    <button type="button" class="btn"><i class="fa fa-save"></i> Lưu thông tin</button>
+    <button type="button" class="btn  ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
+    <button type="button" class="btn"><i class="fa fa-file-excel"></i></button>
   </div>
 
   <div class="table-responsive pt-2">
@@ -60,50 +46,50 @@
       <tbody>
         <tr *ngFor="let item of listEmployeesGrid; let i = index">
           <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
-          <td>{{ item.displayName }}</td>
           <td>
-            <app-validated-input
-              [initialValue]="item.mobile"
-              [inputType]="'text'"
-              [required]="false"
-              [minLength]="1"
-              [maxLength]="12"
-              (valueChange)="onValueChange($event, item.pkEmployeeId)"></app-validated-input>
+            <app-validated-input [initialValue]="item.displayName" [inputType]="'text'" [required]="true"
+              [minLength]="1" [maxLength]="100"
+              (valueChange)="item.displayName = $event?.toString()"></app-validated-input>
           </td>
-          <td>{{ item.driverLicense }}</td>
           <td>
-            <app-validated-input
-              [initialValue]="item.expireLicenseDate"
-              [inputType]="'date'"
-              [required]="true"
-              (valueChange)="onValueChange($event, item.pkEmployeeId)"></app-validated-input>
+            <app-validated-input [initialValue]="item.mobile" [inputType]="'phone'" [required]="false" [minLength]="1"
+              [maxLength]="25" (valueChange)="item.mobile = $event?.toString()"></app-validated-input>
           </td>
-          <td>{{ item.expireLicenseDate }}</td>
-          <td>{{ item.issueLicensePlace }}</td>
           <td>
-            <!-- <select  class="form-control form-control-sm">
-              <option value="">Chọn loại bằng</option>
-              <option *ngFor="let type of licenseTypes" [value]="type">{{ type }}</option>
-            </select> -->
+            <app-validated-input [initialValue]="item.driverLicense" [inputType]="'text'" [required]="true"
+              [minLength]="1" [maxLength]="32"
+              (valueChange)="item.driverLicense = $event?.toString()"></app-validated-input>
           </td>
-          <td></td>
           <td>
-            <button class="btn btn-sm btn-danger">
-              <i class="fa fa-trash"></i>
-            </button>
+            <app-validated-input [initialValue]="item.issueLicenseDate" [inputType]="'date'" [required]="true"
+              [minDate]="null" [maxDate]="dateNow" (valueChange)="onValueChangeDate($event,item)"></app-validated-input>
+          </td>
+
+          <td>
+            <app-validated-input [initialValue]="item.expireLicenseDate" [inputType]="'date'" [required]="true"
+              [minDate]="item.issueLicenseDate" [maxDate]="null"></app-validated-input>
+          </td>
+          <td>
+            <app-validated-input [initialValue]="item.issueLicensePlace" [inputType]="'text'" [required]="true"
+              [minLength]="1" [maxLength]="150"
+              (valueChange)="item.issueLicensePlace = $event?.toString()"></app-validated-input>
+          </td>
+
+          <td>
+            <app-validated-input [inputType]="'select'" [selectOptions]="listLicenseTypes" selectLabel="name"
+              [required]="true" (valueChange)="item.licenseType = $event?.toString()">
+            </app-validated-input>
+          </td>
+          <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
+          <td class="text-center">
+            <i class="fa fa-trash text-danger"></i>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
-  <!-- <form>
-    
-  </form> -->
 
-  <app-pagination
-    #paginator
-    [pagingModel]="pagingModel"
-    (reload)="reloadPagingToEdit()"
+  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()"
     (page)="pageIndexChange($event)">
   </app-pagination>
 </div>

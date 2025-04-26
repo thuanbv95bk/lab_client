@@ -1,4 +1,7 @@
 /* validated-input.component.scss */
+
+$color-border: #ced4da;
+
 .custom-placeholder {
   position: absolute;
   left: 12px;
@@ -14,16 +17,19 @@ input[type='text']::placeholder {
 }
 
 .border-danger {
+  border: 1px solid $color-border !important;
   border-left: 4px solid #dc3545 !important;
 }
 
 .border-success {
+  border: 1px solid $color-border !important;
   border-left: 4px solid #28a745 !important;
 }
 
-.border-danger {
-  border-left: 4px solid #dc3545 !important;
-}
+// .bg-warning {
+//   border: 1px solid $color-border !important;
+//   background-color: #fff3cd !important;
+// }
 
 .bg-warning {
   background-color: #fff3cd !important;
@@ -38,14 +44,14 @@ input[type='text']::placeholder {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.input-group-text {
-  background-color: white;
-  border-left: none;
-  cursor: pointer;
-  i {
-    color: #6c757d;
-  }
-}
+// .input-group-text {
+//   background-color: white;
+//   border-left: none;
+//   cursor: pointer;
+//   i {
+//     color: #6c757d;
+//   }
+// }
 
 // Ẩn placeholder thật, hiển thị placeholder ảo
 input[type='text']::placeholder {
@@ -62,4 +68,16 @@ input[type='text']::placeholder {
   transform: translateY(-50%);
   color: #6c757d;
   z-index: 1;
+}
+
+select.form-control,
+select.form-control-sm {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  /* Đảm bảo select chiếm hết ô */
 }

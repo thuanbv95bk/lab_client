@@ -40,11 +40,16 @@ import { InputSearchOptionComponent } from './lab-component/driving-info/share-c
 import { MultiSelectDropdownComponent } from './lab-component/driving-info/share-component/multi-select-dropdown/multi-select-dropdown.component';
 import { PaginationComponent } from './lab-component/driving-info/share-component/pagination/pagination.component';
 import { ValidatedInputComponent } from './lab-component/driving-info/share-component/validated-input/validated-input.component';
-import { NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDatepickerI18n, NgbDatepickerModule, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import localeVi from '@angular/common/locales/vi';
+import { registerLocaleData } from '@angular/common';
+import { NgbDatepickerI18nViService } from './service/ngb-datepicker-i18n-vi.service';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }
+
+registerLocaleData(localeVi);
 
 @NgModule({
   declarations: [
@@ -85,6 +90,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     BrowserAnimationsModule,
     NgbDatepickerModule,
     NgbModule,
+
     ToastrModule.forRoot({
       timeOut: 3000,
       positionClass: 'toast-bottom-right',
@@ -106,6 +112,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
     VehicleDataService,
     WidgetUpdateDataService,
     TranslateService,
+    { provide: NgbDatepickerI18n, useClass: NgbDatepickerI18nViService },
     CookieService,
     {
       provide: APP_INITIALIZER,

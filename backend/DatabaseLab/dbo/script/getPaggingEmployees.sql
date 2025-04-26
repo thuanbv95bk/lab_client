@@ -7,36 +7,49 @@ DECLARE @LicenseType INT = NULL;
 
 DECLARE @ListEmployeeId NVARCHAR(50) = N'';
 DECLARE @ListStringLicenseTypesId NVARCHAR(50) = N'';
-SELECT A.PK_EmployeeID AS PkEmployeeID,
-       A.*,
+
+SELECT PK_EmployeeID AS PkEmployeeID,
+       CASE
+           WHEN UpdatedDate IS NULL THEN
+               CreatedDate
+           ELSE
+               UpdatedDate
+       END [UpdatedDate],
+       DisplayName,
+       Mobile,
+       DriverLicense,
+       IssueLicenseDate,
+       ExpireLicenseDate,
+       IssueLicensePlace,
+       LicenseType,
        COUNT(*) OVER () AS TotalCount
-FROM dbo.[HRM.Employees] A
-WHERE A.FK_CompanyID = @FK_CompanyID
-      AND ISNULL(A.IsDeleted, 0) = 0
-      AND ISNULL(A.IsLocked, 0) = 0
+FROM dbo.[HRM.Employees]
+WHERE FK_CompanyID = @FK_CompanyID
+      AND ISNULL(IsDeleted, 0) = 0
+      AND ISNULL(IsLocked, 0) = 0
       AND
       (
           @DisplayName IS NULL
-          OR LOWER(A.DisplayName) LIKE '%' + LOWER(@DisplayName) + '%'
+          OR LOWER(DisplayName) LIKE '%' + LOWER(@DisplayName) + '%'
       )
       AND
       (
           @DriverLicense IS NULL
-          OR LOWER(A.DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%'
+          OR LOWER(DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%'
       )
       AND
       (
           @LicenseType IS NULL
-          OR A.LicenseType = @LicenseType
+          OR LicenseType = @LicenseType
       )
       AND
       (
           ISNULL(@ListEmployeeId, '') = ''
-          OR ',' + @ListEmployeeId + ',' LIKE '%,' + CAST(A.PK_EmployeeID AS NVARCHAR) + ',%'
+          OR ',' + @ListEmployeeId + ',' LIKE '%,' + CAST(PK_EmployeeID AS NVARCHAR) + ',%'
       )
       AND
       (
           ISNULL(@ListStringLicenseTypesId, '') = ''
-          OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(A.LicenseType AS NVARCHAR) + ',%'
+          OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%'
       )
-ORDER BY A.DisplayName OFFSET @pageSize * (@pageIndex - 1) ROWS FETCH NEXT @pageSize ROWS ONLY;
+ORDER BY DisplayName OFFSET @pageSize * (@pageIndex - 1) ROWS FETCH NEXT @pageSize ROWS ONLY;

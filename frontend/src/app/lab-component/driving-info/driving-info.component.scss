@@ -1,6 +1,13 @@
 .driving-form {
-  .btn-sm {
+  .btn {
     background-color: #0959a0;
+    color: white;
+    padding: 2px 6px;
+    margin-bottom: 5px;
+
+    i {
+      padding: 2px;
+    }
   }
 
   // .g-2>[class^='btn-sm'] {
@@ -23,7 +30,7 @@
 
   .table-responsive {
     overflow: auto;
-    max-height: calc(100vh - 242px);
+    max-height: calc(100vh - 245px);
 
     .head-light {
       background-color: #2d9cdb !important;
@@ -35,18 +42,48 @@
     .sticky-thead {
       position: sticky;
       top: -9px;
-      z-index: 10000;
+      z-index: 1001;
     }
 
     .col-required {
       color: red;
     }
+
+    td select.form-control,
+    td select.form-control-sm {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+      /* Đảm bảo select chiếm hết ô */
+    }
+
+    // td {
+    //   position: relative;
+
+    //   .custom-arrow {
+    //     position: absolute;
+    //     right: 12px;
+    //     top: 50%;
+    //     transform: translateY(-50%);
+    //     pointer-events: none;
+    //     font-size: 0.8rem;
+    //     color: #888;
+    //     transition: 0.2s;
+    //   }
+    // }
+
+    // select.form-control,
+    // select.form-control-sm {
+    //   appearance: none;
+    //   -webkit-appearance: none;
+    //   -moz-appearance: none;
+    //   background: transparent;
+    //   padding-right: 2em; // chừa chỗ cho icon
+    // }
   }
 
-  // &-search {
-  //     .btn-sm {
-  //         background-color: #0959A0;
-  //     }
-
-  // }
 }
