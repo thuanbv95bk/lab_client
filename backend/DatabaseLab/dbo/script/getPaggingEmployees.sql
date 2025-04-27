@@ -22,10 +22,12 @@ SELECT PK_EmployeeID AS PkEmployeeID,
        ExpireLicenseDate,
        IssueLicensePlace,
        LicenseType,
+	   IsDeleted,
+	   IsLocked,
        COUNT(*) OVER () AS TotalCount
 FROM dbo.[HRM.Employees]
 WHERE FK_CompanyID = @FK_CompanyID
-      AND ISNULL(IsDeleted, 0) = 0
+      AND IsDeleted =0
       AND ISNULL(IsLocked, 0) = 0
       AND
       (
