@@ -2,29 +2,41 @@
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
   <div class="driving-form-search row w-100">
     <div class="col">
-      <app-input-search-option [placeholder]="'Tìm kiếm'"
-        [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
+      <app-input-search-option [placeholder]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
     <div class="col">
-      <app-multi-select-dropdown [title]="'Lái xe'" [items]="this.lstDriver" [displayField1]="'displayName'"
-        [displayField2]="'driverLicense'" [allSelected]="false" [placeholder]="'Chọn lái xe'" [search]="true"
-        [selectAll]="true" (selectedChange)="onSelectedChangeDriver($event)"></app-multi-select-dropdown>
+      <app-multi-select-dropdown
+        [title]="'Lái xe'"
+        [items]="this.lstDriver"
+        [displayField1]="'displayName'"
+        [displayField2]="'driverLicense'"
+        [allSelected]="false"
+        [placeholder]="'Chọn lái xe'"
+        [search]="true"
+        [selectAll]="true"
+        (selectedChange)="onSelectedChangeDriver($event)"></app-multi-select-dropdown>
     </div>
     <div class="col">
-      <app-multi-select-dropdown [title]="'Loại bằng'" [items]="this.listLicenseTypes" [displayField1]="'name'"
-        [allSelected]="false" [placeholder]="'Chọn loại bằng'" [search]="true" [selectAll]="true"
+      <app-multi-select-dropdown
+        [title]="'Loại bằng'"
+        [items]="this.listLicenseTypes"
+        [displayField1]="'name'"
+        [allSelected]="false"
+        [placeholder]="'Chọn loại bằng'"
+        [search]="true"
+        [selectAll]="true"
         (selectedChange)="onSelectedChangeLicenseTypes($event)"></app-multi-select-dropdown>
     </div>
-    <div class="col-auto d-flex flex-column align-items-center p-2">
+    <div class="col-auto d-flex flex-column">
       <div class="mt-auto">
-        <button type="button" class="btn" (click)="searchPagingToEdit()"><i class="fa fa-search"></i> Tìm kiếm</button>
+        <button type="button" class="btn-sm m-0" (click)="searchPagingToEdit()"><i class="fa fa-search"></i> Tìm kiếm</button>
       </div>
     </div>
   </div>
-  <div class="d-flex float-right mt-1 g-2">
-    <button type="button" class="btn"><i class="fa fa-save"></i> Lưu thông tin</button>
-    <button type="button" class="btn  ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
-    <button type="button" class="btn"><i class="fa fa-file-excel"></i></button>
+  <div class="d-flex float-right mt-1">
+    <button type="button" class="btn-sm" [disabled]="!isDirty"><i class="fa fa-save"></i> Lưu thông tin</button>
+    <button type="button" class="btn-sm ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
+    <button type="button" class="btn-sm"><i class="fa fa-file-excel"></i></button>
   </div>
 
   <div class="table-responsive pt-2">
@@ -47,37 +59,75 @@
         <tr *ngFor="let item of listEmployeesGrid; let i = index">
           <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
           <td>
-            <app-validated-input [initialValue]="item.displayName" [inputType]="'text'" [required]="true"
-              [minLength]="1" [maxLength]="100"
-              (valueChange)="item.displayName = $event?.toString()"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.displayName"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="100"
+              (valueChange)="item.displayName = $event?.toString()"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
           <td>
-            <app-validated-input [initialValue]="item.mobile" [inputType]="'phone'" [required]="false" [minLength]="1"
-              [maxLength]="25" (valueChange)="item.mobile = $event?.toString()"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.mobile"
+              [inputType]="'phone'"
+              [required]="false"
+              [minLength]="1"
+              [maxLength]="25"
+              (valueChange)="item.mobile = $event?.toString()"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
           <td>
-            <app-validated-input [initialValue]="item.driverLicense" [inputType]="'text'" [required]="true"
-              [minLength]="1" [maxLength]="32"
-              (valueChange)="item.driverLicense = $event?.toString()"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.driverLicense"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="32"
+              (valueChange)="item.driverLicense = $event?.toString()"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
           <td>
-            <app-validated-input [initialValue]="item.issueLicenseDate" [inputType]="'date'" [required]="true"
-              [minDate]="null" [maxDate]="dateNow" (valueChange)="onValueChangeDate($event,item)"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.issueLicenseDate"
+              [inputType]="'date'"
+              [required]="true"
+              [minDate]="null"
+              [maxDate]="dateNow"
+              (valueChange)="item.issueLicenseDate = this.parseDateValue($event.toString())"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
 
           <td>
-            <app-validated-input [initialValue]="item.expireLicenseDate" [inputType]="'date'" [required]="true"
-              [minDate]="item.issueLicenseDate" [maxDate]="null"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.expireLicenseDate"
+              [inputType]="'date'"
+              [required]="true"
+              [minDate]="item.issueLicenseDate"
+              [maxDate]="null"
+              (valueChange)="item.expireLicenseDate = this.parseDateValue($event.toString())"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
           <td>
-            <app-validated-input [initialValue]="item.issueLicensePlace" [inputType]="'text'" [required]="true"
-              [minLength]="1" [maxLength]="150"
-              (valueChange)="item.issueLicensePlace = $event?.toString()"></app-validated-input>
+            <app-validated-input
+              [initialValue]="item.issueLicensePlace"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="150"
+              (valueChange)="item.issueLicensePlace = $event?.toString()"
+              (isEditedChange)="onRowEdit($event)"></app-validated-input>
           </td>
 
           <td>
-            <app-validated-input [inputType]="'select'" [selectOptions]="listLicenseTypes" selectLabel="name"
-              [required]="true" (valueChange)="item.licenseType = $event?.toString()">
+            <app-validated-input
+              [inputType]="'select'"
+              [selectOptions]="listLicenseTypes"
+              selectLabel="name"
+              [required]="true"
+              (valueChange)="item.licenseType = $event?.toString()"
+              (isEditedChange)="onRowEdit($event)">
             </app-validated-input>
           </td>
           <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
@@ -89,7 +139,6 @@
     </table>
   </div>
 
-  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()"
-    (page)="pageIndexChange($event)">
+  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)">
   </app-pagination>
 </div>

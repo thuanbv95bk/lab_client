@@ -9,7 +9,9 @@
 
     <ng-container [ngSwitch]="inputType">
       <!-- Select -->
-      <select *ngSwitchCase="'select'" class="form-control form-control-sm {{borderClass}} {{inputClass}}"
+      <select
+        *ngSwitchCase="'select'"
+        class="form-control form-control-sm {{ borderClass }} {{ inputClass }}"
         [formControl]="inputControl">
         <option value="">Chọn loại bằng</option>
         <option *ngFor="let opt of selectOptions" [ngValue]="opt">
@@ -17,11 +19,24 @@
         </option>
       </select>
       <!-- Các input khác giữ nguyên -->
-      <input *ngSwitchDefault [formControl]="inputControl"
-        [type]="inputType === 'date' ? 'text' : (inputType === 'phone' ? 'tel' : 'text')"
-        [class]="'form-control ' + borderClass + ' ' + inputClass" [title]="errorMessage" (input)="onDateInput($event)"
-        (keydown)="inputType === 'date' ? onDateKeydown($event) : (inputType === 'phone' ? onPhoneKeydown($event) : (inputType === 'text' ? onTextKeydown($event) : null))"
-        (blur)="validate()" placeholder=" " />
+      <input
+        *ngSwitchDefault
+        [formControl]="inputControl"
+        [type]="inputType === 'date' ? 'text' : inputType === 'phone' ? 'tel' : 'text'"
+        [class]="'form-control  form-control-sm ' + borderClass + ' ' + inputClass"
+        [title]="errorMessage"
+        (input)="onDateInput($event)"
+        (keydown)="
+          inputType === 'date'
+            ? onDateKeydown($event)
+            : inputType === 'phone'
+            ? onPhoneKeydown($event)
+            : inputType === 'text'
+            ? onTextKeydown($event)
+            : null
+        "
+        (blur)="validate()"
+        placeholder=" " />
     </ng-container>
     <div class="input-group-prepend">
       <span *ngIf="inputType === 'date'" class="input-group-text" (click)="toggleDatePicker()">
@@ -30,13 +45,11 @@
     </div>
 
     <div class="date-picker-popover" *ngIf="showDatePicker">
-      <ngb-datepicker [ngModel]="dateModel" [startDate]="dateModel" (dateSelect)="onDateSelect($event)">
-      </ngb-datepicker>
+      <ngb-datepicker [ngModel]="dateModel" [startDate]="dateModel" (dateSelect)="onDateSelect($event)"> </ngb-datepicker>
     </div>
 
     <div class="custom-placeholder" *ngIf="inputType === 'date' && !inputControl.value">
       {{ placeholder }}
     </div>
-
   </div>
 </div>

@@ -63,5 +63,51 @@ namespace App.Lab.App.Service.Implement
             }
                 return _repo.GetPagingToEdit(filter);
         }
+
+        public async Task<ServiceStatus> AddOrEditListAsync(List<HrmEmployees> items)
+        {
+
+            try
+            {
+                if (!items.Any())
+                {
+                    return  ServiceStatus.Failure("Danh sách trống!");
+                }
+
+                using (_uow.BeginTransaction())
+                {
+                    foreach (var item in items)
+                    {
+                        if (item.PkEmployeeId > 0)
+                        {
+                            await _repo.Update(item);
+                        }
+                    }
+
+                    _uow.SaveChanges();
+                    return ServiceStatus.Success("Cập nhật thành công");
+                }
+            }
+            catch (Exception ex)
+            {
+                return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình cập nhật!");
+            }
+        }
+        public async Task<ServiceStatus> DeleteSoft(int employeeId)
+        {
+            try
+            {
+                using (_uow.BeginTransaction())
+                {
+                    await _repo.DeleteSoft(employeeId);
+                    _uow.SaveChanges();
+                    return ServiceStatus.Success("Xóa thành công");
+                }
+            }
+            catch (Exception ex)
+            {
+                return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình xóa!");
+            }
+        }
     }
 }

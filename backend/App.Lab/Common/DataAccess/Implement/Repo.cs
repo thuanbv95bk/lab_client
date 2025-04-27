@@ -131,7 +131,7 @@ namespace App.DataAccess
         /// Author: thuanbv
         /// Created: 23/04/2025
         /// Modified: date - user - description
-        public T ExecuteScalar<T>(string commandText, CommandType commandType = CommandType.StoredProcedure, object parameters = null)
+        public T ExecuteScalar<T>(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
             IDbTransaction trans = null;
             object result = null;

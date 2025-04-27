@@ -13,7 +13,6 @@
   }
 
   .input-group-append {
-
     .cancel-icon {
       color: red;
       padding-right: 0 !important;
@@ -30,7 +29,7 @@
     }
 
     .select-option {
-      width: 100px;
+      width: 90px;
     }
   }
 
@@ -45,7 +44,6 @@
 
     .dropdown-list {
       display: none;
-
 
       &.d-block {
         display: block;
@@ -67,5 +65,4 @@
       }
     }
   }
-
 }

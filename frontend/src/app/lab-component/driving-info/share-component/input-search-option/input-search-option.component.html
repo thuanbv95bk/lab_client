@@ -2,23 +2,32 @@
   <div>{{ placeholder }}</div>
   <div class="mt-auto">
     <div class="align-items-center bg-white input-group">
-      <input type="text" class="form-control" [(ngModel)]="searchOption.value" (ngModelChange)="changeKeySearch()" />
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [(ngModel)]="searchOption.value"
+        (ngModelChange)="changeKeySearch()" />
       <div class="input-group-append">
         <span *ngIf="searchOption.value" class="input-group-text cancel-icon"
           ><i class="fa fa-times" (click)="searchOption.value = ''"></i
         ></span>
         <span class="input-group-text"><i class="fa fa-search"></i></span>
-        <div class="input-group-append">
-          <button class="btn select-option dropdown-toggle" type="button" data-toggle="dropdown">
-            {{ selectedOption.name }}
-          </button>
-          <div class="dropdown-menu dropdown-menu-right">
-            <a class="dropdown-item" *ngFor="let item of listOption" (click)="selectDriver(item)">
-              <div class="d-flex justify-content-between">
-                <span>{{ item.name }}</span>
-              </div>
-            </a>
-          </div>
+        <!-- <button
+          type="button"
+          class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split"
+          data-toggle="dropdown"
+          aria-expanded="false">
+          <span class="sr-only"> {{ selectedOption.name }}</span>
+        </button> -->
+        <button class="btn-sm bg-white select-option dropdown-toggle" type="button" data-toggle="dropdown">
+          {{ selectedOption.name }}
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" *ngFor="let item of listOption" (click)="selectDriver(item)">
+            <div class="d-flex justify-content-between">
+              <span>{{ item.name }}</span>
+            </div>
+          </a>
         </div>
       </div>
     </div>

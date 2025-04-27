@@ -1,5 +1,6 @@
 ﻿using App.Common.Models;
 using System.ComponentModel.DataAnnotations;
+using FluentValidation;
 
 namespace App.Lab.Model
 {
@@ -85,5 +86,61 @@ namespace App.Lab.Model
         public string Key { get; set; }
         public string Value { get; set; }
     }
+    public class HrmEmployeeValidator : AbstractValidator<HrmEmployees>
+    {
+        public HrmEmployeeValidator()
+        {
+            RuleFor(x => x.DisplayName)
+              .Cascade(CascadeMode.Stop)
+              .NotEmpty().WithMessage("DisplayName không được để trống")
+              .MaximumLength(100).WithMessage("DisplayName tối đa 100 ký tự")
+              .Must(x => x == null || (!x.Contains("<") && !x.Contains(">")))
+                    .WithMessage("DisplayName không được chứa ký tự '<' hoặc '>'");
 
+            RuleFor(x => x.Mobile)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Số điện thoại không được để trống")
+                .MaximumLength(25).WithMessage("Mobile tối đa 25 ký tự")
+                .Matches(@"^\d+$").WithMessage("Số điện thoại chỉ được chứa các ký tự số") //.Matches() để kiểm tra chuỗi có phải là số không
+                .Length(10).WithMessage("Số điện thoại phải có 10 chữ số");
+
+
+            RuleFor(x => x.DriverLicense)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("DriverLicense không được để trống")
+                .MaximumLength(32).WithMessage("DriverLicense tối đa 32 ký tự");
+
+            RuleFor(x => x.IssueLicenseDate)
+                .Cascade(CascadeMode.Stop)
+                .NotNull().WithMessage("Ngày cấp bằng lái bắt buộc phải nhập")
+                .LessThanOrEqualTo(DateTime.Now).WithMessage("Ngày cấp bằng lái phải nhỏ hơn ngày hiện tại");
+            RuleFor(x => x.ExpireLicenseDate)
+                .Cascade(CascadeMode.Stop)
+                .NotNull().WithMessage("Ngày hết hạn bắt buộc phải nhập")
+                .Must((employee, expireDate) =>
+                    employee.IssueLicenseDate.HasValue && expireDate > employee.IssueLicenseDate
+                ).WithMessage("Ngày hết hạn phải lớn hơn ngày cấp");
+
+            RuleFor(x => x.IssueLicensePlace)
+                .Cascade(CascadeMode.Stop)
+                .NotEmpty().WithMessage("Nơi cấp bằng lái bắt buộc phải nhập")
+                .MaximumLength(150).WithMessage("Nơi cấp bằng lái không được vượt quá 150 ký tự")
+                .Must(x => x == null || (!x.Contains("<") && !x.Contains(">")))
+                    .WithMessage("Nơi cấp bằng lái không được chứa ký tự '<' hoặc '>'");
+            RuleFor(x => x.LicenseType)
+                .Cascade(CascadeMode.Stop)
+                .NotNull().WithMessage("Loại bằng lái xe bắt buộc phải chọn");
+        }
+
+
+
+        public class HrmEmployeesListValidator : AbstractValidator<List<HrmEmployees>>
+        {
+            public HrmEmployeesListValidator()
+            {
+                RuleForEach(x => x)
+                    .SetValidator(new HrmEmployeeValidator());
+            }
+        }
+    }
 }

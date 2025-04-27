@@ -1,26 +1,14 @@
 .driving-form {
-  .btn {
+  .btn-sm {
     background-color: #0959a0;
     color: white;
-    padding: 2px 6px;
+    border: none;
     margin-bottom: 5px;
 
     i {
       padding: 2px;
     }
   }
-
-  // .g-2>[class^='btn-sm'] {
-  //     padding: 0.5rem;
-  //     /* tương đương g-2 trong BS5 */
-  // }
-
-  .g-2 {
-    margin-left: -0.5rem;
-    margin-right: -0.5rem;
-  }
-
-  // padding: 10px;
 
   &-title {
     color: #436a9f;
@@ -85,5 +73,4 @@
     //   padding-right: 2em; // chừa chỗ cho icon
     // }
   }
-
 }

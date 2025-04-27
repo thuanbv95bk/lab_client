@@ -31,5 +31,9 @@ namespace App.Lab.Service.Interface
         /// Created: 25/04/2025
         /// Modified: date - user - description
         PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter);
+
+        Task<ServiceStatus> AddOrEditListAsync(List<HrmEmployees> items);
+
+        Task<ServiceStatus> DeleteSoft(int employeeId);
     }
 }

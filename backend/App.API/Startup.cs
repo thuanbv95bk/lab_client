@@ -1,8 +1,11 @@
 ﻿
 using App.Common.Helper;
+using App.Lab.Model;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
+using static App.Lab.Model.HrmEmployeeValidator;
 
 public class Startup
 {
@@ -23,12 +26,13 @@ public class Startup
     {
 
         // https://www.tutorialsteacher.com/core/dependency-injection-in-aspnet-core
-
+ 
         services.AddControllers(); // 
 
         App.Lab.Startup.RegisterDependency(services);
         services.AddEndpointsApiExplorer();
-
+        services.AddScoped<IValidator<HrmEmployees>, HrmEmployeeValidator>();
+        services.AddScoped<IValidator<List<HrmEmployees>>, HrmEmployeesListValidator>();
         services
                 .AddCors
                 (

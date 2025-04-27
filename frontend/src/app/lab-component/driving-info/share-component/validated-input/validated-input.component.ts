@@ -30,7 +30,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   @Input() selectOptions: any[] = [];
   @Input() selectLabel: string = 'name'; // trường hiển thị, mặc định là 'name'
   @Output() valueChange = new EventEmitter<string | Date | null>();
-  @Output() validChange = new EventEmitter<boolean>();
+  // @Output() validChange = new EventEmitter<boolean>();
+  @Output() isEditedChange = new EventEmitter<boolean>();
 
   inputControl: FormControl;
   isEdited = false;
@@ -90,7 +91,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     this.updateIsEdited();
     this.inputControl.valueChanges.subscribe(() => {
       this.updateIsEdited();
-      this.validate();
+      // this.validate();
     });
   }
 
@@ -132,11 +133,10 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     const value = this.inputControl.value;
     if (this.initialValue instanceof Date && value instanceof Date) {
       this.isEdited = value.getTime() !== this.initialValue.getTime();
-      // this.isEdited = !equal(value.getTime().toString(), this.initialValue.getTime().toString());
     } else {
       this.isEdited = (value ?? '') !== (this.initialValue ?? '');
-      // this.isEdited = !equal(value, this.initialValue);
     }
+    this.isEditedChange.emit(this.isEdited); // Emit ra ngoài
     this.validate();
   }
 
@@ -402,7 +402,10 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     // Emit trạng thái hợp lệ ra ngoài
     // this.validChange.emit(this.inputControl.valid);
     // Emit giá trị thực tế ra ngoài
-    if (this.inputControl.valid) this.valueChange.emit(this.inputControl.value);
+    if (this.inputControl.valid) {
+      this.valueChange.emit(this.inputControl.value);
+      this.isEditedChange.emit(this.inputControl.value);
+    }
   }
 
   // Xử lý sự kiện click icon calendar

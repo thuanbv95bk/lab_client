@@ -30,5 +30,8 @@ namespace App.Lab.Repository.Interface
         /// Created: 25/04/2025
         /// Modified: date - user - description
         PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter);
+
+        Task Update(HrmEmployees obj);
+        Task DeleteSoft(int employeeId);
     }
 }

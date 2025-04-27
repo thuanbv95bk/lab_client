@@ -91,5 +91,72 @@ namespace App.Lab.Repository.Implement
             };
             return ret;
         }
+
+        public Task Update(HrmEmployees item)
+        {
+            var user = "E66E300E-B644-41B0-8124-CE9954434C6F";
+            var now = DateTime.Now;
+
+            string sql =
+               "UPDATE [HRM.Employees] SET " +
+                            " DisplayName = @DisplayName " +
+                            ",Name = @Name " +
+                            ",Mobile = @Mobile " +
+                            ",DriverLicense = @DriverLicense" +
+                            ",IssueLicenseDate = @IssueLicenseDate " +
+                            ",ExpireLicenseDate = @ExpireLicenseDate " +
+                            ",IssueLicensePlace = @IssueLicensePlace " +
+                            ",LicenseType = @LicenseType" +
+                            ",UpdateByUser = @UpdateByUser " +
+                            ",UpdatedDate = @UpdatedDate" +
+                            ",UpdatedByUser = @UpdatedByUser " +
+                           "WHERE PK_EmployeeID = @PK_EmployeeID;";
+            return Task.Run(() => this.ExecuteScalar<int>
+            (
+                sql
+               , CommandType.Text
+                , new
+                {
+                    DisplayName = item.DisplayName,
+                    Name = item.Name,
+                    Mobile = item.Mobile,
+                    DriverLicense = item.DriverLicense,
+                    IssueLicenseDate = item.IssueLicenseDate,
+                    ExpireLicenseDate = item.ExpireLicenseDate,
+                    IssueLicensePlace = item.IssueLicensePlace,
+                    LicenseType = item.LicenseType,
+
+                    UpdateByUser = user,
+                    UpdatedDate = now,
+                    UpdatedByUser = user
+                }
+            ));
+        }
+
+        public Task DeleteSoft(int employeeId)
+        {
+            var user = "E66E300E-B644-41B0-8124-CE9954434C6F";
+            var now = DateTime.Now;
+
+            string sql =
+               "UPDATE [HRM.Employees] SET " +
+                            "IsDeleted = 1 " +
+                            ",UpdatedDate = @UpdatedDate" +
+                            ",UpdatedByUser = @UpdatedByUser " +
+                           "WHERE PK_EmployeeID = @PK_EmployeeID;";
+            return Task.Run(() => this.ExecuteScalar<int>
+            (
+                sql
+               , CommandType.Text
+                , new
+                {
+                    PK_EmployeeID = employeeId,
+                    UpdateByUser = user,
+                    UpdatedDate = now,
+                    UpdatedByUser = user
+                }
+            ));
+
+        }
     }
 }

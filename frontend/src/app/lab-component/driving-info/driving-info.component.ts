@@ -5,6 +5,7 @@ import { BcaLicenseTypes } from './model/bca-license-types';
 import { BcaLicenseTypesService } from './service/bca-license-types.service';
 import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
 import { PaginationComponent } from './share-component/pagination/pagination.component';
+import { FormDirtyService } from './service/form-dirty.service';
 
 @Component({
   selector: 'app-driving-info',
@@ -34,7 +35,8 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   constructor(
     // private fb: FormBuilder,
     private employeesService: HrmEmployeesService,
-    private licenseTypesService: BcaLicenseTypesService
+    private licenseTypesService: BcaLicenseTypesService,
+    private formDirtyService: FormDirtyService
   ) {
     this.pagingModel = new PagingModel();
   }
@@ -129,20 +131,26 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   //   console.log(rowId);
   // }
 
-  onValueChangeDate($event, item: HrmEmployees) {
+  onValueChangeDate($event, item: HrmEmployees, value: Date) {
     console.log('$event');
     console.log($event);
-    item.issueLicenseDate = this.parseDateValue($event);
+    value = this.parseDateValue($event);
     console.log(item);
   }
 
-  private parseDateValue(value: string): Date {
-    const [day, month, year] = value.split('/');
-    return new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10));
-  }
+  onRowEdit(isEdit: boolean) {
+    // Gọi khi có dòng nào đó thay đổi
+    console.log('Gọi khi có dòng nào đó thay đổi');
+    console.log(isEdit);
 
-  get hasChanges(): boolean {
-    return this.changedRows.size > 0;
+    this.formDirtyService.setDirty(isEdit || this.formDirtyService.getCurrentDirty());
+  }
+  get isDirty() {
+    return this.formDirtyService.isDirty$();
+  }
+  parseDateValue(value: string): Date {
+    const [day, month, year] = value.split('/');
+    return value ? new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10)) : null;
   }
 
   saveChanges() {

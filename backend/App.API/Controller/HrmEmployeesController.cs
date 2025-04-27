@@ -3,6 +3,8 @@ using App.Common.BaseControllers;
 using App.Lab.Service.Interface;
 using App.Lab.Model;
 using App.Lab.App.Service.Implement;
+using static App.Lab.Model.HrmEmployeeValidator;
+using FluentValidation;
 namespace App.Admin.Controllers
 {
     [ApiController]
@@ -45,6 +47,54 @@ namespace App.Admin.Controllers
             }
             var ret = _service.GetPagingToEdit(filter);
             return Success(ret);
+        }
+
+        [HttpPost]
+        [Route("add-or-edit-list")]
+        public async Task<IActionResult> AddOrEditList(List<HrmEmployees> items, [FromServices] IValidator<List<HrmEmployees>> validator)
+        {
+            try
+            {
+                var result = await validator.ValidateAsync(items);
+                if (!result.IsValid)
+                {
+                    return BadRequest(new
+                    {
+                        Errors = result.Errors
+                            .GroupBy(x => x.PropertyName)
+                            .ToDictionary(x => x.Key, x => x.Select(e => e.ErrorMessage).ToArray())
+                    });
+                }
+
+                var ret = await _service.AddOrEditListAsync(items);
+                return ret.IsSuccess ? Success() : Failure(ret.ErroMessage);
+            }
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+
+        }
+
+        [HttpPost]
+        [Route("delete-soft")]
+        public async Task<IActionResult> DeleteSoft(int employeeId)
+        {
+            try
+            {
+                if (employeeId<=0)
+                {
+                    return Failure("Id không hợp lệ");
+                }
+
+                var ret = await _service.DeleteSoft(employeeId);
+                return ret.IsSuccess ? Success() : Failure(ret.ErroMessage);
+            }
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+
         }
     }
 }
