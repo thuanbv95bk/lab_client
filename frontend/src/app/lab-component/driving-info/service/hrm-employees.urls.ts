@@ -2,6 +2,7 @@
  * @Author thuan.bv
  * @Created 25/04/2025
  * @Modified date - user - description
+ * @Modified 28/04/2025 - thuan.bv - Thêm url addOrEditList, deleteSoft
  */
 
 export const Urls = {
@@ -13,4 +14,6 @@ export const Urls = {
   delete: '/api/hrm-employees/delete',
   getListCbx: '/api/hrm-employees/get-list-cbx',
   getPagingToEdit: '/api/hrm-employees/get-paging-to-edit',
+  deleteSoft: '/api/hrm-employees/delete-soft',
+  addOrEditList: '/api/hrm-employees/add-or-edit-list',
 };

@@ -38,8 +38,8 @@ namespace App.Lab.Model
         [MaxLength(100)]
         public string DisplayName { get; set; }
 
-        [MaxLength(100)]
-        public string Name { get; set; }
+        //[MaxLength(100)]
+        //public string Name { get; set; }
 
         [MaxLength(25)]
         public string Mobile { get; set; }
@@ -98,13 +98,12 @@ namespace App.Lab.Model
                     .WithMessage("DisplayName không được chứa ký tự '<' hoặc '>'");
 
             RuleFor(x => x.Mobile)
-                .Cascade(CascadeMode.Stop)
-                .NotEmpty().WithMessage("Số điện thoại không được để trống")
-                .MaximumLength(25).WithMessage("Mobile tối đa 25 ký tự")
-                .Matches(@"^\d+$").WithMessage("Số điện thoại chỉ được chứa các ký tự số") //.Matches() để kiểm tra chuỗi có phải là số không
-                .Length(10).WithMessage("Số điện thoại phải có 10 chữ số");
+                .Matches(@"^\d+$")
+                .WithMessage("Số điện thoại chỉ được chứa các ký tự s")
+                .When(x => !string.IsNullOrEmpty(x.Mobile))
+                .MaximumLength(25).WithMessage("Mobile tối đa 25 ký tự");
 
-
+           
             RuleFor(x => x.DriverLicense)
                 .Cascade(CascadeMode.Stop)
                 .NotEmpty().WithMessage("DriverLicense không được để trống")

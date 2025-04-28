@@ -49,6 +49,19 @@
       /* Đảm bảo select chiếm hết ô */
     }
 
+    td {
+      vertical-align: middle !important;
+
+      .btn-delete {
+        :hover {
+          background-color: #2d9cdb;
+          padding: 2px;
+          border-radius: 1px;
+        }
+      }
+    }
+
+
     // td {
     //   position: relative;
 

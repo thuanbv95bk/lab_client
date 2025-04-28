@@ -1,16 +1,12 @@
 <div class="container-search d-flex flex-column">
-  <div>{{ placeholder }}</div>
+  <div>{{ title }}</div>
   <div class="mt-auto">
     <div class="align-items-center bg-white input-group">
-      <input
-        type="text"
-        class="form-control form-control-sm"
-        [(ngModel)]="searchOption.value"
-        (ngModelChange)="changeKeySearch()" />
+      <input type="text" class="form-control form-control-sm" [placeholder]="selectedOption.placeholder"
+        [(ngModel)]="searchOption.value" (ngModelChange)="changeKeySearch()" />
       <div class="input-group-append">
-        <span *ngIf="searchOption.value" class="input-group-text cancel-icon"
-          ><i class="fa fa-times" (click)="searchOption.value = ''"></i
-        ></span>
+        <span *ngIf="searchOption.value" class="input-group-text cancel-icon"><i class="fa fa-times"
+            (click)="searchOption.value = ''"></i></span>
         <span class="input-group-text"><i class="fa fa-search"></i></span>
         <!-- <button
           type="button"

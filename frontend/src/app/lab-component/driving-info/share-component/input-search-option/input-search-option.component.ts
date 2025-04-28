@@ -5,6 +5,7 @@ import { SearchOption } from '../../model/hrm-employees.model';
 interface DropdownItem {
   code: string;
   name: string;
+  placeholder: string;
 }
 @Component({
   selector: 'app-input-search-option',
@@ -13,21 +14,23 @@ interface DropdownItem {
 })
 export class InputSearchOptionComponent {
   /** placeholder hiển thị */
-  @Input() placeholder: string = 'Tìm kiếm';
+  @Input() title: string = 'Tìm kiếm';
   @Input() searchOption: SearchOption;
+  placeholder: string = 'Nhập tên lái xe';
   // @Output() searchOptionEvent = new EventEmitter<SearchOption>();
   // searchOption = new SearchOption();
 
   selectedOption: DropdownItem;
-
   listOption: DropdownItem[] = [
     {
       code: 'displayName',
       name: 'Tên lái xe',
+      placeholder: 'Nhập tên lái xe',
     },
     {
       code: 'driverLicense',
       name: 'GPLX',
+      placeholder: 'Nhập giấy phép lái xe',
     },
   ];
 
@@ -40,6 +43,7 @@ export class InputSearchOptionComponent {
   ngOnInit(): void {
     this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
     this.searchOption.key = this.selectedOption?.code;
+    this.placeholder = this.selectedOption?.placeholder;
   }
 
   onSearch(): void {
@@ -55,6 +59,7 @@ export class InputSearchOptionComponent {
   selectDriver(driver: DropdownItem): void {
     this.selectedOption = driver;
     this.searchOption.key = this.selectedOption?.code;
+    this.placeholder = this.selectedOption?.placeholder;
   }
   changeKeySearch() {
     // this.searchOptionEvent.emit(this.searchOption);

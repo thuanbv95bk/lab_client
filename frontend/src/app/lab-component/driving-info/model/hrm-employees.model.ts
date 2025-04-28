@@ -18,6 +18,20 @@ export class HrmEmployees {
   licenseType: string;
   updatedDate: Date;
   createdDate: Date;
+
+  /** Trạng thái chỉnh sửa và hợp lệ
+   * true nếu row có ít nhất 1 field thay đổi và tất cả field hợp lệ. */
+  isEdit: boolean = false;
+
+  /**Lưu trạng thái hợp lệ và chỉnh sửa từng field
+   * lưu trạng thái { isEdited, isValid } cho từng field,
+   * được cập nhật từ ValidatedInputComponent qua output fieldStatusChange. */
+  fieldStatus?: {
+    [field: string]: {
+      isEdited: boolean;
+      isValid: boolean;
+    };
+  };
 }
 /** Bộ lọc danh sách lái xe, kèm PagingFilter
  * @Author thuan.bv

@@ -107,7 +107,6 @@ namespace App.Lab.Repository.Implement
                             ",ExpireLicenseDate = @ExpireLicenseDate " +
                             ",IssueLicensePlace = @IssueLicensePlace " +
                             ",LicenseType = @LicenseType" +
-                            ",UpdateByUser = @UpdateByUser " +
                             ",UpdatedDate = @UpdatedDate" +
                             ",UpdatedByUser = @UpdatedByUser " +
                            "WHERE PK_EmployeeID = @PK_EmployeeID;";
@@ -118,7 +117,7 @@ namespace App.Lab.Repository.Implement
                 , new
                 {
                     DisplayName = item.DisplayName,
-                    Name = item.Name,
+                    Name = StringHepler.RemoveDiacriticsToUpper(item.DisplayName),
                     Mobile = item.Mobile,
                     DriverLicense = item.DriverLicense,
                     IssueLicenseDate = item.IssueLicenseDate,
@@ -128,7 +127,8 @@ namespace App.Lab.Repository.Implement
 
                     UpdateByUser = user,
                     UpdatedDate = now,
-                    UpdatedByUser = user
+                    UpdatedByUser = user,
+                    PK_EmployeeID = item.PkEmployeeId
                 }
             ));
         }

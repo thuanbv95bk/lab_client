@@ -6,6 +6,8 @@ import { BcaLicenseTypesService } from './service/bca-license-types.service';
 import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
 import { PaginationComponent } from './share-component/pagination/pagination.component';
 import { FormDirtyService } from './service/form-dirty.service';
+import { CommonService } from '../../service/common.service';
+import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 
 @Component({
   selector: 'app-driving-info',
@@ -32,11 +34,15 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   selectOpen = false;
   dateNow = new Date();
   new: Date;
+
+  selectedId: HrmEmployees;
+  /** biến để trigger reset */
+  resetEditFlag = false;
   constructor(
-    // private fb: FormBuilder,
     private employeesService: HrmEmployeesService,
     private licenseTypesService: BcaLicenseTypesService,
-    private formDirtyService: FormDirtyService
+    public commonService: CommonService,
+    private dialogConfirm: DialogConfirmService
   ) {
     this.pagingModel = new PagingModel();
   }
@@ -100,11 +106,30 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
       }
     );
   }
+  /** Sự kiện click vào row chọn người dùng
+   * @param item Class User
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
+  onClickRow(item: HrmEmployees) {
+    if (this.selectedId != item) {
+      this.selectedId = item;
+    } else {
+      this.selectedId = null;
+    }
+  }
+  onFocusRow(item: HrmEmployees) {
+    this.selectedId = item;
+  }
+  onClickItem(item: HrmEmployees) {
+    this.selectedId = item;
+  }
   searchPagingToEdit() {
     this.filterEmployeesGrid.pageIndex = 1;
-    // this.pagingModel.length = 0;
-    // this.pagingModel.pageIndex = 1;
+    this.pagingModel.length = 0;
+    this.pagingModel.pageIndex = 1;
     this.getPagingToEdit();
   }
 
@@ -126,41 +151,114 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     console.log(event);
   }
 
-  // onValueChange(value: string | Date, rowId: HrmEmployees) {
-  //   // this.changedRows.add(rowId);
-  //   console.log(rowId);
-  // }
+  onFieldStatusChange(row: HrmEmployees, field: string, status: { isEdited: boolean; isValid: boolean }) {
+    if (!row.fieldStatus) row.fieldStatus = {};
+    row.fieldStatus[field] = status;
+    this.updateIsEditFlag(row);
+  }
+  updateIsEditFlag(row: HrmEmployees) {
+    // Danh sách các field cần kiểm tra
+    const fields = [
+      'displayName',
+      'mobile',
+      'driverLicense',
+      'issueLicenseDate',
+      'expireLicenseDate',
+      'issueLicensePlace',
+      'licenseType',
+    ];
 
-  onValueChangeDate($event, item: HrmEmployees, value: Date) {
-    console.log('$event');
-    console.log($event);
-    value = this.parseDateValue($event);
-    console.log(item);
+    // Có ít nhất 1 field isEdited=true và tất cả field đều isValid=true
+    const anyEdited = fields.some((f) => row.fieldStatus?.[f]?.isEdited);
+    const allValid = fields.every((f) => row.fieldStatus?.[f]?.isValid);
+
+    row.isEdit = anyEdited && allValid;
   }
 
-  onRowEdit(isEdit: boolean) {
-    // Gọi khi có dòng nào đó thay đổi
-    console.log('Gọi khi có dòng nào đó thay đổi');
-    console.log(isEdit);
+  getChangedValidRows(): HrmEmployees[] {
+    return this.listEmployeesGrid.filter((row) => row.isEdit);
+  }
 
-    this.formDirtyService.setDirty(isEdit || this.formDirtyService.getCurrentDirty());
-  }
-  get isDirty() {
-    return this.formDirtyService.isDirty$();
-  }
-  parseDateValue(value: string): Date {
-    const [day, month, year] = value.split('/');
-    return value ? new Date(parseInt(year, 10), parseInt(month, 10) - 1, parseInt(day, 10)) : null;
+  get isCanSave(): boolean {
+    return this.getChangedValidRows()?.length > 0;
   }
 
   saveChanges() {
-    const changedData = this.listEmployeesGrid.filter((row) => this.changedRows.has(row.pkEmployeeId));
-    console.log('Lưu các dòng:', changedData);
-    this.changedRows.clear();
+    console.log('Lưu các dòng');
+    // console.log(this.listEmployeesGrid);
+    this.getChangedValidRows();
+    this.addOrEditList(this.getChangedValidRows());
+  }
+
+  async deleteRow(item: HrmEmployees) {
+    const result = await this.dialogConfirm.confirm(`Bạn có chắc chắn muốn xóa lái xe ${item.displayName}?`);
+    if (result) {
+      console.log(' Xử lý xóa');
+      if (!item.pkEmployeeId || item.pkEmployeeId <= 0) return this.commonService.showWarning('Có lỗi với dữ liệu');
+      this.employeesService.deleteSoft(item.pkEmployeeId).then(
+        (res) => {
+          if (!res.isSuccess) {
+            console.error(res);
+            this.commonService.showError(res.errorMessage + ' errCode: ' + res.statusCode + ' )');
+            return;
+          } else if (res.isSuccess) {
+            this.commonService.showSuccess('Xóa thành công');
+            // Xóa item khỏi danh sách
+            this.listEmployeesGrid = this.listEmployeesGrid.filter((x) => x.pkEmployeeId !== item.pkEmployeeId);
+            this.pagingModel.length = this.pagingModel.length > 0 ? this.pagingModel.length - 1 : 0;
+            // Nếu cần, gọi lại getPagingToEdit() nếu muốn reload lại trang hiện tại
+            // this.getPagingToEdit();
+          }
+        },
+        (err) => this.commonService.showError('Xóa thất bại')
+      );
+    }
+  }
+
+  /** Lưu lại giá trị nhóm đã gán vào DB
+   * @param VehicleGroupModel danh sách nhóm phẳng(không cha-con)
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
+
+  addOrEditList(listItem: HrmEmployees[]) {
+    if (!listItem.length) return this.commonService.showWarning('Danh sách trống');
+    listItem.forEach((x) => {
+      x.issueLicenseDate = new Date(this.toISODateString(x.issueLicenseDate.toString()));
+      x.expireLicenseDate = new Date(this.toISODateString(x.expireLicenseDate.toString()));
+    });
+    this.employeesService.addOrEditList(listItem).then(
+      async (res) => {
+        if (!res.isSuccess) {
+          console.error(res);
+          this.commonService.showError(res.errorMessage + ' errCode: ' + res.statusCode + ' )');
+          return;
+        }
+
+        this.commonService.showSuccess('Cập nhật thành công');
+
+        listItem.forEach((row) => {
+          row.isEdit = false;
+          Object.values(row.fieldStatus || {}).forEach((f) => (f.isEdited = false));
+        });
+        this.resetEditFlag = true;
+        setTimeout(() => (this.resetEditFlag = false), 0);
+      },
+      (err) => this.commonService.showError('Cập nhật thất bại')
+    );
   }
 
   cancelChanges() {
     this.changedRows.clear();
+
     // Reset giá trị về ban đầu nếu cần
+  }
+  toISODateString(dateStr: string): string | null {
+    if (!dateStr) return null;
+    const [day, month, year] = dateStr.split('/').map(Number);
+    if (!day || !month || !year) return null;
+    // Trả về dạng yyyy-MM-dd (không có giờ, không bị lệch timezone)
+    return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   }
 }

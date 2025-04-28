@@ -44,6 +44,7 @@ import { NgbDatepickerI18n, NgbDatepickerModule, NgbModule } from '@ng-bootstrap
 import localeVi from '@angular/common/locales/vi';
 import { registerLocaleData } from '@angular/common';
 import { NgbDatepickerI18nViService } from './service/ngb-datepicker-i18n-vi.service';
+import { IsoToDdmmyyyyPipe } from './pipe/isoToDdmmyyyy.pipe';
 
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
@@ -55,11 +56,12 @@ registerLocaleData(localeVi);
   declarations: [
     AppComponent,
     LayoutComponent,
-
+    FilterPipe,
+    IsoToDdmmyyyyPipe,
     ToolbarMenuComponent,
     UserMenuComponent,
     SelectRowGroupsComponent,
-    FilterPipe,
+
     MultiSelectComponent,
     WidthWidgetComponent,
     setHiddenExtendComponent,

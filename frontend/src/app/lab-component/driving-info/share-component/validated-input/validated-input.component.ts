@@ -8,30 +8,43 @@ import {
   HostListener,
   OnChanges,
   SimpleChanges,
+  forwardRef,
 } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { BcaLicenseTypes } from '../../model/bca-license-types';
 
 @Component({
   selector: 'app-validated-input',
   templateUrl: './validated-input.component.html',
   styleUrls: ['./validated-input.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ValidatedInputComponent),
+      multi: true,
+    },
+  ],
 })
 export class ValidatedInputComponent implements OnInit, OnChanges {
-  @Input() initialValue: Date | string | null = null;
+  // @Input() initialValue: Date | string | null = null;
+  private originalValue: any = null; // Lưu giá trị ban đầu để so sánh isEdited
   @Input() required: boolean = false;
   @Input() minLength?: number;
   @Input() maxLength?: number;
   @Input() inputType: 'text' | 'date' | 'select' | 'phone' = 'text';
-
+  @Input() resetEditFlag: boolean = false;
   @Input() minDate: Date | null = null;
   @Input() maxDate: Date | null = null;
 
-  @Input() selectOptions: any[] = [];
+  @Input() selectOptions: BcaLicenseTypes[] = [];
   @Input() selectLabel: string = 'name'; // trường hiển thị, mặc định là 'name'
   @Output() valueChange = new EventEmitter<string | Date | null>();
   // @Output() validChange = new EventEmitter<boolean>();
   @Output() isEditedChange = new EventEmitter<boolean>();
+
+  @Output() fieldStatusChange = new EventEmitter<{ isEdited: boolean; isValid: boolean }>();
+  @Output() focusInput = new EventEmitter<void>();
 
   inputControl: FormControl;
   isEdited = false;
@@ -41,21 +54,68 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   private lastValue = '';
   placeholder = 'dd/MM/yyyy';
 
+  private onChange: any = () => {};
+  private onTouched: any = () => {};
+  writeValue(value: any): void {
+    // Lưu giá trị ban đầu nếu lần đầu gọi
+    if (this.originalValue === null) {
+      this.originalValue = value;
+    }
+    const displayValue = this.convertInitialValue(value);
+    this.inputControl.setValue(displayValue, { emitEvent: false });
+    this.inputControl.updateValueAndValidity(); // Thêm dòng này
+  }
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+    this.inputControl.valueChanges.subscribe(fn);
+  }
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+  setDisabledState?(isDisabled: boolean): void {
+    if (isDisabled) {
+      this.inputControl.disable();
+    } else {
+      this.inputControl.enable();
+    }
+  }
+
   constructor(private el: ElementRef) {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['initialValue'] && !changes['initialValue'].firstChange) {
-      this.inputControl.setValue(this.convertInitialValue(), { emitEvent: false });
-    }
+    if (this.inputType == 'date') {
+      // Chuẩn hóa minDate, maxDate về null nếu không hợp lệ
+      const safeMinDate = this.isValidDateInput(this.minDate) ? this.minDate : null;
+      const safeMaxDate = this.isValidDateInput(this.maxDate) ? this.maxDate : null;
 
-    if ((changes['minDate'] || changes['maxDate']) && this.inputControl) {
-      console.log('minDate');
+      if ((changes['minDate'] || changes['maxDate']) && this.inputControl) {
+        const validators = [];
+        if (this.required) validators.push(Validators.required);
+        validators.push(Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/));
+        validators.push(this.dateRangeValidator(safeMinDate, safeMaxDate));
 
-      this.inputControl.setValidators([
-        Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/),
-        this.dateRangeValidator(this.minDate, this.maxDate),
-      ]);
-      this.inputControl.updateValueAndValidity();
+        this.inputControl.setValidators(validators);
+        setTimeout(() => {
+          this.inputControl.updateValueAndValidity();
+          this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
+        });
+      }
     }
+    if (changes['ngModel']) {
+      this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
+      this.originalValue = changes['ngModel'].currentValue;
+    }
+    if (changes['resetEditFlag'] && changes['resetEditFlag'].currentValue) {
+      this.isEdited = false;
+      this.fieldStatusChange.emit({ isEdited: false, isValid: !this.inputControl.invalid });
+    }
+  }
+
+  // Thêm hàm kiểm tra hợp lệ cho minDate/maxDate
+  private isValidDateInput(date: any): boolean {
+    if (!date) return false;
+    if (date instanceof Date && !isNaN(date.getTime())) return true;
+    if (typeof date === 'string' && this.isValidDateString(date)) return true;
+    return false;
   }
   ngOnInit(): void {
     const validators = [];
@@ -71,27 +131,23 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       validators.push(Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/));
       validators.push(this.dateRangeValidator(this.minDate, this.maxDate));
     } else if (this.inputType === 'phone') {
-      // Định dạng số điện thoại Việt Nam: 10 số, bắt đầu bằng 0
       validators.push(Validators.pattern(/^0\d{9}$/));
-    } else if (this.inputType === 'select') {
-      // Nếu cần validate required cho select
-      if (this.required) validators.push(Validators.required);
     }
 
-    const initialValue = this.convertInitialValue();
-    this.inputControl = new FormControl(initialValue, validators);
+    // KHỞI TẠO VỚI GIÁ TRỊ RỖNG, GIÁ TRỊ SẼ ĐƯỢC SET BỞI writeValue
+    this.inputControl = new FormControl('', validators);
 
     if (this.inputType === 'date') {
-      this.parseDateValue(initialValue);
       this.inputControl.valueChanges.subscribe((value) => {
         this.handleDateInput(value, false);
       });
     }
 
     this.updateIsEdited();
+
     this.inputControl.valueChanges.subscribe(() => {
+      // this.inputControl.updateValueAndValidity({ onlySelf: true, emitEvent: false });
       this.updateIsEdited();
-      // this.validate();
     });
   }
 
@@ -130,14 +186,22 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   // Hàm cập nhật trạng thái isEdited
   private updateIsEdited(): void {
-    const value = this.inputControl.value;
-    if (this.initialValue instanceof Date && value instanceof Date) {
-      this.isEdited = value.getTime() !== this.initialValue.getTime();
+    let value = this.inputControl.value;
+    let initial = this.originalValue;
+
+    // Chuẩn hóa cho kiểu date: nếu rỗng/null/không hợp lệ thì về ''
+    if (this.inputType === 'date') {
+      value = this.convertInitialValue(value);
+      initial = this.convertInitialValue(initial);
     } else {
-      this.isEdited = (value ?? '') !== (this.initialValue ?? '');
+      value = value == null || value === undefined ? '' : String(value).trim();
+      initial = initial == null || initial === undefined ? '' : String(initial).trim();
     }
-    this.isEditedChange.emit(this.isEdited); // Emit ra ngoài
+
+    this.isEdited = value !== initial;
+
     this.validate();
+    this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
   }
 
   // Xử lý nhập liệu và xóa cho trường date
@@ -166,8 +230,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     } else {
       this.dateModel = null;
     }
-    console.log('this.dateModelxxx');
-    console.log(this.dateModel);
   }
   onDateInput(event: any): void {
     if (this.inputType !== 'date') return;
@@ -205,13 +267,11 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     } else {
       this.dateModel = null;
     }
+    this.inputControl.updateValueAndValidity({ onlySelf: true });
   }
   // Định dạng với placeholder
   private formatWithPlaceholders(value: string, isDelete: boolean): string {
-    console.log('ggg' + value);
-
     let formatted = value.replace(/[^0-9]/g, '');
-    console.log('formatted ' + formatted);
 
     if (formatted.length > 8) formatted = formatted.substring(0, 8);
 
@@ -248,7 +308,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   }
   // Xử lý sự kiện keydown
   onDateKeydown(event: KeyboardEvent): void {
-    // this.isEdited = true;
     if (this.inputType !== 'date') return;
 
     const allowedKeys = [
@@ -313,12 +372,12 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     }
   }
   // Chuyển đổi giá trị ban đầu sang chuỗi
-  private convertInitialValue(): string {
+  private convertInitialValue(value: any): string {
     if (this.inputType === 'date') {
-      if (this.initialValue instanceof Date) {
-        return this.isValidDate(this.initialValue) ? this.formatDate(this.initialValue) : '';
+      if (value instanceof Date) {
+        return this.isValidDate(value) ? this.formatDate(value) : '';
       }
-      const strVal = String(this.initialValue ?? '');
+      const strVal = String(value ?? '');
       // Nếu là dạng dd/MM/yyyy thì giữ nguyên
       if (this.isValidDateString(strVal)) return strVal;
       // Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss)
@@ -329,13 +388,29 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       }
       return '';
     }
-    return String(this.initialValue ?? '');
+    return String(value ?? '');
   }
+  // private convertInitialValue(): string {
+  //   if (this.inputType === 'date') {
+  //     if (this.initialValue instanceof Date) {
+  //       return this.isValidDate(this.initialValue) ? this.formatDate(this.initialValue) : '';
+  //     }
+  //     const strVal = String(this.initialValue ?? '');
+  //     // Nếu là dạng dd/MM/yyyy thì giữ nguyên
+  //     if (this.isValidDateString(strVal)) return strVal;
+  //     // Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss)
+  //     const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  //     if (isoMatch) {
+  //       const [_, year, month, day] = isoMatch;
+  //       return `${day}/${month}/${year}`;
+  //     }
+  //     return '';
+  //   }
+  //   return String(this.initialValue ?? '');
+  // }
 
   // Định dạng ngày thành 'dd/MM/yyyy'
   private formatDate(date: Date): string {
-    console.log('vao 1');
-
     return [this.pad(date.getDate()), this.pad(date.getMonth() + 1), date.getFullYear()].join('/');
   }
 
@@ -397,15 +472,26 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
           this.errorMessage = 'Ngày không hợp lệ';
         }
       }
+      // Không emit khi chưa hợp lệ!
+
+      return;
     }
 
-    // Emit trạng thái hợp lệ ra ngoài
-    // this.validChange.emit(this.inputControl.valid);
-    // Emit giá trị thực tế ra ngoài
-    if (this.inputControl.valid) {
-      this.valueChange.emit(this.inputControl.value);
-      this.isEditedChange.emit(this.inputControl.value);
-    }
+    // Emit giá trị thực tế ra ngoài nếu hợp lệ
+    // Chỉ emit khi hợp lệ
+    this.valueChange.emit(this.inputControl.value);
+    // Luôn cập nhật trạng thái isEdited đúng logic
+    // const value = this.inputControl.value ?? '';
+    // let initial = this.originalValue ?? '';
+
+    // if (this.inputType === 'date') {
+    //   const v = this.isValidDateString(value) ? value : '';
+    //   const i = this.isValidDateString(initial.toString()) ? initial : '';
+    //   this.isEdited = v !== i;
+    // } else {
+    //   this.isEdited = value !== initial;
+    // }
+    // this.isEditedChange.emit(this.isEdited);
   }
 
   // Xử lý sự kiện click icon calendar
@@ -433,8 +519,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   // Class CSS cho viền và nền
   get borderClass(): string {
-    if (this.inputControl.invalid && this.inputControl) return 'border-danger';
-    if (this.isEdited) return 'border-success';
+    if (this.inputControl && this.inputControl.invalid) return 'border-danger';
+    if (!this.inputControl.invalid) return 'border-success';
     return '';
   }
 

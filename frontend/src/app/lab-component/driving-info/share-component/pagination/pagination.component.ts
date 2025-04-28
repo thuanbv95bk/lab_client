@@ -8,17 +8,14 @@ import { PageEvent, PagingModel } from '../../../../app-model/paging';
   styleUrls: ['./pagination.component.scss'],
 })
 export class PaginationComponent implements OnChanges {
-  // pageIndex: number = 1;
-  // pageSize: number = 20;
-
   @Input() pagingModel: PagingModel;
-  isLoading: boolean = false;
 
-  pageEvent = new PagingModel();
   @Output() page = new EventEmitter<PagingModel>();
 
   @Output() reload = new EventEmitter<void>();
+  isLoading: boolean = false;
 
+  pageEvent = new PagingModel();
   appGlobals = AppGlobals;
 
   Math = Math; // Add this line to make Math available in template
@@ -59,6 +56,8 @@ export class PaginationComponent implements OnChanges {
   }
 
   getPages(): (number | string)[] {
+    const totalPages = this.totalPages;
+    if (totalPages <= 1) return [1]; // Chỉ hiển thị trang 1 nếu chỉ có 1 trang
     const pages: (number | string)[] = [];
     const maxVisiblePages = 5;
     const halfVisible = Math.floor(maxVisiblePages / 2);

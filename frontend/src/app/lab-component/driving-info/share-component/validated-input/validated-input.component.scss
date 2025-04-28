@@ -26,10 +26,6 @@ input[type='text']::placeholder {
   border-left: 4px solid #28a745 !important;
 }
 
-// .bg-warning {
-//   border: 1px solid $color-border !important;
-//   background-color: #fff3cd !important;
-// }
 
 .bg-warning {
   background-color: #fff3cd !important;
@@ -44,14 +40,6 @@ input[type='text']::placeholder {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-// .input-group-text {
-//   background-color: white;
-//   border-left: none;
-//   cursor: pointer;
-//   i {
-//     color: #6c757d;
-//   }
-// }
 
 // Ẩn placeholder thật, hiển thị placeholder ảo
 input[type='text']::placeholder {

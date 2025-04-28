@@ -1,6 +1,6 @@
 <!-- validated-input.component.html -->
 <div class="">
-  <div class="input-group input-group-sm position-relative">
+  <div class="mx-auto input-group input-group-sm position-relative">
     <!-- <input [formControl]="inputControl"
       [type]="inputType === 'date' ? 'text' : (inputType === 'phone' ? 'tel' : 'text')"
       [class]="'form-control ' + borderClass + ' ' + inputClass" [title]="errorMessage" (input)="onDateInput($event)"
@@ -12,9 +12,10 @@
       <select
         *ngSwitchCase="'select'"
         class="form-control form-control-sm {{ borderClass }} {{ inputClass }}"
-        [formControl]="inputControl">
+        [formControl]="inputControl"
+        (focus)="focusInput.emit()">
         <option value="">Chọn loại bằng</option>
-        <option *ngFor="let opt of selectOptions" [ngValue]="opt">
+        <option *ngFor="let opt of selectOptions" [ngValue]="opt.pkLicenseTypeId.toString()">
           {{ opt[selectLabel] }}
         </option>
       </select>
@@ -36,7 +37,8 @@
             : null
         "
         (blur)="validate()"
-        placeholder=" " />
+        placeholder=" "
+        (focus)="focusInput.emit()" />
     </ng-container>
     <div class="input-group-prepend">
       <span *ngIf="inputType === 'date'" class="input-group-text" (click)="toggleDatePicker()">

@@ -2,7 +2,7 @@
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
   <div class="driving-form-search row w-100">
     <div class="col">
-      <app-input-search-option [placeholder]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
+      <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
     <div class="col">
       <app-multi-select-dropdown
@@ -34,7 +34,9 @@
     </div>
   </div>
   <div class="d-flex float-right mt-1">
-    <button type="button" class="btn-sm" [disabled]="!isDirty"><i class="fa fa-save"></i> Lưu thông tin</button>
+    <button type="button" class="btn-sm" *ngIf="isCanSave" (click)="saveChanges()">
+      <i class="fa fa-save"></i> Lưu thông tin
+    </button>
     <button type="button" class="btn-sm ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
     <button type="button" class="btn-sm"><i class="fa fa-file-excel"></i></button>
   </div>
@@ -56,83 +58,96 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let item of listEmployeesGrid; let i = index">
+        <tr
+          *ngFor="let item of listEmployeesGrid; let i = index"
+          id="{{ item.pkEmployeeId }}"
+          [ngClass]="{ 'selected-row': selectedId && item == selectedId }">
           <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
           <td>
             <app-validated-input
-              [initialValue]="item.displayName"
+              [(ngModel)]="item.displayName"
               [inputType]="'text'"
               [required]="true"
               [minLength]="1"
               [maxLength]="100"
-              (valueChange)="item.displayName = $event?.toString()"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'displayName', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
-              [initialValue]="item.mobile"
+              [(ngModel)]="item.mobile"
               [inputType]="'phone'"
               [required]="false"
               [minLength]="1"
               [maxLength]="25"
-              (valueChange)="item.mobile = $event?.toString()"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'mobile', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
-              [initialValue]="item.driverLicense"
+              [(ngModel)]="item.driverLicense"
               [inputType]="'text'"
               [required]="true"
               [minLength]="1"
               [maxLength]="32"
-              (valueChange)="item.driverLicense = $event?.toString()"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'driverLicense', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
-              [initialValue]="item.issueLicenseDate"
+              [(ngModel)]="item.issueLicenseDate"
               [inputType]="'date'"
               [required]="true"
               [minDate]="null"
               [maxDate]="dateNow"
-              (valueChange)="item.issueLicenseDate = this.parseDateValue($event.toString())"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'issueLicenseDate', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
 
           <td>
             <app-validated-input
-              [initialValue]="item.expireLicenseDate"
+              [(ngModel)]="item.expireLicenseDate"
               [inputType]="'date'"
               [required]="true"
               [minDate]="item.issueLicenseDate"
               [maxDate]="null"
-              (valueChange)="item.expireLicenseDate = this.parseDateValue($event.toString())"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'expireLicenseDate', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
-              [initialValue]="item.issueLicensePlace"
+              [(ngModel)]="item.issueLicensePlace"
               [inputType]="'text'"
               [required]="true"
               [minLength]="1"
               [maxLength]="150"
-              (valueChange)="item.issueLicensePlace = $event?.toString()"
-              (isEditedChange)="onRowEdit($event)"></app-validated-input>
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'issueLicensePlace', $event)"
+              (focusInput)="onFocusRow(item)"></app-validated-input>
           </td>
 
           <td>
             <app-validated-input
+              [(ngModel)]="item.licenseType"
               [inputType]="'select'"
               [selectOptions]="listLicenseTypes"
               selectLabel="name"
               [required]="true"
-              (valueChange)="item.licenseType = $event?.toString()"
-              (isEditedChange)="onRowEdit($event)">
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'licenseType', $event)"
+              (focusInput)="onFocusRow(item)">
             </app-validated-input>
           </td>
           <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
-            <i class="fa fa-trash text-danger"></i>
+            <div class="btn-delete">
+              <i class="fa fa-trash text-danger" (click)="deleteRow(item); onFocusRow(item)"></i>
+            </div>
           </td>
         </tr>
       </tbody>
