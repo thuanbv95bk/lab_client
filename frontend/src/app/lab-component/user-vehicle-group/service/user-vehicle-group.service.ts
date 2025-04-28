@@ -16,13 +16,13 @@ import { UserVehicleGroupFilter, VehicleGroupModel } from '../model/user-vehicle
   providedIn: 'root',
 })
 export class UserVehicleGroupService extends BaseDataService {
-  _getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
-  _getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
-  _getListUrl = AppConfig.apiEndpoint + Urls.getList;
-  _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
-  _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
-  _getListAssignGroupsUrl = AppConfig.apiEndpoint + Urls.getListAssignGroups;
-  _addOrEditListUrl = AppConfig.apiEndpoint + Urls.addOrEditList;
+  getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
+  getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
+  getListUrl = AppConfig.apiEndpoint + Urls.getList;
+  addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
+  deleteUrl = AppConfig.apiEndpoint + Urls.delete;
+  getListAssignGroupsUrl = AppConfig.apiEndpoint + Urls.getListAssignGroups;
+  addOrEditListUrl = AppConfig.apiEndpoint + Urls.addOrEditList;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
@@ -41,7 +41,7 @@ export class UserVehicleGroupService extends BaseDataService {
    */
 
   getListAssignGroups(filterModel: UserVehicleGroupFilter): Promise<RespondData> {
-    return this.postData(this._getListAssignGroupsUrl, filterModel, false);
+    return this.postData(this.getListAssignGroupsUrl, filterModel, false);
   }
 
   /** gọi API thêm/ xóa nhóm phương tiện của user
@@ -52,6 +52,6 @@ export class UserVehicleGroupService extends BaseDataService {
    */
 
   addOrEditList(model: VehicleGroupModel): Promise<RespondData> {
-    return this.postData(this._addOrEditListUrl, model, false);
+    return this.postData(this.addOrEditListUrl, model, false);
   }
 }

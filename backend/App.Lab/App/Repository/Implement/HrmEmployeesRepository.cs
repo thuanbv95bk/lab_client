@@ -91,7 +91,51 @@ namespace App.Lab.Repository.Implement
             };
             return ret;
         }
+        /// <summary> Lấy danh sách lái xe theo điều kiện => xuất Excel </summary>
+        /// <param name="filter">HrmEmployeesFilter: bộ lọc để lấy dữ liệu</param>
+        /// Author: thuanbv
+        /// Created: 25/04/2025
+        /// Modified: date - user - description
+        public List<HrmEmployees> GetDataToExcel(HrmEmployeesFilter filter)
+        {
 
+            var listItem = this.ExecuteReader<HrmEmployees>
+            (
+               "SELECT PK_EmployeeID AS PkEmployeeID" +
+                          ",CASE WHEN UpdatedDate IS NULL THEN CreatedDate ELSE UpdatedDate END [UpdatedDate]" +
+                          ",DisplayName" +
+                          ",Mobile" +
+                          ",DriverLicense" +
+                          ",IssueLicenseDate" +
+                          ",ExpireLicenseDate" +
+                          ",IssueLicensePlace" +
+                          ",LicenseType " +
+                         
+                    "FROM dbo.[HRM.Employees] " +
+                    "WHERE FK_CompanyID = @FK_CompanyID " +
+                           "AND ISNULL(IsDeleted, 0) = 0 " +
+                           "AND ISNULL(IsLocked, 0) = 0 " +
+                           "AND (@DisplayName IS NULL OR LOWER(DisplayName) LIKE '%' + LOWER(@DisplayName) + '%') " +
+                           "AND (@DriverLicense IS NULL OR LOWER(DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%') " +
+                           "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%' ) " +
+                           "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(PK_EmployeeID AS NVARCHAR) + ',%' ) " +
+                    "ORDER BY DisplayName"
+                , CommandType.Text
+                , new
+                {
+                    FK_CompanyID = filter.FkCompanyId,
+                    DisplayName = filter.DisplayName,
+                    DriverLicense = filter.DriverLicense,
+                    ListStringLicenseTypesId = filter.ListStringLicenseTypesId,
+                    ListStringEmployeesId = filter.ListStringEmployeesId,
+
+                    
+                }
+
+            );
+
+            return listItem;
+        }
         public Task Update(HrmEmployees item)
         {
             var user = "E66E300E-B644-41B0-8124-CE9954434C6F";

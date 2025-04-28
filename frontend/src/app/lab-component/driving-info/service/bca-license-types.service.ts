@@ -15,13 +15,13 @@ import { RespondData } from '../../../service/API-service/base.service';
  * @Modified date - user - description
  */
 export class BcaLicenseTypesService extends BaseDataService {
-  _getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
-  _getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
-  _getListUrl = AppConfig.apiEndpoint + Urls.getList;
-  _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
-  _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
+  getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
+  getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
+  getListUrl = AppConfig.apiEndpoint + Urls.getList;
+  addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
+  deleteUrl = AppConfig.apiEndpoint + Urls.delete;
 
-  _getListActiveUrl = AppConfig.apiEndpoint + Urls.getListActive;
+  getListActiveUrl = AppConfig.apiEndpoint + Urls.getListActive;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
@@ -32,6 +32,6 @@ export class BcaLicenseTypesService extends BaseDataService {
    */
 
   getListActive(): Promise<RespondData> {
-    return this.get(this._getListActiveUrl);
+    return this.get(this.getListActiveUrl);
   }
 }

@@ -21,11 +21,11 @@ export interface IBaseDataService {
  * @Modified date - user - description
  */
 export abstract class BaseDataService extends BaseService implements IBaseDataService {
-  abstract _getByIdUrl: string;
-  abstract _getAllUrl: string;
-  abstract _getListUrl: string;
-  abstract _addOrEditUrl: string;
-  abstract _deleteUrl: string;
+  abstract getByIdUrl: string;
+  abstract getAllUrl: string;
+  abstract getListUrl: string;
+  abstract addOrEditUrl: string;
+  abstract deleteUrl: string;
 
   /** getById lấy dữ liệu về bới Id
    * @param id :string | number
@@ -37,7 +37,7 @@ export abstract class BaseDataService extends BaseService implements IBaseDataSe
 
   getById(id: string | number, noLoadingMark = false): Promise<RespondData> {
     const params = new HttpParams().append('id', id);
-    return this.postParams(this._getByIdUrl, params, noLoadingMark);
+    return this.postParams(this.getByIdUrl, params, noLoadingMark);
   }
 
   /** getAll  lấy dữ liệu nobody,
@@ -48,7 +48,7 @@ export abstract class BaseDataService extends BaseService implements IBaseDataSe
    */
 
   getAll(): Promise<RespondData> {
-    return this.post(this._getAllUrl);
+    return this.post(this.getAllUrl);
   }
 
   /** getList lấy về 1 danh sách
@@ -60,7 +60,7 @@ export abstract class BaseDataService extends BaseService implements IBaseDataSe
    */
 
   getList(filterModel: any, noLoadingMark = false): Promise<RespondData> {
-    return this.postData(this._getListUrl, filterModel, noLoadingMark);
+    return this.postData(this.getListUrl, filterModel, noLoadingMark);
   }
 
   /** addOrEdit : thêm, cập nhật 1 item
@@ -71,7 +71,7 @@ export abstract class BaseDataService extends BaseService implements IBaseDataSe
    * @Modified date - user - description
    */
   addOrEdit(model: any, noLoadingMark = false): Promise<RespondData> {
-    return this.postData(this._addOrEditUrl, model, noLoadingMark);
+    return this.postData(this.addOrEditUrl, model, noLoadingMark);
   }
 
   /** delete : xóa 1 item
@@ -82,6 +82,6 @@ export abstract class BaseDataService extends BaseService implements IBaseDataSe
    */
   delete(id: string | number): Promise<RespondData> {
     const params = new HttpParams().append('id', id);
-    return this.postParams(this._deleteUrl, params);
+    return this.postParams(this.deleteUrl, params);
   }
 }

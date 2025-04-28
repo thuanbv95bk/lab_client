@@ -92,6 +92,7 @@ registerLocaleData(localeVi);
     BrowserAnimationsModule,
     NgbDatepickerModule,
     NgbModule,
+    NgbDatepickerModule,
 
     ToastrModule.forRoot({
       timeOut: 3000,

@@ -31,6 +31,13 @@ namespace App.Lab.Repository.Interface
         /// Modified: date - user - description
         PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter);
 
+        /// <summary>Interface Lấy danh sách lái xe theo điều kiện => xuất Excel </summary>
+        /// <param name="filter">HrmEmployeesFilter: bộ lọc để lấy dữ liệu</param>
+        /// Author: thuanbv
+        /// Created: 29/04/2025
+        /// Modified: date - user - description
+        List<HrmEmployees> GetDataToExcel(HrmEmployeesFilter filter);
+
         Task Update(HrmEmployees obj);
         Task DeleteSoft(int employeeId);
     }

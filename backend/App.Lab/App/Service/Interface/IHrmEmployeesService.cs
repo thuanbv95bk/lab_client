@@ -35,5 +35,7 @@ namespace App.Lab.Service.Interface
         Task<ServiceStatus> AddOrEditListAsync(List<HrmEmployees> items);
 
         Task<ServiceStatus> DeleteSoft(int employeeId);
+
+        MemoryStream ExportExcel(HrmEmployeesFilter filter);
     }
 }

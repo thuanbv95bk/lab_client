@@ -46,14 +46,8 @@
     </ul>
   </nav>
   <div class="d-flex align-items-center">
-    <select
-      class="form-control form-control-sm"
-      [(ngModel)]="this.pagingModel.pageSize"
-      (change)="onItemsPerPageChange()">
+    <select class="form-control form-control-sm" [(ngModel)]="this.pagingModel.pageSize" (change)="onItemsPerPageChange()">
       <option *ngFor="let item of appGlobals.pageSizeOptions" [value]="item">{{ item }}</option>
-      <!-- <option value="20">20</option>
-      <option value="50">50</option>
-      <option value="100">100</option> -->
     </select>
     <span class="ml-2 page-text">dòng mỗi trang</span>
   </div>

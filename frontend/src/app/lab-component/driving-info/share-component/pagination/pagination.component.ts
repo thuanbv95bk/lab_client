@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AppGlobals } from '../../../../app-global';
-import { PageEvent, PagingModel } from '../../../../app-model/paging';
-
+import { PagingModel } from '../../../../app-model/paging';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
@@ -18,11 +17,9 @@ export class PaginationComponent implements OnChanges {
   pageEvent = new PagingModel();
   appGlobals = AppGlobals;
 
-  Math = Math; // Add this line to make Math available in template
+  Math = Math;
 
-  constructor() {
-    // this.pageEvent.pageSize = this.pageSize;
-  }
+  constructor() {}
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pagingModel']) {
@@ -47,7 +44,6 @@ export class PaginationComponent implements OnChanges {
   onItemsPerPageChange(): void {
     this.pagingModel.pageIndex = 1; // Reset to first page when items per page changes
     this.pageEvent.pageSize = this.pagingModel.pageSize;
-    // console.log('this.itemsPerPage:' + this.pagingModel.pageSize);
     this.page.emit({ ...this.pageEvent });
   }
 

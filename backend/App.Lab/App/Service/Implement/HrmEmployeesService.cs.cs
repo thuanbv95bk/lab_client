@@ -6,6 +6,7 @@ using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using App.Lab.Service.Interface;
 using Microsoft.AspNetCore.Http;
+using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -107,6 +108,40 @@ namespace App.Lab.App.Service.Implement
             catch (Exception ex)
             {
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình xóa!");
+            }
+        }
+
+        public MemoryStream ExportExcel(HrmEmployeesFilter filter)
+        {
+            {
+                MemoryStream stream;
+
+                // lay du lieu
+
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+                using (var package = new ExcelPackage())
+
+                {
+                    var ws = package.Workbook.Worksheets.Add("sheet1");
+
+                    //filter.IsPaging = false;
+
+                    var listData = _repo.GetDataToExcel(filter);
+                    string title = string.Empty;
+
+                    title = "THÔNG TIN LÁI XE";
+
+                    string subTitle = "Thời gian : ";
+
+                    //excelConfig.FillExcell();
+                    EmployessReportExcel.FillExcell(ws, title, subTitle, 4, listData, EmployessReportExcel.HeaderRows());
+
+                    // luu du lieu vao stream
+                    stream = new MemoryStream(package.GetAsByteArray());
+                    //}
+                }
+
+                return stream;
             }
         }
     }

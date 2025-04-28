@@ -9,9 +9,10 @@ import {
   OnChanges,
   SimpleChanges,
   forwardRef,
+  ViewChild,
 } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
-import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
 
 @Component({
@@ -45,7 +46,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   @Output() fieldStatusChange = new EventEmitter<{ isEdited: boolean; isValid: boolean }>();
   @Output() focusInput = new EventEmitter<void>();
-
+  // Thêm các dòng này
+  @ViewChild('datePopover') datePopover!: NgbPopover;
   inputControl: FormControl;
   isEdited = false;
   errorMessage: string = '';
@@ -390,24 +392,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     }
     return String(value ?? '');
   }
-  // private convertInitialValue(): string {
-  //   if (this.inputType === 'date') {
-  //     if (this.initialValue instanceof Date) {
-  //       return this.isValidDate(this.initialValue) ? this.formatDate(this.initialValue) : '';
-  //     }
-  //     const strVal = String(this.initialValue ?? '');
-  //     // Nếu là dạng dd/MM/yyyy thì giữ nguyên
-  //     if (this.isValidDateString(strVal)) return strVal;
-  //     // Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss)
-  //     const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
-  //     if (isoMatch) {
-  //       const [_, year, month, day] = isoMatch;
-  //       return `${day}/${month}/${year}`;
-  //     }
-  //     return '';
-  //   }
-  //   return String(this.initialValue ?? '');
-  // }
 
   // Định dạng ngày thành 'dd/MM/yyyy'
   private formatDate(date: Date): string {
@@ -438,7 +422,9 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   onDateSelect(date: NgbDateStruct): void {
     const formattedDate = `${this.pad(date.day)}/${this.pad(date.month)}/${date.year}`;
     this.inputControl.setValue(formattedDate);
-    this.showDatePicker = false;
+    if (this.datePopover?.isOpen()) {
+      setTimeout(() => this.datePopover.close(), 50);
+    }
   }
 
   // Validate dữ liệu
@@ -477,36 +463,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       return;
     }
 
-    // Emit giá trị thực tế ra ngoài nếu hợp lệ
-    // Chỉ emit khi hợp lệ
     this.valueChange.emit(this.inputControl.value);
-    // Luôn cập nhật trạng thái isEdited đúng logic
-    // const value = this.inputControl.value ?? '';
-    // let initial = this.originalValue ?? '';
-
-    // if (this.inputType === 'date') {
-    //   const v = this.isValidDateString(value) ? value : '';
-    //   const i = this.isValidDateString(initial.toString()) ? initial : '';
-    //   this.isEdited = v !== i;
-    // } else {
-    //   this.isEdited = value !== initial;
-    // }
-    // this.isEditedChange.emit(this.isEdited);
-  }
-
-  // Xử lý sự kiện click icon calendar
-  toggleDatePicker(): void {
-    if (!this.showDatePicker) {
-      // Khi mở date picker, đồng bộ dateModel với inputControl.value
-      const value = this.inputControl.value;
-      if (this.isValidDateString(value)) {
-        const [day, month, year] = value.split('/').map(Number);
-        this.dateModel = { day, month, year };
-      } else {
-        this.dateModel = null;
-      }
-    }
-    this.showDatePicker = !this.showDatePicker;
   }
 
   // Đóng date picker khi click ra ngoài
@@ -526,5 +483,22 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   get inputClass(): string {
     return this.isEdited == true ? 'bg-warning' : '';
+  }
+
+  // Xử lý toggle date picker
+  toggleDatePicker(popover: NgbPopover) {
+    if (popover.isOpen()) {
+      popover.close();
+    } else {
+      popover.open();
+
+      const value = this.inputControl.value;
+      if (this.isValidDateString(value)) {
+        const [day, month, year] = value.split('/').map(Number);
+        this.dateModel = { day, month, year };
+      } else {
+        this.dateModel = null;
+      }
+    }
   }
 }

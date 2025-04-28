@@ -10,7 +10,6 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { HrmEmployeesCbx } from '../../model/hrm-employees.model';
 import { BehaviorSubject, ReplaySubject, Subject, takeUntil } from 'rxjs';
 import { FormControl } from '@angular/forms';
 

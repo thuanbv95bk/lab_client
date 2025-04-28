@@ -14,11 +14,11 @@ import { Urls } from '../model/urls/user.urls';
   providedIn: 'root',
 })
 export class UserService extends BaseDataService {
-  _getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
-  _getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
-  _getListUrl = AppConfig.apiEndpoint + Urls.getList;
-  _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
-  _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
+  getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
+  getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
+  getListUrl = AppConfig.apiEndpoint + Urls.getList;
+  addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
+  deleteUrl = AppConfig.apiEndpoint + Urls.delete;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }

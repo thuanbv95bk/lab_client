@@ -206,8 +206,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
             // Xóa item khỏi danh sách
             this.listEmployeesGrid = this.listEmployeesGrid.filter((x) => x.pkEmployeeId !== item.pkEmployeeId);
             this.pagingModel.length = this.pagingModel.length > 0 ? this.pagingModel.length - 1 : 0;
-            // Nếu cần, gọi lại getPagingToEdit() nếu muốn reload lại trang hiện tại
-            // this.getPagingToEdit();
           }
         },
         (err) => this.commonService.showError('Xóa thất bại')
@@ -260,5 +258,13 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     if (!day || !month || !year) return null;
     // Trả về dạng yyyy-MM-dd (không có giờ, không bị lệch timezone)
     return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+  }
+
+  downloadExcel() {
+    this.filterEmployeesGrid.fkCompanyId = this.FkCompanyID;
+    this.employeesService
+      .exportExcel(this.filterEmployeesGrid)
+      .then(() => console.log('Download completed'))
+      .catch((error) => console.error('Download failed:', error));
   }
 }

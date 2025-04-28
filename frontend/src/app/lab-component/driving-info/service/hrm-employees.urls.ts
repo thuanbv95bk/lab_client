@@ -16,4 +16,5 @@ export const Urls = {
   getPagingToEdit: '/api/hrm-employees/get-paging-to-edit',
   deleteSoft: '/api/hrm-employees/delete-soft',
   addOrEditList: '/api/hrm-employees/add-or-edit-list',
+  exportExcel: '/api/hrm-employees/export-excel',
 };

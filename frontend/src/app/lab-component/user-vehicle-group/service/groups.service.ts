@@ -17,12 +17,12 @@ import { GroupsFilter } from '../model/groups';
   providedIn: 'root',
 })
 export class GroupsService extends BaseDataService {
-  _getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
-  _getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
-  _getListUrl = AppConfig.apiEndpoint + Urls.getList;
-  _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
-  _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
-  _getListUnassignGroupsUrl = AppConfig.apiEndpoint + Urls.getListUnassignGroups;
+  getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
+  getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
+  getListUrl = AppConfig.apiEndpoint + Urls.getList;
+  addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
+  deleteUrl = AppConfig.apiEndpoint + Urls.delete;
+  getListUnassignGroupsUrl = AppConfig.apiEndpoint + Urls.getListUnassignGroups;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
@@ -36,7 +36,7 @@ export class GroupsService extends BaseDataService {
    */
 
   getListUnassignGroups(filterModel: GroupsFilter): Promise<RespondData> {
-    return this.postData(this._getListUnassignGroupsUrl, filterModel, false);
+    return this.postData(this.getListUnassignGroupsUrl, filterModel, false);
   }
 
   /** Xây cây cha-con từ danh sách nhóm

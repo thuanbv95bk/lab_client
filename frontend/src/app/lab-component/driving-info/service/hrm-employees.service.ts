@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { BaseDataService } from '../../../service/API-service/base-data.service';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { AppConfig } from '../../../app.config';
 import { Urls } from './hrm-employees.urls';
 import { RespondData } from '../../../service/API-service/base.service';
 import { HrmEmployees, HrmEmployeesFilter } from '../model/hrm-employees.model';
+import { catchError, throwError } from 'rxjs';
 
 /** Service dùng để gọi API tới backend, lấy dữ liệu
  * @Author thuan.bv
@@ -17,16 +18,17 @@ import { HrmEmployees, HrmEmployeesFilter } from '../model/hrm-employees.model';
   providedIn: 'root',
 })
 export class HrmEmployeesService extends BaseDataService {
-  _getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
-  _getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
-  _getListUrl = AppConfig.apiEndpoint + Urls.getList;
-  _addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
-  _deleteUrl = AppConfig.apiEndpoint + Urls.delete;
+  getByIdUrl = AppConfig.apiEndpoint + Urls.getById;
+  getAllUrl = AppConfig.apiEndpoint + Urls.getAll;
+  getListUrl = AppConfig.apiEndpoint + Urls.getList;
+  addOrEditUrl = AppConfig.apiEndpoint + Urls.addOrEdit;
+  deleteUrl = AppConfig.apiEndpoint + Urls.delete;
 
-  _getListCbxUrl = AppConfig.apiEndpoint + Urls.getListCbx;
-  _getPagingToEditUrl = AppConfig.apiEndpoint + Urls.getPagingToEdit;
-  _deleteSoftUrl = AppConfig.apiEndpoint + Urls.deleteSoft;
-  _addOrEditListUrl = AppConfig.apiEndpoint + Urls.addOrEditList;
+  getListCbxUrl = AppConfig.apiEndpoint + Urls.getListCbx;
+  getPagingToEditUrl = AppConfig.apiEndpoint + Urls.getPagingToEdit;
+  deleteSoftUrl = AppConfig.apiEndpoint + Urls.deleteSoft;
+  addOrEditListUrl = AppConfig.apiEndpoint + Urls.addOrEditList;
+  exportExcelUrl = AppConfig.apiEndpoint + Urls.exportExcel;
   constructor(protected override httpClient: HttpClient) {
     super(httpClient);
   }
@@ -40,7 +42,7 @@ export class HrmEmployeesService extends BaseDataService {
 
   getListCbx(fkCompanyID: number): Promise<RespondData> {
     const params = new HttpParams().append('fkCompanyID', fkCompanyID);
-    return this.postParams(this._getListCbxUrl, params, false);
+    return this.postParams(this.getListCbxUrl, params, false);
   }
 
   /** lấy danh sách lái xe dạng paging phân trạng
@@ -50,7 +52,7 @@ export class HrmEmployeesService extends BaseDataService {
    * @Modified date - user - description
    */
   getPagingToEdit(filterModel: HrmEmployeesFilter): Promise<RespondData> {
-    return this.postData(this._getPagingToEditUrl, filterModel, false);
+    return this.postData(this.getPagingToEditUrl, filterModel, false);
   }
 
   /** gọi API xóa mềm 1 thông tin lái xe
@@ -62,7 +64,7 @@ export class HrmEmployeesService extends BaseDataService {
 
   deleteSoft(employeeId: number): Promise<RespondData> {
     const params = new HttpParams().append('employeeId', employeeId);
-    return this.postParams(this._deleteSoftUrl, params, false);
+    return this.postParams(this.deleteSoftUrl, params, false);
   }
 
   /** gọi API cập nhật 1 danh sách lái xe
@@ -73,7 +75,73 @@ export class HrmEmployeesService extends BaseDataService {
    */
 
   addOrEditList(models: HrmEmployees[]): Promise<RespondData> {
-    return this.postData(this._addOrEditListUrl, models, false);
+    return this.postData(this.addOrEditListUrl, models, false);
+  }
+
+  // exportExcel(filterModel: HrmEmployeesFilter) {
+  //   return new Promise((resolve, reject) => {
+  //     this.httpClient.post(this.exportExcelUrl, filterModel, { responseType: 'arraybuffer' }).subscribe((response: any) => {
+  //       resolve(response);
+  //     }, reject);
+  //   });
+  // }
+
+  exportExcel(filterModel: HrmEmployeesFilter): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.httpClient
+        .post(this.exportExcelUrl, filterModel, {
+          responseType: 'arraybuffer',
+          observe: 'response', // Thêm dòng này để nhận đầy đủ response
+        })
+        .pipe(
+          catchError((error) => {
+            reject(this.handleError(error)); // Xử lý lỗi tập trung
+            return throwError(() => error);
+          })
+        )
+        .subscribe((response: HttpResponse<ArrayBuffer>) => {
+          // Kiểm tra response hợp lệ
+          if (!response.body || response.body.byteLength === 0) {
+            reject(new Error('Empty response from server'));
+            return;
+          }
+
+          // Xử lý download file
+          const blob = new Blob([response.body], {
+            type: response.headers.get('Content-Type') || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+
+          const filename = this.getFilenameFromHeaders(response.headers) || 'export.xlsx';
+          this.triggerDownload(blob, filename);
+
+          resolve();
+        });
+    });
+  }
+
+  // Hàm hỗ trợ lấy tên file từ headers
+  private getFilenameFromHeaders(headers: HttpHeaders): string | null {
+    const contentDisposition = headers.get('Content-Disposition');
+    return contentDisposition?.split('filename=')[1]?.replace(/"/g, '') || null;
+  }
+
+  // Hàm trigger download
+  private triggerDownload(blob: Blob, filename: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  // Xử lý lỗi tập trung
+  private handleError(error: HttpErrorResponse): string {
+    if (error.error instanceof ErrorEvent) {
+      return `Client-side error: ${error.error.message}`;
+    } else {
+      return `Server-side error: ${error.status} - ${error.message}`;
+    }
   }
 
   /** tạo string-key danh sách theo id của 1 list

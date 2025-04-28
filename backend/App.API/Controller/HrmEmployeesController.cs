@@ -96,5 +96,15 @@ namespace App.Admin.Controllers
             }
 
         }
+
+
+        [HttpPost]
+        [Route("export-excel")]
+        public async Task<IActionResult> ExportExcel(HrmEmployeesFilter filter)
+        {
+            var stream = await Task.Run(() => _service.ExportExcel(filter));
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        }
+
     }
 }
