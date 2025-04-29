@@ -429,7 +429,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.employeesService
       .exportExcel(this.filterExcel)
       .then(() => {
-        this.commonService.showSuccess('Lưu thành công');
+        console.log('Lưu thành công');
       })
       .catch((error) => {
         console.error('Download failed:', error);
