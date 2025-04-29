@@ -4,7 +4,7 @@ import { HttpClient, HttpErrorResponse, HttpHeaders, HttpParams, HttpResponse } 
 import { AppConfig } from '../../../app.config';
 import { Urls } from './hrm-employees.urls';
 import { RespondData } from '../../../service/API-service/base.service';
-import { HrmEmployees, HrmEmployeesFilter } from '../model/hrm-employees.model';
+import { HrmEmployees, HrmEmployeesFilter, HrmEmployeesFilterExcel } from '../model/hrm-employees.model';
 import { catchError, throwError } from 'rxjs';
 
 /** Service dùng để gọi API tới backend, lấy dữ liệu
@@ -78,24 +78,22 @@ export class HrmEmployeesService extends BaseDataService {
     return this.postData(this.addOrEditListUrl, models, false);
   }
 
-  // exportExcel(filterModel: HrmEmployeesFilter) {
-  //   return new Promise((resolve, reject) => {
-  //     this.httpClient.post(this.exportExcelUrl, filterModel, { responseType: 'arraybuffer' }).subscribe((response: any) => {
-  //       resolve(response);
-  //     }, reject);
-  //   });
-  // }
-
-  exportExcel(filterModel: HrmEmployeesFilter): Promise<void> {
+  /** gọi API export Excel
+   * @param filterModel filter của người dùng
+   * @Author thuan.bv
+   * @Created 29/04/2025
+   * @Modified date - user - description
+   */
+  exportExcel(filterModel: HrmEmployeesFilterExcel): Promise<void> {
     return new Promise((resolve, reject) => {
       this.httpClient
         .post(this.exportExcelUrl, filterModel, {
           responseType: 'arraybuffer',
-          observe: 'response', // Thêm dòng này để nhận đầy đủ response
+          observe: 'response',
         })
         .pipe(
           catchError((error) => {
-            reject(this.handleError(error)); // Xử lý lỗi tập trung
+            reject(this.handleError(error));
             return throwError(() => error);
           })
         )
@@ -111,7 +109,7 @@ export class HrmEmployeesService extends BaseDataService {
             type: response.headers.get('Content-Type') || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
 
-          const filename = this.getFilenameFromHeaders(response.headers) || 'export.xlsx';
+          const filename = this.getFilenameFromHeaders(response.headers) || 'Danh sách lái xe.xlsx';
           this.triggerDownload(blob, filename);
 
           resolve();
@@ -119,13 +117,24 @@ export class HrmEmployeesService extends BaseDataService {
     });
   }
 
-  // Hàm hỗ trợ lấy tên file từ headers
+  /** Hàm hỗ trợ lấy tên file từ headers
+   * @param headersHttpHeaders
+   * @Author thuan.bv
+   * @Created 29/04/2025
+   * @Modified date - user - description
+   */
+
   private getFilenameFromHeaders(headers: HttpHeaders): string | null {
     const contentDisposition = headers.get('Content-Disposition');
     return contentDisposition?.split('filename=')[1]?.replace(/"/g, '') || null;
   }
 
-  // Hàm trigger download
+  /**  Hàm trigger download
+   * @param headersHttpHeaders
+   * @Author thuan.bv
+   * @Created 29/04/2025
+   * @Modified date - user - description
+   */
   private triggerDownload(blob: Blob, filename: string): void {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');

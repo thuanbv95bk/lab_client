@@ -32,10 +32,27 @@ namespace App.Lab.Service.Interface
         /// Modified: date - user - description
         PagingResult<HrmEmployees> GetPagingToEdit(HrmEmployeesFilter filter);
 
+
+        /// <summary>Interface cập nhât danh sách thông tin của lái xe </summary>
+        /// <param name="items">Danh sách lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         Task<ServiceStatus> AddOrEditListAsync(List<HrmEmployees> items);
 
+        /// <summary>Interface Xóa mềm 1 lái xe </summary>
+        /// <param name="employeeId"> Id của lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         Task<ServiceStatus> DeleteSoft(int employeeId);
 
-        MemoryStream ExportExcel(HrmEmployeesFilter filter);
+
+        /// <summary>Interface Export Excel danh sách lái xe theo bộ lọc </summary>
+        /// <param name="filter"> Bộ lọc </param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
+        MemoryStream ExportExcel(HrmEmployeesFilterExcel filter);
     }
 }

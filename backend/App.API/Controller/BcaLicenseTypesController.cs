@@ -27,8 +27,17 @@ namespace App.Admin.Controllers
         [Route("get-list-active")]
         public IActionResult GetListActive()
         {
-            var ret = _service.GetListActive();
-            return Success(ret);
+
+            try
+            {
+                var ret = _service.GetListActive();
+                return Success(ret);
+            }
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+
         }
     }
 }

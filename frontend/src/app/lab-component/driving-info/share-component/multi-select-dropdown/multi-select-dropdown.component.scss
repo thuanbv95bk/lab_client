@@ -26,19 +26,11 @@
             &:focus {
                 outline: none;
             }
-
-            &::placeholder {
-                color: #ced4da;
-            }
         }
 
         .search-input {
             &:focus {
                 outline: none;
-            }
-
-            &::placeholder {
-                color: #ced4da;
             }
         }
     }

@@ -1,10 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { Component, Input } from '@angular/core';
 import { SearchOption } from '../../model/hrm-employees.model';
 
+/** dùng để tạo menu chon các lựu chọn để tìm kiếm
+ * @Author thuan.bv
+ * @Created 29/04/2025
+ * @Modified date - user - description
+ */
 interface DropdownItem {
+  /** mã */
   code: string;
+  /** Tên hiên thi ở menu */
   name: string;
+  /** placeholder */
   placeholder: string;
 }
 @Component({
@@ -17,10 +24,11 @@ export class InputSearchOptionComponent {
   @Input() title: string = 'Tìm kiếm';
   @Input() searchOption: SearchOption;
   placeholder: string = 'Nhập tên lái xe';
-  // @Output() searchOptionEvent = new EventEmitter<SearchOption>();
-  // searchOption = new SearchOption();
 
+  /** lưu lựa chọn của người dùng, khi click */
   selectedOption: DropdownItem;
+
+  /** Khởi tạo menu lựa chon */
   listOption: DropdownItem[] = [
     {
       code: 'displayName',
@@ -34,34 +42,28 @@ export class InputSearchOptionComponent {
     },
   ];
 
-  // filteredDrivers = [...this.drivers];
-
-  // constructor() {
-  //   this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
-  // }
+  /** Khởi tạo các giá trị mặc định
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   ngOnInit(): void {
+    /** set giá trị mặc định */
     this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
     this.searchOption.key = this.selectedOption?.code;
     this.placeholder = this.selectedOption?.placeholder;
   }
 
-  onSearch(): void {
-    // if (!this.searchTerm) {
-    //   this.listOption = [...this.listOption];
-    //   return;
-    // }
-    // this.listOption = this.listOption.filter((driver) =>
-    //   driver.code.toLowerCase().includes(this.searchTerm.toLowerCase())
-    // );
-  }
+  /** Sự kiện người dùng chọn option
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   selectDriver(driver: DropdownItem): void {
     this.selectedOption = driver;
     this.searchOption.key = this.selectedOption?.code;
     this.placeholder = this.selectedOption?.placeholder;
-  }
-  changeKeySearch() {
-    // this.searchOptionEvent.emit(this.searchOption);
   }
 }

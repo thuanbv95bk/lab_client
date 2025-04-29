@@ -29,26 +29,53 @@ namespace App.Admin.Controllers
         [Route("get-list-cbx")]
         public IActionResult GetListCbx(int FkCompanyID)
         {
-            if (FkCompanyID <=0)
+            try
             {
-                return Failure("Phải nhập tiêu chí tìm kiếm");
+                if (FkCompanyID <= 0)
+                {
+                    return Failure("Phải nhập tiêu chí tìm kiếm");
+                }
+                var ret = _service.GetListCbx(FkCompanyID);
+                return Success(ret);
             }
-            var ret = _service.GetListCbx(FkCompanyID);
-            return Success(ret);
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
         }
 
+
+
+        /// <summary> Lấy danh sách lái xe, theo paging </summary>
+        /// <param name="filter"> Bộ lọc có paging </param>
+        /// Author: thuanbv
+        /// Created: 25/04/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("get-paging-to-edit")]
         public IActionResult GetPagingToEdit(HrmEmployeesFilter filter)
         {
-            if (filter.FkCompanyId <= 0)
+            try
             {
-                return Failure("Phải nhập tiêu chí tìm kiếm");
+                if (filter.FkCompanyId <= 0)
+                {
+                    return Failure("Phải nhập tiêu chí tìm kiếm");
+                }
+                var ret = _service.GetPagingToEdit(filter);
+                return Success(ret);
             }
-            var ret = _service.GetPagingToEdit(filter);
-            return Success(ret);
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+            
         }
 
+        /// <summary>Chỉnh sửa danh sách lái xe, check Validator đầu vào hợp lệ</summary>
+        /// <param name="items"> Danh sách lái xe cần cập nhật </param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("add-or-edit-list")]
         public async Task<IActionResult> AddOrEditList(List<HrmEmployees> items, [FromServices] IValidator<List<HrmEmployees>> validator)
@@ -76,13 +103,20 @@ namespace App.Admin.Controllers
 
         }
 
+
+        /// <summary>Xóa mềm 1 lái xe</summary>
+        /// <param name="employeeId"> Id lái xe </param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
+
         [HttpPost]
         [Route("delete-soft")]
         public async Task<IActionResult> DeleteSoft(int employeeId)
         {
             try
             {
-                if (employeeId<=0)
+                if (employeeId <= 0)
                 {
                     return Failure("Id không hợp lệ");
                 }
@@ -97,13 +131,34 @@ namespace App.Admin.Controllers
 
         }
 
+        /// <summary>Xuất excel danh sách lái xe theo điều kiện bộ lọc </summary>
+        /// <param name="filter"> Bộ lọc theo người dùng chọn </param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
 
         [HttpPost]
         [Route("export-excel")]
-        public async Task<IActionResult> ExportExcel(HrmEmployeesFilter filter)
+        public async Task<IActionResult> ExportExcel(HrmEmployeesFilterExcel filter)
         {
-            var stream = await Task.Run(() => _service.ExportExcel(filter));
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            try
+            {
+                if(filter ==null)
+                {
+                    return Failure("Kiểm tra điều kiện");
+                }
+                if (filter.FkCompanyId <=0)
+                {
+                    return Failure("Chưa có điều kiện tìm kiếm theo công ty, vui lòng thử lại");
+                }
+                var stream = await Task.Run(() => _service.ExportExcel(filter));
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            }
+            catch (Exception ex)
+            {
+                return Failure("Có lỗi xảy ra với hệ thống");
+            }
+            
         }
 
     }

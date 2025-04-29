@@ -1,7 +1,7 @@
 ﻿DECLARE @FK_CompanyID INT = 15076;
 DECLARE @pageSize INT = 50;
 DECLARE @pageIndex INT = 1;
-DECLARE @Name NVARCHAR(100) = N'DAO XUAN TRUONG';
+DECLARE @Name NVARCHAR(100) = N'';
 DECLARE @DriverLicense NVARCHAR(32) = N'';
 DECLARE @LicenseType INT = NULL;
 
@@ -21,10 +21,13 @@ SELECT PK_EmployeeID AS PkEmployeeID,
        IssueLicenseDate,
        ExpireLicenseDate,
        IssueLicensePlace,
-       LicenseType,
+       (
+           SELECT B.Name
+           FROM dbo.[BCA.LicenseTypes] B
+           WHERE B.PK_LicenseTypeID = LicenseType
+       ) LicenseType,
        IsDeleted,
-       IsLocked,
-       COUNT(*) OVER () AS TotalCount
+       IsLocked
 FROM dbo.[HRM.Employees]
 WHERE FK_CompanyID = @FK_CompanyID
       AND IsDeleted = 0
@@ -32,7 +35,7 @@ WHERE FK_CompanyID = @FK_CompanyID
       AND
       (
           @Name IS NULL
-          OR Name LIKE '%' + Name + '%'
+          OR Name LIKE '%' + @Name + '%'
       )
       AND
       (
@@ -54,4 +57,4 @@ WHERE FK_CompanyID = @FK_CompanyID
           ISNULL(@ListStringLicenseTypesId, '') = ''
           OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%'
       )
-ORDER BY DisplayName OFFSET @pageSize * (@pageIndex - 1) ROWS FETCH NEXT @pageSize ROWS ONLY;
+ORDER BY DisplayName;

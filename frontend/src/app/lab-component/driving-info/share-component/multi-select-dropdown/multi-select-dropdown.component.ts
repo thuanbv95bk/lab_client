@@ -22,16 +22,18 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   /**  tiêu đề */
   @Input() title: string = 'Tìm kiếm';
 
+  /** Field name cần hiên thị*/
   @Input() displayField1: string = '';
   @Input() displayField2: string = '';
+  /** ký hiệu nối các displayField*/
   @Input() separate: string = ' - ';
 
   @Input()
   set items(value) {
-    this._data.next(value);
+    this.listData.next(value);
   }
   get items() {
-    return this._data.getValue();
+    return this.listData.getValue();
   }
   private _items: any[];
 
@@ -39,19 +41,16 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   @Input() search: boolean = true;
   @Input() selectAll: boolean = true;
   @Input() allSelected: boolean = false;
-  @Output() selectedChange = new EventEmitter<any[]>();
-
+  @Output() selectedChange = new EventEmitter<{ data: any[]; isCheckAll: boolean }>();
   @ViewChild('searchInput') searchInput!: ElementRef;
 
   selectedItems: any[] = [];
-  // filteredItems: any[] = [];
   searchField: string = '';
   isOpen: boolean = false;
 
-  // private _items: any[];
-  private _data = new BehaviorSubject<any[]>([]);
+  private listData = new BehaviorSubject<any[]>([]);
   public filteredItems: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
-  private _onDestroy = new Subject<void>();
+  private onDestroy = new Subject<void>();
   FilterCtrl: FormControl = new FormControl();
   constructor(private elementRef: ElementRef) {}
 
@@ -71,12 +70,13 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   }
 
   initData() {
-    this._data.pipe(takeUntil(this._onDestroy)).subscribe((x) => {
+    this.listData.pipe(takeUntil(this.onDestroy)).subscribe((x) => {
       this._items = this.items;
       this.filteredItems.next(this.items);
     });
-    // listen for search field value changes
-    this.FilterCtrl.valueChanges.pipe(takeUntil(this._onDestroy)).subscribe(() => {
+
+    /** listen for search field value changes */
+    this.FilterCtrl.valueChanges.pipe(takeUntil(this.onDestroy)).subscribe(() => {
       this.filterItems();
     });
   }
@@ -97,10 +97,10 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     } else {
       search = search.toLowerCase();
     }
-    // filter items
+    /** filter data */
     this.filteredItems.next(
       this._items.filter((itm) => {
-        // tim kiem tren ca field2
+        /** tim kiem tren ca  field2 và field2 */
         return (
           (this.displayField1 && itm[this.displayField1].toString().toLowerCase().indexOf(search) > -1) ||
           (this.displayField2 && itm[this.displayField2].toString().toLowerCase().indexOf(search) > -1)
@@ -168,7 +168,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     } else {
       this.selectedItems.splice(index, 1);
     }
-    this.selectedChange.emit(this.selectedItems);
+    this.selectedChange.emit({ data: this.selectedItems, isCheckAll: false });
     this.allSelected = this.selectedItems.length === this.items.length;
   }
 
@@ -184,7 +184,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     const index = this.selectedItems.indexOf(item);
     if (index !== -1) {
       this.selectedItems.splice(index, 1);
-      this.selectedChange.emit(this.selectedItems);
+      this.selectedChange.emit({ data: this.selectedItems, isCheckAll: false });
     }
     this.allSelected = this.selectedItems.length === this.items.length;
   }
@@ -202,7 +202,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     } else {
       this.selectedItems = [];
     }
-    this.selectedChange.emit(this.selectedItems);
+    this.selectedChange.emit({ data: this.selectedItems, isCheckAll: this.allSelected });
   }
 
   /**kiểm tra trạng thai isSelected của item: Vehicle

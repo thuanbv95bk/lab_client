@@ -56,15 +56,20 @@ namespace App.Lab.App.Service.Implement
             }
             else if (string.Equals(filter.option.Key.ToLower(), "DisplayName".ToLower()))
             {
-                filter.DisplayName = filter.option.Value;
+                filter.DisplayName = StringHepler.RemoveDiacriticsToUpper(filter.option.Value);
             }
             else
             {
-                filter.DriverLicense = filter.option.Value;
+                filter.DriverLicense = StringHepler.RemoveDiacriticsToUpper(filter.option.Value);
             }
                 return _repo.GetPagingToEdit(filter);
         }
 
+        /// <summary>Service hàm cập nhât danh sách thông tin của lái xe </summary>
+        /// <param name="items">Danh sách lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         public async Task<ServiceStatus> AddOrEditListAsync(List<HrmEmployees> items)
         {
 
@@ -94,6 +99,13 @@ namespace App.Lab.App.Service.Implement
                 return ServiceStatus.Failure("Đã xảy ra lỗi trong quá trình cập nhật!");
             }
         }
+
+
+        /// <summary>service hàm Xóa mềm 1 lái xe </summary>
+        /// <param name="employeeId"> Id của lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         public async Task<ServiceStatus> DeleteSoft(int employeeId)
         {
             try
@@ -111,37 +123,80 @@ namespace App.Lab.App.Service.Implement
             }
         }
 
-        public MemoryStream ExportExcel(HrmEmployeesFilter filter)
+
+        /// <summary>Service hamf Export Excel danh sách lái xe theo bộ lọc </summary>
+        /// <param name="filter"> Bộ lọc </param>
+        /// Author: thuanbv
+        /// Created: 29/04/2025
+        /// Modified: date - user - description
+        public MemoryStream ExportExcel(HrmEmployeesFilterExcel filter)
         {
+            try
             {
                 MemoryStream stream;
-
-                // lay du lieu
-
                 ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
                 using (var package = new ExcelPackage())
-
                 {
-                    var ws = package.Workbook.Worksheets.Add("sheet1");
+                    var ws = package.Workbook.Worksheets.Add("DATA");
 
-                    //filter.IsPaging = false;
+                    if (string.IsNullOrEmpty(filter.option.Key) || string.IsNullOrEmpty(filter.option.Value))
+                    {
+                        filter.DisplayName = "";
+                        filter.DriverLicense = "";
+                    }
+                    else if (string.Equals(filter.option.Key.ToLower(), "DisplayName".ToLower()))
+                    {
+                        filter.DisplayName = StringHepler.RemoveDiacriticsToUpper(filter.option.Value);
+                    }
+                    else
+                    {
+                        filter.DriverLicense = StringHepler.RemoveDiacriticsToUpper(filter.option.Value);
+                    }
 
+                    // lay du lieu
                     var listData = _repo.GetDataToExcel(filter);
                     string title = string.Empty;
 
+                    var listFilter = new List<Lab.Model.SearchOption>() { };
+
                     title = "THÔNG TIN LÁI XE";
 
-                    string subTitle = "Thời gian : ";
+              
+                    if (!string.IsNullOrEmpty(filter.ListStringEmployeesId))
+                    {
+                        listFilter.Add(new Lab.Model.SearchOption
+                        {
+                            Key = "Danh sách lái xe",
+                            Value = filter.ListStringEmployeesName
+                        });
+                    }
+                    if (!string.IsNullOrEmpty(filter.ListStringLicenseTypesName))
+                    {
+                        listFilter.Add(new Lab.Model.SearchOption
+                        {
+                            Key = "Loại bằng",
+                            Value = filter.ListStringLicenseTypesName
+                        });
+                    }
+                    if (!string.IsNullOrEmpty(filter.option.Value))
+                    {
+                        listFilter.Add(new Lab.Model.SearchOption
+                        {
+                            Key = filter.option.Key == "displayName" ? "Tên lái xe" : "GPLX",
+                            Value = filter.option.Value
+                        });
+                    }
+              
+                    EmployessReportExcel.FillExcell(ws, title, listFilter, 1, listData, EmployessReportExcel.HeaderRows());
 
-                    //excelConfig.FillExcell();
-                    EmployessReportExcel.FillExcell(ws, title, subTitle, 4, listData, EmployessReportExcel.HeaderRows());
-
-                    // luu du lieu vao stream
                     stream = new MemoryStream(package.GetAsByteArray());
-                    //}
                 }
 
                 return stream;
+            }
+            catch (Exception ex)
+            {
+                return new MemoryStream(); 
             }
         }
     }

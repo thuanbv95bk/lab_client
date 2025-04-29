@@ -1,5 +1,11 @@
 .driving-form {
   .btn-sm {
+    &-cancel {
+      background-color: white;
+      color: #0959a0;
+      border: 1px solid #0959a0;
+    }
+
     background-color: #0959a0;
     color: white;
     border: none;
@@ -8,6 +14,12 @@
     i {
       padding: 2px;
     }
+  }
+
+  .validated-search-btn {
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
   &-title {
@@ -53,6 +65,11 @@
       vertical-align: middle !important;
 
       .btn-delete {
+
+        img {
+          width: 21px;
+        }
+
         :hover {
           background-color: #2d9cdb;
           padding: 2px;

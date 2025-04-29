@@ -66,14 +66,14 @@ namespace App.Lab.Repository.Implement
                     "WHERE FK_CompanyID = @FK_CompanyID " +
                            "AND ISNULL(IsDeleted, 0) = 0 " +
                            "AND ISNULL(IsLocked, 0) = 0 " +
-                           "AND (@DisplayName IS NULL OR LOWER(DisplayName) LIKE '%' + LOWER(@DisplayName) + '%')" +
-                           "AND (@DriverLicense IS NULL OR LOWER(DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%')" +
+                           "AND (@Name IS NULL OR Name LIKE '%' + @Name + '%')" +
+                           "AND (@DriverLicense IS NULL OR DriverLicense LIKE '%' + @DriverLicense + '%')" +
                            "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%' )" +
                            "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(PK_EmployeeID AS NVARCHAR) + ',%' )" +
                     "ORDER BY DisplayName OFFSET @pageSize * (@pageIndex-1) ROWS FETCH NEXT @pageSize ROWS ONLY"
                 , CommandType.Text
                 , new { FK_CompanyID = filter.FkCompanyId,
-                        DisplayName = filter.DisplayName,
+                        Name = filter.DisplayName,
                         DriverLicense = filter.DriverLicense,
                         ListStringLicenseTypesId = filter.ListStringLicenseTypesId,
                         ListStringEmployeesId =filter.ListStringEmployeesId,
@@ -96,7 +96,7 @@ namespace App.Lab.Repository.Implement
         /// Author: thuanbv
         /// Created: 25/04/2025
         /// Modified: date - user - description
-        public List<HrmEmployees> GetDataToExcel(HrmEmployeesFilter filter)
+        public List<HrmEmployees> GetDataToExcel(HrmEmployeesFilterExcel filter)
         {
 
             var listItem = this.ExecuteReader<HrmEmployees>
@@ -109,14 +109,14 @@ namespace App.Lab.Repository.Implement
                           ",IssueLicenseDate" +
                           ",ExpireLicenseDate" +
                           ",IssueLicensePlace" +
-                          ",LicenseType " +
+                          ",(SELECT B.Name FROM dbo.[BCA.LicenseTypes] B WHERE B.PK_LicenseTypeID = LicenseType) LicenseType " +
                          
                     "FROM dbo.[HRM.Employees] " +
                     "WHERE FK_CompanyID = @FK_CompanyID " +
                            "AND ISNULL(IsDeleted, 0) = 0 " +
                            "AND ISNULL(IsLocked, 0) = 0 " +
-                           "AND (@DisplayName IS NULL OR LOWER(DisplayName) LIKE '%' + LOWER(@DisplayName) + '%') " +
-                           "AND (@DriverLicense IS NULL OR LOWER(DriverLicense) LIKE '%' + LOWER(@DriverLicense) + '%') " +
+                           "AND (@Name IS NULL OR Name LIKE '%' + @Name + '%') " +
+                           "AND (@DriverLicense IS NULL OR DriverLicense LIKE '%' + @DriverLicense + '%') " +
                            "AND (ISNULL(@ListStringLicenseTypesId, '') = '' OR ',' + @ListStringLicenseTypesId + ',' LIKE '%,' + CAST(LicenseType AS NVARCHAR) + ',%' ) " +
                            "AND (ISNULL(@ListStringEmployeesId, '') = '' OR ',' + @ListStringEmployeesId + ',' LIKE '%,' + CAST(PK_EmployeeID AS NVARCHAR) + ',%' ) " +
                     "ORDER BY DisplayName"
@@ -124,18 +124,22 @@ namespace App.Lab.Repository.Implement
                 , new
                 {
                     FK_CompanyID = filter.FkCompanyId,
-                    DisplayName = filter.DisplayName,
+                    Name = filter.DisplayName,
                     DriverLicense = filter.DriverLicense,
                     ListStringLicenseTypesId = filter.ListStringLicenseTypesId,
                     ListStringEmployeesId = filter.ListStringEmployeesId,
-
-                    
                 }
 
             );
 
             return listItem;
         }
+
+        /// <summary>Updates Thông tin của 1 lái xe.</summary>
+        /// <param name="obj">HrmEmployees thông tin của 1 lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         public Task Update(HrmEmployees item)
         {
             var user = "E66E300E-B644-41B0-8124-CE9954434C6F";
@@ -163,7 +167,7 @@ namespace App.Lab.Repository.Implement
                     DisplayName = item.DisplayName,
                     Name = StringHepler.RemoveDiacriticsToUpper(item.DisplayName),
                     Mobile = item.Mobile,
-                    DriverLicense = item.DriverLicense,
+                    DriverLicense = StringHepler.RemoveDiacriticsToUpper(item.DriverLicense),
                     IssueLicenseDate = item.IssueLicenseDate,
                     ExpireLicenseDate = item.ExpireLicenseDate,
                     IssueLicensePlace = item.IssueLicensePlace,
@@ -177,6 +181,12 @@ namespace App.Lab.Repository.Implement
             ));
         }
 
+
+        /// <summary>Xóa mềm 1 lái xe. isDelete =0 </summary>
+        /// <param name="employeeId">id lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         public Task DeleteSoft(int employeeId)
         {
             var user = "E66E300E-B644-41B0-8124-CE9954434C6F";

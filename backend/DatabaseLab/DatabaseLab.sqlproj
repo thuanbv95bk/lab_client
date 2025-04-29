@@ -72,5 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="dbo\script\getPaggingEmployees.sql" />
+    <None Include="dbo\script\getDataToExcel.sql" />
   </ItemGroup>
 </Project>

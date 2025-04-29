@@ -34,11 +34,23 @@ namespace App.Lab.Repository.Interface
         /// <summary>Interface Lấy danh sách lái xe theo điều kiện => xuất Excel </summary>
         /// <param name="filter">HrmEmployeesFilter: bộ lọc để lấy dữ liệu</param>
         /// Author: thuanbv
-        /// Created: 29/04/2025
+        /// Created: 28/04/2025
         /// Modified: date - user - description
-        List<HrmEmployees> GetDataToExcel(HrmEmployeesFilter filter);
+        List<HrmEmployees> GetDataToExcel(HrmEmployeesFilterExcel filter);
 
+
+        /// <summary>Updates Thông tin của 1 lái xe.</summary>
+        /// <param name="obj">HrmEmployees thông tin của 1 lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         Task Update(HrmEmployees obj);
+
+        /// <summary>Xóa mềm 1 lái xe. isDelete =0 </summary>
+        /// <param name="employeeId">id lái xe</param>
+        /// Author: thuanbv
+        /// Created: 28/04/2025
+        /// Modified: date - user - description
         Task DeleteSoft(int employeeId);
     }
 }

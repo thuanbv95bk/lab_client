@@ -14,6 +14,11 @@ namespace App.Lab.Repository.Interface
     /// Modified: date - user - description
     public interface IBcaLicenseTypesRepository
     {
+        /// <summary>Lấy ra danh sách các loại giấy phép lái xe
+        /// điều kiện đang kích hoạt (IsActived) và không bị xóa (IsDeteted), săp xếp theo tên</summary>
+        /// Author: thuanbv
+        /// Created: 24/04/2025
+        /// Modified: date - user - descriptions
         public List<BcaLicenseTypes> GetListActive();
     }
 }

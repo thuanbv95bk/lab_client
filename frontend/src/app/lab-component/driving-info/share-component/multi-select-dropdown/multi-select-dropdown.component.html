@@ -25,7 +25,7 @@
 
     <!-- Dropdown menu -->
     <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="isOpen">
-      <div class="select-all p-2 border-bottom" *ngIf="selectAll">
+      <div class="select-all p-1 border-bottom" *ngIf="selectAll">
         <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
         <label class="form-check-label p-1">Tất cả ({{ items.length }})</label>
       </div>
@@ -34,7 +34,7 @@
       <div class="options" style="max-height: 15rem; overflow-y: auto">
         <div
           *ngFor="let item of filteredItems | async"
-          class="option d-flex align-items-center p-2 border-bottom form-check"
+          class="option d-flex align-items-center p-1 border-bottom form-check"
           [class.bg-light]="isSelected(item)"
           (click)="toggleList(item)">
           <input type="checkbox" [checked]="isSelected(item)" />

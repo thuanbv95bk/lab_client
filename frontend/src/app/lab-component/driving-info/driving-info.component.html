@@ -1,6 +1,6 @@
-<div class="container-fluid driving-form p-0">
+<div class="driving-form p-0" (keyup.enter)="searchPagingToEdit()">
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
-  <div class="driving-form-search row w-100">
+  <div class="container-fluid row p-0">
     <div class="col">
       <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
@@ -27,18 +27,18 @@
         [selectAll]="true"
         (selectedChange)="onSelectedChangeLicenseTypes($event)"></app-multi-select-dropdown>
     </div>
-    <div class="col-auto d-flex flex-column">
-      <div class="mt-auto">
-        <button type="button" class="btn-sm m-0" (click)="searchPagingToEdit()"><i class="fa fa-search"></i> Tìm kiếm</button>
-      </div>
+    <div class="col-auto d-flex align-items-stretch mt-auto ml-auto p-0">
+      <button type="button" class="btn-sm mb-0" (click)="searchPagingToEdit()"><i class="fa fa-search p-1"></i> Tìm kiếm</button>
     </div>
   </div>
   <div class="d-flex float-right mt-1">
     <button type="button" class="btn-sm" *ngIf="isCanSave" (click)="saveChanges()">
       <i class="fa fa-save"></i> Lưu thông tin
     </button>
-    <button type="button" class="btn-sm ml-2 mr-2"><i class="fa fa-times"></i>Hủy</button>
-    <button type="button" class="btn-sm" (click)="downloadExcel()"><i class="fa fa-file-excel"></i></button>
+    <button type="button" class="btn-sm ml-2 mr-2 btn-sm-cancel" *ngIf="isCanCancel" (click)="cancel()">
+      <i class="fa fa-times"></i>Hủy
+    </button>
+    <button type="button" class="btn-sm" (click)="downloadExcel()"><i class="bi bi-file-earmark-excel"></i></button>
   </div>
 
   <div class="table-responsive pt-2">
@@ -72,7 +72,7 @@
               [maxLength]="100"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'displayName', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
@@ -83,7 +83,7 @@
               [maxLength]="25"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'mobile', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
@@ -94,7 +94,7 @@
               [maxLength]="32"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'driverLicense', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
@@ -105,7 +105,7 @@
               [maxDate]="dateNow"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'issueLicenseDate', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
 
           <td>
@@ -117,7 +117,7 @@
               [maxDate]="null"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'expireLicenseDate', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
           <td>
             <app-validated-input
@@ -128,7 +128,7 @@
               [maxLength]="150"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'issueLicensePlace', $event)"
-              (focusInput)="onFocusRow(item)"></app-validated-input>
+              (focusInput)="onClickItem(item)"></app-validated-input>
           </td>
 
           <td>
@@ -140,13 +140,14 @@
               [required]="true"
               [resetEditFlag]="resetEditFlag"
               (fieldStatusChange)="onFieldStatusChange(item, 'licenseType', $event)"
-              (focusInput)="onFocusRow(item)">
+              (focusInput)="onClickItem(item)">
             </app-validated-input>
           </td>
           <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
             <div class="btn-delete">
-              <i class="fa fa-trash text-danger" (click)="deleteRow(item); onFocusRow(item)"></i>
+              <img src="../../../assets/image/icons-delete.svg" (click)="deleteRow(item); onClickItem(item)" alt="delete" />
+              <!-- <i class="bi bi-trash3 text-danger"></i> -->
             </div>
           </td>
         </tr>
