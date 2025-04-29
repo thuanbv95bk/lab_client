@@ -15,7 +15,7 @@ import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/
 })
 export class DrivingInfoComponent implements OnInit, AfterViewInit {
   /** Địa chỉ công ty mặc định */
-  FkCompanyID: number = 15076;
+  fkCompanyID: number = 15076;
 
   /** Danh sách lái xe ở combobox tìm kiếm */
   lstDriver: HrmEmployeesCbx[] = [];
@@ -76,7 +76,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    */
 
   getListEmployeesToCbx() {
-    this.employeesService.getListCbx(this.FkCompanyID).then(
+    this.employeesService.getListCbx(this.fkCompanyID).then(
       async (res) => {
         if (!res.isSuccess) {
           console.error(res);
@@ -119,7 +119,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
 
   getPagingToEdit() {
     /** gán id của công ty mặc định */
-    this.filterEmployeesGrid.fkCompanyId = this.FkCompanyID;
+    this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
     this.employeesService.getPagingToEdit(this.filterEmployeesGrid).then(
       (res) => {
         if (!res.isSuccess) {
@@ -134,20 +134,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
         console.log(err);
       }
     );
-  }
-  /** Sự kiện click vào row chọn lái xe
-   * @param item Class User
-   * @Author thuan.bv
-   * @Created 28/04/2025
-   * @Modified date - user - description
-   */
-
-  onClickRow(item: HrmEmployees) {
-    if (this.selectedId != item) {
-      this.selectedId = item;
-    } else {
-      this.selectedId = null;
-    }
   }
 
   /** highline dòng-row mà người dùng chọn
@@ -443,7 +429,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.employeesService
       .exportExcel(this.filterExcel)
       .then(() => {
-        this.commonService.showSuccess('Lưu thành công');
+        console.log('Lưu thành công');
       })
       .catch((error) => {
         console.error('Download failed:', error);
