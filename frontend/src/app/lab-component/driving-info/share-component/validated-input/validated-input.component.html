@@ -1,0 +1,57 @@
+<div class="validated-input">
+  <div class="mx-auto input-group input-group-sm position-relative">
+    <ng-container [ngSwitch]="inputType">
+      <!-- Select -->
+      <select
+        *ngSwitchCase="'select'"
+        class="form-control form-control-sm {{ borderClass }} {{ inputClass }}"
+        [formControl]="inputControl"
+        (focus)="focusInput.emit()">
+        <option value="">Chọn loại bằng</option>
+        <option *ngFor="let opt of selectOptions" [ngValue]="opt.pkLicenseTypeId.toString()">
+          {{ opt[selectLabel] }}
+        </option>
+      </select>
+
+      <!-- Các input khác -->
+      <input
+        #inputElement
+        *ngSwitchDefault
+        [formControl]="inputControl"
+        [type]="inputType === 'date' ? 'text' : inputType === 'phone' ? 'tel' : 'text'"
+        [class]="'form-control form-control-sm ' + borderClass + ' ' + inputClass"
+        [title]="errorMessage"
+        (input)="onDateInput($event)"
+        (keydown)="inputType === 'date' ? onDateKeydown($event) : inputType === 'phone' ? onPhoneKeydown($event) : null"
+        (blur)="validate()"
+        placeholder=" "
+        (focus)="focusInput.emit()" />
+    </ng-container>
+
+    <!-- Date Picker Trigger -->
+    <div class="input-group-prepend" *ngIf="inputType === 'date'">
+      <span
+        class="input-group-text"
+        ngbPopover
+        container="body"
+        [autoClose]="'outside'"
+        [placement]="'auto'"
+        triggers="manual"
+        [ngbPopover]="datePickerTemplate"
+        #datePopover="ngbPopover"
+        (click)="toggleDatePicker(datePopover); focusInput.emit()">
+        <i class="bi bi-calendar4-event"></i>
+      </span>
+    </div>
+
+    <!-- Date Picker Template -->
+    <ng-template #datePickerTemplate>
+      <ngb-datepicker [ngModel]="dateModel" [startDate]="dateModel" (dateSelect)="onDateSelect($event)"> </ngb-datepicker>
+    </ng-template>
+
+    <!-- Placeholder cho date input -->
+    <div class="custom-placeholder" *ngIf="inputType === 'date' && !inputControl.value">
+      {{ placeholder }}
+    </div>
+  </div>
+</div>

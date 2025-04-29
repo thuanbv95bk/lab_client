@@ -1,0 +1,78 @@
+$color-border: #ced4da;
+
+.custom-placeholder {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: calc(100% - 2.5rem);
+  /* chừa chỗ cho icon calendar */
+  padding-left: 0.75rem;
+  padding-right: 2.5rem;
+  /* chừa chỗ cho icon calendar */
+  color: #aaa;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 2.1;
+  /* căn giữa chiều cao input */
+  font-size: 0.95em;
+}
+
+
+input[type='text']::placeholder {
+  color: transparent;
+}
+
+.border-danger {
+  border: 1px solid $color-border !important;
+  border-left: 4px solid #dc3545 !important;
+}
+
+.border-success {
+  border: 1px solid $color-border !important;
+  border-left: 4px solid #28a745 !important;
+}
+
+.bg-warning {
+  background-color: #fff3cd !important;
+}
+
+.date-picker-popover {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 1000;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+// Ẩn placeholder thật, hiển thị placeholder ảo
+input[type='text']::placeholder {
+  color: transparent;
+}
+
+// Hiển thị placeholder tùy chỉnh
+.input-group:after {
+  content: attr(data-placeholder);
+  position: absolute;
+  pointer-events: none;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+  z-index: 1;
+}
+
+select.form-control,
+select.form-control-sm {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  /* Đảm bảo select chiếm hết ô */
+}

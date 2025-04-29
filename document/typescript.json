@@ -1,0 +1,40 @@
+{
+
+  "TS Mô tả đầy đủ": {
+    "prefix": "/**all",
+    "body": [
+      "	/** ${1:Mô tả chức năng}",
+      "	 * @param ${2:param1} ${3:Mô tả param 1}",
+      "	 * @param ${4:param2} ${5:Mô tả param 2}",
+      "	 * @Author thuan.bv",
+      "	 * @Created $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+      "	 * @Modified date - user - description",
+      "	 */",
+      "$6"
+    ],
+    "description": "Mô tả đầy đủ (class, interface, hàm...)"
+  },
+  
+   "TS không có param ": {
+    "prefix": "/**all-no-param",
+    "body": [
+      "	/** ${1:Mô tả chức năng}",
+      "	 * @Author thuan.bv",
+      "	 * @Created $CURRENT_DATE/$CURRENT_MONTH/$CURRENT_YEAR",
+      "	 * @Modified date - user - description",
+      "	 */",
+      "$0"
+    ],
+    "description": " all-no-param (class, interface, hàm...)"
+  }
+
+
+  "TS thuộc tính class": {
+    "prefix": "/**class",
+    "body": [
+	  " /** ${1:mô tả} */",
+	  
+]
+    "description": "Mô tả ngắn (thuộc tính class...)"
+  },
+}

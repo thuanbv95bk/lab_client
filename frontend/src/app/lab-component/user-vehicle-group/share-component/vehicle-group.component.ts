@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { User } from '../model/admin-user';
 import { UserVehicleGroupView } from '../model/user-vehicle-group';
 import { directionMoveGroupsEnum } from '../enum/vehicle-group.enum';
 import { Groups } from '../model/groups';
@@ -11,21 +10,45 @@ import { GroupsService } from '../service/groups.service';
   styleUrls: ['./vehicle-group.component.scss'],
 })
 export class VehicleGroupComponent implements OnChanges {
-  @Input() title: string = ''; // tiêu đề
+  /**  tiêu đề */
+  @Input() title: string = '';
+  /** Id User */
   @Input() userId: string = '';
-  @Input() listItem: UserVehicleGroupView[]; //danh sách nhóm phương tiện- cha-con
-  @Input() isTree: boolean = false; // đã được build cha-con hay chưa
+  /** danh sách nhóm phương tiện- cha-con */
+  @Input() listItem: UserVehicleGroupView[];
+
+  /** đã được build cha-con hay chưa */
+  @Input() isTree: boolean = false;
+  /** outPut sự kiện chọn nhóm */
+
   @Output() isChangeBtn = new EventEmitter<boolean>();
-  listItemFlatten: UserVehicleGroupView[]; //danh sách nhóm phương tiện- làm phẳng. k có cha-con
+  /** danh sách nhóm phương tiện- làm phẳng. k có cha-con */
+
+  listItemFlatten: UserVehicleGroupView[]; //
+
+  /** số phần tử của nhóm */
   lengthList: number = 0;
 
-  directionMoveGroupsEnum = directionMoveGroupsEnum; // enum
+  /** enum dùng cho html */
+  directionMoveGroupsEnum = directionMoveGroupsEnum;
+
+  /**  key search */
   stringSearch: string;
 
-  isAllItem: boolean = false; // check-all
-  isBtnActive: boolean = false; // check có sự thay đổi của nhóm
+  /** check-all */
+  isAllItem: boolean = false;
+
+  /** check có sự thay đổi của nhóm */
+  isBtnActive: boolean = false;
 
   constructor(private groupsService: GroupsService) {}
+
+  /** kiểm tra sự thay đỗi của data:userId ,listItem
+   * @param SimpleChanges hook
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['userId']) {
@@ -47,9 +70,10 @@ export class VehicleGroupComponent implements OnChanges {
     }
   }
 
-  /**
-   * Determines whether check all unassign groups on
-   * @event click vào check all nhóm
+  /**click vào check all nhóm, event sự kiên ra cha
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   onCheckAll() {
@@ -64,12 +88,14 @@ export class VehicleGroupComponent implements OnChanges {
     this.isChangeBtn.emit(this.isBtnActive);
   }
 
-  /**
-   * Determines whether selected change on
-   * @event outEvent khi người dùng chọn 1 item của các nhóm
-   * @param item Groups
-   * @param list Groups[]
+  /** khi người dùng chọn 1 item của các nhóm
+   * @param item nhóm đã chọn
+   * @param list: Groups[] danh sách của tát cả nhóm
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   onSelectedChange(item: Groups, list: Groups[]) {
     let status = false;
     if (

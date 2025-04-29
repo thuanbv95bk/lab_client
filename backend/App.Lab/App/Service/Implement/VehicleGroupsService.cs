@@ -31,14 +31,13 @@ namespace App.Lab.App.Service.Implement
         }
 
 
-        /// <summary>Gets the list unassign groups.</summary>
-        /// <param name="filter">VehicleGroupsFilter</param>
-        /// <returns>List&lt;VehicleGroups&gt;</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025  Danh sách nhóm phương tiện chưa được gán
-        /// </Modified>
 
+        /// <summary>Danh sách nhóm phương tiện chưa được gán</summary>
+        /// <param name="filter">bộ lọc nhóm phương tiện</param>
+        /// <param name="includeParentIfAssigned">if set to <c>true</c> [include parent if assigned].</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         public ServiceStatus GetListUnassignGroups(VehicleGroupsFilter filter, bool includeParentIfAssigned = true)
         {
             try
@@ -83,17 +82,16 @@ namespace App.Lab.App.Service.Implement
             
         }
 
-        // Hàm thêm nhóm và cha của nó nếu cần
-        /// <summary>Adds the group with optional parents.</summary>
-        /// <param name="group">The group.</param>
-        /// <param name="allGroupsDict">All groups dictionary.</param>
+
+        /// <summary>Hàm thêm nhóm và cha của nó nếu cần</summary>
+        /// <param name="group">Nhóm gốc</param>
+        /// <param name="allGroupsDict">Tất cả id cùa nhóm tổng</param>
         /// <param name="assignedIds">The assigned ids.</param>
         /// <param name="resultDict">Danh sách nhóm phương tiện</param>
         /// <param name="includeParentIfAssigned">if set to <c>true</c> [include parent if assigned].</param>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/17/2025 	Hàm thêm nhóm và cha của nó nếu cần
-        /// </Modified>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         private void AddGroupWithOptionalParents(
             VehicleGroups group,
             Dictionary<int, VehicleGroups> allGroupsDict,
@@ -125,15 +123,11 @@ namespace App.Lab.App.Service.Implement
         }
 
 
-        /// <summary>Builds the hierarchy.</summary>
-        /// <param name="listItem">The list item.</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025  Đệ quy để xây cha-con
-        /// </Modified>
+        /// <summary>Xây cây cha-con của danh sách nhóm</summary>
+        /// <param name="listItem">Danh sách nhom cần xây</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         public List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
             var allIds = listItem
@@ -159,6 +153,13 @@ namespace App.Lab.App.Service.Implement
             return rootGroups.ToList();
         }
 
+        /// <summary>Lấy về danh sách các nhóm con của 1 nhóm cha</summary>
+        /// <param name="listItem">Danh sách gốc</param>
+        /// <param name="parentId">Id nhóm cha</param>
+        /// <param name="level">Cấp của nhóm cha</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)
         {
             var childGroups = listItem

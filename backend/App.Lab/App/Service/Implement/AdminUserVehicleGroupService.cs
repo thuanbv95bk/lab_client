@@ -34,23 +34,12 @@ namespace App.Lab.Service.Implement
 
         }
 
-        //public Task Create(AdminUserVehicleGroup objinfo)
-        //{
-        //    using (_uow.BeginTransaction())
-        //    {
-        //        var id = _repo.Create(objinfo);
-        //        _uow.SaveChanges();
-        //        return Task.FromResult(id);
-        //    }
-        //}
 
-        /// <summary>Adds the or edit list.</summary>
-        /// <param name="items">The items.</param>
-        /// <returns>ServiceStatus</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/17/2025 	thêm, xóa mềm, cập nhật xóa mềm- active của danh sách nhóm phương tiện của user
-        /// </Modified>
+        /// <summary>Thêm, xóa mềm, cập nhật xóa mềm- active của danh sách nhóm phương tiện của user</summary>
+        /// <param name="items"> Model thêm mới 1 nhóm phương tiện</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public async Task<ServiceStatus> AddOrEditListAsync(VehicleGroupModel items)
         {
             try
@@ -154,13 +143,12 @@ namespace App.Lab.Service.Implement
             }
         }
 
-        /// <summary>Gets the list assign groups.</summary>
-        /// <param name="filter">AdminUserVehicleGroupFilter<br /></param>
-        /// <returns>List&lt;UserVehicleGroupView&gt;</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/17/2025 	danh sách nhóm phương tiện đã gán cho user
-        /// </Modified>
+
+        /// <summary>Lấy danh sách nhóm phương tiện đã gán</summary>
+        /// <param name="filter">Bộ lọc nhóm phương tiện đã gán</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public ServiceStatus GetListAssignGroups(AdminUserVehicleGroupFilter filter)
         {
             try
@@ -181,6 +169,11 @@ namespace App.Lab.Service.Implement
             }
         }
 
+        /// <summary>Dựng cha-con của danh sách nhóm phương tiện</summary>
+        /// <param name="listItem">Danh sách 1 nhóm phương tiện</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         private List<VehicleGroups> BuildHierarchy(List<VehicleGroups> listItem)
         {
             var allIds = listItem
@@ -205,6 +198,13 @@ namespace App.Lab.Service.Implement
             return rootGroups.ToList();
         }
 
+        /// <summary>Lấy về danh sách các nhóm con của 1 nhóm cha</summary>
+        /// <param name="listItem">Danh sách gốc</param>
+        /// <param name="parentId">Id nhóm cha</param>
+        /// <param name="level">Cấp của nhóm cha</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         private List<VehicleGroups> GetChildGroups(List<VehicleGroups> listItem, int? parentId, int level)
         {
             var childGroups = listItem

@@ -1,0 +1,29 @@
+<div class="container-search d-flex flex-column">
+  <div>{{ title }}</div>
+  <div class="mt-auto">
+    <div class="align-items-center bg-white input-group">
+      <input
+        type="text"
+        class="form-control form-control-sm"
+        [placeholder]="selectedOption.placeholder"
+        [(ngModel)]="searchOption.value" />
+      <div class="input-group-append">
+        <span *ngIf="searchOption.value" class="input-group-text cancel-icon"
+          ><i class="fa fa-times" (click)="searchOption.value = ''"></i
+        ></span>
+        <span class="input-group-text"><i class="fa fa-search"></i></span>
+
+        <button class="btn-sm bg-white select-option dropdown-toggle" type="button" data-toggle="dropdown">
+          {{ selectedOption.name }}
+        </button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" *ngFor="let item of listOption" (click)="selectDriver(item)">
+            <div class="d-flex justify-content-between">
+              <span>{{ item.name }}</span>
+            </div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

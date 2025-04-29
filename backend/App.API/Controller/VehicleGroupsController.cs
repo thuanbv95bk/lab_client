@@ -17,13 +17,12 @@ namespace App.Admin.Controllers
             _service = service;
         }
 
-        /// <summary>Gets the list unassign groups.</summary>
-        /// <param name="filter">VehicleGroupsFilter</param>
-        /// <returns>Danh sách nhóm chưa gán theo user</returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/18/2025 Danh sách các nhóm chưa được gán theo user
-        /// </Modified>
+
+        /// <summary>Danh sách các nhóm chưa được gán theo user</summary>
+        /// <param name="filter">Bộ lọc nhóm phương tiện</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         [HttpPost]
         [Route("get-list-unassign-groups")]
         public IActionResult GetListUnassignGroups(VehicleGroupsFilter filter)

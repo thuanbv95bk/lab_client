@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonService } from '../../service/common.service';
 import { UserService } from './service/user.service';
 import { GroupsService } from './service/groups.service';
-import { Groups, GroupService, GroupsFilter } from './model/groups';
+import { GroupsFilter } from './model/groups';
 import { UserVehicleGroupFilter, UserVehicleGroupView, VehicleGroupModel } from './model/user-vehicle-group';
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
-import { CommonService } from '../../service/common.service';
 import equal from 'fast-deep-equal';
 import { User, UsersFilter } from './model/admin-user';
-import { directionMoveGroupsEnum } from './enum/vehicle-group.enum';
 
 @Component({
   selector: 'app-user-vehicle-group',
@@ -15,27 +14,52 @@ import { directionMoveGroupsEnum } from './enum/vehicle-group.enum';
   styleUrls: ['./user-vehicle-group.component.scss'],
 })
 export class UserVehicleGroupComponent implements OnInit {
-  companyID: number = 15076; // ID công ty mặc định
+  /** ID công ty mặc định */
+  companyID: number = 15076;
+
+  /** key để lấy ra đoan string-key */
   keyId: string = 'pK_VehicleGroupID';
-  userSearch = ''; // filter User
 
-  listUser: User[] = []; // danh sách người dùng
-  userFilter = new UsersFilter(); // filter người dùng
+  /** filter User */
+  userSearch = '';
 
-  groupsFilter = new GroupsFilter(); // filter nhóm chưa gán
-  groupsViewFilter = new UserVehicleGroupFilter(); // filter nhóm đã gán
+  /** danh sách người dùng */
+  listUser: User[] = [];
 
-  listUnassignGroups: UserVehicleGroupView[] = []; // nhóm chưa gán
-  listAssignGroups: UserVehicleGroupView[] = []; // nhóm đã gán
+  /** filter người dùng */
+  userFilter = new UsersFilter();
 
-  selectedId = new User(); // useKey chon người dùng
-  first: number = 0; // kiểm tra- lấy dữ liệu lần đầu cho nhóm
-  currentGroupIdsStr = ''; // string-key check sự thay đổi của các nhóm
-  originalGroupIdsStr = ''; // string-key-original check sự thay đổi của các nhóm
+  /** filter nhóm chưa gán */
+  groupsFilter = new GroupsFilter();
 
-  isBtnUnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm chưa gán
-  isBtnAssignGroupsActive: boolean = false; // check có sự thay đổi của nhóm đã gán
+  /** filter nhóm đã gán */
+  groupsViewFilter = new UserVehicleGroupFilter();
 
+  /** nhóm chưa gán */
+  listUnassignGroups: UserVehicleGroupView[] = [];
+
+  /** nhóm đã gán */
+  listAssignGroups: UserVehicleGroupView[] = [];
+
+  /** useKey chon người dùng */
+  selectedId = new User();
+
+  /** kiểm tra- lấy dữ liệu lần đầu cho nhóm */
+  first: number = 0;
+
+  /** string-key check sự thay đổi của các nhóm */
+  currentGroupIdsStr = '';
+
+  /** string-key-original check sự thay đổi của các nhóm */
+  originalGroupIdsStr = '';
+
+  /** check có sự thay đổi của nhóm chưa gán */
+  isBtnUnAssignGroupsActive: boolean = false;
+
+  /** check có sự thay đổi của nhóm đã gán */
+  isBtnAssignGroupsActive: boolean = false;
+
+  /** đóng popup thông báo */
   @ViewChild('closeModal') closeModal;
 
   constructor(
@@ -45,23 +69,32 @@ export class UserVehicleGroupComponent implements OnInit {
     public commonService: CommonService
   ) {}
 
+  /** lấy dữ liệu masterData
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
+
   ngOnInit() {
     this.getMasterData();
   }
 
-  /**
-   * Gets master data
-   * Lấy các data từ DB khi mở giao diện
+  /** Lấy các data từ DB khi mở giao diện
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
   getMasterData() {
     this.getListUser();
   }
 
-  /**
-   * sự kiện click vào row chọn người dùng
-   * @param item User
-   * @returns danh sách của nhóm chưa gán, đã gán
+  /** Sự kiện click vào row chọn người dùng
+   * @param item Class User
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   async onClickRow(item: User) {
     if (this.selectedId != item) {
       this.selectedId = item;
@@ -77,38 +110,41 @@ export class UserVehicleGroupComponent implements OnInit {
     }
   }
 
-  /**
-   * thiết lập string-key Original để check sự thay đổi
-   * của các nhóm
-   * @param fromList
-   * @param key string-key
+  /** thiết lập string-key Original ban đầu để check sự thay đổi
+   * @param fromList UserVehicleGroupView nhóm phương tiện
+   * @param key string: pK_VehicleGroupID
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   markOriginal(fromList: UserVehicleGroupView[], key: string) {
     this.originalGroupIdsStr = this.groupsService.getSortedIdString(fromList, key);
     this.currentGroupIdsStr = this.originalGroupIdsStr;
   }
 
-  /**
-   * Assigns groups
-   * Hàm chuyển từ nhóm chưa gán sang nhóm đã gán
-   * Xây lại cây cha-con
+  /** Hàm chuyển từ nhóm chưa gán sang nhóm đã gán
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
-  assignGroups() {
-    this.listUnassignGroups = this.groupsService.moveGroups(this.listUnassignGroups, this.listAssignGroups);
 
+  assignGroups() {
+    // lấy về dah sách nhóm chưa gán
+    this.listUnassignGroups = this.groupsService.moveGroups(this.listUnassignGroups, this.listAssignGroups);
     const tempList = this.listAssignGroups;
     const allRelatedGroups = this.groupsService.flattenGroupTree(tempList);
     this.currentGroupIdsStr = this.groupsService.getSortedIdString(allRelatedGroups, this.keyId);
     this.listAssignGroups = this.groupsService.buildHierarchy(allRelatedGroups);
-
     this.isBtnAssignGroupsActive = false;
   }
 
-  /**
-   * Assigns groups
-   * Hàm chuyển từ nhóm đã sang nhóm chưa gán
-   * Xây lại cây cha-con
+  /** Hàm chuyển từ nhóm đã sang nhóm chưa gán - Xây lại cây cha-con
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   unassignGroups() {
     this.listAssignGroups = this.groupsService.moveGroups(this.listAssignGroups, this.listUnassignGroups);
 
@@ -125,10 +161,12 @@ export class UserVehicleGroupComponent implements OnInit {
     this.isBtnUnAssignGroupsActive = false;
   }
 
-  /**
-   * Saves user vehicle group component
-   * Lưu lại giá trị nhóm đã gán vào DB
+  /** Thêm pK_UserID, tạo list phẳng để lưu DB
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   save() {
     const tempList = this.listAssignGroups;
     const allRelatedGroups = this.groupsService.flattenGroupTree(tempList, this.selectedId.pK_UserID);
@@ -137,6 +175,12 @@ export class UserVehicleGroupComponent implements OnInit {
     item.listGroup = allRelatedGroups;
     this.addOrEditList(item);
   }
+  /** Lưu lại giá trị nhóm đã gán vào DB
+   * @param VehicleGroupModel danh sách nhóm phẳng(không cha-con)
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   addOrEditList(item: VehicleGroupModel) {
     this.userVehicleGroupService.addOrEditList(item).then(
@@ -155,11 +199,12 @@ export class UserVehicleGroupComponent implements OnInit {
     );
   }
 
-  /**
-   * Cancels user vehicle group component
-   * Hàm xác nhận hủy các thay đổi chưa lưu
-   * có xác nhận?
+  /** Hàm xác nhận hủy các thay đổi chưa lưu,có xác nhận? lại
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   cancel() {
     this.closeModal.nativeElement.click();
     this.getListAssignGroups(this.selectedId.pK_UserID);
@@ -167,12 +212,12 @@ export class UserVehicleGroupComponent implements OnInit {
     this.refreshAllBottom();
   }
 
-  /**
-   * Gets list user
-   * get danh sách users từ DB
-   * truyền vào ID công ty = 15076
-   * Người dùng có isLock = false và isDeleted = false;
+  /** get danh sách users từ DB
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   getListUser() {
     this.userFilter.fK_CompanyID = this.companyID;
     this.userFilter.isLock = false;
@@ -192,12 +237,13 @@ export class UserVehicleGroupComponent implements OnInit {
     );
   }
 
-  /**
-   * Gets list unassign groups
-   * get danh sách các nhóm chưa gán
-   * @param pK_UserID
-   * @param isDeleted = false
-   * @param companyID = 15076
+  /** get danh sách các nhóm chưa gán
+   * @param pK_UserID Id của user
+   * @param isDeleted = false trạng thái
+   * @param companyID = 15076 iD công ty
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   async getListUnassignGroups(pK_UserID: string) {
@@ -219,16 +265,13 @@ export class UserVehicleGroupComponent implements OnInit {
     );
   }
 
-  /**
-   * Gets list unassign groups
-   * get danh sách các nhóm chưa gán
-   * Set currentGroupIdsStr  string-key để kiểm tra sự thay đổi
-   * Xây lại cây cha-con
+  /** get danh sách các nhóm chưa gán, va  currentGroupIdsStr  string-key để kiểm tra sự thay đổi
    * @param pK_UserID
-   * @param isDeleted = false
-   * @param companyID = 15076
-   *
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   getListAssignGroups(PK_UserID: string) {
     this.groupsViewFilter.fK_UserID = PK_UserID;
     this.groupsViewFilter.isDeleted = false;
@@ -254,10 +297,12 @@ export class UserVehicleGroupComponent implements OnInit {
     );
   }
 
-  /**
-   * Refresh all bottom
-   * bỏ đi các giá trị active của các bottom
+  /**  bỏ đi các giá trị active của các bottom
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   refreshAllBottom() {
     this.isBtnUnAssignGroupsActive = false;
     this.isBtnAssignGroupsActive = false;
@@ -266,9 +311,10 @@ export class UserVehicleGroupComponent implements OnInit {
     this.originalGroupIdsStr = '';
   }
 
-  /**
-   * Gets whether is assign groups changed
-   *  kiểm tra có thay đổi của nhóm đã chọn không
+  /** kiểm tra có thay đổi của nhóm đã chọn không
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
 
   get isAssignGroupsChanged(): boolean {

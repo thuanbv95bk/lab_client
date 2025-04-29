@@ -1,5 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { User } from '../../model/admin-user';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-text-search',
@@ -7,15 +6,20 @@ import { User } from '../../model/admin-user';
   styleUrls: ['./text-search.component.scss'],
 })
 export class TextSearchComponent {
+  /** placeholder hiển thị */
   @Input() placeholder: string;
 
+  /** searchField tìm kiếm trong nhóm cột */
   searchField: string;
+
   @Output() searchFieldChange = new EventEmitter<string>();
 
-  /**
-   * Changes input
-   * emit sự kiên ra ngoài khi ng dùng gõ input
+  /** emit sự kiên ra ngoài khi ng dùng gõ input
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   changeInput() {
     this.searchFieldChange.emit(this.searchField);
   }

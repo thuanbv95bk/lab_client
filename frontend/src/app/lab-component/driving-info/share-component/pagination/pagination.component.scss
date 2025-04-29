@@ -1,0 +1,72 @@
+/* Add this to your component's style file */
+:host ::ng-deep {
+  .container-pagination {
+    background-color: #f8f9fa;
+
+    .pagination {
+      .page-item {
+        margin: 0 5px;
+        /* Adjust spacing between items */
+        .page-link {
+          border: none !important;
+          /* Remove borders */
+          background-color: #f8f9fa !important;
+          /* bg-light color */
+          color: #495057;
+          /* Dark gray text */
+
+          &:hover {
+            background-color: #e9ecef !important;
+            /* Slightly darker on hover */
+          }
+        }
+
+        &.active .page-link {
+          background-color: #2d9cdb !important;
+          /* Active state color */
+          color: white !important;
+          /* Darker text for active */
+          font-weight: 500;
+        }
+
+        &.disabled .page-link {
+          background-color: #f8f9fa !important;
+          color: #adb5bd !important;
+          /* Lighter text for disabled */
+        }
+      }
+
+      .item-select {
+        width: 27px;
+      }
+    }
+
+    /* Style for the items per page selector */
+    .form-control-sm {
+      border: 1px solid #dee2e6 !important;
+      background-color: #f8f9fa !important;
+      width: max-content;
+    }
+
+    .info-section {
+      font-size: 0.875rem;
+
+      .reload-btn {
+        padding: 0.15rem 0.35rem;
+        font-size: 0.75rem;
+
+        &:disabled {
+          opacity: 0.6;
+        }
+      }
+    }
+  }
+
+  .page-text {
+    font-size: 0.9rem;
+  }
+
+  .icon-loading {
+    color: green;
+  }
+}

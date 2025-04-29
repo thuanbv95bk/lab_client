@@ -1,6 +1,6 @@
 import { Component, HostListener, OnInit } from '@angular/core';
-import { Menu } from '../../model/app-model';
 import { Router } from '@angular/router';
+import { Menu } from '../../lab-component/login/model/app-model';
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -8,14 +8,20 @@ import { Router } from '@angular/router';
   styleUrls: ['./toolbar-menu.component.scss'],
 })
 export class ToolbarMenuComponent implements OnInit {
+  /** Active menu */
   selectedId: string;
+  /** Kiểm tra đóng mở side menu */
   isCollapsed = true;
+
+  /** check trạng thái porter màn hình */
   isMobileView = false;
 
-  /**
-   * List menu of toolbar menu component
-   * Danh sách menu hiển thị
+  /**  Danh sách menu hiển thị
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   listMenu: Menu[] = [
     {
       href: '/dash-board',
@@ -25,36 +31,63 @@ export class ToolbarMenuComponent implements OnInit {
       href: '/user-vehicle-group',
       code: 'Nhóm phương tiện',
     },
+    {
+      href: '/driving-info',
+      code: 'Thông tin lái xe',
+    },
   ];
   constructor(private router: Router) {}
 
-  /**
-   *router về trang home khi click vào logo
+  /** router về trang home khi click vào logo
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   onclickLogo() {
     this.router.navigate(['/']);
   }
-  /**
-   * Go page home
-   * Chuyển đến trạng theo link
+
+  /** Chuyển đến trạng theo link
+   * @param item Menu
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   goPage(item: Menu) {
     this.selectedId = item.href;
     this.router.navigateByUrl(item.href);
   }
 
-  /**
-   * Set mặc định về trang dash-board
+  /** Set mặc định về trang dash-board
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   ngOnInit() {
     this.checkViewport();
     this.selectedId = '/dash-board';
   }
+  /** theo dõi window:resize để hiển thi bottom side menu
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     this.checkViewport();
   }
+
+  /** kiểm tra Viewport, để hiển thi side menu
+   * @param param1 Mô tả param 1
+   * @param param2 Mô tả param 2
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   checkViewport() {
     this.isMobileView = window.innerWidth < 992; // Bootstrap lg breakpoint
@@ -62,6 +95,12 @@ export class ToolbarMenuComponent implements OnInit {
       this.isCollapsed = true; // Đảm bảo menu đóng khi chuyển sang desktop
     }
   }
+
+  /** Ần hiện side menu
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   toggleMenu() {
     this.isCollapsed = !this.isCollapsed;

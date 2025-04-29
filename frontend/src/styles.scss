@@ -1,16 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 
 $toolbar-height: 40px;
-// @mixin define-css-classes() {
-//   app-layout {
-//     .navbar {
-//       height: $toolbar-height !important;
-//     }
 
-//     app-toolbar {
-//       .navbar {
-//         height: $toolbar-height !important;
-//       }
-//     }
-//   }
+// .ngb-dp-navigation-select select {
+//   min-width: 90px !important;
 // }
+
+.selected-row {
+  background-color: #caeffb !important;
+}

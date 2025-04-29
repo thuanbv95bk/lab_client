@@ -1,8 +1,11 @@
 ﻿
 using App.Common.Helper;
+using App.Lab.Model;
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Data.SqlClient;
 using System.Data.Common;
+using static App.Lab.Model.HrmEmployeeValidator;
 
 public class Startup
 {
@@ -14,17 +17,22 @@ public class Startup
 
     public IConfiguration Configuration { get; }
 
-    // Đăng ký dịch vụ
+    /// <summary> Đăng ký dịch vụ. </summary>
+    /// <param name="services">The services.</param>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public void ConfigureServices(IServiceCollection services)
     {
 
         // https://www.tutorialsteacher.com/core/dependency-injection-in-aspnet-core
-
-        services.AddControllers(); // 👈 Bắt buộc có
+ 
+        services.AddControllers(); // 
 
         App.Lab.Startup.RegisterDependency(services);
         services.AddEndpointsApiExplorer();
-
+        services.AddScoped<IValidator<HrmEmployees>, HrmEmployeeValidator>();
+        services.AddScoped<IValidator<List<HrmEmployees>>, HrmEmployeesListValidator>();
         services
                 .AddCors
                 (
@@ -40,7 +48,13 @@ public class Startup
         services.AddSwaggerGen();
     }
 
-    // Thiết lập middleware pipeline
+
+    /// <summary>Configures the specified application. Thiết lập middleware pipeline</summary>
+    /// <param name="app">The application.</param>
+    /// <param name="env">The env.</param>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
 

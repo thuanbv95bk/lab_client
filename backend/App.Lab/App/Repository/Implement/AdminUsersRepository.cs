@@ -1,10 +1,10 @@
 ﻿
+using App.DataAccess;
 using App.Lab.Model;
 using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
-using App.DataAccess;
-using App.Common.Helper;
-using Microsoft.VisualStudio.Services.Common;
+using System.Data;
+using System.Runtime.CompilerServices;
 
 
 
@@ -15,22 +15,17 @@ namespace App.Lab.Repository.Implement
         public AdminUsersRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Admin"; }
         public AdminUsersRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Admin"; }
 
-
-        /// <summary>Gets the list.</summary>
-        /// <param name="filter">UsersFilter</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025 	get danh sách user theo bộ lọc UsersFilter
-        /// </Modified>
-        public  List<Users>  GetList(Users filter)
+        /// <summary>Get danh sách User</summary>
+        /// <param name="filter">Class User</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
+        public List<Users> GetList(Users filter)
         {
 
             var listOrderOption = new OrderOption[] {
             new OrderOption {
-                Column = "Fullname", 
+                Column = "Fullname",
                 OrderType = "ASC",
             }};
             var listFilter = MapFilterToOptions(filter);
@@ -41,6 +36,13 @@ namespace App.Lab.Repository.Implement
             );
             return ret;
 
+            //var ret = ExecuteReader<Users>
+            //(
+            //    "SELECT * FROM [Admin.Users] WHERE FK_CompanyID = @FK_CompanyID AND IsDeleted = @IsDeleted AND IsLock = @IsLock ORDER BY Fullname",
+            //CommandType.Text,
+            //    new { FK_CompanyID = filter.FK_CompanyID, IsDeleted = filter.IsDeleted, IsLock= filter.IsLock }
+            //);
+            //return ret;
         }
     }
 

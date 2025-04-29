@@ -1,0 +1,160 @@
+<div class="driving-form p-0" (keyup.enter)="searchPagingToEdit()">
+  <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
+  <div class="container-fluid row p-0">
+    <div class="col">
+      <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
+    </div>
+    <div class="col">
+      <app-multi-select-dropdown
+        [title]="'Lái xe'"
+        [items]="this.lstDriver"
+        [displayField1]="'displayName'"
+        [displayField2]="'driverLicense'"
+        [allSelected]="false"
+        [placeholder]="'Chọn lái xe'"
+        [search]="true"
+        [selectAll]="true"
+        (selectedChange)="onSelectedChangeDriver($event)"></app-multi-select-dropdown>
+    </div>
+    <div class="col">
+      <app-multi-select-dropdown
+        [title]="'Loại bằng'"
+        [items]="this.listLicenseTypes"
+        [displayField1]="'name'"
+        [allSelected]="false"
+        [placeholder]="'Chọn loại bằng'"
+        [search]="true"
+        [selectAll]="true"
+        (selectedChange)="onSelectedChangeLicenseTypes($event)"></app-multi-select-dropdown>
+    </div>
+    <div class="col-auto d-flex align-items-stretch mt-auto ml-auto p-0">
+      <button type="button" class="btn-sm mb-0" (click)="searchPagingToEdit()"><i class="fa fa-search p-1"></i> Tìm kiếm</button>
+    </div>
+  </div>
+  <div class="d-flex float-right mt-1">
+    <button type="button" class="btn-sm" *ngIf="isCanSave" (click)="saveChanges()">
+      <i class="fa fa-save"></i> Lưu thông tin
+    </button>
+    <button type="button" class="btn-sm ml-2 mr-2 btn-sm-cancel" *ngIf="isCanCancel" (click)="cancel()">
+      <i class="fa fa-times"></i>Hủy
+    </button>
+    <button type="button" class="btn-sm" (click)="downloadExcel()"><i class="bi bi-file-earmark-excel"></i></button>
+  </div>
+
+  <div class="table-responsive pt-2">
+    <table class="table table-bordered table-sm mb-0">
+      <thead class="head-light sticky-thead">
+        <tr>
+          <th>STT</th>
+          <th>Họ và tên <span class="col-required">*</span></th>
+          <th>Số điện thoại</th>
+          <th>Số giấy phép lái xe <span class="col-required">*</span></th>
+          <th>Ngày cấp <span class="col-required">*</span></th>
+          <th>Ngày hết hạn <span class="col-required">*</span></th>
+          <th>Nơi cấp <span class="col-required">*</span></th>
+          <th>Loại bằng <span class="col-required">*</span></th>
+          <th>Ngày cập nhật</th>
+          <th>Xóa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let item of listEmployeesGrid; let i = index"
+          id="{{ item.pkEmployeeId }}"
+          [ngClass]="{ 'selected-row': selectedId && item == selectedId }">
+          <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.displayName"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="100"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'displayName', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.mobile"
+              [inputType]="'phone'"
+              [required]="false"
+              [minLength]="1"
+              [maxLength]="25"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'mobile', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.driverLicense"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="32"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'driverLicense', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.issueLicenseDate"
+              [inputType]="'date'"
+              [required]="true"
+              [minDate]="null"
+              [maxDate]="dateNow"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'issueLicenseDate', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.expireLicenseDate"
+              [inputType]="'date'"
+              [required]="true"
+              [minDate]="item.issueLicenseDate"
+              [maxDate]="null"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'expireLicenseDate', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.issueLicensePlace"
+              [inputType]="'text'"
+              [required]="true"
+              [minLength]="1"
+              [maxLength]="150"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'issueLicensePlace', $event)"
+              (focusInput)="onClickItem(item)"></app-validated-input>
+          </td>
+
+          <td>
+            <app-validated-input
+              [(ngModel)]="item.licenseType"
+              [inputType]="'select'"
+              [selectOptions]="listLicenseTypes"
+              selectLabel="name"
+              [required]="true"
+              [resetEditFlag]="resetEditFlag"
+              (fieldStatusChange)="onFieldStatusChange(item, 'licenseType', $event)"
+              (focusInput)="onClickItem(item)">
+            </app-validated-input>
+          </td>
+          <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
+          <td class="text-center">
+            <div class="btn-delete">
+              <img src="../../../assets/image/icons-delete.svg" (click)="deleteRow(item); onClickItem(item)" alt="delete" />
+              <!-- <i class="bi bi-trash3 text-danger"></i> -->
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)">
+  </app-pagination>
+</div>

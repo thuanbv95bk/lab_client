@@ -9,10 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./layout.component.scss'],
 })
 export class LayoutComponent implements AfterViewInit {
-  /**
-   * after view init
-   * Tính toán chiều cao phần menu để trừ đi
+  /** Tính toán chiều cao phần menu để trừ đi
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
    */
+
   ngAfterViewInit(): void {
     const navbar = document.querySelector('#main-navbar');
     const container = document.querySelector('#router-outlet-container');

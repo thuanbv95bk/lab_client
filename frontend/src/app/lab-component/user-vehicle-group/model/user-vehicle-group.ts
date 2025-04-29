@@ -1,9 +1,9 @@
 import { Groups } from './groups';
 
-/**
- * User vehicle group
- * class nhóm xe cho người dùng
- * @author thuan.bv
+/** Danh sách nhóm theo user
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
 export class UserVehicleGroup {
   pK_UserID!: string | null;
@@ -22,11 +22,12 @@ export class UserVehicleGroup {
   }
 }
 
-/**
- * User vehicle group view
- * Nhóm phương tiện của người dùng- để view ở UI
- * @author thuan.bv
+/** Nhóm phương tiện của người dùng- để view ở UI
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
+
 export class UserVehicleGroupView extends Groups {
   pK_UserID!: string | null;
   declare isDeleted: boolean;
@@ -38,11 +39,15 @@ export class UserVehicleGroupView extends Groups {
     this.isDeleted = obj?.isDeleted || false;
   }
 }
-/**
- * Nhóm phương tiện của người dùng
- * dùng để thêm-update lên DB
+
+/** Nhóm phương tiện để thêm mới 1 danh sách nhóm theo pK_UserID
+ * @Author thuan.bv
+ * @Created 23/04/2025
+ * @Modified date - user - description
  */
+
 export class VehicleGroupModel {
+  /** mô tả */
   pK_UserID!: string | null;
   listGroup: UserVehicleGroupView[];
   constructor(obj?: Partial<VehicleGroupModel>) {

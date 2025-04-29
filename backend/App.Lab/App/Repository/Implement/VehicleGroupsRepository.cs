@@ -20,16 +20,10 @@ namespace App.Lab.Repository.Implement
         public VehicleGroupsRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Vehicle"; }
         public VehicleGroupsRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Vehicle"; }
 
-
-        /// <summary>Gets the view by identifier.</summary>
-        /// <param name="PK_VehicleGroupID">The pk vehicle group identifier.</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025 	lấy thông nhóm phương tiện theo ID của nó
-        /// </Modified>
+        /// <summary>lấy thông nhóm phương tiện theo ID của nó</summary>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public UserVehicleGroupView GetViewById(int PK_VehicleGroupID)
         {
             string sql = @"select * from [Vehicle.Groups] where PK_VehicleGroupID = @PK_VehicleGroupID";
@@ -39,6 +33,11 @@ namespace App.Lab.Repository.Implement
             return retList.FirstOrDefault();
         }
 
+        /// <summary>Lấy danh sách nhóm phương tiện</summary>
+        /// <param name="filter">Bộ lọc Nhóm phương tiện</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public List<VehicleGroups> GetList(VehicleGroupsFilter filter)
         {
             var listOrderOption = new OrderOption[] {

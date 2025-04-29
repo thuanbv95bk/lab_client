@@ -1,13 +1,10 @@
 ﻿
-using Microsoft.AspNetCore.Http;
-using System.Text.Json;
 using System.Data;
 using System.Text;
 using App.Common.Helper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Data.SqlClient;
-using System.Xml.Linq;
-using System.Security.Cryptography;
-using Microsoft.AspNetCore.Http.Extensions;
+
 
 namespace App.DataAccess
 {
@@ -16,15 +13,15 @@ namespace App.DataAccess
         private readonly IUnitOfWork _unitOfWork;
         public string Schema;
 
-        private static readonly JsonSerializerOptions jsonSerializeroptions = new JsonSerializerOptions
-        {
-            Converters =
-        {
-                new BooleanConverter(),
-                new NullableBooleanConverter()
-        },
-            PropertyNameCaseInsensitive = true
-        };
+        //private static readonly JsonSerializerOptions jsonSerializeroptions = new JsonSerializerOptions
+        //{
+        //    Converters =
+        //{
+        //        new BooleanConverter(),
+        //        new NullableBooleanConverter()
+        //},
+        //    PropertyNameCaseInsensitive = true
+        //};
 
         public Repo(IUnitOfWork unitOfWork)
         {
@@ -36,459 +33,430 @@ namespace App.DataAccess
             _unitOfWork = unitOfWork;
         }
 
+        /// <summary>Gets the database information.</summary>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public string GetDbInfo()
         {
             return _unitOfWork.GetDbContext().Connection.ConnectionString;
         }
 
         #region "data helper"
-        public void ExecNonQuery(string spName, params object[] parameterValues)
+        /// <summary>Executes the non query.</summary>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        public int ExecuteNonQuery(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
+            IDbTransaction trans = null;
+            int affectedRows = 0;
 
-            if (_unitOfWork.GetDbContext().IsSqlServer())
+            try
             {
-                IDbTransaction trans = null;
-                try
+                // Xử lý schema cho stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
                 {
+                    commandText = $"{Schema}.{commandText}";
+                }
+
+                // Lấy connection từ UnitOfWork
+                var connection = _unitOfWork.GetDbContext().Connection;
+
+                // Mở kết nối nếu chưa mở
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                // Tạo command
+                using (var cmd = connection.CreateCommand())
+                {
+                    // Thiết lập transaction
+                    trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                    cmd.Transaction = trans;
+
+                    // Thiết lập command
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = commandType;
+
+                    // Thêm parameters nếu có
+                    if (parameters != null)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+
+                    // Thực thi command
+                    affectedRows = cmd.ExecuteNonQuery();
+
+                    // Commit transaction nếu là transaction mới tạo
                     if (_unitOfWork.GetTransaction() == null)
                     {
-                        trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                        var ret = SqlHelper.ExecuteNonQuery((SqlTransaction)trans, spName, parameterValues);
                         trans.Commit();
-                        trans.Dispose();
-                    }
-                    else
-                    {
-                        SqlHelper.ExecuteNonQuery((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
                     }
                 }
-                catch (Exception ex)
+
+                return affectedRows;
+            }
+            catch (Exception ex)
+            {
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
                 {
-                    if (trans != null)
-                    {
-                        trans.Rollback();
-                        trans.Dispose();
-                    }
-                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                    trans.Rollback();
+                }
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
+            }
+            finally
+            {
+                // Dispose transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null)
+                {
+                    trans?.Dispose();
                 }
             }
-            else if (_unitOfWork.GetDbContext().IsOracle())
+
+        }
+
+        /// <summary>Executes the scalar.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        public T ExecuteScalar<T>(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
+        {
+            IDbTransaction trans = null;
+            object result = null;
+
+            try
             {
-                IDbTransaction trans = null;
-                try
+                // Xử lý schema cho stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
                 {
+                    commandText = $"{Schema}.{commandText}";
+                }
+
+                // Lấy connection
+                var connection = _unitOfWork.GetDbContext().Connection;
+
+                // Mở kết nối nếu chưa mở
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (var cmd = connection.CreateCommand())
+                {
+                    // Thiết lập transaction
+                    trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                    cmd.Transaction = trans;
+
+                    // Thiết lập command
+                    cmd.CommandText = commandText;
+                    cmd.CommandType = commandType;
+
+                    // Thêm parameters
+                    if (parameters != null)
+                    {
+                        AddParameters(cmd, parameters);
+                    }
+
+                    // Thực thi và lấy kết quả
+                    result = cmd.ExecuteScalar();
+
+                    // Commit nếu là transaction mới
                     if (_unitOfWork.GetTransaction() == null)
                     {
-                        //trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                        //var ret = OracleHelper.ExecuteNonQuery((OracleTransaction)trans, spName, parameterValues);
-                        //trans.Commit();
-                        //trans.Dispose();
+                        trans.Commit();
                     }
-                    else
-                    {
-                        //OracleHelper.ExecuteNonQuery((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (trans != null)
-                    {
-                        trans.Rollback();
-                        trans.Dispose();
-                    }
-                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
-                }
-            }
-            else if (_unitOfWork.GetDbContext().IsMySql())
-            {
-                IDbTransaction trans = null;
-                try
-                {
-                    if (_unitOfWork.GetTransaction() == null)
-                    {
-                        //trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                        //var ret = MySqlHelper.ExecuteNonQuery((MySqlTransaction)trans, spName, parameterValues);
-                        //trans.Commit();
-                        //trans.Dispose();
-                    }
-                    else
-                    {
-                        //MySqlHelper.ExecuteNonQuery((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    if (trans != null)
-                    {
-                        trans.Rollback();
-                        trans.Dispose();
-                    }
-                    throw new Exception(ErrorMessage(ex, spName, parameterValues));
-                }
-            }
-        }
 
-        public object ExecuteScalar(string spName, params object[] parameterValues)
-        {
-            //if (!string.IsNullOrEmpty(Schema))
-            //    spName = $"{Schema}.{spName}";
+                    // Xử lý kết quả null
+                    if (result == DBNull.Value || result == null)
+                    {
+                        return default(T);
+                    }
 
-            object ret = null;
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                if (dr != null)
-                {
-                    ret = CBO.FillString(dr);
-                    dr.Close();
-                }
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
+                    return (T)Convert.ChangeType(result, typeof(T));
                 }
             }
             catch (Exception ex)
             {
-                dr?.Close();
-                if (trans != null)
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
                 {
                     trans.Rollback();
-                    trans.Dispose();
                 }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
             }
-
-            return ret;
+            finally
+            {
+                // Dispose transaction nếu là transaction mới
+                if (_unitOfWork.GetTransaction() == null)
+                {
+                    trans?.Dispose();
+                }
+            }
         }
 
-        public T ExecuteScalarAs<T>(string spName, params object[] parameterValues)
+
+        /// <summary>Executes the reader.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="commandType">Type of the command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception"></exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        public List<T> ExecuteReader<T>(string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
-
-
-            Type type = typeof(T);
-
-            var allowedTypes = new[]
-            {
-                typeof(bool), typeof(byte), typeof(sbyte), typeof(short), typeof(ushort),
-                typeof(int), typeof(uint), typeof(long), typeof(ulong),
-                typeof(float), typeof(double), typeof(decimal), typeof(char),
-                typeof(string), typeof(DateTime)
-            };
-
-            if (Array.IndexOf(allowedTypes, type) < 0)
-            {
-                throw new InvalidOperationException($"The type {type} is not a supported primitive type.");
-            }
-
-            var retstr = ExecuteScalar(spName, parameterValues);
-            var ret = (T)Convert.ChangeType(retstr, typeof(T));
-            return ret;
-        }
-
-        public void ExecuteReader<T>(out T ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
             IDataReader dr = null;
             IDbTransaction trans = null;
+            List<T> result = null;
+
             try
             {
-                Exec(out dr, out trans, spName, parameterValues);
+                // Xử lý schema nếu là stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
+                {
+                    commandText = $"{Schema}.{commandText}";
+                }
 
-                ret = CBO.FillObject<T>(dr);
+                // Mở kết nối nếu chưa mở
+                var connection = _unitOfWork.GetDbContext().Connection;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
 
-                if (trans != null)
+                // Tạo command
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = commandText;
+                cmd.CommandType = commandType;
+
+                // Thêm transaction nếu có
+                trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                cmd.Transaction = trans;
+
+                // Thêm parameters nếu có
+                if (parameters != null)
+                {
+                    AddParameters(cmd, parameters);
+                }
+
+                // Thực thi
+                dr = cmd.ExecuteReader();
+
+                // Map kết quả
+                result = CBO.FillList<T>(dr);
+
+                // Commit transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null && trans != null)
                 {
                     trans.Commit();
-                    trans.Dispose();
                 }
+
+                return result;
             }
             catch (Exception ex)
             {
-                dr?.Close();
-                if (trans != null)
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
                 {
                     trans.Rollback();
-                    trans.Dispose();
                 }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
             }
-        }
-
-        public void ExecuteReaderJson<T>(out T ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            var data = ExecuteScalar(spName, parameterValues);
-            if (string.IsNullOrEmpty(data?.ToString()))
-                ret = default;
-            else
-                ret = JsonSerializer.Deserialize<T>(data.ToString(), jsonSerializeroptions);
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillList<T>(dr);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
+            finally
             {
                 dr?.Close();
-                if (trans != null)
+                // Dispose transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null)
                 {
-                    trans.Rollback();
-                    trans.Dispose();
+                    trans?.Dispose();
                 }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
-        public void ExecuteReaderJson<T>(out List<T> ret, string spName, params object[] parameterValues)
+        public void ExecuteReader<T>(out List<T> ret, out int TotalCount, string commandText, CommandType commandType = CommandType.Text, object parameters = null)
         {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            var data = ExecuteScalar(spName, parameterValues);
-            if (string.IsNullOrEmpty(data?.ToString()))
-                ret = default;
-            else
-                ret = JsonSerializer.Deserialize<List<T>>(data.ToString(), jsonSerializeroptions);
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, out int TotalCount, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
             IDataReader dr = null;
             IDbTransaction trans = null;
+            List<T> result = null;
+
             try
             {
-                Exec(out dr, out trans, spName, parameterValues);
+                // Xử lý schema nếu là stored procedure
+                if (commandType == CommandType.StoredProcedure && !string.IsNullOrEmpty(Schema))
+                {
+                    commandText = $"{Schema}.{commandText}";
+                }
 
+                // Mở kết nối nếu chưa mở
+                var connection = _unitOfWork.GetDbContext().Connection;
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                // Tạo command
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = commandText;
+                cmd.CommandType = commandType;
+
+                // Thêm transaction nếu có
+                trans = _unitOfWork.GetTransaction() ?? connection.BeginTransaction();
+                cmd.Transaction = trans;
+
+                // Thêm parameters nếu có
+                if (parameters != null)
+                {
+                    AddParameters(cmd, parameters);
+                }
+
+                // Thực thi
+                dr = cmd.ExecuteReader();
+             
+
+                // Map kết quả
                 ret = CBO.FillList<T>(dr, "TotalCount", out TotalCount);
+                //result = CBO.FillList<T>(dr);
 
-                if (trans != null)
+                // Commit transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null && trans != null)
                 {
                     trans.Commit();
-                    trans.Dispose();
                 }
+
+               
             }
             catch (Exception ex)
+            {
+                // Rollback nếu có lỗi
+                if (trans != null && _unitOfWork.GetTransaction() == null)
+                {
+                    trans.Rollback();
+                }
+                throw new Exception(ErrorMessage(ex, commandText, parameters), ex);
+            }
+            finally
             {
                 dr?.Close();
-                if (trans != null)
+                // Dispose transaction nếu là transaction mới tạo
+                if (_unitOfWork.GetTransaction() == null)
                 {
-                    trans.Rollback();
-                    trans.Dispose();
+                    trans?.Dispose();
                 }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
             }
         }
 
-        public void ExecuteReader<T>(out T ret, List<string> objProperties, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillObject<T>(dr, objProperties);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public void ExecuteReader<T>(out List<T> ret, List<string> objProperties, string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                Exec(out dr, out trans, spName, parameterValues);
-
-                ret = CBO.FillList<T>(dr, objProperties);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        public DataSet ExecuteDataset(string spName, params object[] parameterValues)
-        {
-            if (!string.IsNullOrEmpty(Schema))
-                spName = $"{Schema}.{spName}";
-
-            DataSet ds = null;
-            IDbTransaction trans = null;
-            try
-            {
-                ExecDataset(out ds, out trans, spName, parameterValues);
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-
-                return ds;
-            }
-            catch (Exception ex)
-            {
-                ds?.Dispose();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception(ErrorMessage(ex, spName, parameterValues));
-            }
-        }
-
-        private string ErrorMessage(Exception ex, string spName, params object[] parameterValues)
-        {
-            return ">>>>>>> " + spName + " " + string.Join(", ", parameterValues.Select(p =>
-                    string.IsNullOrEmpty(p?.ToString()) ? "NULL" :
-                    p is string ? $"'{p}'" :
-                    p is DateTime dt ? $"'{dt:yyyy-MM-dd HH:mm:ss}'" :
-                    p.ToString())) + " >>>>>>> "
-                + ex.ToString() + " >>>>>>>";
-        }
-
-        private void Exec(out IDataReader dr, out IDbTransaction trans, string spName, params object[] parameterValues)
-        {
-            dr = null;
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsMySql())
-                //    dr = MySqlHelper.ExecuteReader((MySqlTransaction)trans, spName, parameterValues);
-            }
-            else
-            {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    dr = OracleHelper.ExecuteReader((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsMySql())
-                //    dr = MySqlHelper.ExecuteReader((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-            }
-        }
-
-        private void ExecDataset(out DataSet ds, out IDbTransaction trans, string spName, params object[] parameterValues)
-        {
-            ds = null;
-            trans = null;
-            if (_unitOfWork.GetTransaction() == null)
-            {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    ds = SqlHelper.ExecuteDataset((SqlTransaction)trans, spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    ds = OracleHelper.ExecuteDataset((OracleTransaction)trans, spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsMySql())
-                //    ds = MySqlHelper.ExecuteDataset((MySqlTransaction)trans, spName, parameterValues);
-            }
-            else
-            {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    ds = SqlHelper.ExecuteDataset((SqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    ds = OracleHelper.ExecuteDataset((OracleTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-                //else if (_unitOfWork.GetDbContext().IsMySql())
-                //    ds = MySqlHelper.ExecuteDataset((MySqlTransaction)_unitOfWork.GetTransaction(), spName, parameterValues);
-            }
-        }
-
+        /// <summary>Executes the command.</summary>
+        /// <param name="dr">The dr.</param>
+        /// <param name="trans">The trans.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="commandParameters">The command parameters.</param>
+        /// <exception cref="System.NotImplementedException">Chỉ hỗ trợ SQL Server</exception>
+        /// <exception cref="System.InvalidCastException">Kết nối không phải SqlConnection</exception>
+        /// <exception cref="System.Exception">Lỗi thực thi command</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         private void _ExecCommand(out IDataReader dr, out IDbTransaction trans, string sqlCommand, SqlParameter[] commandParameters)
         {
             dr = null;
             trans = null;
-            if (_unitOfWork.GetTransaction() == null)
+
+            // Lấy đối tượng database context
+            var dbContext = _unitOfWork.GetDbContext();
+
+            // Kiểm tra loại database
+            if (!dbContext.IsSqlServer())
             {
-                trans = _unitOfWork.GetDbContext().Connection.BeginTransaction();
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)trans, CommandType.Text, sqlCommand, commandParameters);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, CommandType.Text, sqlCommand);
-                else
-                    throw new NotImplementedException();
+                throw new NotImplementedException("Chỉ hỗ trợ SQL Server");
+            }
+
+            // Ép kiểu connection sang SqlConnection
+            var sqlConnection = dbContext.Connection as SqlConnection;
+            if (sqlConnection == null)
+            {
+                throw new InvalidCastException("Kết nối không phải SqlConnection");
+            }
+
+            // Kiểm tra transaction hiện có
+            var existingTrans = _unitOfWork.GetTransaction() as SqlTransaction;
+
+            if (existingTrans == null)
+            {
+                // TẠO TRANSACTION MỚI
+                // Đảm bảo kết nối đã mở
+                if (sqlConnection.State != ConnectionState.Open)
+                {
+                    sqlConnection.Open(); // Mở kết nối nếu chưa mở
+                }
+
+                // Bắt đầu transaction mới
+                trans = sqlConnection.BeginTransaction();
             }
             else
             {
-                if (_unitOfWork.GetDbContext().IsSqlServer())
-                    dr = SqlHelper.ExecuteReader((SqlTransaction)_unitOfWork.GetTransaction(), CommandType.Text, sqlCommand, commandParameters);
-                //else if (_unitOfWork.GetDbContext().IsOracle())
-                //    dr = OracleHelper.ExecuteReader((OracleTransaction)trans, CommandType.Text, sqlCommand);
-                else
-                    throw new NotImplementedException();
+                // SỬ DỤNG TRANSACTION CÓ SẴN
+                trans = existingTrans;
+            }
+
+            // TẠO VÀ CẤU HÌNH COMMAND
+            var cmd = sqlConnection.CreateCommand();
+            cmd.Transaction = trans as SqlTransaction; // Gán transaction
+            cmd.CommandText = sqlCommand; // Câu lệnh SQL
+            cmd.CommandType = CommandType.Text; // Loại command
+
+            // THÊM PARAMETERS NẾU CÓ
+            if (commandParameters != null && commandParameters.Length > 0)
+            {
+                cmd.Parameters.AddRange(commandParameters); // Thêm tất cả parameters
+            }
+
+            try
+            {
+                // THỰC THI VÀ TRẢ VỀ DATA READER
+                dr = cmd.ExecuteReader(CommandBehavior.Default);
+
+                // Giữ kết nối mở cho các thao tác tiếp theo
+                // Sử dụng CommandBehavior.Default để không đóng kết nối
+            }
+            catch (Exception ex)
+            {
+                // XỬ LÝ NGOẠI LỆ
+                if (existingTrans == null) // Chỉ rollback nếu tạo transaction mới
+                {
+                    trans.Rollback();
+                    sqlConnection.Close(); // Đóng kết nối nếu tự mở
+                }
+                throw new Exception("Lỗi thực thi command", ex);
             }
         }
 
-        public void GetTableData<T>(out List<T> ret, string tableName, string[] lstColumn = null, FilterOption[] lstFilterOption = null, OrderOption[] lstOrderOption = null) 
-        { 
+
+        /// <summary>Gets the table data.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ret">The ret.</param>
+        /// <param name="tableName">Name of the table.</param>
+        /// <param name="lstColumn">The LST column.</param>
+        /// <param name="lstFilterOption">The LST filter option.</param>
+        /// <param name="lstOrderOption">The LST order option.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        public void GetTableData<T>(out List<T> ret, string tableName, string[] lstColumn = null, FilterOption[] lstFilterOption = null, OrderOption[] lstOrderOption = null)
+        {
 
             if (!string.IsNullOrEmpty(Schema))
                 tableName = $"[{Schema}.{tableName}]";
@@ -520,11 +488,11 @@ namespace App.DataAccess
                     {
                         queryBuilder.Append($" AND ( {filter.Column} {filter.Operator} {filter.Value} or {filter.Column} is null )");
                     }
-                    else 
+                    else
                     {
                         queryBuilder.Append($" AND {filter.Column} {filter.Operator} {filter.Value} ");
                     }
-                        
+
                 }
             }
 
@@ -562,7 +530,16 @@ namespace App.DataAccess
                 throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
         }
-        
+
+        /// <summary>Executes the command.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ret">The ret.</param>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void ExecCommand<T>(out List<T> ret, string sqlCommand, SqlParameter[] parameters)
         {
             IDataReader dr = null;
@@ -591,33 +568,13 @@ namespace App.DataAccess
             }
         }
 
-        public void ExecCommand(string sqlCommand)
-        {
-            IDataReader dr = null;
-            IDbTransaction trans = null;
-            try
-            {
-                _ExecCommand(out dr, out trans, sqlCommand, null);
-
-                dr?.Close();
-
-                if (trans != null)
-                {
-                    trans.Commit();
-                    trans.Dispose();
-                }
-            }
-            catch (Exception ex)
-            {
-                dr?.Close();
-                if (trans != null)
-                {
-                    trans.Rollback();
-                    trans.Dispose();
-                }
-                throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
-            }
-        }
+        /// <summary>Executes the command.</summary>
+        /// <param name="sqlCommand">The SQL command.</param>
+        /// <param name="commandParameters">The command parameters.</param>
+        /// <exception cref="System.Exception">sqlCommand: " + sqlCommand + ": " + ex.ToString()</exception>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public void ExecCommand(string sqlCommand, SqlParameter[] commandParameters)
         {
             IDataReader dr = null;
@@ -645,6 +602,12 @@ namespace App.DataAccess
                 throw new Exception("sqlCommand: " + sqlCommand + ": " + ex.ToString());
             }
         }
+        /// <summary>Maps to SQL parameters.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj">The object.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public SqlParameter[] MapToSqlParameters<T>(T obj)
         {
             var properties = typeof(T).GetProperties();
@@ -660,6 +623,12 @@ namespace App.DataAccess
         }
 
 
+        /// <summary>Maps the filter to options.</summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filter">The filter.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
         public FilterOption[] MapFilterToOptions<T>(T filter)
         {
             var filterOptions = new List<FilterOption>();
@@ -679,12 +648,9 @@ namespace App.DataAccess
                     }
                     else if (property.PropertyType == typeof(string))
                     {
-                        valueString = string.Format(" '{0}' ", value.ToString()) ;
+                        valueString = string.Format(" '{0}' ", value.ToString());
                     }
-                    //else if (property.PropertyType == typeof(int))
-                    //{
-                    //    valueString = string.Format(" '{0}' ", value.ToString());
-                    //}
+
                     else
                     {
                         valueString = value.ToString();
@@ -694,8 +660,8 @@ namespace App.DataAccess
                     {
                         Column = property.Name,
                         Value = valueString,
-                        Operator =" = ",
-                        ValueType = isTypeBool==true?"bool": property.PropertyType.Name.ToLower()
+                        Operator = " = ",
+                        ValueType = isTypeBool == true ? "bool" : property.PropertyType.Name.ToLower()
                     });
                 }
             }
@@ -703,18 +669,96 @@ namespace App.DataAccess
             return filterOptions.ToArray();
         }
 
+        /// <summary>Adds the parameters.</summary>
+        /// <param name="cmd">The command.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        private void AddParameters(IDbCommand cmd, object parameters)
+        {
+            if (parameters is IDictionary<string, object> dictionary)
+            {
+                // Xử lý parameters dạng Dictionary
+                foreach (var item in dictionary)
+                {
+                    var param = cmd.CreateParameter();
+                    param.ParameterName = item.Key.StartsWith("@") ? item.Key : "@" + item.Key;
+                    param.Value = Null.GetDBNull(item.Value);
+                    cmd.Parameters.Add(param);
+                }
+            }
+            else
+            {
+                // Xử lý parameters dạng anonymous object
+                var properties = parameters.GetType().GetProperties();
+                foreach (var prop in properties)
+                {
+                    var param = cmd.CreateParameter();
+                    param.ParameterName = "@" + prop.Name;
+                    param.Value = Null.GetDBNull(prop.GetValue(parameters)) ;
+                    cmd.Parameters.Add(param);
+                }
+            }
+        }
+
+        /// <summary>Errors the message.</summary>
+        /// <param name="ex">The ex.</param>
+        /// <param name="commandText">The command text.</param>
+        /// <param name="parameters">The parameters.</param>
+        /// Author: thuanbv
+        /// Created: 23/04/2025
+        /// Modified: date - user - description
+        private string ErrorMessage(Exception ex, string commandText, object parameters)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine($"Error executing command: {commandText}");
+
+            if (parameters != null)
+            {
+                sb.AppendLine("Parameters:");
+                if (parameters is IDictionary<string, object> dictionary)
+                {
+                    foreach (var item in dictionary)
+                    {
+                        sb.AppendLine($"{item.Key} = {item.Value}");
+                    }
+                }
+                else
+                {
+                    foreach (var prop in parameters.GetType().GetProperties())
+                    {
+                        sb.AppendLine($"{prop.Name} = {prop.GetValue(parameters)}");
+                    }
+                }
+            }
+
+            sb.AppendLine($"Error: {ex.Message}");
+            return sb.ToString();
+        }
+
         #endregion
     }
 
+    /// <summary> Filter Filed column mapping Db column </summary>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public class FilterOption
     {
         public string Column { get; set; }
+
+        /// <summary> value =" = " exam A=B</summary>
         public string Operator { get; set; }
         public string Value { get; set; }
         public string ValueType { get; set; }
         public int OrderValue { get; set; }
     }
 
+    /// <summary> order by Column ASC/DESC </summary>
+    /// Author: thuanbv
+    /// Created: 23/04/2025
+    /// Modified: date - user - description
     public class OrderOption
     {
         public string Column { get; set; }
@@ -725,7 +769,5 @@ namespace App.DataAccess
             return $"{Column} {OrderType}";
         }
     }
-
-
 
 }

@@ -1,0 +1,61 @@
+.multiselect-dropdown {
+    width: 20em;
+    min-height: 100%;
+
+    .selected-items {
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #ced4da;
+            outline: none;
+            /* giữ viền giống trạng thái bình thường */
+        }
+
+        cursor: pointer;
+        padding: 0px 7px;
+        border-radius: 3px;
+
+        .dropdown-icon {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .placeholder-input {
+            border: none;
+            cursor: pointer;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .search-input {
+            &:focus {
+                outline: none;
+            }
+        }
+    }
+
+    .dropdown-list {
+        display: none;
+        z-index: 1002;
+
+        &.d-block {
+            display: block;
+        }
+
+        .options {
+            .option {
+                cursor: pointer;
+
+                &:hover {
+                    background-color: #f8f9fa;
+                    color: black;
+
+                    .form-check-label {
+                        font-weight: 500;
+                    }
+                }
+            }
+        }
+    }
+}

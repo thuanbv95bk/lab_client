@@ -18,15 +18,12 @@ namespace App.Lab.Repository.Implement
         public AdminUserVehicleGroupRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { Schema = "Admin"; }
         public AdminUserVehicleGroupRepository(IHttpContextAccessor accessor, IUnitOfWork unitOfWork) : base(accessor, unitOfWork) { Schema = "Admin"; }
 
-        /// <summary>Creates the specified object.</summary>
-        /// <param name="obj">AdminUserVehicleGroup</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025 	Thêm mới 1 nhóm phương tiện theo user
-        /// </Modified>
+
+        /// <summary>Thêm mới 1 nhóm phương tiện theo user</summary>
+        /// <param name="obj">Nhóm phương tiện theo người dùng </param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public Task Create(AdminUserVehicleGroup obj)
         {
 
@@ -61,24 +58,27 @@ namespace App.Lab.Repository.Implement
             return Task.Run(() => this.ExecCommand(sql, parameters));
            
         }
+        /// <summary>Cập nhật 1 nhóm phương tiện theo user</summary>
+        /// <param name="item">Class nhóm phương tiện</param>
+        /// Author: thuanbv
+        /// Created: 4/22/2025
+        /// Modified: date - user - description
         public Task Update(AdminUserVehicleGroup item)
         {
             string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" +
                          " WHERE FK_UserID = @FK_UserID " +
                          " AND FK_VehicleGroupID = @FK_VehicleGroupID;";
 
-            var parameters = this.MapToSqlParameters(item);
-
+            var parameters = this.MapToSqlParameters(item);  
             return Task.Run(() => this.ExecCommand(sql, parameters));
         }
 
 
-        /// <summary>Deletes the soft.</summary>
-        /// <param name="item">The item.</param>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025 	Xóa mềm 1 nhóm phương tiện theo user
-        /// </Modified>
+        /// <summary>Xóa mềm 1 nhóm phương tiện theo user</summary>
+        /// <param name="item">Nhóm phương tiện theo người dùng</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public Task DeleteSoft(AdminUserVehicleGroup item)
         {
 
@@ -94,15 +94,12 @@ namespace App.Lab.Repository.Implement
 
         }
 
-        /// <summary>Gets the list.</summary>
-        /// <param name="filter">AdminUserVehicleGroupFilter</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        /// <Modified>
-        /// Name       Date          Comments
-        /// thuanbv 4/16/2025 	get danh sách nhóm phương tiện theo user 
-        /// </Modified>
+
+        /// <summary>Lấy danh sách nhóm phương tiện theo user</summary>
+        /// <param name="filter">Bộ lọc Nhóm phương tiện theo người dùng</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public List<AdminUserVehicleGroup> GetList(AdminUserVehicleGroupFilter filter)
         {
             var listOrderOption = new OrderOption[] {
@@ -121,6 +118,12 @@ namespace App.Lab.Repository.Implement
 
         }
 
+        /// <summary>danh sách nhóm phương tiện theo user, 
+        /// bao gồm tên của nhóm</summary>
+        /// <param name="filter">Bộ lọc Nhóm phương tiện theo người dùng</param>
+        /// Author: thuanbv
+        /// Created: 22/04/2025
+        /// Modified: date - user - description
         public List<VehicleGroups> GetListView(AdminUserVehicleGroupFilter filter)
         {
 
@@ -136,22 +139,6 @@ namespace App.Lab.Repository.Implement
 
             this.ExecCommand<VehicleGroups>(out var retList, sql, parameters);
             return retList;
-
-
-            //var listOrderOption = new OrderOption[] {
-            //new OrderOption {
-            //    Column = "FK_VehicleGroupID",
-            //    OrderType = "ASC",
-            //}};
-            //var listFilter = MapFilterToOptions(filter);
-
-            //this.GetTableData
-            //(
-            //    out List<VehicleGroups> ret
-            //    , "UserVehicleGroup", null, listFilter
-            //);
-            //return ret;
-
         }
 
     }
