@@ -7,6 +7,7 @@ import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
 import { PaginationComponent } from './share-component/pagination/pagination.component';
 import { CommonService } from '../../service/common.service';
 import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
+import { toISODateString } from '../../utils/date-utils';
 
 @Component({
   selector: 'app-driving-info',
@@ -327,8 +328,8 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   addOrEditList(listItem: HrmEmployees[]) {
     if (!listItem.length) return this.commonService.showWarning('Danh sách trống');
     listItem.forEach((x) => {
-      x.issueLicenseDate = new Date(this.toISODateString(x.issueLicenseDate.toString()));
-      x.expireLicenseDate = new Date(this.toISODateString(x.expireLicenseDate.toString()));
+      x.issueLicenseDate = new Date(toISODateString(x.issueLicenseDate.toString()));
+      x.expireLicenseDate = new Date(toISODateString(x.expireLicenseDate.toString()));
     });
 
     this.employeesService.addOrEditList(listItem).then(
@@ -394,21 +395,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
       await this.reloadPagingToEdit();
       // this.commonService.showSuccess('Xóa thành công');
     }
-  }
-
-  /** Hàm chuyển đỗi kiểu date dạng string => date đầy đủ
-   * @Author thuan.bv
-   * @Created 25/04/2025
-   * @Modified date - user - description
-   */
-
-  toISODateString(dateStr: string): string | null {
-    if (!dateStr) return null;
-    const [day, month, year] = dateStr.split('/').map(Number);
-
-    if (!day || !month || !year) return null;
-    /** Trả về dạng yyyy-MM-dd (không có giờ, không bị lệch timezone) */
-    return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   }
 
   /** Hàm API download file excel

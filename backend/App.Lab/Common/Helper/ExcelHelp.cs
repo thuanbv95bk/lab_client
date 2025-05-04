@@ -80,8 +80,8 @@ namespace App.Lab.Common.Helper
         /// Modified: date - user - description
         public static void SetExcelDateTimeFormat(ExcelRange range)
         {
-            range.Style.Numberformat.Format = "hh:mm_dd/MM/yyyy;@";
-            range.Value = range.Value.ToString().Replace("_", ("" + ((char)13) + ((char)10)));
+            // Định dạng ngày giờ với ký tự xuống dòng
+            range.Style.Numberformat.Format = "HH:mm \n\\ dd/MM/yyyy";
         }
 
         /// <summary>Set định dạng phần trăm cho cell, không có số thập phân</summary>

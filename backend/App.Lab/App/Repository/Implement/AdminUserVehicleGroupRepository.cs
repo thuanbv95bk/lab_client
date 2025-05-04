@@ -6,6 +6,7 @@ using App.Lab.Repository.Interface;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -28,7 +29,7 @@ namespace App.Lab.Repository.Implement
         {
 
             string sql =
-               "INSERT INTO [Admin.UserVehicleGroup] " +
+                  "INSERT INTO [Admin.UserVehicleGroup] " +
                            "(" +
                                "FK_UserID, " +
                                "FK_VehicleGroupID, " +
@@ -52,11 +53,24 @@ namespace App.Lab.Repository.Implement
                                "@UpdatedByUser, " +
                                "@IsDeleted" +
                            "); ";
+            return Task.Run(() => this.ExecuteScalar<int>
+            (
+                sql
+               , CommandType.Text
+                , new
+                {
+                    FK_UserID = obj.FK_UserID,
+                    FK_VehicleGroupID = obj.FK_VehicleGroupID,
+                    ParentVehicleGroupID = obj.ParentVehicleGroupID,
+                    CreatedByUser = obj.CreatedByUser,
+                    CreatedDate = obj.CreatedDate,
+                    UpdateByUser = obj.UpdateByUser,
+                    UpdatedDate = obj.UpdatedDate,
+                    UpdatedByUser = obj.UpdatedByUser,
+                    IsDeleted = obj.IsDeleted,
+                }
+            ));
 
-            var parameters = this.MapToSqlParameters(obj);
-
-            return Task.Run(() => this.ExecCommand(sql, parameters));
-           
         }
         /// <summary>Cập nhật 1 nhóm phương tiện theo user</summary>
         /// <param name="item">Class nhóm phương tiện</param>
@@ -65,12 +79,22 @@ namespace App.Lab.Repository.Implement
         /// Modified: date - user - description
         public Task Update(AdminUserVehicleGroup item)
         {
-            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" +
+            string sql =
+                 "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 0 , UpdatedDate = @UpdatedDate" +
                          " WHERE FK_UserID = @FK_UserID " +
                          " AND FK_VehicleGroupID = @FK_VehicleGroupID;";
+            return Task.Run(() => this.ExecuteScalar<int>
+            (
+                sql
+               , CommandType.Text
+                , new
+                {
+                    UpdatedDate = item.UpdatedDate,
+                    FK_UserID = item.FK_UserID,
+                    FK_VehicleGroupID = item.FK_VehicleGroupID,
 
-            var parameters = this.MapToSqlParameters(item);  
-            return Task.Run(() => this.ExecCommand(sql, parameters));
+                }
+            ));
         }
 
 
@@ -82,15 +106,26 @@ namespace App.Lab.Repository.Implement
         public Task DeleteSoft(AdminUserVehicleGroup item)
         {
 
-            string sql = "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 1 , UpdatedDate = @UpdatedDate" + " WHERE " +
+            string sql =
+               "UPDATE [Admin.UserVehicleGroup] SET IsDeleted = 1 , UpdatedDate = @UpdatedDate" + " WHERE " +
                                                                 "FK_UserID = @FK_UserID " +
                                                                 " AND FK_VehicleGroupID = " +
                                                                 "@FK_VehicleGroupID " +
                                                                 " AND ParentVehicleGroupID = @ParentVehicleGroupID;";
 
-            var parameters = this.MapToSqlParameters(item);
+            return Task.Run(() => this.ExecuteScalar<int>
+            (
+                sql
+               , CommandType.Text
+                , new
+                {
+                    UpdatedDate = item.UpdatedDate,
+                    FK_UserID = item.FK_UserID,
+                    FK_VehicleGroupID = item.FK_VehicleGroupID,
+                    ParentVehicleGroupID = item.ParentVehicleGroupID,
 
-            return Task.Run(() => this.ExecCommand(sql, parameters));
+                }
+            ));
 
         }
 
@@ -127,13 +162,13 @@ namespace App.Lab.Repository.Implement
         public List<VehicleGroups> GetListView(AdminUserVehicleGroupFilter filter)
         {
 
-            string sql = 
+            string sql =
                 "SELECT G.* FROM dbo.[Vehicle.Groups] G " +
                     "JOIN dbo.[Admin.UserVehicleGroup] A ON A.FK_VehicleGroupID = G.PK_VehicleGroupID" +
                 " WHERE A.FK_UserID = @FK_UserID  " +
                     "AND ISNULL(G.IsDeleted, 0) = 0 " +
                     "AND ISNULL(A.IsDeleted, 0) = 0;";
-            
+
 
             var parameters = this.MapToSqlParameters(filter);
 
