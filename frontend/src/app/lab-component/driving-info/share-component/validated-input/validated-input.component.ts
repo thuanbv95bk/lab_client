@@ -1,19 +1,8 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  OnInit,
-  ElementRef,
-  HostListener,
-  OnChanges,
-  SimpleChanges,
-  forwardRef,
-  ViewChild,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, forwardRef, ViewChild } from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
+import { formatDate, isValidDateString, parseDate } from '../../../../utils/date-utils';
 
 @Component({
   selector: 'app-validated-input',
@@ -109,9 +98,20 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     this.onChange = fn;
     this.inputControl.valueChanges.subscribe(fn);
   }
+
+  /** Đăng ký hàm callback khi input bị "touch"
+   * @Author thuan.bv
+   * @Created 28/04/2025
+   * @Modified date - user - description
+   */
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }
+  /** thiết lập trạng thái disabled cho inputControl (theo chuẩn ControlValueAccessor)
+   * @Author thuan.bv
+   * @Created 28/04/2025
+   * @Modified date - user - description
+   */
   setDisabledState?(isDisabled: boolean): void {
     if (isDisabled) {
       this.inputControl.disable();
@@ -168,7 +168,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   private isValidDateInput(date: Date | string): boolean {
     if (!date) return false;
     if (date instanceof Date && !isNaN(date.getTime())) return true;
-    if (typeof date === 'string' && this.isValidDateString(date)) return true;
+    if (typeof date === 'string' && isValidDateString(date)) return true;
     return false;
   }
 
@@ -225,42 +225,20 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   private dateRangeValidator = (minDate: string | Date | null, maxDate: string | Date | null) => {
     return (control: FormControl) => {
       const value = control.value;
-      if (!value || !this.isValidDateString(value)) return null;
-      const date = this.parseDate(value);
-      const min = this.parseDate(minDate);
-      const max = this.parseDate(maxDate);
+      if (!value || !isValidDateString(value)) return null;
+      const date = parseDate(value);
+      const min = parseDate(minDate);
+      const max = parseDate(maxDate);
 
       if (min && date && date < min) {
-        return { minDate: { requiredMin: this.formatDate(min), actual: value } };
+        return { minDate: { requiredMin: formatDate(min), actual: value } };
       }
       if (max && date && date > max) {
-        return { maxDate: { requiredMax: this.formatDate(max), actual: value } };
+        return { maxDate: { requiredMax: formatDate(max), actual: value } };
       }
       return null;
     };
   };
-
-  /** chuyển date về định dạng chuẩn
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private parseDate(str: string | Date): Date | null {
-    if (!str) return null;
-    if (str instanceof Date) return str;
-    if (typeof str === 'string') {
-      const parts = str.split('/');
-      if (parts.length === 3) {
-        const [day, month, year] = parts.map(Number);
-        return new Date(year, month - 1, day);
-      }
-
-      const d = new Date(str);
-      return isNaN(d.getTime()) ? null : d;
-    }
-    return null;
-  }
 
   /** Hàm cập nhật trạng thái isEdited, emit trạng thái ra ngoài
    * @Author thuan.bv
@@ -313,7 +291,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       this.valueChange.emit(newValue === this.placeholder ? null : newValue);
     }
 
-    if (this.isValidDateString(newValue)) {
+    if (isValidDateString(newValue)) {
       const [day, month, year] = newValue.split('/').map(Number);
       this.dateModel = { day, month, year };
     } else {
@@ -357,7 +335,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     });
 
     /** Cập nhật dateModel nếu hợp lệ */
-    if (this.isValidDateString(formatted)) {
+    if (isValidDateString(formatted)) {
       const [day, month, year] = formatted.split('/').map(Number);
       this.dateModel = { day, month, year };
     } else {
@@ -484,11 +462,11 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   private convertInitialValue(value: Date | string): string {
     if (this.inputType === 'date') {
       if (value instanceof Date) {
-        return this.isValidDate(value) ? this.formatDate(value) : '';
+        return this.isValidDate(value) ? formatDate(value) : '';
       }
       const strVal = String(value ?? '');
       /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
-      if (this.isValidDateString(strVal)) return strVal;
+      if (isValidDateString(strVal)) return strVal;
       /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
       const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
       if (isoMatch) {
@@ -498,16 +476,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       return '';
     }
     return String(value ?? '');
-  }
-
-  /** Định dạng ngày thành 'dd/MM/yyyy'
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private formatDate(date: Date): string {
-    return [this.pad(date.getDate()), this.pad(date.getMonth() + 1), date.getFullYear()].join('/');
   }
 
   /** Thêm số 0 đằng trước nếu cần
@@ -528,20 +496,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   private isValidDate(date: Date): boolean {
     return !isNaN(date.getTime());
-  }
-
-  /** Kiểm tra chuỗi date hợp lệ
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-  private isValidDateString(dateStr: string): boolean {
-    const regex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/;
-    if (!regex.test(dateStr)) return false;
-
-    const [day, month, year] = dateStr.split('/').map(Number);
-    const date = new Date(year, month - 1, day);
-    return date.getDate() === day && date.getMonth() === month - 1 && date.getFullYear() === year;
   }
 
   /** ử lý khi chọn ngày từ date picker
@@ -590,7 +544,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       } else if (errors?.['maxDate']) {
         this.errorMessage = `Ngày phải nhỏ hơn hoặc bằng ${errors['maxDate'].requiredMax}`;
       } else if (this.inputType === 'date' && this.inputControl.value) {
-        if (!this.isValidDateString(this.inputControl.value)) {
+        if (!isValidDateString(this.inputControl.value)) {
           this.errorMessage = 'Ngày không hợp lệ';
         }
       }
@@ -636,7 +590,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       popover.open();
 
       const value = this.inputControl.value;
-      if (this.isValidDateString(value)) {
+      if (isValidDateString(value)) {
         const [day, month, year] = value.split('/').map(Number);
         this.dateModel = { day, month, year };
       } else {

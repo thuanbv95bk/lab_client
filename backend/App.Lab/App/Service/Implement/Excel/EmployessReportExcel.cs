@@ -16,6 +16,10 @@ using System.Data.Common;
 
 namespace App.Lab.App.Service.Implement
 {
+    /// <summary> Tạo danh sách tiêu đề cho báo cáo Excel. </summary>
+    /// Author: thuanbv
+    /// Created: 29/04/2025
+    /// Modified: date - user - description
     public static class EmployessReportExcel
     {
         public static List<string> Title()
@@ -34,6 +38,10 @@ namespace App.Lab.App.Service.Implement
    
             return lstTitle;
         }
+        /// <summary> Cấu hình các hàng tiêu đề cho file Excel </summary>
+        /// Author: thuanbv
+        /// Created: 29/04/2025
+        /// Modified: date - user - description
         public static List<ExportExcelConfigRow> HeaderRows()
         {
             return new List<ExportExcelConfigRow>()
@@ -83,7 +91,16 @@ namespace App.Lab.App.Service.Implement
                         },
             };
         }
-
+        /// <summary>  Điền dữ liệu vào file Excel </summary>
+        /// <param name="ws">Worksheet Excel.</param>
+        /// <param name="title">Tiêu đề báo cáo.</param>
+        /// <param name="listFilter">Danh sách bộ lọc.</param>
+        /// <param name="startRow">Dòng bắt đầu.</param>
+        /// <param name="result">Danh sách dữ liệu.</param>
+        /// <param name="rows">Cấu hình các cột.</param>
+        /// Author: thuanbv
+        /// Created: 29/04/2025
+        /// Modified: date - user - description
         public static void FillExcell(ExcelWorksheet ws, string title, List<Lab.Model.SearchOption> listFilter , int startRow, List<HrmEmployees> result = null, List<ExportExcelConfigRow> rows = null)
         {
             int currRowIdx = startRow;
@@ -140,25 +157,30 @@ namespace App.Lab.App.Service.Implement
                 ws.Cells[currRowIdx, 1].Value = index;
                 ws.Cells[currRowIdx, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
                 ws.Cells[currRowIdx, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                ws.Row(currRowIdx).Height = 36;
                 currColIdx = 2;
                 foreach (var column in rows)
                 {
-
                     PropertyInfo info = type.GetProperty(column.PropertyName) as PropertyInfo;
-                   
-                    ws.Cells[currRowIdx, currColIdx].Style.WrapText = column.WrapText.HasValue ? column.WrapText.Value : false;
-                    if (column.ColumnFormat== ExportExcelConfigFormatType.DateTime)
+                    var value = info.GetValue(item);
+
+                    // Kiểm tra nếu cột là kiểu DateTime
+                    if (column.ColumnFormat == ExportExcelConfigFormatType.DateTime && value is DateTime dateTimeValue)
                     {
-                        ws.Cells[currRowIdx, currColIdx].Value = info.GetValue(item).ToString();
-                        ExcelHelp.SetFormat(ws.Cells[currRowIdx, currColIdx], ExportExcelConfigFormatType.Text);
+                        // Đặt giá trị với ký tự xuống dòng
+                        ws.Cells[currRowIdx, currColIdx].Value = $"{dateTimeValue:HH:mm}\n{dateTimeValue:dd/MM/yyyy}";
+                        ws.Cells[currRowIdx, currColIdx].Style.WrapText = true; // Bật WrapText để xuống dòng
+                        ExcelHelp.SetFormat(ws.Cells[currRowIdx, currColIdx], column.ColumnFormat);
                     }
                     else
                     {
-                        ws.Cells[currRowIdx, currColIdx].Value = info.GetValue(item);
+                        // Các cột khác giữ nguyên
+                        ws.Cells[currRowIdx, currColIdx].Value = value;
+                        ws.Cells[currRowIdx, currColIdx].Style.WrapText = column.WrapText.HasValue ? column.WrapText.Value : false;
                         ExcelHelp.SetFormat(ws.Cells[currRowIdx, currColIdx], column.ColumnFormat);
                     }
 
-                        currColIdx++;
+                    currColIdx++;
                 }
                 currRowIdx++;
             }
@@ -172,6 +194,7 @@ namespace App.Lab.App.Service.Implement
             ws.Cells[currStartData, 1, currRowIdx, totalCols].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
             // autofit columns
             ws.Cells[1, 1, currRowIdx, totalCols].AutoFitColumns();
+          
             // font
             ws.Cells[1, 1, currRowIdx - 1, totalCols].Style.Font.Name = "Times New Roman";
 
