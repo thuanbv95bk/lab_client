@@ -51,8 +51,8 @@ export class HrmEmployeesService extends BaseDataService {
    * @Created 25/04/2025
    * @Modified date - user - description
    */
-  getPagingToEdit(filterModel: HrmEmployeesFilter): Promise<RespondData> {
-    return this.postData(this.getPagingToEditUrl, filterModel, false);
+  getPagingToEdit(filterModel: HrmEmployeesFilter, noLoadingMark = false): Promise<RespondData> {
+    return this.postData(this.getPagingToEditUrl, filterModel, noLoadingMark);
   }
 
   /** gọi API xóa mềm 1 thông tin lái xe
@@ -62,9 +62,9 @@ export class HrmEmployeesService extends BaseDataService {
    * @Modified date - user - description
    */
 
-  deleteSoft(employeeId: number): Promise<RespondData> {
+  deleteSoft(employeeId: number, noLoadingMark = false): Promise<RespondData> {
     const params = new HttpParams().append('employeeId', employeeId);
-    return this.postParams(this.deleteSoftUrl, params, false);
+    return this.postParams(this.deleteSoftUrl, params, noLoadingMark);
   }
 
   /** gọi API cập nhật 1 danh sách lái xe
@@ -74,8 +74,8 @@ export class HrmEmployeesService extends BaseDataService {
    * @Modified date - user - description
    */
 
-  addOrEditList(models: HrmEmployees[]): Promise<RespondData> {
-    return this.postData(this.addOrEditListUrl, models, false);
+  addOrEditList(models: HrmEmployees[], noLoadingMark = false): Promise<RespondData> {
+    return this.postData(this.addOrEditListUrl, models, noLoadingMark);
   }
 
   /** gọi API export Excel
@@ -84,13 +84,19 @@ export class HrmEmployeesService extends BaseDataService {
    * @Created 29/04/2025
    * @Modified date - user - description
    */
-  exportExcel(filterModel: HrmEmployeesFilterExcel): Promise<void> {
+  exportExcel(filterModel: HrmEmployeesFilterExcel, noLoadingMark = false): Promise<void> {
     return new Promise((resolve, reject) => {
+      const options: any = {
+        responseType: 'arraybuffer',
+        observe: 'response' as const,
+        headers: new HttpHeaders(),
+      };
+      if (noLoadingMark) {
+        options.headers = options.headers.set('no-loading-mark', '1');
+      }
+
       this.httpClient
-        .post(this.exportExcelUrl, filterModel, {
-          responseType: 'arraybuffer',
-          observe: 'response',
-        })
+        .post<ArrayBuffer>(this.exportExcelUrl, filterModel, options)
         .pipe(
           catchError((error) => {
             reject(this.handleError(error));
@@ -98,20 +104,15 @@ export class HrmEmployeesService extends BaseDataService {
           })
         )
         .subscribe((response: HttpResponse<ArrayBuffer>) => {
-          // Kiểm tra response hợp lệ
           if (!response.body || response.body.byteLength === 0) {
             reject(new Error('Empty response from server'));
             return;
           }
-
-          // Xử lý download file
           const blob = new Blob([response.body], {
             type: response.headers.get('Content-Type') || 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           });
-
           const filename = this.getFilenameFromHeaders(response.headers) || 'Danh sách lái xe.xlsx';
           this.triggerDownload(blob, filename);
-
           resolve();
         });
     });
