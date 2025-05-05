@@ -5,9 +5,14 @@
  */
 
 export class BcaLicenseTypes {
+  /** Id */
   pkLicenseTypeId: number;
+  /** Tên */
   name: string;
+  /** mã */
   code: string;
+  /** Hiệu lực? */
   isActived: string;
+  /** xóa? */
   isDeteted: string;
 }
