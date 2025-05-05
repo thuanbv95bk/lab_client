@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
+import { LoadingService } from '../../layout/loading-mask/loading.service';
 
 /** interface RespondData chưa thông tin API trả về
  * @Author thuan.bv
@@ -40,7 +41,7 @@ export class BaseService implements IBaseService {
     if (noLoadingMark) {
       return firstValueFrom(
         this.httpClient.get<RespondData>(url, {
-          headers: new HttpHeaders({ 'No-Loading-Mark': '1' }),
+          headers: new HttpHeaders({ 'no-loading-mark': '1' }),
         })
       );
     }
@@ -50,7 +51,7 @@ export class BaseService implements IBaseService {
   _getParams(url: string, params: HttpParams, noLoadingMark = false): Observable<RespondData> {
     if (noLoadingMark) {
       return this.httpClient.get<RespondData>(url, {
-        headers: new HttpHeaders({ 'No-Loading-Mark': '1' }),
+        headers: new HttpHeaders({ 'no-loading-mark': '1' }),
         params: params,
       });
     }
@@ -61,7 +62,7 @@ export class BaseService implements IBaseService {
     if (noLoadingMark) {
       return firstValueFrom(
         this.httpClient.get<RespondData>(url, {
-          headers: new HttpHeaders({ 'No-Loading-Mark': '1' }),
+          headers: new HttpHeaders({ 'no-loading-mark': '1' }),
           params: params,
         })
       );
@@ -74,7 +75,7 @@ export class BaseService implements IBaseService {
     if (noLoadingMark) {
       return firstValueFrom(
         this.httpClient.post<RespondData>(url, null, {
-          headers: new HttpHeaders({ 'No-Loading-Mark': '1' }),
+          headers: new HttpHeaders({ 'no-loading-mark': '1' }),
         })
       );
     }
@@ -95,7 +96,7 @@ export class BaseService implements IBaseService {
   private __postData(url: string, data: any, noLoadingMark = false): Promise<RespondData> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json; charset=utf-8',
-      ...(noLoadingMark ? { 'No-Loading-Mark': '1' } : {}),
+      ...(noLoadingMark ? { 'no-loading-mark': '1' } : {}),
     });
 
     return firstValueFrom(this.httpClient.post<RespondData>(url, data, { headers }));
@@ -110,7 +111,7 @@ export class BaseService implements IBaseService {
   }
 
   postParams(url: string, params: HttpParams, noLoadingMark = false): Promise<RespondData> {
-    const headers = noLoadingMark ? new HttpHeaders({ 'No-Loading-Mark': '1' }) : undefined;
+    const headers = noLoadingMark ? new HttpHeaders({ 'no-loading-mark': '1' }) : undefined;
 
     return firstValueFrom(
       this.httpClient.post<RespondData>(url, null, {
@@ -123,7 +124,7 @@ export class BaseService implements IBaseService {
   getHttp(url: string, noLoadingMark = false) {
     if (noLoadingMark) {
       return this.httpClient.get(url, {
-        headers: new HttpHeaders({ 'No-Loading-Mark': '1' }),
+        headers: new HttpHeaders({ 'no-loading-mark': '1' }),
       });
     }
     return this.httpClient.get(url);

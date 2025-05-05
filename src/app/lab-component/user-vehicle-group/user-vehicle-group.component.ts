@@ -7,6 +7,7 @@ import { UserVehicleGroupFilter, UserVehicleGroupView, VehicleGroupModel } from 
 import { UserVehicleGroupService } from './service/user-vehicle-group.service';
 import equal from 'fast-deep-equal';
 import { User, UsersFilter } from './model/admin-user';
+import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 
 @Component({
   selector: 'app-user-vehicle-group',
@@ -66,7 +67,8 @@ export class UserVehicleGroupComponent implements OnInit {
     private service: UserService,
     private groupsService: GroupsService,
     private userVehicleGroupService: UserVehicleGroupService,
-    public commonService: CommonService
+    public commonService: CommonService,
+    private dialogConfirm: DialogConfirmService
   ) {}
 
   /** lấy dữ liệu masterData
@@ -205,11 +207,14 @@ export class UserVehicleGroupComponent implements OnInit {
    * @Modified date - user - description
    */
 
-  cancel() {
-    this.closeModal.nativeElement.click();
-    this.getListAssignGroups(this.selectedId.pK_UserID);
-    this.getListUnassignGroups(this.selectedId.pK_UserID);
-    this.refreshAllBottom();
+  async cancel() {
+    const result = await this.dialogConfirm.confirm(`Bạn có chắc chắn muốn hủy các thay đổi?`);
+    if (result) {
+      this.closeModal.nativeElement.click();
+      this.getListAssignGroups(this.selectedId.pK_UserID);
+      this.getListUnassignGroups(this.selectedId.pK_UserID);
+      this.refreshAllBottom();
+    }
   }
 
   /** get danh sách users từ DB
@@ -283,10 +288,7 @@ export class UserVehicleGroupComponent implements OnInit {
         }
         this.listAssignGroups = res.data;
         if (this.first == 0) {
-          const allRelatedGroups = this.groupsService.flattenGroupTree(
-            this.listAssignGroups,
-            this.selectedId.pK_UserID
-          );
+          const allRelatedGroups = this.groupsService.flattenGroupTree(this.listAssignGroups, this.selectedId.pK_UserID);
           this.markOriginal(allRelatedGroups, this.keyId);
           this.first = 1;
         }

@@ -17,7 +17,7 @@ const routes: Routes = [
     children: [
       { path: 'dash-board', component: DashBoardComponent, canActivate: [AuthGuard] },
       { path: 'user-vehicle-group', component: UserVehicleGroupComponent, canActivate: [AuthGuard] },
-      { path: 'driving-info', component: DrivingInfoComponent },
+      { path: 'driving-info', component: DrivingInfoComponent, canActivate: [AuthGuard] },
     ],
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },

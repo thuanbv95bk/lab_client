@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     this.initTranslate();
     if (this.authService.isAuthenticated()) {
       this.router.navigate(['/driving-info']);
+      AppGlobals.activeMenuId = '/driving-info';
     }
   }
 

@@ -8,6 +8,7 @@ import { PaginationComponent } from './share-component/pagination/pagination.com
 import { CommonService } from '../../service/common.service';
 import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 import { toISODateString } from '../../utils/date-utils';
+import { LoadingService } from '../../layout/loading-mask/loading.service';
 
 @Component({
   selector: 'app-driving-info',
@@ -48,7 +49,8 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     private employeesService: HrmEmployeesService,
     private licenseTypesService: BcaLicenseTypesService,
     public commonService: CommonService,
-    private dialogConfirm: DialogConfirmService
+    private dialogConfirm: DialogConfirmService,
+    private loadingService: LoadingService
   ) {
     this.pagingModel = new PagingModel();
   }
@@ -119,6 +121,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    */
 
   getPagingToEdit() {
+    // this.loadingService.setLoading(true);
     /** gán id của công ty mặc định */
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
     this.employeesService.getPagingToEdit(this.filterEmployeesGrid).then(

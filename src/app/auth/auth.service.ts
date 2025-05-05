@@ -5,6 +5,7 @@ import { TokenStorage } from './token.storage';
 import { CommonService } from '../service/common.service';
 import { CookieService } from 'ngx-cookie-service';
 import { UserInfo } from '../lab-component/login/model/app-model';
+import { AppGlobals } from '../app-global';
 
 /** AuthService
  * @Author thuan.bv
@@ -76,6 +77,7 @@ export class AuthService {
       }
 
       this.router.navigate(['/dash-board']);
+      AppGlobals.activeMenuId = '/dash-board';
       return true;
     } else {
       this.commonService.showError('Tài khoản hoặc mật khẩu không đúng');

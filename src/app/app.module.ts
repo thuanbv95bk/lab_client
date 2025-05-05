@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { NgChartsModule } from 'ng2-charts';
 import { MultiSelectComponent } from './lab-component/dash-board/share-component/multi-select/multi-select.component';
 import { setHiddenExtendComponent } from './lab-component/dash-board/share-component/set-hidden-extend/set-hidden-extend.component';
@@ -45,7 +45,8 @@ import localeVi from '@angular/common/locales/vi';
 import { registerLocaleData } from '@angular/common';
 import { NgbDatepickerI18nViService } from './service/ngb-datepicker-i18n-vi.service';
 import { IsoToDdmmyyyyPipe } from './pipe/isoToDdmmyyyy.pipe';
-
+import { LoadingMaskComponent } from './layout/loading-mask/loading-mask.component';
+import { LoadingInterceptor } from './layout/loading-mask/loading.interceptor';
 export function HttpLoaderFactory(httpClient: HttpClient) {
   return new TranslateHttpLoader(httpClient);
 }
@@ -61,7 +62,7 @@ registerLocaleData(localeVi);
     ToolbarMenuComponent,
     UserMenuComponent,
     SelectRowGroupsComponent,
-
+    LoadingMaskComponent,
     MultiSelectComponent,
     WidthWidgetComponent,
     setHiddenExtendComponent,
@@ -123,6 +124,7 @@ registerLocaleData(localeVi);
       deps: [AppConfig],
       multi: true,
     },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
   ],
   bootstrap: [AppComponent],
 })
