@@ -30,31 +30,50 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
 
   @Input()
   set items(value) {
+    /** Khi giá trị items thay đổi, cập nhật listData */
     this.listData.next(value);
   }
   get items() {
+    /**Lấy giá trị hiện tại của listData */
     return this.listData.getValue();
   }
+  /**  Lưu trữ danh sách item gốc */
   private _items: any[];
 
+  /**  Placeholder cho ô tìm kiếm */
   @Input() placeholder: string = 'Select';
+  /** Cho phép tìm kiếm hay không */
   @Input() search: boolean = true;
+  /** Cho phép chọn tất cả hay không */
   @Input() selectAll: boolean = true;
+  /** Trạng thái đã chọn tất cả hay chưa */
   @Input() allSelected: boolean = false;
+  /**Sự kiện khi danh sách chọn thay đổi */
   @Output() selectedChange = new EventEmitter<{ data: any[]; isCheckAll: boolean }>();
+  /**  Tham chiếu đến input tìm kiếm */
   @ViewChild('searchInput') searchInput!: ElementRef;
 
+  /** Danh sách các item đã chọn */
   selectedItems: any[] = [];
+  /**  Giá trị trường tìm kiếm */
   searchField: string = '';
+  /**  Trạng thái mở/đóng dropdown */
   isOpen: boolean = false;
 
+  /** Subject lưu trữ danh sách item */
   private listData = new BehaviorSubject<any[]>([]);
+  /**  Subject lưu trữ danh sách item đã lọc */
   public filteredItems: ReplaySubject<any[]> = new ReplaySubject<any[]>(1);
+  /**  Subject để hủy các subscription khi component bị hủy */
   private onDestroy = new Subject<void>();
+  /** FormControl cho input tìm kiếm */
   FilterCtrl: FormControl = new FormControl();
+
+  /**  Inject ElementRef để kiểm tra click ngoài dropdown */
   constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    /** Khi input items thay đổi, khởi tạo lại dữ liệu */
     if (changes['items']) {
       this.initData();
     }
@@ -68,6 +87,11 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.initData();
   }
+  /** Khởi tạo dữ liệu
+   * @Author thuan.bv
+   * @Created 23/04/2025
+   * @Modified date - user - description
+   */
 
   initData() {
     this.listData.pipe(takeUntil(this.onDestroy)).subscribe((x) => {
@@ -100,7 +124,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     /** filter data */
     this.filteredItems.next(
       this._items.filter((itm) => {
-        /** tim kiem tren ca  field2 và field2 */
+        /** tim kiem tren ca  field1 và field2 */
         return (
           (this.displayField1 && itm[this.displayField1].toString().toLowerCase().indexOf(search) > -1) ||
           (this.displayField2 && itm[this.displayField2].toString().toLowerCase().indexOf(search) > -1)
