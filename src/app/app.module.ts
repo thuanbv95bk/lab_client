@@ -45,7 +45,6 @@ import localeVi from '@angular/common/locales/vi';
 import { registerLocaleData } from '@angular/common';
 import { NgbDatepickerI18nViService } from './service/ngb-datepicker-i18n-vi.service';
 import { IsoToDdmmyyyyPipe } from './pipe/isoToDdmmyyyy.pipe';
-import { NgxLoadingModule, ngxLoadingAnimationTypes } from 'ngx-loading';
 import { LoadingMaskComponent } from './layout/loading-mask/loading-mask.component';
 import { LoadingInterceptor } from './layout/loading-mask/loading.interceptor';
 export function HttpLoaderFactory(httpClient: HttpClient) {
@@ -107,14 +106,6 @@ registerLocaleData(localeVi);
         useFactory: HttpLoaderFactory,
         deps: [HttpClient],
       },
-    }),
-    NgxLoadingModule.forRoot({
-      animationType: ngxLoadingAnimationTypes.wanderingCubes,
-      backdropBackgroundColour: 'rgba(0,0,0,0.1)',
-      backdropBorderRadius: '4px',
-      primaryColour: '#ffffff',
-      secondaryColour: '#ffffff',
-      tertiaryColour: '#ffffff',
     }),
   ],
   providers: [
