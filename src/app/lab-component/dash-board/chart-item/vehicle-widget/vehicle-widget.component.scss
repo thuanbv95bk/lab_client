@@ -1,26 +1,43 @@
+.g-2>[class^='col'] {
+  padding: 0.4rem;
+  /* tương đương g-2 trong BS5 */
+}
+
+.g-2 {
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
+}
+
 .vehicle-container {
+
   .card {
     color: white;
     padding: 8px;
+
     .card-title {
       font-size: 14px;
     }
+
     .card-body {
       padding: 0;
     }
+
     .card-content {
       gap: 5px;
+
       .vehicle-count {
         font-size: 40px;
         font-weight: bold;
         margin: 0;
       }
+
       .vehicle-label {
         font-size: 15px;
         font-weight: 400;
         margin: 0;
       }
     }
+
     .card-footer {
       border-top: none !important;
       background-color: transparent !important;

@@ -8,7 +8,7 @@
       <li class="nav-item" *ngFor="let item of listMenu">
         <a
           class="nav-link menu-link"
-          [ngClass]="{ 'is-active-router': selectedId && item.href == selectedId }"
+          [ngClass]="{ 'is-active-router': appGlobals.activeMenuId && item.href == appGlobals.activeMenuId }"
           (click)="goPage(item)"
           >{{ item.code | translate }}
         </a>
@@ -41,7 +41,7 @@
       <li class="nav-item" *ngFor="let item of listMenu">
         <a
           class="nav-link menu-link"
-          [ngClass]="{ active: selectedId && item.href == selectedId }"
+          [ngClass]="{ active: appGlobals.activeMenuId && item.href == appGlobals.activeMenuId }"
           (click)="goPage(item); toggleMenu()"
           >{{ item.code }}
         </a>

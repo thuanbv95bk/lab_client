@@ -1,6 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Menu } from '../../lab-component/login/model/app-model';
+import { AppGlobals } from '../../app-global';
 
 @Component({
   selector: 'app-toolbar-menu',
@@ -9,13 +10,13 @@ import { Menu } from '../../lab-component/login/model/app-model';
 })
 export class ToolbarMenuComponent implements OnInit {
   /** Active menu */
-  selectedId: string;
+  // selectedId: string;
   /** Kiểm tra đóng mở side menu */
   isCollapsed = true;
 
   /** check trạng thái porter màn hình */
   isMobileView = false;
-
+  appGlobals = AppGlobals;
   /**  Danh sách menu hiển thị
    * @Author thuan.bv
    * @Created 23/04/2025
@@ -56,7 +57,7 @@ export class ToolbarMenuComponent implements OnInit {
    */
 
   goPage(item: Menu) {
-    this.selectedId = item.href;
+    AppGlobals.activeMenuId = item.href;
     this.router.navigateByUrl(item.href);
   }
 
@@ -68,7 +69,7 @@ export class ToolbarMenuComponent implements OnInit {
 
   ngOnInit() {
     this.checkViewport();
-    this.selectedId = '/dash-board';
+    // AppGlobals.activeMenuId = '/dash-board';
   }
   /** theo dõi window:resize để hiển thi bottom side menu
    * @Author thuan.bv

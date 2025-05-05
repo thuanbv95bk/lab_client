@@ -10,7 +10,7 @@ export class AppGlobals {
   static apiEndpoint: string;
   public static readonly LANGUAGE = 'language';
   static selectedId: any;
-
+  static activeMenuId: string;
   /** Sets language
    * @param lang : ngôn ngữ muốn setting: vi/en
    * @Author thuan.bv
