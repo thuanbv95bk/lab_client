@@ -4,7 +4,6 @@ import { HrmEmployees, HrmEmployeesCbx, HrmEmployeesFilter, HrmEmployeesFilterEx
 import { BcaLicenseTypes } from './model/bca-license-types';
 import { BcaLicenseTypesService } from './service/bca-license-types.service';
 import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
-import { PaginationComponent } from './share-component/pagination/pagination.component';
 import { CommonService } from '../../service/common.service';
 import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 import { toISODateString } from '../../utils/date-utils';
@@ -124,7 +123,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     // this.loadingService.setLoading(true);
     /** gán id của công ty mặc định */
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
-    this.employeesService.getPagingToEdit(this.filterEmployeesGrid).then(
+    this.employeesService.getPagingToEdit(this.filterEmployeesGrid, true).then(
       (res) => {
         if (!res.isSuccess) {
           console.error(res.errorMessage);

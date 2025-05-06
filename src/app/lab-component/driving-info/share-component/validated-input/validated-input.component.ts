@@ -2,7 +2,14 @@ import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChange
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
-import { formatDate, isValidDateString, parseDate } from '../../../../utils/date-utils';
+import {
+  convertInitialValue,
+  formatDate,
+  isValidDateInput,
+  isValidDateString,
+  pad,
+  parseDate,
+} from '../../../../utils/date-utils';
 
 @Component({
   selector: 'app-validated-input',
@@ -84,7 +91,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       this.originalValue = value;
     }
 
-    const displayValue = this.convertInitialValue(value);
+    const displayValue = convertInitialValue(this.inputType, value);
     this.inputControl.setValue(displayValue, { emitEvent: false });
     this.inputControl.updateValueAndValidity();
   }
@@ -131,8 +138,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (this.inputType == 'date') {
       /** Chuẩn hóa minDate, maxDate về null nếu không hợp lệ */
-      const safeMinDate = this.isValidDateInput(this.minDate) ? this.minDate : null;
-      const safeMaxDate = this.isValidDateInput(this.maxDate) ? this.maxDate : null;
+      const safeMinDate = isValidDateInput(this.minDate) ? this.minDate : null;
+      const safeMaxDate = isValidDateInput(this.maxDate) ? this.maxDate : null;
 
       if ((changes['minDate'] || changes['maxDate']) && this.inputControl) {
         const validators = [];
@@ -157,19 +164,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       this.isEdited = false;
       this.fieldStatusChange.emit({ isEdited: false, isValid: !this.inputControl.invalid });
     }
-  }
-
-  /** hàm kiểm tra hợp lệ cho minDate/maxDate
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private isValidDateInput(date: Date | string): boolean {
-    if (!date) return false;
-    if (date instanceof Date && !isNaN(date.getTime())) return true;
-    if (typeof date === 'string' && isValidDateString(date)) return true;
-    return false;
   }
 
   /** Khởi tạo giá trị ban đầu, và thêm các Validators cho các loại dữ liệu khác nhau
@@ -252,8 +246,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
     /** Chuẩn hóa cho kiểu date: nếu rỗng/null/không hợp lệ thì về '' */
     if (this.inputType === 'date') {
-      value = this.convertInitialValue(value);
-      initial = this.convertInitialValue(initial);
+      value = convertInitialValue(this.inputType, value);
+      initial = convertInitialValue(this.inputType, initial);
     } else {
       value = value == null || value === undefined ? '' : String(value).trim();
       initial = initial == null || initial === undefined ? '' : String(initial).trim();
@@ -453,59 +447,15 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       event.preventDefault();
     }
   }
-  /** Chuyển đổi giá trị ban đầu sang chuỗi
-   * @param value
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-  private convertInitialValue(value: Date | string): string {
-    if (this.inputType === 'date') {
-      if (value instanceof Date) {
-        return this.isValidDate(value) ? formatDate(value) : '';
-      }
-      const strVal = String(value ?? '');
-      /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
-      if (isValidDateString(strVal)) return strVal;
-      /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
-      const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
-      if (isoMatch) {
-        const [_, year, month, day] = isoMatch;
-        return `${day}/${month}/${year}`;
-      }
-      return '';
-    }
-    return String(value ?? '');
-  }
 
-  /** Thêm số 0 đằng trước nếu cần
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private pad(num: number): string {
-    return num.toString().padStart(2, '0');
-  }
-
-  /** Kiểm tra Date hợp lệ của Date
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private isValidDate(date: Date): boolean {
-    return !isNaN(date.getTime());
-  }
-
-  /** ử lý khi chọn ngày từ date picker
+  /** xử lý khi chọn ngày từ date picker
    * @Author thuan.bv
    * @Created 26/04/2025
    * @Modified date - user - description
    */
 
   onDateSelect(date: NgbDateStruct): void {
-    const formattedDate = `${this.pad(date.day)}/${this.pad(date.month)}/${date.year}`;
+    const formattedDate = `${pad(date.day)}/${pad(date.month)}/${date.year}`;
     this.inputControl.setValue(formattedDate);
     if (this.datePopover?.isOpen()) {
       setTimeout(() => this.datePopover.close(), 50);

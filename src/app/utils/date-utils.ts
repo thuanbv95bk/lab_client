@@ -60,3 +60,50 @@ export function toISODateString(dateStr: string): string | null {
   /** Trả về dạng yyyy-MM-dd (không có giờ, không bị lệch timezone) */
   return `${year.toString().padStart(4, '0')}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 }
+/** Chuyển đổi giá trị ban đầu sang chuỗi
+ * @param value
+ * @Author thuan.bv
+ * @Created 26/04/2025
+ * @Modified date - user - description
+ */
+export function convertInitialValue(inputType: string, value: Date | string): string {
+  if (inputType === 'date') {
+    if (value instanceof Date) {
+      return this.isValidDate(value) ? formatDate(value) : '';
+    }
+    const strVal = String(value ?? '');
+    /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
+    if (isValidDateString(strVal)) {
+      return strVal;
+    }
+    /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
+    const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if (isoMatch) {
+      const [_, year, month, day] = isoMatch;
+      return `${day}/${month}/${year}`;
+    }
+    return String(value ?? '');
+  }
+  return String(value ?? '');
+}
+/** hàm kiểm tra hợp lệ cho minDate/maxDate
+ * @Author thuan.bv
+ * @Created 26/04/2025
+ * @Modified date - user - description
+ */
+
+export function isValidDateInput(date: Date | string): boolean {
+  if (!date) return false;
+  if (date instanceof Date && !isNaN(date.getTime())) return true;
+  if (typeof date === 'string' && isValidDateString(date)) return true;
+  return false;
+}
+/** Thêm số 0 đằng trước nếu cần
+ * @Author thuan.bv
+ * @Created 26/04/2025
+ * @Modified date - user - description
+ */
+
+export function pad(num: number): string {
+  return num.toString().padStart(2, '0');
+}

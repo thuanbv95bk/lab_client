@@ -11,13 +11,18 @@
         }
 
         cursor: pointer;
-        padding: 0px 7px;
         border-radius: 3px;
 
-        .dropdown-icon {
-            font-size: 14px;
-            color: #666;
+        input {
+            border-right: none !important;
         }
+
+
+        .input-group-text {
+            background-color: white;
+        }
+
+
 
         .placeholder-input {
             border: none;

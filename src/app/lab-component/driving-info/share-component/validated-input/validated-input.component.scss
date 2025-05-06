@@ -16,7 +16,6 @@ $color-border: #ced4da;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 2.1;
-  /* căn giữa chiều cao input */
   font-size: 0.95em;
 }
 
@@ -74,5 +73,4 @@ select.form-control-sm {
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  /* Đảm bảo select chiếm hết ô */
 }

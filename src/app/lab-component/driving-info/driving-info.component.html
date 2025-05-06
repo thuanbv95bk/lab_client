@@ -4,7 +4,7 @@
     <div class="col pl-0">
       <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
-    <div class="col">
+    <div class="col p-0">
       <app-multi-select-dropdown
         [title]="'Lái xe'"
         [items]="this.lstDriver"
@@ -38,7 +38,9 @@
     <button type="button" class="btn-sm ml-2 mr-2 btn-sm-cancel" *ngIf="isCanCancel" (click)="cancel()">
       <i class="fa fa-times"></i>Hủy
     </button>
-    <button type="button" class="btn-sm" (click)="downloadExcel()"><i class="bi bi-file-earmark-excel"></i></button>
+    <button type="button" class="btn-sm" *ngIf="this.pagingModel.length > 0" (click)="downloadExcel()">
+      <i class="bi bi-file-earmark-excel"></i>
+    </button>
   </div>
 
   <div class="table-responsive pt-2">
