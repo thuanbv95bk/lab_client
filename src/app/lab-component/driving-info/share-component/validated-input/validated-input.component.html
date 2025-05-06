@@ -4,7 +4,7 @@
       <!-- Select -->
       <select
         *ngSwitchCase="'select'"
-        class="form-control form-control-sm {{ borderClass }} {{ inputClass }}"
+        [class]="'form-control form-control-sm ' + borderClass + ' ' + inputClass"
         [formControl]="inputControl"
         (focus)="focusInput.emit()">
         <option value="">Chọn loại bằng</option>
@@ -31,6 +31,7 @@
     <!-- Date Picker Trigger -->
     <div class="input-group-prepend" *ngIf="inputType === 'date'">
       <span
+        #dateIcon
         class="input-group-text"
         ngbPopover
         container="body"
@@ -39,14 +40,21 @@
         triggers="manual"
         [ngbPopover]="datePickerTemplate"
         #datePopover="ngbPopover"
-        (click)="toggleDatePicker(datePopover); focusInput.emit()">
+        [tabindex]="0"
+        (click)="toggleDatePicker(datePopover); focusInput.emit()"
+        (keydown.enter)="toggleDatePicker(datePopover); focusInput.emit()">
         <i class="bi bi-calendar4-event"></i>
       </span>
     </div>
 
     <!-- Date Picker Template -->
     <ng-template #datePickerTemplate>
-      <ngb-datepicker [ngModel]="dateModel" [startDate]="dateModel" (dateSelect)="onDateSelect($event)"> </ngb-datepicker>
+      <ngb-datepicker
+        #ngbDatePickerRef
+        [ngModel]="dateModel"
+        [startDate]="dateModel"
+        (dateSelect)="onDateSelect($event, datePopover)">
+      </ngb-datepicker>
     </ng-template>
 
     <!-- Placeholder cho date input -->

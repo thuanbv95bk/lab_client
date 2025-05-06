@@ -1,6 +1,6 @@
-<div class="driving-form p-0" (keyup.enter)="searchPagingToEdit()">
+<div class="driving-form p-0">
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
-  <div class="container-fluid row p-0 m-0 justify-content-between">
+  <div class="container-fluid row p-0 m-0 justify-content-between" (keyup.enter)="searchPagingToEdit()">
     <div class="col pl-0">
       <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
@@ -145,18 +145,19 @@
               (focusInput)="onClickItem(item)">
             </app-validated-input>
           </td>
-          <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
+          <td class="text-center">{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
-            <div class="btn-delete">
-              <img src="../../../assets/image/icons-delete.svg" (click)="deleteRow(item); onClickItem(item)" alt="delete" />
-              <!-- <i class="bi bi-trash3 text-danger"></i> -->
-            </div>
+            <button #deleteBtn class="btn-delete bg-white" type="button" (click)="deleteRow(item, deleteBtn); onClickItem(item)">
+              <img src="../../../assets/image/icons-delete.svg" alt="delete" />
+            </button>
+            <!-- <div >
+             
+            </div> -->
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)">
-  </app-pagination>
+  <app-pagination [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)"> </app-pagination>
 </div>

@@ -1,4 +1,4 @@
-import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector } from '@angular/core';
+import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef } from '@angular/core';
 import { DialogConfirmComponent } from './dialog-confirm.component';
 
 /** Injectable Mở 1 dialog , có xác nhận

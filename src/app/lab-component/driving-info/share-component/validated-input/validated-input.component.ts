@@ -1,4 +1,15 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, forwardRef, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  OnInit,
+  OnChanges,
+  SimpleChanges,
+  forwardRef,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 import { FormControl, NG_VALUE_ACCESSOR, Validators } from '@angular/forms';
 import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
@@ -57,9 +68,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   /** Lưu giá trị ban đầu để so sánh isEdited */
   private originalValue: any = null;
 
-  /** ViewChild của datepicker */
-  @ViewChild('datePopover') datePopover!: NgbPopover;
-
   inputControl: FormControl;
 
   /** Lưu trạng thái isEdited */
@@ -75,6 +83,12 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   private lastValue = '';
   /** placeholder nếu type = date */
   placeholder = 'dd/MM/yyyy';
+
+  /** ViewChild của datepicker */
+  @ViewChild('datePopover') datePopover!: NgbPopover;
+
+  /** ViewChild của dateIcon để trả lại focus*/
+  @ViewChild('dateIcon') dateIconRef!: ElementRef;
 
   private onChange: any = () => {};
   private onTouched: any = () => {};
@@ -454,12 +468,17 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    * @Modified date - user - description
    */
 
-  onDateSelect(date: NgbDateStruct): void {
+  onDateSelect(date: NgbDateStruct, datePopover: NgbPopover): void {
     const formattedDate = `${pad(date.day)}/${pad(date.month)}/${date.year}`;
     this.inputControl.setValue(formattedDate);
-    if (this.datePopover?.isOpen()) {
-      setTimeout(() => this.datePopover.close(), 50);
+
+    if (datePopover?.isOpen()) {
+      datePopover.close();
     }
+    /** Sau khi đóng, focus lại vào icon datepicker */
+    setTimeout(() => {
+      this.dateIconRef?.nativeElement.focus();
+    }, 0);
   }
 
   /**Validate dữ liệu
@@ -538,6 +557,13 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       popover.close();
     } else {
       popover.open();
+      setTimeout(() => {
+        // Tìm button ngày đầu tiên trong datepicker và focus vào đó
+        const datepickerElem = document.querySelector('.ngb-dp-day[tabindex="0"]') as HTMLElement;
+        if (datepickerElem) {
+          datepickerElem.focus();
+        }
+      }, 0);
 
       const value = this.inputControl.value;
       if (isValidDateString(value)) {

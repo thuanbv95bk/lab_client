@@ -65,18 +65,19 @@
       vertical-align: middle !important;
 
       .btn-delete {
+        border: none;
 
         img {
           width: 21px;
         }
-
-        :hover {
-          background-color: #2d9cdb;
-          padding: 2px;
-          border-radius: 1px;
-        }
       }
     }
 
+  }
+}
+
+::ng-deep .selected-row {
+  button {
+    background-color: #caeffb !important;
   }
 }

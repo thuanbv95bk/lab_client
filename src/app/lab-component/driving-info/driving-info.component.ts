@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HrmEmployeesService } from './service/hrm-employees.service';
 import { HrmEmployees, HrmEmployeesCbx, HrmEmployeesFilter, HrmEmployeesFilterExcel } from './model/hrm-employees.model';
 import { BcaLicenseTypes } from './model/bca-license-types';
@@ -48,8 +48,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     private employeesService: HrmEmployeesService,
     private licenseTypesService: BcaLicenseTypesService,
     public commonService: CommonService,
-    private dialogConfirm: DialogConfirmService,
-    private loadingService: LoadingService
+    private dialogConfirm: DialogConfirmService
   ) {
     this.pagingModel = new PagingModel();
   }
@@ -362,10 +361,12 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
 
-  async deleteRow(item: HrmEmployees) {
+  async deleteRow(item: HrmEmployees, deleteBtn: HTMLElement) {
     const result = await this.dialogConfirm.confirm(`Bạn có chắc chắn muốn xóa lái xe ${item.displayName}?`);
+    if (!result && deleteBtn) {
+      setTimeout(() => deleteBtn?.focus(), 0);
+    }
     if (result) {
-      console.log(' Xử lý xóa');
       if (!item.pkEmployeeId || item.pkEmployeeId <= 0) return this.commonService.showWarning('Có lỗi với dữ liệu');
       this.employeesService.deleteSoft(item.pkEmployeeId).then(
         (res) => {
