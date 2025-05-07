@@ -11,6 +11,12 @@ import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root',
 })
+
+/** AuthGuard check isAuthenticated
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class AuthGuard implements CanActivate {
   constructor(private router: Router, private authService: AuthService) {}
 

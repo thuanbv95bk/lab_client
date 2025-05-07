@@ -1,26 +1,36 @@
-// doughnut-plugin.service.ts
 import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root',
+})
 
 /**
  * Injectable
  * @description vẽ lại thanh tooltip : đường chỉ và giá trị
  */
-@Injectable({
-  providedIn: 'root',
-})
 export class DoughnutPluginService {
   getDoughnutLabelPlugin(config?: any) {
     const defaultConfig = {
-      lineColor: '#999', // màu đường line
-      lineWidth: 1.5, // Độ dày của đường nối.
-      textFont: '12px Arial', // font chữ
-      textColor: '#333', // màu sắc
-      minPercentageToShow: 1, //Tỷ lệ phần trăm tối thiểu của một phần dữ liệu để quyết định có vẽ đường nối hay không.
-      lineExtensionRatio: 0.05, // Tỉ lệ tính độ dài của đường nối dựa trên kích thước biểu đồ.
-      minLineExtension: 15, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
-      maxLineExtension: 25, // Giới hạn độ dài tối thiểu và tối đa của đường nối.
-      boundaryOffset: 0.001, // Một giá trị offset để tránh vẽ nhãn trùng với các góc biên (như 0, π/2, π, 3π/2, 2π).
-      margin: 15, // Biên an toàn để đảm bảo rằng không bị cắt xén khi vẽ.
+      // màu đường line
+      lineColor: '#999',
+      // Độ dày của đường nối.
+      lineWidth: 1.5,
+      // font chữ
+      textFont: '12px Arial',
+      // màu sắc
+      textColor: '#333',
+      //Tỷ lệ phần trăm tối thiểu của một phần dữ liệu để quyết định có vẽ đường nối hay không.
+      minPercentageToShow: 1,
+      // Tỉ lệ tính độ dài của đường nối dựa trên kích thước biểu đồ.
+      lineExtensionRatio: 0.05,
+      // Giới hạn độ dài tối thiểu và tối đa của đường nối.
+      minLineExtension: 15,
+      // Giới hạn độ dài tối thiểu và tối đa của đường nối.
+      maxLineExtension: 25,
+      // Một giá trị offset để tránh vẽ nhãn trùng với các góc biên (như 0, π/2, π, 3π/2, 2π).
+      boundaryOffset: 0.001,
+      // Biên an toàn để đảm bảo rằng không bị cắt xén khi vẽ.
+      margin: 15,
     };
 
     const mergedConfig = { ...defaultConfig, ...config };
@@ -37,10 +47,7 @@ export class DoughnutPluginService {
         if (!data?.datasets?.[0]?.data) return;
 
         const datasetData: any[] = data.datasets[0].data || [];
-        const total = datasetData.reduce(
-          (sum: number, val: any) => sum + (typeof val === 'number' ? val : 0),
-          0
-        );
+        const total = datasetData.reduce((sum: number, val: any) => sum + (typeof val === 'number' ? val : 0), 0);
         if (total <= 0) return;
 
         // Tâm chart
@@ -57,10 +64,7 @@ export class DoughnutPluginService {
          *
          */
         let lineExtension = chartSize * mergedConfig.lineExtensionRatio;
-        lineExtension = Math.max(
-          mergedConfig.minLineExtension,
-          Math.min(mergedConfig.maxLineExtension, lineExtension)
-        );
+        lineExtension = Math.max(mergedConfig.minLineExtension, Math.min(mergedConfig.maxLineExtension, lineExtension));
         // duyệt qua các phần của biểu đồ
         chart.data.datasets.forEach((dataset: any, i: number) => {
           const meta = chart.getDatasetMeta(i); //lấy thông tin meta của dataset từ Chart.js.
@@ -78,10 +82,7 @@ export class DoughnutPluginService {
             }
 
             // Lấy startAngle, endAngle, outerRadius
-            const { startAngle, endAngle, outerRadius } = arc.getProps(
-              ['startAngle', 'endAngle', 'outerRadius'],
-              true
-            );
+            const { startAngle, endAngle, outerRadius } = arc.getProps(['startAngle', 'endAngle', 'outerRadius'], true);
 
             // Nếu góc của phần (sự chênh lệch giữa startAngle và endAngle)
             // nhỏ hơn boundaryOffset, bỏ qua phần đó để tránh vẽ nhãn cho những phần quá nhỏ.
@@ -102,13 +103,7 @@ export class DoughnutPluginService {
 
             // Né góc ranh giới (nếu không phải 100% => offset)
             if (Math.abs(percentage - 100) > mergedConfig.boundaryOffset) {
-              const boundaryAngles = [
-                0,
-                Math.PI / 2,
-                Math.PI,
-                (3 * Math.PI) / 2,
-                2 * Math.PI,
-              ];
+              const boundaryAngles = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2, 2 * Math.PI];
 
               //kiểm tra và điều chỉnh nếu midAngle quá gần với các góc biên
               // (0, π/2, π, 3π/2, 2π) bằng cách thêm boundaryOffset.
@@ -176,15 +171,10 @@ export class DoughnutPluginService {
             }
 
             // Tạo nội dung
-            const textDisplay = `${value} phương tiện (${percentage.toFixed(
-              0
-            )}%)`;
+            const textDisplay = `${value} phương tiện (${percentage.toFixed(0)}%)`;
 
             // Vẽ text (có hỗ trợ xuống dòng)
-            const availableWidth =
-              xLine >= centerX
-                ? right - textX - mergedConfig.margin
-                : textX - left - mergedConfig.margin;
+            const availableWidth = xLine >= centerX ? right - textX - mergedConfig.margin : textX - left - mergedConfig.margin;
             const availableHeight = bottom - top;
 
             this.drawFullText(
@@ -202,6 +192,11 @@ export class DoughnutPluginService {
       },
     };
   }
+  /** vẽ các ký hiệu
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
 
   private drawFullText(
     ctx: CanvasRenderingContext2D,

@@ -5,6 +5,12 @@ import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterVie
   templateUrl: './dialog-confirm.component.html',
   styleUrls: ['./dialog-confirm.component.scss'],
 })
+
+/** DialogConfirm xác  nhận, có chọn
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class DialogConfirmComponent implements AfterViewInit {
   /** Nội dung muốn hiển thị , dạng message */
   @Input() message: string = '';

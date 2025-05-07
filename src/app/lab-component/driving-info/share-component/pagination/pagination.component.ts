@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from
 import { AppGlobals } from '../../../../app-global';
 import { PagingModel } from '../../../../app-model/paging';
 import { DialogConfirmService } from '../../../../app-dialog-component/dialog-confirm/dialog-confirm.service';
+import { messageConfirm } from '../../model/hrm-employees.model';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
@@ -32,6 +33,7 @@ export class PaginationComponent implements OnChanges {
   appGlobals = AppGlobals;
 
   Math = Math;
+  constructor(private dialogConfirm: DialogConfirmService) {}
 
   /** theo dõi sự thay đỗi thông số pagingModel
    * @Author thuan.bv
@@ -47,8 +49,12 @@ export class PaginationComponent implements OnChanges {
       this.itemRange;
     }
   }
-  constructor(private dialogConfirm: DialogConfirmService) {}
-  /** Tổng số page */
+
+  /** Tính toán Tổng số page
+   * @Author thuan.bv
+   * @Created 29/04/2025
+   * @Modified date - user - description
+   */
   get totalPages(): number {
     const total = Math.ceil(this.pagingModel.length / this.pagingModel.pageSize);
     this.pageEvent.length = total;
@@ -62,8 +68,9 @@ export class PaginationComponent implements OnChanges {
    */
 
   get itemRange(): string {
-    const start = this.pagingModel.pageIndex * this.pagingModel.pageSize + 1;
-    const end = Math.min((this.pagingModel.pageIndex + 1) * this.pagingModel.pageSize, this.pagingModel.length);
+    const pageIndex = this.pagingModel.pageIndex == 0 ? 1 : this.pagingModel.pageIndex;
+    const start = (pageIndex - 1) * this.pagingModel.pageSize + 1;
+    const end = Math.min(pageIndex * this.pagingModel.pageSize, this.pagingModel.length);
     return `${start}-${end}/${this.pagingModel.length}`;
   }
   /** event set số dòng của 1 trang
@@ -74,7 +81,7 @@ export class PaginationComponent implements OnChanges {
 
   async onItemsPerPageChange(event): Promise<void> {
     if (this.isChangeData) {
-      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      const result = await this.dialogConfirm.confirm(messageConfirm);
       if (!result) {
         return;
       }
@@ -91,7 +98,7 @@ export class PaginationComponent implements OnChanges {
    */
   async reloadData() {
     if (this.isChangeData) {
-      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      const result = await this.dialogConfirm.confirm(messageConfirm);
       if (!result) {
         return;
       }
@@ -107,45 +114,45 @@ export class PaginationComponent implements OnChanges {
 
   getPages(): (number | string)[] {
     const totalPages = this.totalPages;
-    /** // Chỉ hiển thị trang 1 nếu chỉ có 1 trang */
+    // Chỉ hiển thị trang 1 nếu chỉ có 1 trang */
     if (totalPages <= 1) return [1];
     const pages: (number | string)[] = [];
-    /** Luôn set mặc định 5 trang trên 1 dòng */
+    // Luôn set mặc định 5 trang trên 1 dòng
     const maxVisiblePages = 5;
     const halfVisible = Math.floor(maxVisiblePages / 2);
 
-    /** Luôn hiển thị trang đầu */
+    // Luôn hiển thị trang đầu
     if (this.pagingModel.pageIndex < 5) pages.push(1);
 
-    /**Tính toán range hiển thị */
+    // Tính toán range hiển thị
     let startPage = Math.max(2, this.pagingModel.pageIndex - halfVisible);
     let endPage = Math.min(this.totalPages - 1, this.pagingModel.pageIndex + halfVisible);
 
-    /** Đảm bảo luôn hiển thị đủ 5 trang (nếu đủ) */
+    // Đảm bảo luôn hiển thị đủ 5 trang (nếu đủ)
     if (this.pagingModel.pageIndex <= halfVisible + 1) {
       endPage = Math.min(maxVisiblePages, this.totalPages - 1);
     } else if (this.pagingModel.pageIndex >= this.totalPages - halfVisible) {
       startPage = Math.max(2, this.totalPages - maxVisiblePages + 1);
     }
 
-    /**Thêm dấu ... nếu cần */
+    //Thêm dấu ... nếu cần
 
     if (startPage > 2) {
       pages.push('...');
     }
 
-    /** Thêm các trang trong khoảng*/
+    // Thêm các trang trong khoảng
     for (let i = startPage; i <= endPage; i++) {
       if (pages.length >= 5) break;
       else pages.push(i);
     }
 
-    /** Thêm dấu ... nếu cần */
+    // Thêm dấu ... nếu cần
     if (endPage < this.totalPages - 1) {
       pages.push('...');
     }
 
-    /**  Luôn hiển thị trang cuối (nếu có nhiều hơn 1 trang) */
+    //  Luôn hiển thị trang cuối (nếu có nhiều hơn 1 trang)
     if (this.totalPages - startPage <= 5) {
       pages.push(this.totalPages);
     }
@@ -162,7 +169,7 @@ export class PaginationComponent implements OnChanges {
   async goToPage(page: number | string, event: Event): Promise<void> {
     event.preventDefault();
     if (this.isChangeData) {
-      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      const result = await this.dialogConfirm.confirm(messageConfirm);
       if (!result) {
         return;
       }
@@ -218,7 +225,6 @@ export class PaginationComponent implements OnChanges {
    */
   gotoEmit() {
     this.pageEvent.pageSize = this.pagingModel.pageSize;
-    // Chuyển pageIndex từ one-based (UI) sang zero-based (backend)
     this.pageEvent.pageIndex = this.pagingModel.pageIndex - 1;
     this.page.emit({ ...this.pageEvent });
   }

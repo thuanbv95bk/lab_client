@@ -8,6 +8,12 @@ import { Router } from '@angular/router';
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
 })
+
+/** định dạng khung chính của toàn bộ app
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class LayoutComponent implements AfterViewInit {
   /** Tính toán chiều cao phần menu để trừ đi
    * @Author thuan.bv

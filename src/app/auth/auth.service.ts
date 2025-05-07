@@ -12,7 +12,6 @@ import { AppGlobals } from '../app-global';
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 @Injectable({
   providedIn: 'root',
 })

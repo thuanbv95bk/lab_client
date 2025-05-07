@@ -10,6 +10,11 @@ import { Widget } from '../../model/dashboard.model';
   templateUrl: './widget-item.component.html',
   styleUrl: './widget-item.component.scss',
 })
+/** Component dùng chung, để setup cho 1 widget
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class WidgetItemComponent implements AfterViewInit {
   /** Input 1 widget */
   @Input() widget!: Widget;
@@ -21,6 +26,12 @@ export class WidgetItemComponent implements AfterViewInit {
 
   /** Component */
   dynamicComponentData: any;
+
+  /** setTimeout, đưa widget vào Component
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
 
   ngAfterViewInit(): void {
     setTimeout(() => {

@@ -1,13 +1,11 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { firstValueFrom, Observable } from 'rxjs';
-import { LoadingService } from '../../layout/loading-mask/loading.service';
 
 /** interface RespondData chưa thông tin API trả về
  * @Author thuan.bv
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export interface RespondData {
   isSuccess: boolean;
   errorMessage: string;
@@ -20,7 +18,6 @@ export interface RespondData {
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export interface IBaseService {
   post(url: string): Promise<any>;
   postData(url: string, data: any): Promise<any>;
@@ -33,7 +30,6 @@ export interface IBaseService {
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export class BaseService implements IBaseService {
   constructor(protected httpClient: HttpClient) {}
 

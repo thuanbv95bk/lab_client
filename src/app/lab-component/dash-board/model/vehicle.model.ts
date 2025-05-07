@@ -18,7 +18,6 @@ export interface Vehicle {
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export class CardWidgetModel {
   backgroundColor: string = '';
   title: string = '';

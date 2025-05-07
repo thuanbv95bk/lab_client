@@ -8,7 +8,6 @@ import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/c
  * @Created 05/05/2025
  * @Modified date - user - description
  */
-
 @Injectable()
 export class LoadingInterceptor implements HttpInterceptor {
   /** Đếm số lượng request đang xử lý */

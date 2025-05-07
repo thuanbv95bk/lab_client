@@ -17,18 +17,30 @@ interface DropdownItem {
   templateUrl: './width-widget.component.html',
   styleUrls: ['./width-widget.component.scss'],
 })
+
+/** Component để chọn vị trí cho tưng widget
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class WidthWidgetComponent {
+  /** vị trí đang chọn */
   @Input() selectedItem: SizeEnum = SizeEnum.auto as const;
+
+  /** EventEmitter */
   @Output() widthSelected = new EventEmitter<SizeEnum>();
 
   @ViewChild('dropdownMenu') dropdownMenu!: ElementRef;
+
   @ViewChild('dropdownWidth') dropdownWidth!: ElementRef;
 
   isMenuOpen = false;
   isSubMenuOpen = false;
   isMenuLeft = false;
   isSubMenuLeft = false;
-  isClickOpen = false; // Biến kiểm soát trạng thái mở do click
+
+  /** Biến kiểm soát trạng thái mở do click */
+  isClickOpen = false;
 
   /** Khởi tạo item cho menu chọn width của widget
    * @Author thuan.bv

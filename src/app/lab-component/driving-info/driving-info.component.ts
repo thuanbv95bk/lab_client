@@ -1,6 +1,12 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { HrmEmployeesService } from './service/hrm-employees.service';
-import { HrmEmployees, HrmEmployeesCbx, HrmEmployeesFilter, HrmEmployeesFilterExcel } from './model/hrm-employees.model';
+import {
+  HrmEmployees,
+  HrmEmployeesCbx,
+  HrmEmployeesFilter,
+  HrmEmployeesFilterExcel,
+  messageConfirm,
+} from './model/hrm-employees.model';
 import { BcaLicenseTypes } from './model/bca-license-types';
 import { BcaLicenseTypesService } from './service/bca-license-types.service';
 import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
@@ -64,15 +70,14 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 07/05/2025
    * @Modified date - user - description
    */
-
   ngOnInit() {
-    /** Lấy về danh sách lái xe to CBX */
+    // Lấy về danh sách lái xe to CBX
     this.getListEmployeesToCbx();
 
-    /** Lấy về danh sách giấy phép lái xe */
+    // Lấy về danh sách giấy phép lái xe
     this.getListLicenseTypes();
 
-    /** Lấy về Paging của bảng chính- danh sách lái xe */
+    // Lấy về Paging của bảng chính- danh sách lái xe
     this.getPagingToEdit();
   }
 
@@ -81,7 +86,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 07/05/2025
    * @Modified date - user - description
    */
-
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.pagingModel.pageSize = this.filterEmployeesGrid.pageSize;
@@ -94,7 +98,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   getListEmployeesToCbx() {
     this.employeesService.getListCbx(this.fkCompanyID).then(
       async (res) => {
@@ -115,7 +118,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   getListLicenseTypes() {
     this.licenseTypesService.getListActive().then(
       async (res) => {
@@ -136,10 +138,9 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   getPagingToEdit() {
     // this.loadingService.setLoading(true);
-    /** gán id của công ty mặc định */
+    // gán id của công ty mặc định
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
     this.employeesService.getPagingToEdit(this.filterEmployeesGrid, false).then(
       (res) => {
@@ -171,13 +172,19 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
-  searchPagingToEdit() {
-    /** set các thuộc tính của paging về mặc định */
+  async searchPagingToEdit() {
+    if (this.isCanCancel) {
+      const result = await this.dialogConfirm.confirm(messageConfirm);
+      if (!result) {
+        return;
+      }
+    }
+    // set các thuộc tính của paging về mặc định
     this.filterEmployeesGrid.pageIndex = 0;
+    this.filterEmployeesGrid.pageSize = this.pagingModel.pageSize;
     this.pagingModel.length = 0;
-    this.pagingModel.pageIndex = 0;
-    /** gọi đến hàm call API */
+    this.pagingModel.pageIndex = 1;
+    // gọi đến hàm call API
     this.getPagingToEdit();
   }
 
@@ -188,8 +195,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   async pageIndexChange(event: PageEvent) {
-    console.log('pageIndexChange');
-
     this.filterEmployeesGrid.pageIndex = event.pageIndex;
     this.filterEmployeesGrid.pageSize = event.pageSize;
     this.getPagingToEdit();
@@ -200,10 +205,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 25/04/2025
    * @Modified date - user - description
    */
-
   reloadPagingToEdit() {
-    console.log('reloadPagingToEdit');
-
     this.getPagingToEdit();
   }
 
@@ -215,19 +217,21 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 25/04/2025
    * @Modified date - user - description
    */
-
   onSelectedChangeDriver(items: { data: HrmEmployeesCbx[]; isCheckAll: boolean }) {
+    console.log(items);
+
     if (!items.isCheckAll) {
-      /** Tạo string-key là danh sách các ID cua lái xe , cách nhau bởi dấu ',' */
+      // Tạo string-key là danh sách các ID cua lái xe , cách nhau bởi dấu ','
       this.filterEmployeesGrid.listStringEmployeesId = this.employeesService.getSortedIdString(items.data, 'pkEmployeeId');
 
-      /** Tạo string-Name là danh sách các Tên cua lái xe , cách nhau bởi dấu ','
-       * -> phục vụ cho hiển thị danh sách bộ lọc */
+      // Tạo string-Name là danh sách các Tên cua lái xe , cách nhau bởi dấu ','
+      // -> phục vụ cho hiển thị danh sách bộ lọc
       this.filterExcel.listStringEmployeesName = this.employeesService.getSortedIdString(items.data, 'displayName');
     } else {
-      /** Nếu chọn all */
-      /** không lấy hết các name, mà chỉ hiển thị text = 'Tất cả(length)' */
+      // Nếu chọn all
+      // không lấy hết các name, mà chỉ hiển thị text = 'Tất cả(length)'
       this.filterExcel.listStringEmployeesName = `Tất cả (${items.data.length})`;
+      this.filterEmployeesGrid.listStringEmployeesId = '';
     }
   }
 
@@ -239,19 +243,19 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 25/04/2025
    * @Modified date - user - description
    */
-
   onSelectedChangeLicenseTypes(items: { data: BcaLicenseTypes[]; isCheckAll: boolean }) {
     if (!items.isCheckAll) {
-      /** Tạo string-key là danh sách các ID Danh sách loại giấy phép lái xe , cách nhau bởi dấu ',' */
+      // Tạo string-key là danh sách các ID Danh sách loại giấy phép lái xe , cách nhau bởi dấu ','
       this.filterEmployeesGrid.listStringLicenseTypesId = this.employeesService.getSortedIdString(items.data, 'pkLicenseTypeId');
 
-      /** Tạo string-Name là danh sách các name Danh sách loại giấy phép lái xe , cách nhau bởi dấu ',' */
+      // Tạo string-Name là danh sách các name Danh sách loại giấy phép lái xe , cách nhau bởi dấu ','
       this.filterExcel.listStringLicenseTypesName = this.employeesService.getSortedIdString(items.data, 'name');
     } else {
-      /** Nếu chọn all */
+      // Nếu chọn all
 
-      /** không lấy hết các name, mà chỉ hiển thị text = 'Tất cả(length)' */
+      // không lấy hết các name, mà chỉ hiển thị text = 'Tất cả(length)'
       this.filterExcel.listStringLicenseTypesName = `Tất cả (${items.data.length})`;
+      this.filterEmployeesGrid.listStringLicenseTypesId = '';
     }
   }
 
@@ -266,7 +270,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   onFieldStatusChange(row: HrmEmployees, field: string, status: { isEdited: boolean; isValid: boolean }) {
     if (!row.fieldStatus) row.fieldStatus = {};
     row.fieldStatus[field] = status;
-    /**Hàm update -checker cả dòng */
+    // Hàm update -checker cả dòng
     this.updateIsEditFlag(row);
   }
 
@@ -277,7 +281,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   updateIsEditFlag(row: HrmEmployees) {
-    /** Danh sách các field cần kiểm tra */
+    // Danh sách các field cần kiểm tra
     const fields = [
       'displayName',
       'mobile',
@@ -288,12 +292,12 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
       'licenseType',
     ];
 
-    /** Có ít nhất 1 field isEdited=true và tất cả field đều isValid=true */
+    // Có ít nhất 1 field isEdited=true và tất cả field đều isValid=true
     const anyEdited = fields.some((f) => row.fieldStatus?.[f]?.isEdited);
     const allValid = fields.every((f) => row.fieldStatus?.[f]?.isValid);
 
     row.isEdit = anyEdited;
-    /** cập nhật lái xe đó đã được edit và các fields đều hợp lệ */
+    // cập nhật lái xe đó đã được edit và các fields đều hợp lệ
     row.isValid = anyEdited && allValid;
   }
 
@@ -302,7 +306,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   getChangedValidRows(): HrmEmployees[] {
     return this.listEmployeesGrid.filter((row) => row.isValid);
   }
@@ -312,10 +315,10 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   getChangedEditRows(): HrmEmployees[] {
     return this.listEmployeesGrid.filter((row) => row.isEdit);
   }
+
   /** get trạng thái Ẩn/hiện của bottom Save
    * @Author thuan.bv
    * @Created 28/04/2025
@@ -326,6 +329,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     const listEdit = this.listEmployeesGrid.filter((item) => item.isEdit);
     return listEdit.length > 0 && !listEdit.some((x) => !x.isValid);
   }
+
   /** get trạng thái Ẩn/hiện của bottom cancel
    * @Author thuan.bv
    * @Created 28/04/2025
@@ -350,7 +354,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   addOrEditList(listItem: HrmEmployees[]) {
     if (!listItem.length) return this.commonService.showWarning('Danh sách trống');
     listItem.forEach((x) => {
@@ -367,7 +370,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
         }
 
         this.commonService.showSuccess('Cập nhật thành công');
-        /** cập nhật lại trạng thái của các dòng về chưa chỉnh sửa,sau khi lưu thành công */
+        // cập nhật lại trạng thái của các dòng về chưa chỉnh sửa,sau khi lưu thành công
         listItem.forEach((row) => {
           row.isEdit = false;
           Object.values(row.fieldStatus || {}).forEach((f) => (f.isEdited = false));
@@ -385,7 +388,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 28/04/2025
    * @Modified date - user - description
    */
-
   async deleteRow(item: HrmEmployees, deleteBtn: HTMLElement) {
     const result = await this.dialogConfirm.confirm(`Bạn có chắc chắn muốn xóa lái xe ${item.displayName}?`);
     if (!result && deleteBtn) {
@@ -401,9 +403,9 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
             return;
           } else if (res.isSuccess) {
             this.commonService.showSuccess('Xóa thành công');
-            /**  Xóa item khỏi danh sách */
+            //  Xóa item khỏi danh sách
             this.listEmployeesGrid = this.listEmployeesGrid.filter((x) => x.pkEmployeeId !== item.pkEmployeeId);
-            /** cập nhật lại  this.pagingModel.length */
+            // cập nhật lại  this.pagingModel.length
             this.pagingModel.length = this.pagingModel.length > 0 ? this.pagingModel.length - 1 : 0;
             this.getListEmployeesToCbx();
           }
@@ -431,16 +433,15 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 29/04/2025
    * @Modified date - user - description
    */
-
   downloadExcel() {
-    /** Cập nhật lại bộ lọc */
+    // Cập nhật lại bộ lọc
     this.filterExcel.fkCompanyId = this.filterEmployeesGrid.fkCompanyId;
     this.filterExcel.displayName = this.filterEmployeesGrid.displayName;
     this.filterExcel.driverLicense = this.filterEmployeesGrid.driverLicense;
     this.filterExcel.option = this.filterEmployeesGrid.option;
     this.filterExcel.listStringEmployeesId = this.filterEmployeesGrid.listStringEmployeesId;
     this.filterExcel.listStringLicenseTypesId = this.filterEmployeesGrid.listStringLicenseTypesId;
-    /** gọi api */
+    // gọi api
     this.employeesService
       .exportExcel(this.filterExcel)
       .then(() => {

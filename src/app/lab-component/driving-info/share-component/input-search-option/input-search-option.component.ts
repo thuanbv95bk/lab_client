@@ -56,7 +56,7 @@ export class InputSearchOptionComponent {
    */
 
   ngOnInit(): void {
-    /** set giá trị mặc định */
+    // set giá trị mặc định
     this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
     this.searchOption.key = this.selectedOption?.code;
     this.placeholder = this.selectedOption?.placeholder;

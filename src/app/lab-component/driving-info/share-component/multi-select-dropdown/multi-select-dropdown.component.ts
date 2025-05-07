@@ -51,12 +51,16 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
 
   /**  Placeholder cho ô tìm kiếm */
   @Input() placeholder: string = 'Select';
+
   /** Cho phép tìm kiếm hay không */
   @Input() search: boolean = true;
+
   /** Cho phép chọn tất cả hay không */
   @Input() selectAll: boolean = true;
+
   /** Trạng thái đã chọn tất cả hay chưa */
   @Input() allSelected: boolean = false;
+
   /**Sự kiện khi danh sách chọn thay đổi */
   @Output() selectedChange = new EventEmitter<{ data: any[]; isCheckAll: boolean }>();
   /**  Tham chiếu đến input tìm kiếm */
@@ -82,7 +86,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    /** Khi input items thay đổi, khởi tạo lại dữ liệu */
+    // Khi input items thay đổi, khởi tạo lại dữ liệu
     if (changes['items']) {
       this.initData();
     }
@@ -103,14 +107,14 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
    */
 
   initData() {
-    /** Đăng ký lắng nghe thay đổi của danh sách dữ liệu gốc */
+    // Đăng ký lắng nghe thay đổi của danh sách dữ liệu gốc
     this.listData.pipe(takeUntil(this.onDestroy)).subscribe((x) => {
       this._items = this.items;
-      /** cập nhật giá trị mới cho các subscriber của filteredItems */
+      // cập nhật giá trị mới cho các subscriber của filteredItems
       this.filteredItems.next(this.items);
     });
 
-    /** Đăng ký lắng nghe thay đổi giá trị ô tìm kiếm */
+    // Đăng ký lắng nghe thay đổi giá trị ô tìm kiếm
     this.FilterCtrl.valueChanges.pipe(takeUntil(this.onDestroy)).subscribe(() => {
       this.filterItems();
     });
@@ -124,22 +128,20 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     if (!this._items) {
       return;
     }
-    /** Lấy giá trị từ ô tìm kiếm */
+    // Lấy giá trị từ ô tìm kiếm
     let search = this.FilterCtrl.value;
     if (!search) {
-      /**  trả về toàn bộ danh sách gốc. */
+      //  trả về toàn bộ danh sách gốc.
       this.filteredItems.next(this._items.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
-    /** filter data */
+    // filter data
     this.filteredItems.next(
       this._items.filter((itm) => {
-        /** tim kiem tren ca  field1 và field2
-         * Chỉ những item nào có từ khóa tìm kiếm xuất hiện trong
-         * một trong hai trường displayField1 hoặc displayField2 mới được hiển thị trong dropdown.
-         */
+        // tim kiem tren ca  field1 và field2
+        // Chỉ những item nào có từ khóa tìm kiếm xuất hiện trong
         return (
           (this.displayField1 && itm[this.displayField1].toString().toLowerCase().indexOf(search) > -1) ||
           (this.displayField2 && itm[this.displayField2].toString().toLowerCase().indexOf(search) > -1)
@@ -170,7 +172,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      // this.filterList();
       setTimeout(() => {
         if (this.searchInput) {
           this.searchInput.nativeElement.focus();

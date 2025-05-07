@@ -3,7 +3,6 @@
  * @Created 25/04/2025
  * @Modified date - user - description
  */
-
 export class BcaLicenseTypes {
   /** Id */
   pkLicenseTypeId: number;

@@ -11,6 +11,12 @@ import { Widget, WidgetSizeConfig } from './model/dashboard.model';
   templateUrl: './dash-board.component.html',
   styleUrl: './dash-board.component.scss',
 })
+
+/** Component => hiển thị màn hinh dash board
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class DashBoardComponent implements OnInit, OnDestroy {
   /** Danh sách xe */
   vehicles: Vehicle[] = [];
@@ -33,7 +39,10 @@ export class DashBoardComponent implements OnInit, OnDestroy {
   /** widget tại cảng */
   widgetAtThePort!: Widget;
 
+  /** setup vị trí */
   widgetSizeConfig = WidgetSizeConfig;
+
+  /** enum các kích thước */
   sizeEnum = SizeEnum;
 
   /**Thời gian để tải lại dữ liệu, Mặc đinh 5 phút
@@ -123,19 +132,32 @@ export class DashBoardComponent implements OnInit, OnDestroy {
     );
   }
 
+  /** khởi tạo giá trị ban đầu
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
   async ngOnInit(): Promise<void> {
     await this.initData();
     this.updateFilteredVehicles(this.filteredVehicles);
     this.startInterval();
   }
 
+  /** Hủy đăng ký Observable khi component bị hủy
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
   ngOnDestroy() {
     this.stopInterval();
-    this.widgetOverView.destroy(); // Hủy đăng ký Observable khi component bị hủy
-    this.widgetBorderGate.destroy(); // Hủy đăng ký Observable khi component bị hủy
-    this.widgetOnTheRoad.destroy(); // Hủy đăng ký Observable khi component bị hủy
-    this.widgetAtTheFactory.destroy(); // Hủy đăng ký Observable khi component bị hủy
-    this.widgetAtThePort.destroy(); // Hủy đăng ký Observable khi component bị hủy
+    // Hủy đăng ký Observable khi component bị hủy
+    this.widgetOverView.destroy();
+    this.widgetBorderGate.destroy();
+    this.widgetOnTheRoad.destroy();
+    this.widgetAtTheFactory.destroy();
+    this.widgetAtThePort.destroy();
   }
 
   /** Khởi tạo dữ liệu của danh sách xe

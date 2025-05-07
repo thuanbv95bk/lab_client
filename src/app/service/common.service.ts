@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
 import { ActiveToast, ToastrService } from 'ngx-toastr';
 
+@Injectable({
+  providedIn: 'root',
+})
 /** CommonService các service dùng chung của app
  * @Author thuan.bv
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
-@Injectable({
-  providedIn: 'root',
-})
 export class CommonService {
   constructor(protected toastr: ToastrService) {}
 

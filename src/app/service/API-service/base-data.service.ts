@@ -6,7 +6,6 @@ import { BaseService, RespondData } from './base.service';
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export interface IBaseDataService {
   getById(id: string): Promise<RespondData>;
   getAll(): Promise<RespondData>;

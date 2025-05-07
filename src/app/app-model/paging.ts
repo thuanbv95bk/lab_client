@@ -5,10 +5,9 @@ import { AppGlobals } from '../app-global';
  * @Created 25/04/2025
  * @Modified date - user - description
  */
-
 export class PagingModel {
-  /** trang hiện tại: giá trị mặc định = 1 */
-  pageIndex: number = 1;
+  /** trang hiện tại: giá trị mặc định = 0 */
+  pageIndex: number = 0;
   /** số phần tử 1 trang, mặc định = 20 , định nghĩ trong AppGlobals.pageSizeOptions */
   pageSize: number = AppGlobals.pageSizeOptions[1];
   length: number = 0;

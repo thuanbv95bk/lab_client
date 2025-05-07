@@ -7,8 +7,13 @@ import { LoadingService } from './loading.service';
   templateUrl: './loading-mask.component.html',
   styleUrls: ['./loading-mask.component.scss'],
 })
+/** hiệu ứng loading dữ liệu
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class LoadingMaskComponent implements OnInit {
-  /**T rạng thái hiển thị loading mask */
+  /**Trạng thái hiển thị loading mask */
   isLoading: boolean = false;
   /**  Đăng ký lắng nghe trạng thái loading */
   loadingSubscription: Subscription;

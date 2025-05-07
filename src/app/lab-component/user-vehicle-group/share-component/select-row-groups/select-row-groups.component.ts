@@ -5,6 +5,12 @@ import { UserVehicleGroupView } from '../../model/user-vehicle-group';
   templateUrl: './select-row-groups.component.html',
   styleUrls: ['./select-row-groups.component.scss'],
 })
+
+/** Component dùng chung, hiển thị 1 nhóm phương tiện
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class SelectRowGroupsComponent {
   /** 1 nhóm cụ thể */
   @Input() attribute!: UserVehicleGroupView;
@@ -97,6 +103,7 @@ export class SelectRowGroupsComponent {
    */
 
   toggleVisibility(attribute: UserVehicleGroupView) {
-    attribute.isHideChildren = !attribute.isHideChildren; // Mở hoặc đóng
+    // Mở hoặc đóng
+    attribute.isHideChildren = !attribute.isHideChildren;
   }
 }

@@ -6,6 +6,12 @@ import { Vehicle } from '../../model/vehicle.model';
   templateUrl: './multi-select.component.html',
   styleUrls: ['./multi-select.component.scss'],
 })
+
+/** Component chọn xe-có thể chọn nhiều
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class MultiSelectComponent implements OnInit {
   @Input() vehicles: Vehicle[] = [];
   @Input() placeholder: string = 'Select';
@@ -88,9 +94,7 @@ export class MultiSelectComponent implements OnInit {
    */
 
   filterList() {
-    this.filteredItems = this.vehicles.filter((item) =>
-      item.code.toLowerCase().includes(this.searchQuery.toLowerCase())
-    );
+    this.filteredItems = this.vehicles.filter((item) => item.code.toLowerCase().includes(this.searchQuery.toLowerCase()));
   }
 
   /** chọn/ bỏ chọn 1 xe

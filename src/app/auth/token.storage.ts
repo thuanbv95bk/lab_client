@@ -1,3 +1,9 @@
+/** TokenStorage
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
+
 export class TokenStorage {
   public static readonly JwtToken = 'JWT_TOKEN';
   public static readonly IsLoggedIn = 'loggedIn';

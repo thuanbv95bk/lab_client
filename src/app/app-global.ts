@@ -4,7 +4,6 @@
  * @Modified date - user - description
  * @Modified 25/04/1995 - user - description
  */
-
 export class AppGlobals {
   public static pageSizeOptions = [10, 20, 50, 100];
   static apiEndpoint: string;

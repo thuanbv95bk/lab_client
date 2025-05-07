@@ -108,7 +108,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    */
 
   writeValue(value: any): void {
-    /** Lưu giá trị ban đầu nếu lần đầu gọi */
+    // Lưu giá trị ban đầu nếu lần đầu gọi
     if (this.originalValue === null) {
       this.originalValue = value;
     }
@@ -159,7 +159,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.inputType == 'date') {
-      /** Chuẩn hóa minDate, maxDate về null nếu không hợp lệ */
+      // Chuẩn hóa minDate, maxDate về null nếu không hợp lệ
       const safeMinDate = isValidDateInput(this.minDate) ? this.minDate : null;
       const safeMaxDate = isValidDateInput(this.maxDate) ? this.maxDate : null;
 
@@ -176,12 +176,12 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
         });
       }
     }
-    /** trigger Lưu lại giá trị của input ban đầu */
+    // trigger Lưu lại giá trị của input ban đầu
     if (changes['ngModel']) {
       this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
       this.originalValue = changes['ngModel'].currentValue;
     }
-    /** trigger this.isEdited nếu người dùng đã lưu các thay đỗi */
+    // trigger this.isEdited nếu người dùng đã lưu các thay đỗi
     if (changes['resetEditFlag'] && changes['resetEditFlag'].currentValue) {
       this.isEdited = false;
       this.fieldStatusChange.emit({ isEdited: false, isValid: !this.inputControl.invalid });
@@ -211,20 +211,20 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       validators.push(Validators.pattern(/^0\d{9}$/));
     }
 
-    /** KHỞI TẠO VỚI GIÁ TRỊ RỖNG, GIÁ TRỊ SẼ ĐƯỢC SET BỞI writeValue */
+    // KHỞI TẠO VỚI GIÁ TRỊ RỖNG, GIÁ TRỊ SẼ ĐƯỢC SET BỞI writeValue
     this.inputControl = new FormControl('', validators);
 
-    /** nếu la date => đăng ký sự thay đỗi, khi người dùng gõ */
+    // nếu la date => đăng ký sự thay đỗi, khi người dùng gõ
     if (this.inputType === 'date') {
       this.inputControl.valueChanges.subscribe((value) => {
         this.handleDateInput(value, false);
       });
     }
 
-    /** gọi hàm cập nhật trạng thái isEdit */
+    // gọi hàm cập nhật trạng thái isEdit
     this.updateIsEdited();
 
-    /** Đăng ký theo dõi*/
+    // Đăng ký theo dõi
     this.inputControl.valueChanges.subscribe(() => {
       this.updateIsEdited();
     });
@@ -266,21 +266,16 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     let value = this.inputControl.value;
     let initial = this.originalValue;
 
-    /** Chuẩn hóa cho kiểu date: nếu rỗng/null/không hợp lệ thì về '' */
+    // Chuẩn hóa cho kiểu date: nếu rỗng/null/không hợp lệ thì về ''
     if (this.inputType === 'date') {
       value = convertInitialValue(this.inputType, value);
-      console.log('value:"' + value);
-
       initial = convertInitialValue(this.inputType, initial);
-      console.log('initial:"' + initial);
     } else {
       value = value == null || value === undefined ? '' : String(value).trim();
       initial = initial == null || initial === undefined ? '' : String(initial).trim();
     }
 
     this.isEdited = value !== initial;
-
-    console.log('this.isEdited:"' + this.isEdited);
 
     this.validate();
     this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
@@ -385,7 +380,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/[^0-9]/g, '');
 
-    /** Tự động format và thêm placeholder */
+    // Tự động format và thêm placeholder
     let formatted = '';
     let cursorPos = input.selectionStart || 0;
 
@@ -401,15 +396,15 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       if (cursorPos > 10) cursorPos = 10;
     }
 
-    /** Cập nhật giá trị input mà không emit event */
+    // Cập nhật giá trị input mà không emit event
     this.inputControl.setValue(formatted, { emitEvent: false });
 
-    /**Đặt lại vị trí con trỏ */
+    // Đặt lại vị trí con trỏ
     setTimeout(() => {
       input.setSelectionRange(cursorPos, cursorPos);
     });
 
-    /** Cập nhật dateModel nếu hợp lệ */
+    // Cập nhật dateModel nếu hợp lệ
     if (isValidDateString(formatted)) {
       const [day, month, year] = formatted.split('/').map(Number);
       this.dateModel = { day, month, year };
@@ -481,7 +476,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       return;
     }
 
-    /** Xử lý đặc biệt cho phím xóa */
+    // Xử lý đặc biệt cho phím xóa
     if (event.key === 'Backspace' || event.key === 'Delete') {
       this.handleDateInput(this.inputControl.value, true);
     }
@@ -494,7 +489,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    */
   onPhoneKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'phone') return;
-    /**  Chỉ cho phép số, phím điều hướng, backspace, delete, tab */
+    //  Chỉ cho phép số, phím điều hướng, backspace, delete, tab
     const allowedKeys = [
       '0',
       '1',
@@ -542,7 +537,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     if (datePopover?.isOpen()) {
       datePopover.close();
     }
-    /** Sau khi đóng, focus lại vào icon datepicker */
+    // Sau khi đóng, focus lại vào icon datepicker
     setTimeout(() => {
       this.dateIconRef?.nativeElement.focus();
     }, 0);
@@ -587,7 +582,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       return;
     }
 
-    /**emit value ra ngoài nếu hợp lệ */
+    // emit value ra ngoài nếu hợp lệ
     this.valueChange.emit(this.inputControl.value);
   }
 
