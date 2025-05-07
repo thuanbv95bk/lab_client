@@ -1,15 +1,24 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { AppGlobals } from '../../../../app-global';
 import { PagingModel } from '../../../../app-model/paging';
+import { DialogConfirmService } from '../../../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 @Component({
   selector: 'app-pagination',
   templateUrl: './pagination.component.html',
   styleUrls: ['./pagination.component.scss'],
 })
+
+/** Component dùng để phân trang dữ liệu trong table
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class PaginationComponent implements OnChanges {
   /** PagingModel lưu các giá trị của phân trang */
   @Input() pagingModel: PagingModel;
 
+  /** PagingModel lưu các giá trị của phân trang */
+  @Input() isChangeData: boolean = false;
   /** EventEmitter output các thông số của paging ra ngoài */
   @Output() page = new EventEmitter<PagingModel>();
 
@@ -33,10 +42,12 @@ export class PaginationComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pagingModel']) {
       this.pageEvent.pageSize = this.pagingModel.pageSize;
+      this.pageEvent.pageIndex = this.pagingModel.pageIndex;
       this.totalPages;
       this.itemRange;
     }
   }
+  constructor(private dialogConfirm: DialogConfirmService) {}
   /** Tổng số page */
   get totalPages(): number {
     const total = Math.ceil(this.pagingModel.length / this.pagingModel.pageSize);
@@ -51,21 +62,26 @@ export class PaginationComponent implements OnChanges {
    */
 
   get itemRange(): string {
-    const start = (this.pagingModel.pageIndex - 1) * this.pagingModel.pageSize + 1;
-    const end = Math.min(this.pagingModel.pageIndex * this.pagingModel.pageSize, this.pagingModel.length);
+    const start = this.pagingModel.pageIndex * this.pagingModel.pageSize + 1;
+    const end = Math.min((this.pagingModel.pageIndex + 1) * this.pagingModel.pageSize, this.pagingModel.length);
     return `${start}-${end}/${this.pagingModel.length}`;
   }
-
   /** event set số dòng của 1 trang
    * @Author thuan.bv
    * @Created 24/04/2025
    * @Modified date - user - description
    */
 
-  onItemsPerPageChange(): void {
+  async onItemsPerPageChange(event): Promise<void> {
+    if (this.isChangeData) {
+      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      if (!result) {
+        return;
+      }
+    }
     this.pagingModel.pageIndex = 1;
-    this.pageEvent.pageSize = this.pagingModel.pageSize;
-    this.page.emit({ ...this.pageEvent });
+    this.pagingModel.pageSize = event;
+    this.gotoEmit();
   }
 
   /** event emit ra ngoài, để loading lại data
@@ -73,7 +89,13 @@ export class PaginationComponent implements OnChanges {
    * @Created 24/04/2025
    * @Modified date - user - description
    */
-  reloadData() {
+  async reloadData() {
+    if (this.isChangeData) {
+      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      if (!result) {
+        return;
+      }
+    }
     this.reload.emit();
   }
 
@@ -137,12 +159,17 @@ export class PaginationComponent implements OnChanges {
    * @Modified date - user - description
    */
 
-  goToPage(page: number | string, event: Event): void {
+  async goToPage(page: number | string, event: Event): Promise<void> {
     event.preventDefault();
+    if (this.isChangeData) {
+      const result = await this.dialogConfirm.confirm('Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?');
+      if (!result) {
+        return;
+      }
+    }
     if (typeof page === 'number' && page !== this.pagingModel.pageIndex) {
       this.pagingModel.pageIndex = page;
-      this.pageEvent.pageIndex = this.pagingModel.pageIndex;
-      this.page.emit({ ...this.pageEvent });
+      this.gotoEmit();
     }
   }
 
@@ -182,5 +209,17 @@ export class PaginationComponent implements OnChanges {
   goToPrevPage(event: Event): void {
     const prevPage = Math.max(this.pagingModel.pageIndex - 1, 1);
     this.goToPage(prevPage, event);
+  }
+
+  /** Emit các thay đỗi paging ra ngoài
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+  gotoEmit() {
+    this.pageEvent.pageSize = this.pagingModel.pageSize;
+    // Chuyển pageIndex từ one-based (UI) sang zero-based (backend)
+    this.pageEvent.pageIndex = this.pagingModel.pageIndex - 1;
+    this.page.emit({ ...this.pageEvent });
   }
 }

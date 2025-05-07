@@ -1,3 +1,7 @@
+import { Validators } from '@angular/forms';
+
+// Validators.pattern
+export const datePatternValidator = Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/);
 /** chuyển date về định dạng chuẩn
  * @Author thuan.bv
  * @Created 26/04/2025
@@ -65,27 +69,62 @@ export function toISODateString(dateStr: string): string | null {
  * @Author thuan.bv
  * @Created 26/04/2025
  * @Modified date - user - description
+ *
+ *
  */
+
 export function convertInitialValue(inputType: string, value: Date | string): string {
   if (inputType === 'date') {
-    if (value instanceof Date) {
-      return this.isValidDate(value) ? formatDate(value) : '';
+    // Giữ nguyên null/undefined/empty/placeholder
+    if (!value || value === '' || value === 'dd/MM/yyyy') {
+      return '';
     }
-    const strVal = String(value ?? '');
-    /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
+
+    if (value instanceof Date) {
+      // Nếu là Date, kiểm tra hợp lệ và format, không hợp lệ thì trả về toString()
+      return isNaN(value.getTime()) ? value.toString() : formatDate(value);
+    }
+
+    const strVal = String(value);
+
+    // Nếu là dạng dd/MM/yyyy thì giữ nguyên
     if (isValidDateString(strVal)) {
       return strVal;
     }
-    /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
+
+    // Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss)
     const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
     if (isoMatch) {
       const [_, year, month, day] = isoMatch;
       return `${day}/${month}/${year}`;
     }
-    return String(value ?? '');
+
+    // Trả về chính giá trị gốc nếu không match format nào
+    return strVal;
   }
+
   return String(value ?? '');
 }
+// export function convertInitialValue(inputType: string, value: Date | string): string {
+//   if (inputType === 'date') {
+//     if (value instanceof Date) {
+//       return this.isValidDate(value) ? formatDate(value) : '';
+//     }
+//     const strVal = String(value ?? '');
+//     /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
+//     if (isValidDateString(strVal)) {
+//       return strVal;
+//     }
+//     /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
+//     const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
+//     if (isoMatch) {
+//       const [_, year, month, day] = isoMatch;
+//       return `${day}/${month}/${year}`;
+//     }
+//     return String(value ?? '');
+//   }
+//   return String(value ?? '');
+// }
 /** hàm kiểm tra hợp lệ cho minDate/maxDate
  * @Author thuan.bv
  * @Created 26/04/2025

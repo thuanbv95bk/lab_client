@@ -14,6 +14,12 @@ import { LoadingService } from '../../layout/loading-mask/loading.service';
   templateUrl: './driving-info.component.html',
   styleUrls: ['./driving-info.component.scss'],
 })
+
+/** Component danh danh sách lái xe, edit, xóa lái xe
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class DrivingInfoComponent implements OnInit, AfterViewInit {
   /** Địa chỉ công ty mặc định */
   fkCompanyID: number = 15076;
@@ -53,6 +59,12 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.pagingModel = new PagingModel();
   }
 
+  /** thiết lập trạng thái ban đầu, get các data, master data
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+
   ngOnInit() {
     /** Lấy về danh sách lái xe to CBX */
     this.getListEmployeesToCbx();
@@ -64,9 +76,16 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.getPagingToEdit();
   }
 
+  /** set lại thông số phân trang
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.pagingModel.pageSize = this.filterEmployeesGrid.pageSize;
+      this.pagingModel.pageIndex = 1;
     }, 100);
   }
 
@@ -122,7 +141,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     // this.loadingService.setLoading(true);
     /** gán id của công ty mặc định */
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
-    this.employeesService.getPagingToEdit(this.filterEmployeesGrid, true).then(
+    this.employeesService.getPagingToEdit(this.filterEmployeesGrid, false).then(
       (res) => {
         if (!res.isSuccess) {
           console.error(res.errorMessage);
@@ -155,9 +174,9 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
 
   searchPagingToEdit() {
     /** set các thuộc tính của paging về mặc định */
-    this.filterEmployeesGrid.pageIndex = 1;
+    this.filterEmployeesGrid.pageIndex = 0;
     this.pagingModel.length = 0;
-    this.pagingModel.pageIndex = 1;
+    this.pagingModel.pageIndex = 0;
     /** gọi đến hàm call API */
     this.getPagingToEdit();
   }
@@ -168,7 +187,9 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Created 25/04/2025
    * @Modified date - user - description
    */
-  pageIndexChange(event: PageEvent) {
+  async pageIndexChange(event: PageEvent) {
+    console.log('pageIndexChange');
+
     this.filterEmployeesGrid.pageIndex = event.pageIndex;
     this.filterEmployeesGrid.pageSize = event.pageSize;
     this.getPagingToEdit();
@@ -181,6 +202,8 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    */
 
   reloadPagingToEdit() {
+    console.log('reloadPagingToEdit');
+
     this.getPagingToEdit();
   }
 
@@ -193,7 +216,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
 
-  onSelectedChangeDriver(items: { data: any[]; isCheckAll: boolean }) {
+  onSelectedChangeDriver(items: { data: HrmEmployeesCbx[]; isCheckAll: boolean }) {
     if (!items.isCheckAll) {
       /** Tạo string-key là danh sách các ID cua lái xe , cách nhau bởi dấu ',' */
       this.filterEmployeesGrid.listStringEmployeesId = this.employeesService.getSortedIdString(items.data, 'pkEmployeeId');
@@ -217,7 +240,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
 
-  onSelectedChangeLicenseTypes(items: { data: any[]; isCheckAll: boolean }) {
+  onSelectedChangeLicenseTypes(items: { data: BcaLicenseTypes[]; isCheckAll: boolean }) {
     if (!items.isCheckAll) {
       /** Tạo string-key là danh sách các ID Danh sách loại giấy phép lái xe , cách nhau bởi dấu ',' */
       this.filterEmployeesGrid.listStringLicenseTypesId = this.employeesService.getSortedIdString(items.data, 'pkLicenseTypeId');
@@ -297,9 +320,11 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Author thuan.bv
    * @Created 28/04/2025
    * @Modified date - user - description
+   *  @Modified 07/05/2025 - thuan.bv - Sửa logic
    */
   get isCanSave(): boolean {
-    return this.getChangedValidRows()?.length > 0;
+    const listEdit = this.listEmployeesGrid.filter((item) => item.isEdit);
+    return listEdit.length > 0 && !listEdit.some((x) => !x.isValid);
   }
   /** get trạng thái Ẩn/hiện của bottom cancel
    * @Author thuan.bv
@@ -307,7 +332,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   get isCanCancel(): boolean {
-    return this.getChangedEditRows()?.length > 0;
+    return this.listEmployeesGrid.some((item) => item.isEdit);
   }
 
   /** Lưu dữ liệu

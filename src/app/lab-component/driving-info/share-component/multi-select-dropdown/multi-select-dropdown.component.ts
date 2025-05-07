@@ -18,10 +18,19 @@ import { FormControl } from '@angular/forms';
   templateUrl: './multi-select-dropdown.component.html',
   styleUrls: ['./multi-select-dropdown.component.scss'],
 })
+
+/** Component  MultiSelectDropdown dùng hiển thị dạng danh sách
+ * có chọn nhiều, filter theo các displayField, theo nguoi dug set
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   /**  tiêu đề */
   @Input() title: string = 'Tìm kiếm';
 
+  /**  tiêu đề */
+  @Input() id: string = '';
   /** Field name cần hiên thị*/
   @Input() displayField1: string = '';
   @Input() displayField2: string = '';

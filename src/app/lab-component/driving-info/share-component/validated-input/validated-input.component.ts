@@ -15,6 +15,7 @@ import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
 import {
   convertInitialValue,
+  datePatternValidator,
   formatDate,
   isValidDateInput,
   isValidDateString,
@@ -34,6 +35,13 @@ import {
     },
   ],
 })
+
+/** Component  ValidatedInput dùng để check Validated, theo các định dạng
+ * inputType: 'text' | 'date' | 'select' | 'phone' = 'text'
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class ValidatedInputComponent implements OnInit, OnChanges {
   /** input required */
   @Input() required: boolean = false;
@@ -158,7 +166,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       if ((changes['minDate'] || changes['maxDate']) && this.inputControl) {
         const validators = [];
         if (this.required) validators.push(Validators.required);
-        validators.push(Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/));
+        validators.push(datePatternValidator);
         validators.push(this.dateRangeValidator(safeMinDate, safeMaxDate));
 
         this.inputControl.setValidators(validators);
@@ -197,7 +205,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
         ...(this.maxLength ? [Validators.maxLength(this.maxLength)] : [])
       );
     } else if (this.inputType === 'date') {
-      validators.push(Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/));
+      validators.push(datePatternValidator);
       validators.push(this.dateRangeValidator(this.minDate, this.maxDate));
     } else if (this.inputType === 'phone') {
       validators.push(Validators.pattern(/^0\d{9}$/));
@@ -261,13 +269,18 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     /** Chuẩn hóa cho kiểu date: nếu rỗng/null/không hợp lệ thì về '' */
     if (this.inputType === 'date') {
       value = convertInitialValue(this.inputType, value);
+      console.log('value:"' + value);
+
       initial = convertInitialValue(this.inputType, initial);
+      console.log('initial:"' + initial);
     } else {
       value = value == null || value === undefined ? '' : String(value).trim();
       initial = initial == null || initial === undefined ? '' : String(initial).trim();
     }
 
     this.isEdited = value !== initial;
+
+    console.log('this.isEdited:"' + this.isEdited);
 
     this.validate();
     this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
@@ -280,32 +293,86 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    * @Created 26/04/2025
    * @Modified date - user - description
    */
+  private handleDateInput(value: string, isDelete: boolean, event?: KeyboardEvent): void {
+    const inputEl = document.activeElement as HTMLInputElement;
+    let cursorPos = inputEl?.selectionStart || 0;
 
-  private handleDateInput(value: string, isDelete: boolean): void {
-    if (!value) {
-      this.inputControl.setValue('', { emitEvent: false });
-      this.dateModel = null;
+    // Nếu là xóa và có vị trí con trỏ
+    if (isDelete && cursorPos > 0) {
+      // Xử lý khi xóa ở vị trí dấu '/'
+      if (value[cursorPos - 1] === '/') {
+        cursorPos--;
+      }
+
+      // Lấy chuỗi số và vị trí xóa trong chuỗi số
+      let numbers = value.replace(/[^0-9]/g, '');
+      let numberPos = cursorPos;
+      if (cursorPos > 3) numberPos--;
+      if (cursorPos > 6) numberPos--;
+
+      // Xóa số tại vị trí tương ứng
+      numbers = numbers.slice(0, numberPos - 1) + numbers.slice(numberPos);
+
+      // Format lại với placeholder
+      let formatted = '';
+      if (numbers.length > 0) {
+        const day = numbers.slice(0, 2).padEnd(2, 'd');
+        const month = numbers.slice(2, 4).padEnd(2, 'M');
+        const year = numbers.slice(4, 8).padEnd(4, 'y');
+        formatted = `${day}/${month}/${year}`;
+      } else {
+        formatted = 'dd/MM/yyyy';
+      }
+
+      // Cập nhật giá trị
+      this.inputControl.setValue(formatted, { emitEvent: false });
+      this.lastValue = formatted;
+
+      // Đặt lại vị trí con trỏ
+      setTimeout(() => {
+        let newCursorPos = cursorPos - 1;
+        // Điều chỉnh vị trí con trỏ nếu đang ở ranh giới ngày/tháng/năm
+        if (newCursorPos === 2) newCursorPos = 2;
+        if (newCursorPos === 5) newCursorPos = 5;
+        inputEl.setSelectionRange(newCursorPos, newCursorPos);
+      });
+
+      // Cập nhật model và emit
+      if (isValidDateString(formatted)) {
+        const [d, m, y] = formatted.split('/').map(Number);
+        this.dateModel = { day: d, month: m, year: y };
+      } else {
+        this.dateModel = null;
+      }
+      this.valueChange.emit(formatted === this.placeholder ? '' : formatted);
       return;
     }
-
-    if (value === this.placeholder) return;
-
-    let newValue = value.replace(/[^0-9dmyDMY]/g, '');
-    newValue = this.formatWithPlaceholders(newValue, isDelete);
-
-    if (newValue !== this.lastValue) {
-      this.inputControl.setValue(newValue, { emitEvent: false });
-      this.lastValue = newValue;
-      this.valueChange.emit(newValue === this.placeholder ? null : newValue);
-    }
-
-    if (isValidDateString(newValue)) {
-      const [day, month, year] = newValue.split('/').map(Number);
-      this.dateModel = { day, month, year };
-    } else {
-      this.dateModel = null;
-    }
   }
+  // private handleDateInput(value: string, isDelete: boolean): void {
+  //   if (!value) {
+  //     this.inputControl.setValue('', { emitEvent: false });
+  //     this.dateModel = null;
+  //     return;
+  //   }
+
+  //   if (value === this.placeholder) return;
+
+  //   let newValue = value.replace(/[^0-9dmyDMY]/g, '');
+  //   newValue = this.formatWithPlaceholders(newValue, isDelete);
+
+  //   if (newValue !== this.lastValue) {
+  //     this.inputControl.setValue(newValue, { emitEvent: false });
+  //     this.lastValue = newValue;
+  //     this.valueChange.emit(newValue === this.placeholder ? null : newValue);
+  //   }
+
+  //   if (isValidDateString(newValue)) {
+  //     const [day, month, year] = newValue.split('/').map(Number);
+  //     this.dateModel = { day, month, year };
+  //   } else {
+  //     this.dateModel = null;
+  //   }
+  // }
 
   /** xử lý sự kiện người dùng nhập liệu với dataType = date
    * @Author thuan.bv

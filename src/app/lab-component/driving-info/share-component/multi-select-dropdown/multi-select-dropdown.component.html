@@ -29,8 +29,8 @@
     <!-- Dropdown menu -->
     <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="isOpen">
       <div class="select-all p-1 pl-2 border-bottom" *ngIf="selectAll">
-        <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
-        <label class="form-check-label p-1">Tất cả ({{ items.length }})</label>
+        <input type="checkbox" [(ngModel)]="allSelected" [id]="id" (change)="toggleSelectAll()" />
+        <label class="form-check-label p-1" [for]="id">Tất cả ({{ items.length }})</label>
       </div>
 
       <!-- Danh sách các tùy chọn -->

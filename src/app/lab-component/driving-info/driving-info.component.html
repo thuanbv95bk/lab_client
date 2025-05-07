@@ -7,6 +7,7 @@
     <div class="col p-0">
       <app-multi-select-dropdown
         [title]="'Lái xe'"
+        [id]="'driver'"
         [items]="this.lstDriver"
         [displayField1]="'displayName'"
         [displayField2]="'driverLicense'"
@@ -19,6 +20,7 @@
     <div class="col">
       <app-multi-select-dropdown
         [title]="'Loại bằng'"
+        [id]="'licenseTypes'"
         [items]="this.listLicenseTypes"
         [displayField1]="'name'"
         [allSelected]="false"
@@ -31,7 +33,7 @@
       <button type="button" class="btn-sm mb-0" (click)="searchPagingToEdit()"><i class="fa fa-search p-1"></i> Tìm kiếm</button>
     </div>
   </div>
-  <div class="d-flex justify-content-end mt-1">
+  <div class="d-flex justify-content-end mt-2">
     <button type="button" class="btn-sm" *ngIf="isCanSave" (click)="saveChanges()">
       <i class="fa fa-save"></i> Lưu thông tin
     </button>
@@ -64,7 +66,7 @@
           *ngFor="let item of listEmployeesGrid; let i = index"
           id="{{ item.pkEmployeeId }}"
           [ngClass]="{ 'selected-row': selectedId && item == selectedId }">
-          <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
+          <td class="text-center">{{ i + 1 + filterEmployeesGrid.pageIndex * filterEmployeesGrid.pageSize }}</td>
           <td>
             <app-validated-input
               [(ngModel)]="item.displayName"
@@ -150,14 +152,16 @@
             <button #deleteBtn class="btn-delete bg-white" type="button" (click)="deleteRow(item, deleteBtn); onClickItem(item)">
               <img src="../../../assets/image/icons-delete.svg" alt="delete" />
             </button>
-            <!-- <div >
-             
-            </div> -->
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <app-pagination [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)"> </app-pagination>
+  <app-pagination
+    [pagingModel]="pagingModel"
+    [isChangeData]="isCanCancel"
+    (reload)="reloadPagingToEdit()"
+    (page)="pageIndexChange($event)">
+  </app-pagination>
 </div>

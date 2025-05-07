@@ -25,6 +25,8 @@
         (keydown)="inputType === 'date' ? onDateKeydown($event) : inputType === 'phone' ? onPhoneKeydown($event) : null"
         (blur)="validate()"
         placeholder=" "
+        [maxlength]="maxLength"
+        [minlength]="minLength"
         (focus)="focusInput.emit()" />
     </ng-container>
 
