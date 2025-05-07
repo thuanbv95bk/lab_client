@@ -380,6 +380,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
             this.listEmployeesGrid = this.listEmployeesGrid.filter((x) => x.pkEmployeeId !== item.pkEmployeeId);
             /** cập nhật lại  this.pagingModel.length */
             this.pagingModel.length = this.pagingModel.length > 0 ? this.pagingModel.length - 1 : 0;
+            this.getListEmployeesToCbx();
           }
         },
         (err) => this.commonService.showError('Xóa thất bại')

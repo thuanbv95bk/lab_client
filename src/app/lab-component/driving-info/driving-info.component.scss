@@ -49,16 +49,19 @@
       color: red;
     }
 
+    th {
+      vertical-align: top;
+    }
+
     td select.form-control,
     td select.form-control-sm {
-      width: 100%;
-      min-width: 0;
-      max-width: 100%;
+      // width: 100%;
+      // min-width: 0;
+      // max-width: 100%;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       display: block;
-      /* Đảm bảo select chiếm hết ô */
     }
 
     td {
