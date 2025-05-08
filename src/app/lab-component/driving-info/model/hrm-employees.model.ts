@@ -1,11 +1,16 @@
+import { PagingModel } from '../../../app-model/paging';
+/** message xác nhận thay đỗi dự liệu
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
+export const messageConfirm = 'Tồn tại dữ liệu đã có thay đổi, bạn muốn tiếp tục không?';
+
 /** Class Cho danh sách lái xe
  * @Author thuan.bv
  * @Created 25/04/2025
  * @Modified date - user - description
  */
-
-import { PagingModel } from '../../../app-model/paging';
-
 export class HrmEmployees {
   /** Id lái xe */
   pkEmployeeId: number;

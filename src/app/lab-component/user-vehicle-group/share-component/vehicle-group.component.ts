@@ -9,6 +9,12 @@ import { GroupsService } from '../service/groups.service';
   templateUrl: './vehicle-group.component.html',
   styleUrls: ['./vehicle-group.component.scss'],
 })
+
+/** dùng để hiển thị nhóm phương tiện-đã gán/ chưa gán
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class VehicleGroupComponent implements OnChanges {
   /**  tiêu đề */
   @Input() title: string = '';

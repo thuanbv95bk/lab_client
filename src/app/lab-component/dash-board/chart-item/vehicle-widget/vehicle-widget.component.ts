@@ -7,12 +7,22 @@ import { Widget } from '../../model/dashboard.model';
   templateUrl: './vehicle-widget.component.html',
   styleUrl: './vehicle-widget.component.scss',
 })
-export class VehicleWidgetComponent implements OnInit {
-  listCardWidgetModel: CardWidgetModel[] = [];
-  totalVehicles: number = 0;
-  emptyVehicles: number = 0;
-  loadedVehicles: number = 0;
 
+/** widget số phường tiện
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
+export class VehicleWidgetComponent implements OnInit {
+  /** danh sách item */
+  listCardWidgetModel: CardWidgetModel[] = [];
+  /** tổng số phương tiện */
+  totalVehicles: number = 0;
+  /** tổng phương tiện không hàng */
+  emptyVehicles: number = 0;
+  /** tổng phương tiện có hàng */
+  loadedVehicles: number = 0;
+  /** chứa thuộc tính của 1 widget */
   @Input() widget!: Widget;
 
   ngOnInit(): void {
@@ -74,7 +84,8 @@ export class VehicleWidgetComponent implements OnInit {
     this.listCardWidgetModel[0].numberVehicle = 0;
     this.listCardWidgetModel[1].numberVehicle = 0;
     this.listCardWidgetModel[2].numberVehicle = 0;
-    /** setTimeout để nhìn thấy sự thay đổi */
+    // setTimeout để nhìn thấy sự thay đổi
+
     setTimeout(() => {
       this.listCardWidgetModel[0].numberVehicle = totalVehicles;
       this.listCardWidgetModel[1].numberVehicle = numberLoad;

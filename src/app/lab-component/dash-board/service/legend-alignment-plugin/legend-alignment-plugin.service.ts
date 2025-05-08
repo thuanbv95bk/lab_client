@@ -1,24 +1,22 @@
 import { Injectable } from '@angular/core';
 import { Chart, Plugin } from 'chart.js';
 
-/**
- * Injectable
- * @description Service vẽ lại Legend của widget (tròn)
+@Injectable({
+  providedIn: 'root',
+})
+
+/** Service vẽ lại Legend của widget (tròn)
  * Cắn chỉnh Legend vào vị trí chính giữa màn hình
  * khi màn hình bé thì vẽ thành 2 hàng căn giữa
  * @param circleSize :độ lơn của hình tròn
  * @param textOffset: offset chử cách đều nhau
  * @param paddingBottom:  khoáng cách giữa Legend và bottom
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
  */
-@Injectable({
-  providedIn: 'root',
-})
 export class LegendService {
-  getCustomLegendPlugin(
-    circleSize: number = 12,
-    textOffset: number = 10,
-    paddingBottom: number = 10
-  ): Plugin {
+  getCustomLegendPlugin(circleSize: number = 12, textOffset: number = 10, paddingBottom: number = 10): Plugin {
     return {
       id: 'customLegend',
       afterDraw: (chart: Chart) => {
@@ -33,19 +31,16 @@ export class LegendService {
         ctx.font = '12px Arial';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-
-        const itemSpacing = 30; // Khoảng cách giữa các mục legend
-        const maxRowWidth = width - 40; // Giới hạn chiều rộng legend
+        // Khoảng cách giữa các mục legend
+        const itemSpacing = 30;
+        // Giới hạn chiều rộng legend
+        const maxRowWidth = width - 40;
 
         let legendY = height - paddingBottom; // Sát mép dưới
         let items = labels.map((label, index) => ({
           color: colors[index],
           label,
-          width:
-            ctx.measureText(label).width +
-            circleSize +
-            textOffset +
-            itemSpacing,
+          width: ctx.measureText(label).width + circleSize + textOffset + itemSpacing,
         }));
 
         let row1: typeof items = [];
@@ -76,21 +71,20 @@ export class LegendService {
         this.drawLegendRow(ctx, row1, startX, legendY, circleSize, textOffset);
 
         if (row2.length > 0) {
-          legendY -= 25; // Cách đều nhau
-          this.drawLegendRow(
-            ctx,
-            row2,
-            startX,
-            legendY,
-            circleSize,
-            textOffset
-          );
+          // Cách đều nhau
+          legendY -= 25;
+          this.drawLegendRow(ctx, row2, startX, legendY, circleSize, textOffset);
         }
 
         ctx.restore();
       },
     };
   }
+  /** vẽ lại các ký hiệu
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
 
   private drawLegendRow(
     ctx: CanvasRenderingContext2D,
@@ -109,8 +103,8 @@ export class LegendService {
 
       ctx.fillStyle = '#000';
       ctx.fillText(label, x + circleSize + textOffset, y);
-
-      x += circleSize + textOffset + ctx.measureText(label).width + 30; // Giữ khoảng cách đều
+      // Giữ khoảng cách đều
+      x += circleSize + textOffset + ctx.measureText(label).width + 30;
     });
   }
 }

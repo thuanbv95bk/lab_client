@@ -7,8 +7,15 @@ import { LegendService } from '../../service/legend-alignment-plugin/legend-alig
 import { Widget } from '../../model/dashboard.model';
 import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.service';
 
+/** data của biểu đồ Doughnut
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export interface DoughnutModel {
+  /** khoá */
   key: string;
+  /** giá trị */
   value: number;
 }
 
@@ -17,10 +24,21 @@ export interface DoughnutModel {
   templateUrl: './dashboard-doughnut.component.html',
   styleUrl: './dashboard-doughnut.component.scss',
 })
+
+/** hiển thị biểu đồ  DashboardDoughnut
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges {
-  emptyVehicles: number = 0; // Phương tiện không hàng
-  loadedVehicles: number = 0; // Phương tiện có hàng
+  /** Phương tiện không hàng */
+  emptyVehicles: number = 0;
+  /**  Phương tiện có hàng*/
+  /** số pt có hàng */
+  loadedVehicles: number = 0;
+  /** chứa data */
   @Input() dataModel: DoughnutModel[] = [];
+  /** các thuộc tính của 1 Widget */
   @Input() widget!: Widget;
   @ViewChild(BaseChartDirective, { static: false }) chart!: BaseChartDirective;
   private resizeSubscription: Subscription | undefined;
@@ -39,6 +57,12 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges 
         });
     }
   }
+  /** khởi tạo
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
   ngOnInit(): void {
     this.initData();
   }
@@ -66,6 +90,12 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges 
       this.resizeSubscription.unsubscribe();
     }
   }
+
+  /** vẽ biểu đồ
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
 
   ngAfterViewInit(): void {
     setTimeout(() => {
@@ -104,9 +134,10 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges 
         right: 10,
       },
     },
-
-    maintainAspectRatio: false, // Cho phép co giãn theo container
-    aspectRatio: 1, // Change Size of Doughnut Chart
+    // Cho phép co giãn theo container
+    maintainAspectRatio: false,
+    // Change Size of Doughnut Chart
+    aspectRatio: 1,
     plugins: {
       legend: {
         display: false,
@@ -116,9 +147,10 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges 
           pointStyle: 'circle',
           boxWidth: 10,
           padding: 20,
-
-          font: { size: 12 }, // Kích thước chữ
-          textAlign: 'center', // Căn giữa nội dung Legend
+          // Kích thước chữ
+          font: { size: 12 },
+          // Căn giữa nội dung Legend
+          textAlign: 'center',
         },
       },
 
@@ -150,12 +182,14 @@ export class DashboardDoughnutComponent implements OnInit, OnDestroy, OnChanges 
 
     afterDraw(chart: any) {
       const ctx = chart.ctx;
-      const { width, height, data } = chart; // Lấy kích thước biểu đồ
+      // Lấy kích thước biểu đồ
+      const { width, height, data } = chart;
       const xCenter = chart.getDatasetMeta(0).data[0].x;
       const yCenter = chart.getDatasetMeta(0).data[0].y;
 
       ctx.save();
-      const total = data.datasets[0].data[0] + data.datasets[0].data[1]; // lấy ra tổng
+      // lấy ra tổng
+      const total = data.datasets[0].data[0] + data.datasets[0].data[1];
       ctx.translate(xCenter, yCenter);
 
       let fontSize = (Math.min(width, height) / 10).toFixed(2);

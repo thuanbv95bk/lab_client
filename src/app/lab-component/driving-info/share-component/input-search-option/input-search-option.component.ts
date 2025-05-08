@@ -19,6 +19,13 @@ interface DropdownItem {
   templateUrl: './input-search-option.component.html',
   styleUrls: ['./input-search-option.component.scss'],
 })
+
+/** Component  InputSearchOption tìm kiếm theo các tiêu chí khác nhau, được set ở DropdownItem
+ * có chọn nhiều, filter theo các displayField, theo nguoi dug set
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class InputSearchOptionComponent {
   /** placeholder hiển thị */
   @Input() title: string = 'Tìm kiếm';
@@ -49,7 +56,7 @@ export class InputSearchOptionComponent {
    */
 
   ngOnInit(): void {
-    /** set giá trị mặc định */
+    // set giá trị mặc định
     this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
     this.searchOption.key = this.selectedOption?.code;
     this.placeholder = this.selectedOption?.placeholder;

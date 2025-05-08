@@ -1,6 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({ name: 'isoToDdmmyyyy' })
+
+/** định dạng lại date
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class IsoToDdmmyyyyPipe implements PipeTransform {
   transform(value: string | Date): string {
     if (!value) return '';

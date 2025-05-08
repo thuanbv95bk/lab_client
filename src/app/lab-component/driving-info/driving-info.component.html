@@ -1,12 +1,13 @@
-<div class="driving-form p-0" (keyup.enter)="searchPagingToEdit()">
+<div class="driving-form p-0">
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
-  <div class="container-fluid row p-0 m-0 justify-content-between">
+  <div class="container-fluid row p-0 m-0 justify-content-between" (keyup.enter)="searchPagingToEdit()">
     <div class="col pl-0">
       <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
     </div>
-    <div class="col">
+    <div class="col p-0">
       <app-multi-select-dropdown
         [title]="'Lái xe'"
+        [id]="'driver'"
         [items]="this.lstDriver"
         [displayField1]="'displayName'"
         [displayField2]="'driverLicense'"
@@ -19,6 +20,7 @@
     <div class="col">
       <app-multi-select-dropdown
         [title]="'Loại bằng'"
+        [id]="'licenseTypes'"
         [items]="this.listLicenseTypes"
         [displayField1]="'name'"
         [allSelected]="false"
@@ -31,14 +33,16 @@
       <button type="button" class="btn-sm mb-0" (click)="searchPagingToEdit()"><i class="fa fa-search p-1"></i> Tìm kiếm</button>
     </div>
   </div>
-  <div class="d-flex justify-content-end mt-1">
+  <div class="d-flex justify-content-end mt-2">
     <button type="button" class="btn-sm" *ngIf="isCanSave" (click)="saveChanges()">
       <i class="fa fa-save"></i> Lưu thông tin
     </button>
     <button type="button" class="btn-sm ml-2 mr-2 btn-sm-cancel" *ngIf="isCanCancel" (click)="cancel()">
       <i class="fa fa-times"></i>Hủy
     </button>
-    <button type="button" class="btn-sm" (click)="downloadExcel()"><i class="bi bi-file-earmark-excel"></i></button>
+    <button type="button" class="btn-sm" *ngIf="this.pagingModel.length > 0" (click)="downloadExcel()">
+      <i class="bi bi-file-earmark-excel"></i>
+    </button>
   </div>
 
   <div class="table-responsive pt-2">
@@ -62,7 +66,7 @@
           *ngFor="let item of listEmployeesGrid; let i = index"
           id="{{ item.pkEmployeeId }}"
           [ngClass]="{ 'selected-row': selectedId && item == selectedId }">
-          <td class="text-center">{{ i + 1 + (filterEmployeesGrid.pageIndex - 1) * filterEmployeesGrid.pageSize }}</td>
+          <td class="text-center">{{ i + 1 + filterEmployeesGrid.pageIndex * filterEmployeesGrid.pageSize }}</td>
           <td>
             <app-validated-input
               [(ngModel)]="item.displayName"
@@ -143,18 +147,21 @@
               (focusInput)="onClickItem(item)">
             </app-validated-input>
           </td>
-          <td>{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
+          <td class="text-center">{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
-            <div class="btn-delete">
-              <img src="../../../assets/image/icons-delete.svg" (click)="deleteRow(item); onClickItem(item)" alt="delete" />
-              <!-- <i class="bi bi-trash3 text-danger"></i> -->
-            </div>
+            <button #deleteBtn class="btn-delete bg-white" type="button" (click)="deleteRow(item, deleteBtn); onClickItem(item)">
+              <img src="../../../assets/image/icons-delete.svg" alt="delete" />
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <app-pagination #paginator [pagingModel]="pagingModel" (reload)="reloadPagingToEdit()" (page)="pageIndexChange($event)">
+  <app-pagination
+    [pagingModel]="pagingModel"
+    [isChangeData]="isCanCancel"
+    (reload)="reloadPagingToEdit()"
+    (page)="pageIndexChange($event)">
   </app-pagination>
 </div>

@@ -5,6 +5,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   templateUrl: './text-search.component.html',
   styleUrls: ['./text-search.component.scss'],
 })
+
+/** Component dùng chung- dùng để nhập tìm kiếm, theo input
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class TextSearchComponent {
   /** placeholder hiển thị */
   @Input() placeholder: string;

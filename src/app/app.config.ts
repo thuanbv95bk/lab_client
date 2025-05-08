@@ -7,6 +7,12 @@ export interface ApiEndpoint {
 }
 
 @Injectable()
+
+/** config app khi khởi chạy
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class AppConfig {
   static apiEndpoint: string;
   private httpClient: HttpClient;

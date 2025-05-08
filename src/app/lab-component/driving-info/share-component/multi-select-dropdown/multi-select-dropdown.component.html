@@ -2,11 +2,11 @@
   <div>{{ title }}</div>
   <div class="mt-auto">
     <!-- Phần hiển thị khi chưa click vào dropdown -->
-    <div class="selected-items d-flex align-items-center border bg-white input-group" (click)="toggleDropdown()">
+    <div class="selected-items d-flex bg-white input-group input-group-sm" (click)="toggleDropdown()">
       <input
         *ngIf="!isOpen"
         type="text"
-        class="p-0 border-0 placeholder-input form-control form-control-sm bg-white"
+        class="border placeholder-input form-control bg-white"
         [value]="getDisplayText()"
         [placeholder]="placeholder"
         readonly />
@@ -15,23 +15,26 @@
         *ngIf="isOpen && search"
         #searchInput
         type="text"
-        class="border-0 p-0 search-input form-control form-control-sm"
+        class="border search-input form-control"
         [formControl]="FilterCtrl"
         [placeholder]="placeholder" />
-      <div class="input-group-prepend ml-1">
-        <i class="dropdown-icon" [ngClass]="!isOpen ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"></i>
+
+      <div class="input-group-append">
+        <span class="input-group-text">
+          <i [ngClass]="!isOpen ? 'fa-solid fa-caret-down' : 'fa-solid fa-caret-up'"></i>
+        </span>
       </div>
     </div>
 
     <!-- Dropdown menu -->
     <div class="dropdown-list position-absolute w-100 bg-white border shadow" [class.d-block]="isOpen">
       <div class="select-all p-1 pl-2 border-bottom" *ngIf="selectAll">
-        <input type="checkbox" [(ngModel)]="allSelected" (change)="toggleSelectAll()" />
-        <label class="form-check-label p-1">Tất cả ({{ items.length }})</label>
+        <input type="checkbox" [(ngModel)]="allSelected" [id]="id" (change)="toggleSelectAll()" />
+        <label class="form-check-label p-1" [for]="id">Tất cả ({{ items.length }})</label>
       </div>
 
       <!-- Danh sách các tùy chọn -->
-      <div class="options" style="max-height: 15rem; overflow-y: auto">
+      <div class="options">
         <div
           *ngFor="let item of filteredItems | async"
           class="option d-flex align-items-center p-1 pl-2 border-bottom form-check"

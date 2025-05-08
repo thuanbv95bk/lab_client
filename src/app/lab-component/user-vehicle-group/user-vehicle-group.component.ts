@@ -14,6 +14,12 @@ import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/
   templateUrl: './user-vehicle-group.component.html',
   styleUrls: ['./user-vehicle-group.component.scss'],
 })
+
+/** màn hình danh sách nhóm phương tiện
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class UserVehicleGroupComponent implements OnInit {
   /** ID công ty mặc định */
   companyID: number = 15076;

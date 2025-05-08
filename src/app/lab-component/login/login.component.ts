@@ -10,6 +10,12 @@ import { Menu, News, Branch, Languages } from './model/app-model';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
+
+/** LoginComponent màn hình đăng nhập
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class LoginComponent implements OnInit, OnDestroy {
   //#region Khởi tạo dữ liệu MasterData
 
@@ -61,8 +67,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       index: 0,
       imageUrl: '../assets/image/baexpress.png',
       title: 'GIẢI PHÁP ĐIỀU HÀNH VẬN TẢI',
-      shortContent:
-        'Camera giám sát ghi hình trong xe ô tô của BA GPS mang đến nhiều lợi ích cho doanh nghiệp vận tải.',
+      shortContent: 'Camera giám sát ghi hình trong xe ô tô của BA GPS mang đến nhiều lợi ích cho doanh nghiệp vận tải.',
       link: 'https://bagps.vn/trich-xuat-du-lieu-mien-phi-tu-camera-giam-sat-d4221',
     },
     {

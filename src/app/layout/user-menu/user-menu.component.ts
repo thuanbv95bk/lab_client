@@ -7,8 +7,16 @@ import { UserInfo } from '../../lab-component/login/model/app-model';
   templateUrl: './user-menu.component.html',
   styleUrls: ['./user-menu.component.scss'],
 })
+
+/** hiển thị icon user và nút đăng xuất
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class UserMenuComponent implements OnInit {
+  /** thông tin user */
   user = new UserInfo();
+
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {

@@ -9,14 +9,13 @@ $color-border: #ced4da;
   /* chừa chỗ cho icon calendar */
   padding-left: 0.75rem;
   padding-right: 2.5rem;
-  /* chừa chỗ cho icon calendar */
+
   color: #aaa;
   pointer-events: none;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   line-height: 2.1;
-  /* căn giữa chiều cao input */
   font-size: 0.95em;
 }
 
@@ -48,31 +47,11 @@ input[type='text']::placeholder {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-// Ẩn placeholder thật, hiển thị placeholder ảo
-input[type='text']::placeholder {
-  color: transparent;
-}
-
-// Hiển thị placeholder tùy chỉnh
-.input-group:after {
-  content: attr(data-placeholder);
-  position: absolute;
-  pointer-events: none;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #6c757d;
-  z-index: 1;
-}
 
 select.form-control,
 select.form-control-sm {
-  width: 100%;
-  min-width: 0;
-  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  /* Đảm bảo select chiếm hết ô */
 }

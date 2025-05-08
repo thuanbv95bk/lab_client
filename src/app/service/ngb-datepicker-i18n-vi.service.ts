@@ -8,6 +8,12 @@ const MONTHS = ['T1', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'T8', 'T9', 'T10', 'T1
 @Injectable({
   providedIn: 'root',
 })
+
+/** ghi đè NgbDatepicker của bootstrap
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class NgbDatepickerI18nViService extends NgbDatepickerI18n {
   override getWeekdayLabel(weekday: number, width?: TranslationWidth.Wide): string {
     return WEEKDAYS[weekday - 1];

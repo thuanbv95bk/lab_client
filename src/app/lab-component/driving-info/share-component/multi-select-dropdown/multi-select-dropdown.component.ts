@@ -18,10 +18,19 @@ import { FormControl } from '@angular/forms';
   templateUrl: './multi-select-dropdown.component.html',
   styleUrls: ['./multi-select-dropdown.component.scss'],
 })
+
+/** Component  MultiSelectDropdown dùng hiển thị dạng danh sách
+ * có chọn nhiều, filter theo các displayField, theo nguoi dug set
+ * @Author thuan.bv
+ * @Created 07/05/2025
+ * @Modified date - user - description
+ */
 export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   /**  tiêu đề */
   @Input() title: string = 'Tìm kiếm';
 
+  /**  tiêu đề */
+  @Input() id: string = '';
   /** Field name cần hiên thị*/
   @Input() displayField1: string = '';
   @Input() displayField2: string = '';
@@ -42,12 +51,16 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
 
   /**  Placeholder cho ô tìm kiếm */
   @Input() placeholder: string = 'Select';
+
   /** Cho phép tìm kiếm hay không */
   @Input() search: boolean = true;
+
   /** Cho phép chọn tất cả hay không */
   @Input() selectAll: boolean = true;
+
   /** Trạng thái đã chọn tất cả hay chưa */
   @Input() allSelected: boolean = false;
+
   /**Sự kiện khi danh sách chọn thay đổi */
   @Output() selectedChange = new EventEmitter<{ data: any[]; isCheckAll: boolean }>();
   /**  Tham chiếu đến input tìm kiếm */
@@ -73,7 +86,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   constructor(private elementRef: ElementRef) {}
 
   ngOnChanges(changes: SimpleChanges): void {
-    /** Khi input items thay đổi, khởi tạo lại dữ liệu */
+    // Khi input items thay đổi, khởi tạo lại dữ liệu
     if (changes['items']) {
       this.initData();
     }
@@ -94,12 +107,14 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
    */
 
   initData() {
+    // Đăng ký lắng nghe thay đổi của danh sách dữ liệu gốc
     this.listData.pipe(takeUntil(this.onDestroy)).subscribe((x) => {
       this._items = this.items;
+      // cập nhật giá trị mới cho các subscriber của filteredItems
       this.filteredItems.next(this.items);
     });
 
-    /** listen for search field value changes */
+    // Đăng ký lắng nghe thay đổi giá trị ô tìm kiếm
     this.FilterCtrl.valueChanges.pipe(takeUntil(this.onDestroy)).subscribe(() => {
       this.filterItems();
     });
@@ -113,18 +128,20 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     if (!this._items) {
       return;
     }
-    // get the search keyword
+    // Lấy giá trị từ ô tìm kiếm
     let search = this.FilterCtrl.value;
     if (!search) {
+      //  trả về toàn bộ danh sách gốc.
       this.filteredItems.next(this._items.slice());
       return;
     } else {
       search = search.toLowerCase();
     }
-    /** filter data */
+    // filter data
     this.filteredItems.next(
       this._items.filter((itm) => {
-        /** tim kiem tren ca  field1 và field2 */
+        // tim kiem tren ca  field1 và field2
+        // Chỉ những item nào có từ khóa tìm kiếm xuất hiện trong
         return (
           (this.displayField1 && itm[this.displayField1].toString().toLowerCase().indexOf(search) > -1) ||
           (this.displayField2 && itm[this.displayField2].toString().toLowerCase().indexOf(search) > -1)
@@ -155,7 +172,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
   toggleDropdown() {
     this.isOpen = !this.isOpen;
     if (this.isOpen) {
-      // this.filterList();
       setTimeout(() => {
         if (this.searchInput) {
           this.searchInput.nativeElement.focus();
@@ -196,23 +212,6 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.allSelected = this.selectedItems.length === this.items.length;
   }
 
-  /** xóa xe đã chọn
-   * @param item Vehicle : xe được chọn
-   * @event emit sự kiện ra ngoài: trả về danh sách xe đã chọn
-   * @Author thuan.bv
-   * @Created 23/04/2025
-   * @Modified date - user - description
-   */
-
-  removeItem(item: any) {
-    const index = this.selectedItems.indexOf(item);
-    if (index !== -1) {
-      this.selectedItems.splice(index, 1);
-      this.selectedChange.emit({ data: this.selectedItems, isCheckAll: false });
-    }
-    this.allSelected = this.selectedItems.length === this.items.length;
-  }
-
   /** chọn/ bỏ chọn check all
    * emit sự kiện ra ngoài: trả về danh sách xe
    * @Author thuan.bv
@@ -229,7 +228,7 @@ export class MultiSelectDropdownComponent implements OnInit, OnChanges {
     this.selectedChange.emit({ data: this.selectedItems, isCheckAll: this.allSelected });
   }
 
-  /**kiểm tra trạng thai isSelected của item: Vehicle
+  /**kiểm tra trạng thai isSelected của item:
    * @param item Vehicle
    * @Author thuan.bv
    * @Created 23/04/2025

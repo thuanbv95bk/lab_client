@@ -8,12 +8,24 @@ import { VehicleDataService } from '../../service/vehicle-data/vehicle-data.serv
   templateUrl: './vehicle-list.component.html',
   styleUrl: './vehicle-list.component.scss',
 })
+
+/** hiện danh sách xe
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class VehicleListComponent implements OnInit {
+  /** danh sách xe */
   vehicles: Vehicle[] = [];
+  /** Tổng số xe */
   numberVehicle: number = 0;
+  /** bộ lọc xe */
   filteredVehicles: Vehicle[] = [];
+  /** vị trí hiện tại của xe */
   locations = Object.values(LocationEnum);
+  /** vị trí chọn */
   selectedLocation: string = '';
+  /** vị trí chọn */
   selectedIsLoaded: string = '';
 
   constructor(private vehicleService: VehicleDataService) {}

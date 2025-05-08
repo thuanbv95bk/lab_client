@@ -3,13 +3,15 @@ import { LocationEnum } from '../../enum/location.enum';
 import { Vehicle } from '../../model/vehicle.model';
 import { DoughnutModel } from '../../chart-item/dashboard-doughnut/dashboard-doughnut.component';
 
-/**
- * Injectable Sinh dữ liệu xe, theo radom,
- * số lương xe sinh ra bằng tổng value của companyList
- */
 @Injectable({
   providedIn: 'root',
 })
+
+/** số lương xe sinh ra bằng tổng value của companyList
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class VehicleDataService {
   private vehicleList: Vehicle[] = [];
   private idCounter = 1;
@@ -41,6 +43,11 @@ export class VehicleDataService {
   constructor() {
     this.generateVehicles();
   }
+  /** tạo xe
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
 
   public generateVehicles(): void {
     for (const company of this.companyList) {
@@ -57,22 +64,24 @@ export class VehicleDataService {
     }
   }
 
-  /**
-   * Gets vehicles
-   * @returns vehicles danh sách xe
+  /** Gets vehicles
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
    */
+
   getVehicles(): Vehicle[] {
     this.vehicleList = [];
     this.generateVehicles();
     return this.vehicleList;
   }
 
-  /**
-   * Gets company summary
-   * @description Tính toán, tổng hợp số lượng xe dựa trên địa điểm công ty của nó
-   * @param data
-   * @returns company summary
+  /**Tính toán, tổng hợp số lượng xe dựa trên địa điểm công ty của nó
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
    */
+
   getCompanySummary(data: any): any[] {
     // kiểm tra dữ liệu đầu vào
     const factoryVehicles = data || [];
@@ -92,13 +101,12 @@ export class VehicleDataService {
     }));
   }
 
-  /**
-   * Gets summary
-   * @description tính toán số lượng xe: có hàng, không có hàng, theo tiêu chí vị trí
-   * @param data
-   * @param locationEnum
-   * @returns summary VehicleLoaded[]
+  /**tính toán số lượng xe: có hàng, không có hàng, theo tiêu chí vị trí
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
    */
+
   getDataToDoughnut(data: Vehicle[], locationEnum: string): DoughnutModel[] {
     // kiểm tra dữ liệu đầu vào
     let res: DoughnutModel[] = [];

@@ -8,7 +8,6 @@ import { WidgetUpdateDataService } from '../service/vehicle-data/widget-update-d
  * @Created 23/04/2025
  * @Modified date - user - description
  */
-
 export class Widget {
   orderValue: number = 0;
   title: string = '';
@@ -19,8 +18,8 @@ export class Widget {
   isVisible: boolean = true;
   chartType!: TypeChartEnum;
   currentSize!: SizeEnum;
-
-  dataModel: Vehicle[] = []; // Sử dụng Observable thay vì dữ liệu tĩnh
+  // Sử dụng Observable thay vì dữ liệu tĩnh
+  dataModel: Vehicle[] = [];
   private subscription!: Subscription;
   constructor(obj?: Partial<Widget>, private updateDataService?: WidgetUpdateDataService) {
     this.orderValue = obj?.orderValue || 0;
@@ -89,7 +88,12 @@ export class WidgetSizeConfig {
     },
   };
 
-  // Trạng thái kích thước hiện tại cho từng location
+  /** Trạng thái kích thước hiện tại cho từng location
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
   private static currentSize: Record<LocationEnum, SizeEnum> = {
     [LocationEnum.TongQuan]: SizeEnum.auto,
     [LocationEnum.CuaKhau]: SizeEnum.auto,
@@ -98,11 +102,12 @@ export class WidgetSizeConfig {
     [LocationEnum.TaiCang]: SizeEnum.auto,
   };
 
-  /**
-   * Lấy class theo `currentSize` của một location
-   * @param location Vị trí widget
-   * @returns Class tương ứng
+  /** Lấy class theo `currentSize` của một location
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
    */
+
   static getClass(location: LocationEnum): string {
     const size = this.currentSize[location] ?? SizeEnum.auto;
     return this.sizeConfig[location]?.[size];
@@ -112,7 +117,7 @@ export class WidgetSizeConfig {
    * @param location Vị trí widget
    * @param size Kích thước mới
    * @Author thuan.bv
-   * @Created 23/04/2025
+   * @Created 08/05/2025
    * @Modified date - user - description
    */
 

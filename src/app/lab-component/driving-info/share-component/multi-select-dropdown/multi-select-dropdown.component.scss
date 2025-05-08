@@ -1,5 +1,5 @@
 .multiselect-dropdown {
-    width: 20em;
+    // width: 25em;
     min-height: 100%;
 
     .selected-items {
@@ -11,13 +11,18 @@
         }
 
         cursor: pointer;
-        padding: 0px 7px;
         border-radius: 3px;
 
-        .dropdown-icon {
-            font-size: 14px;
-            color: #666;
+        input {
+            border-right: none !important;
         }
+
+
+        .input-group-text {
+            background-color: white;
+        }
+
+
 
         .placeholder-input {
             border: none;
@@ -44,6 +49,9 @@
         }
 
         .options {
+            max-height: 20rem;
+            overflow-y: auto;
+
             .option {
                 cursor: pointer;
 

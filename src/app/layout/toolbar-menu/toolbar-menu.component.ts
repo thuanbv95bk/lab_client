@@ -8,14 +8,18 @@ import { AppGlobals } from '../../app-global';
   templateUrl: './toolbar-menu.component.html',
   styleUrls: ['./toolbar-menu.component.scss'],
 })
+/** khu menu chính của app
+ * @Author thuan.bv
+ * @Created 08/05/2025
+ * @Modified date - user - description
+ */
 export class ToolbarMenuComponent implements OnInit {
-  /** Active menu */
-  // selectedId: string;
   /** Kiểm tra đóng mở side menu */
   isCollapsed = true;
 
   /** check trạng thái porter màn hình */
   isMobileView = false;
+
   appGlobals = AppGlobals;
   /**  Danh sách menu hiển thị
    * @Author thuan.bv
@@ -69,7 +73,6 @@ export class ToolbarMenuComponent implements OnInit {
 
   ngOnInit() {
     this.checkViewport();
-    // AppGlobals.activeMenuId = '/dash-board';
   }
   /** theo dõi window:resize để hiển thi bottom side menu
    * @Author thuan.bv
@@ -91,9 +94,11 @@ export class ToolbarMenuComponent implements OnInit {
    */
 
   checkViewport() {
-    this.isMobileView = window.innerWidth < 992; // Bootstrap lg breakpoint
+    // Bootstrap lg breakpoint
+    this.isMobileView = window.innerWidth < 992;
     if (!this.isMobileView) {
-      this.isCollapsed = true; // Đảm bảo menu đóng khi chuyển sang desktop
+      // Đảm bảo menu đóng khi chuyển sang desktop
+      this.isCollapsed = true;
     }
   }
 

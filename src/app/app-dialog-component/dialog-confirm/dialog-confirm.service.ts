@@ -1,13 +1,13 @@
-import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector } from '@angular/core';
+import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector, ElementRef } from '@angular/core';
 import { DialogConfirmComponent } from './dialog-confirm.component';
+
+@Injectable({ providedIn: 'root' })
 
 /** Injectable Mở 1 dialog , có xác nhận
  * @Author thuan.bv
  * @Created 28/04/2025
  * @Modified date - user - description
  */
-
-@Injectable({ providedIn: 'root' })
 export class DialogConfirmService {
   constructor(
     private appRef: ApplicationRef,
