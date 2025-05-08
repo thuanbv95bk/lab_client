@@ -55,8 +55,10 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   /** trigger reset về trạng thái isEdit = false,sau khi lưu */
   @Input() resetEditFlag: boolean = false;
 
-  /** nếu data type = Date , minDate và maxDate để check Validated */
+  /** nếu data type = Date , minDate check Validated */
   @Input() minDate: Date | null = null;
+
+  /** nếu data type = Date  maxDate để check Validated */
   @Input() maxDate: Date | null = null;
 
   /** nếu data type = selection => danh sách options */
@@ -76,6 +78,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   /** Lưu giá trị ban đầu để so sánh isEdited */
   private originalValue: any = null;
 
+  /** giá trị input */
   inputControl: FormControl;
 
   /** Lưu trạng thái isEdited */
@@ -87,8 +90,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   /** biến lưu value nếu type = date */
   dateModel: { day: number; month: number; year: number } | null = null;
 
-  /** biến lưu data mới nhất=> check sự thay đỗi data */
-  private lastValue = '';
   /** placeholder nếu type = date */
   placeholder = 'dd/MM/yyyy';
 
@@ -97,6 +98,9 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   /** ViewChild của dateIcon để trả lại focus*/
   @ViewChild('dateIcon') dateIconRef!: ElementRef;
+
+  /** ViewChild của input dùng xử lý con trỏ, khi nhập xóa ngày */
+  @ViewChild('inputElement') inputElement!: ElementRef<HTMLInputElement>;
 
   private onChange: any = () => {};
   private onTouched: any = () => {};
@@ -148,8 +152,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       this.inputControl.enable();
     }
   }
-
-  constructor() {}
 
   /** Theo dõi sự thay đỗi cửa dữ liệu
    * @Author thuan.bv
@@ -215,11 +217,11 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     this.inputControl = new FormControl('', validators);
 
     // nếu la date => đăng ký sự thay đỗi, khi người dùng gõ
-    if (this.inputType === 'date') {
-      this.inputControl.valueChanges.subscribe((value) => {
-        this.handleDateInput(value, false);
-      });
-    }
+    // if (this.inputType === 'date') {
+    //   this.inputControl.valueChanges.subscribe((value) => {
+    //     this.handleDateInput(value, false);
+    //   });
+    // }
 
     // gọi hàm cập nhật trạng thái isEdit
     this.updateIsEdited();
@@ -281,175 +283,11 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     this.fieldStatusChange.emit({ isEdited: this.isEdited, isValid: !this.inputControl.invalid });
   }
 
-  /** Xử lý nhập liệu và xóa cho data type= date
-   * @param value
-   * @param isDelete nhập thêm hay xóa
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-  private handleDateInput(value: string, isDelete: boolean, event?: KeyboardEvent): void {
-    const inputEl = document.activeElement as HTMLInputElement;
-    let cursorPos = inputEl?.selectionStart || 0;
-
-    // Nếu là xóa và có vị trí con trỏ
-    if (isDelete && cursorPos > 0) {
-      // Xử lý khi xóa ở vị trí dấu '/'
-      if (value[cursorPos - 1] === '/') {
-        cursorPos--;
-      }
-
-      // Lấy chuỗi số và vị trí xóa trong chuỗi số
-      let numbers = value.replace(/[^0-9]/g, '');
-      let numberPos = cursorPos;
-      if (cursorPos > 3) numberPos--;
-      if (cursorPos > 6) numberPos--;
-
-      // Xóa số tại vị trí tương ứng
-      numbers = numbers.slice(0, numberPos - 1) + numbers.slice(numberPos);
-
-      // Format lại với placeholder
-      let formatted = '';
-      if (numbers.length > 0) {
-        const day = numbers.slice(0, 2).padEnd(2, 'd');
-        const month = numbers.slice(2, 4).padEnd(2, 'M');
-        const year = numbers.slice(4, 8).padEnd(4, 'y');
-        formatted = `${day}/${month}/${year}`;
-      } else {
-        formatted = 'dd/MM/yyyy';
-      }
-
-      // Cập nhật giá trị
-      this.inputControl.setValue(formatted, { emitEvent: false });
-      this.lastValue = formatted;
-
-      // Đặt lại vị trí con trỏ
-      setTimeout(() => {
-        let newCursorPos = cursorPos - 1;
-        // Điều chỉnh vị trí con trỏ nếu đang ở ranh giới ngày/tháng/năm
-        if (newCursorPos === 2) newCursorPos = 2;
-        if (newCursorPos === 5) newCursorPos = 5;
-        inputEl.setSelectionRange(newCursorPos, newCursorPos);
-      });
-
-      // Cập nhật model và emit
-      if (isValidDateString(formatted)) {
-        const [d, m, y] = formatted.split('/').map(Number);
-        this.dateModel = { day: d, month: m, year: y };
-      } else {
-        this.dateModel = null;
-      }
-      this.valueChange.emit(formatted === this.placeholder ? '' : formatted);
-      return;
-    }
-  }
-  // private handleDateInput(value: string, isDelete: boolean): void {
-  //   if (!value) {
-  //     this.inputControl.setValue('', { emitEvent: false });
-  //     this.dateModel = null;
-  //     return;
-  //   }
-
-  //   if (value === this.placeholder) return;
-
-  //   let newValue = value.replace(/[^0-9dmyDMY]/g, '');
-  //   newValue = this.formatWithPlaceholders(newValue, isDelete);
-
-  //   if (newValue !== this.lastValue) {
-  //     this.inputControl.setValue(newValue, { emitEvent: false });
-  //     this.lastValue = newValue;
-  //     this.valueChange.emit(newValue === this.placeholder ? null : newValue);
-  //   }
-
-  //   if (isValidDateString(newValue)) {
-  //     const [day, month, year] = newValue.split('/').map(Number);
-  //     this.dateModel = { day, month, year };
-  //   } else {
-  //     this.dateModel = null;
-  //   }
-  // }
-
   /** xử lý sự kiện người dùng nhập liệu với dataType = date
    * @Author thuan.bv
    * @Created 26/04/2025
    * @Modified date - user - description
    */
-
-  onDateInput(event: any): void {
-    if (this.inputType !== 'date') return;
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/[^0-9]/g, '');
-
-    // Tự động format và thêm placeholder
-    let formatted = '';
-    let cursorPos = input.selectionStart || 0;
-
-    if (value.length <= 2) {
-      formatted = value.padEnd(2, 'd') + '/MM/yyyy';
-      cursorPos = value.length === 2 ? 3 : value.length;
-    } else if (value.length <= 4) {
-      formatted = value.substr(0, 2) + '/' + value.substr(2, 2).padEnd(2, 'M') + '/yyyy';
-      cursorPos = value.length === 4 ? 6 : value.length + 1;
-    } else {
-      formatted = value.substr(0, 2) + '/' + value.substr(2, 2) + '/' + value.substr(4, 4).padEnd(4, 'y');
-      cursorPos = value.length + 2;
-      if (cursorPos > 10) cursorPos = 10;
-    }
-
-    // Cập nhật giá trị input mà không emit event
-    this.inputControl.setValue(formatted, { emitEvent: false });
-
-    // Đặt lại vị trí con trỏ
-    setTimeout(() => {
-      input.setSelectionRange(cursorPos, cursorPos);
-    });
-
-    // Cập nhật dateModel nếu hợp lệ
-    if (isValidDateString(formatted)) {
-      const [day, month, year] = formatted.split('/').map(Number);
-      this.dateModel = { day, month, year };
-    } else {
-      this.dateModel = null;
-    }
-    this.inputControl.updateValueAndValidity({ onlySelf: true });
-  }
-
-  /** Định dạng với placeholder
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
-  private formatWithPlaceholders(value: string, isDelete: boolean): string {
-    let formatted = value.replace(/[^0-9]/g, '');
-
-    if (formatted.length > 8) formatted = formatted.substring(0, 8);
-
-    let result = '';
-    for (let i = 0; i < formatted.length; i++) {
-      if (i === 2 || i === 4) result += '/';
-      result += formatted[i];
-    }
-
-    // Thêm placeholder
-    if (!isDelete) {
-      const parts = result.split('/');
-      parts[0] = parts[0]?.padEnd(2, 'd') || 'dd';
-      parts[1] = parts[1]?.padEnd(2, 'M') || 'MM';
-      parts[2] = parts[2]?.padEnd(4, 'y') || 'yyyy';
-
-      return parts.join('/');
-    }
-
-    return result;
-  }
-
-  /** Xử lý sự kiện keydown DataType = date
-   * @Author thuan.bv
-   * @Created 26/04/2025
-   * @Modified date - user - description
-   */
-
   onDateKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'date') return;
 
@@ -471,15 +309,112 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       'Tab',
     ];
 
-    if (!allowedKeys.includes(event.key)) {
+    const isCtrlOrMeta = event.ctrlKey || event.metaKey;
+    const ctrlAllowed = ['a', 'c', 'v', 'x'];
+
+    if (allowedKeys.includes(event.key) || (isCtrlOrMeta && ctrlAllowed.includes(event.key.toLowerCase()))) {
+      if (event.key >= '0' && event.key <= '9') {
+        event.preventDefault();
+        this.insertDateDigit(event.key);
+      } else if (event.key === 'Backspace' || event.key === 'Delete') {
+        event.preventDefault();
+        this.deleteDateDigit(event.key as 'Backspace' | 'Delete');
+      }
+      // Arrow keys/tab xử lý mặc định
+    } else {
       event.preventDefault();
+    }
+  }
+
+  /** xử lý khi người dùng nhập thêm ngày/tháng/ năm từ bàn phím
+   * @param digit giá trị date
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
+  private insertDateDigit(digit: string): void {
+    const input = this.inputElement.nativeElement as HTMLInputElement;
+    const rawValue = this.inputControl.value || this.placeholder;
+    let cursor = input.selectionStart ?? 0;
+
+    // Bỏ qua nếu ngoài vùng cho phép
+    if (cursor >= rawValue.length) return;
+
+    // Bỏ qua dấu `/`
+    while (cursor < rawValue.length && rawValue[cursor] === '/') {
+      cursor++;
+    }
+
+    if (cursor >= rawValue.length) return;
+
+    // Ghi đè ký tự tại vị trí con trỏ
+    const chars = rawValue.split('');
+    chars[cursor] = digit;
+    const newValue = chars.join('');
+
+    this.inputControl.setValue(newValue);
+
+    // Di chuyển con trỏ tới vị trí tiếp theo, bỏ qua dấu `/`
+    let nextCursor = cursor + 1;
+    while (nextCursor < newValue.length && newValue[nextCursor] === '/') {
+      nextCursor++;
+    }
+
+    // Đặt lại vị trí con trỏ
+    setTimeout(() => input.setSelectionRange(nextCursor, nextCursor));
+  }
+
+  /** xử lý khi người dùng xóa ngày/tháng/ năm từ bàn phím
+   * @param isBackspace phím isBackspace?
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+
+  private deleteDateDigit(key: 'Backspace' | 'Delete'): void {
+    const input = this.inputElement.nativeElement as HTMLInputElement;
+    const rawValue = this.inputControl.value || 'dd/MM/yyyy';
+    const placeholder = 'dd/MM/yyyy';
+
+    let start = input.selectionStart ?? 0;
+    let end = input.selectionEnd ?? 0;
+
+    // Nếu có vùng chọn (bôi đen)
+    if (start !== end) {
+      const chars = rawValue.split('');
+      for (let i = start; i < end; i++) {
+        if (placeholder[i] && placeholder[i] !== '/' && rawValue[i] !== '/') {
+          chars[i] = placeholder[i];
+        }
+      }
+      const newValue = chars.join('');
+      this.inputControl.setValue(newValue);
+      setTimeout(() => input.setSelectionRange(start, start));
       return;
     }
 
-    // Xử lý đặc biệt cho phím xóa
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-      this.handleDateInput(this.inputControl.value, true);
+    // Nếu không bôi đen (xóa 1 ký tự)
+    let cursor = start;
+
+    if (key === 'Backspace') {
+      if (cursor === 0) return;
+      cursor--;
     }
+
+    // Bỏ qua dấu "/"
+    while (cursor >= 0 && rawValue[cursor] === '/') {
+      cursor += key === 'Backspace' ? -1 : 1;
+    }
+
+    if (cursor < 0 || cursor >= rawValue.length) return;
+
+    const chars = rawValue.split('');
+    chars[cursor] = placeholder[cursor];
+    const newValue = chars.join('');
+
+    this.inputControl.setValue(newValue);
+    setTimeout(() => input.setSelectionRange(cursor, cursor));
   }
 
   /** Xử lý sự kiện keydown DataType = phone

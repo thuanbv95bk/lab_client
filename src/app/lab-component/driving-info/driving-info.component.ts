@@ -13,7 +13,6 @@ import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
 import { CommonService } from '../../service/common.service';
 import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
 import { toISODateString } from '../../utils/date-utils';
-import { LoadingService } from '../../layout/loading-mask/loading.service';
 
 @Component({
   selector: 'app-driving-info',
@@ -139,7 +138,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   getPagingToEdit() {
-    // this.loadingService.setLoading(true);
     // gán id của công ty mặc định
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
     this.employeesService.getPagingToEdit(this.filterEmployeesGrid, false).then(
