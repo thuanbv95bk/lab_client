@@ -105,26 +105,7 @@ export function convertInitialValue(inputType: string, value: Date | string): st
 
   return String(value ?? '');
 }
-// export function convertInitialValue(inputType: string, value: Date | string): string {
-//   if (inputType === 'date') {
-//     if (value instanceof Date) {
-//       return this.isValidDate(value) ? formatDate(value) : '';
-//     }
-//     const strVal = String(value ?? '');
-//     /** Nếu là dạng dd/MM/yyyy thì giữ nguyên */
-//     if (isValidDateString(strVal)) {
-//       return strVal;
-//     }
-//     /** Nếu là dạng ISO (yyyy-MM-ddTHH:mm:ss) */
-//     const isoMatch = strVal.match(/^(\d{4})-(\d{2})-(\d{2})/);
-//     if (isoMatch) {
-//       const [_, year, month, day] = isoMatch;
-//       return `${day}/${month}/${year}`;
-//     }
-//     return String(value ?? '');
-//   }
-//   return String(value ?? '');
-// }
+
 /** hàm kiểm tra hợp lệ cho minDate/maxDate
  * @Author thuan.bv
  * @Created 26/04/2025

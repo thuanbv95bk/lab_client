@@ -216,13 +216,6 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     // KHỞI TẠO VỚI GIÁ TRỊ RỖNG, GIÁ TRỊ SẼ ĐƯỢC SET BỞI writeValue
     this.inputControl = new FormControl('', validators);
 
-    // nếu la date => đăng ký sự thay đỗi, khi người dùng gõ
-    // if (this.inputType === 'date') {
-    //   this.inputControl.valueChanges.subscribe((value) => {
-    //     this.handleDateInput(value, false);
-    //   });
-    // }
-
     // gọi hàm cập nhật trạng thái isEdit
     this.updateIsEdited();
 
@@ -374,8 +367,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
   private deleteDateDigit(key: 'Backspace' | 'Delete'): void {
     const input = this.inputElement.nativeElement as HTMLInputElement;
-    const rawValue = this.inputControl.value || 'dd/MM/yyyy';
-    const placeholder = 'dd/MM/yyyy';
+    const rawValue = this.inputControl.value || this.placeholder;
 
     let start = input.selectionStart ?? 0;
     let end = input.selectionEnd ?? 0;
@@ -384,8 +376,8 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     if (start !== end) {
       const chars = rawValue.split('');
       for (let i = start; i < end; i++) {
-        if (placeholder[i] && placeholder[i] !== '/' && rawValue[i] !== '/') {
-          chars[i] = placeholder[i];
+        if (this.placeholder[i] && this.placeholder[i] !== '/' && rawValue[i] !== '/') {
+          chars[i] = this.placeholder[i];
         }
       }
       const newValue = chars.join('');
@@ -410,7 +402,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
     if (cursor < 0 || cursor >= rawValue.length) return;
 
     const chars = rawValue.split('');
-    chars[cursor] = placeholder[cursor];
+    chars[cursor] = this.placeholder[cursor];
     const newValue = chars.join('');
 
     this.inputControl.setValue(newValue);
