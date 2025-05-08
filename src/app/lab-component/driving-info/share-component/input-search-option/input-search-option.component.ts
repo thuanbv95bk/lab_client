@@ -42,10 +42,16 @@ export class InputSearchOptionComponent {
       name: 'Tên lái xe',
       placeholder: 'Nhập tên lái xe',
     },
+
     {
       code: 'driverLicense',
       name: 'GPLX',
       placeholder: 'Nhập giấy phép lái xe',
+    },
+    {
+      code: 'issueLicensePlace',
+      name: 'Nơi cấp',
+      placeholder: 'Nhập nơi cấp GPLX',
     },
   ];
 
@@ -58,7 +64,8 @@ export class InputSearchOptionComponent {
   ngOnInit(): void {
     // set giá trị mặc định
     this.selectedOption = this.listOption.find((x) => x.code == 'displayName');
-    this.searchOption.key = this.selectedOption?.code;
+    this.searchOption.key = 'displayName';
+    this.searchOption.name = this.selectedOption.name;
     this.placeholder = this.selectedOption?.placeholder;
   }
 
@@ -67,10 +74,17 @@ export class InputSearchOptionComponent {
    * @Created 23/04/2025
    * @Modified date - user - description
    */
-
-  selectDriver(driver: DropdownItem): void {
-    this.selectedOption = driver;
-    this.searchOption.key = this.selectedOption?.code;
+  selectOption(item: DropdownItem): void {
+    this.selectedOption = item;
+    this.searchOption.key = this.selectedOption.code;
+    this.searchOption.name = this.selectedOption.name;
+    this.searchOption.value = this.searchOption.value;
     this.placeholder = this.selectedOption?.placeholder;
+
+    if (!this.searchOption.value) {
+      this.searchOption.key = '';
+      this.searchOption.value = '';
+      this.searchOption.name = '';
+    }
   }
 }

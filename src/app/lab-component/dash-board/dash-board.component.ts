@@ -71,7 +71,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         location: LocationEnum.TongQuan,
         isVisible: true,
         setClassForChild: this.setOverViewClass,
-        chartType: TypeChartEnum.vehicleWidget,
+        chartType: TypeChartEnum.VehicleWidget,
       },
       this.widgetUpdateDataService
     );
@@ -84,7 +84,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         location: LocationEnum.CuaKhau,
         isVisible: true,
         setClassForChild: '',
-        chartType: TypeChartEnum.doughnut,
+        chartType: TypeChartEnum.Doughnut,
       },
       this.widgetUpdateDataService
     );
@@ -97,7 +97,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         location: LocationEnum.TrenDuong,
         isVisible: true,
         setClassForChild: '',
-        chartType: TypeChartEnum.doughnut,
+        chartType: TypeChartEnum.Doughnut,
         dataModel: this.filteredVehicles,
       },
       this.widgetUpdateDataService
@@ -111,7 +111,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         location: LocationEnum.NhaMay,
         isVisible: true,
         setClassForChild: '',
-        chartType: TypeChartEnum.bar,
+        chartType: TypeChartEnum.Bar,
         dataModel: this.filteredVehicles,
       },
       this.widgetUpdateDataService
@@ -125,7 +125,7 @@ export class DashBoardComponent implements OnInit, OnDestroy {
         location: LocationEnum.TaiCang,
         isVisible: true,
         setClassForChild: '',
-        chartType: TypeChartEnum.bar,
+        chartType: TypeChartEnum.Bar,
         dataModel: this.filteredVehicles,
       },
       this.widgetUpdateDataService

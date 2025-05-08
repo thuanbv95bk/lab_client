@@ -25,7 +25,7 @@ interface DropdownItem {
  */
 export class WidthWidgetComponent {
   /** vị trí đang chọn */
-  @Input() selectedItem: SizeEnum = SizeEnum.auto as const;
+  @Input() selectedItem: SizeEnum = SizeEnum.Auto as const;
 
   /** EventEmitter */
   @Output() widthSelected = new EventEmitter<SizeEnum>();
@@ -53,10 +53,10 @@ export class WidthWidgetComponent {
       id: 'width-options',
       name: 'Độ rộng',
       children: [
-        { id: SizeEnum.auto, name: 'Tự động' },
-        { id: SizeEnum.small, name: 'Nhỏ' },
-        { id: SizeEnum.medium, name: 'Trung bình' },
-        { id: SizeEnum.large, name: 'Lớn' },
+        { id: SizeEnum.Auto, name: 'Tự động' },
+        { id: SizeEnum.Small, name: 'Nhỏ' },
+        { id: SizeEnum.Medium, name: 'Trung bình' },
+        { id: SizeEnum.Large, name: 'Lớn' },
       ],
     },
   ];

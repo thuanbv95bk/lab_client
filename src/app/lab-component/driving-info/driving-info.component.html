@@ -57,6 +57,7 @@
           <th>Ngày hết hạn <span class="col-required">*</span></th>
           <th>Nơi cấp <span class="col-required">*</span></th>
           <th>Loại bằng <span class="col-required">*</span></th>
+          <th>Hiệu lực</th>
           <th>Ngày cập nhật</th>
           <th>Xóa</th>
         </tr>
@@ -115,6 +116,7 @@
           <td>
             <app-validated-input
               [(ngModel)]="item.expireLicenseDate"
+              (ngModelChange)="changeExpireLicenseDate(item)"
               [inputType]="'date'"
               [required]="true"
               [minDate]="item.issueLicenseDate"
@@ -147,6 +149,7 @@
               (focusInput)="onClickItem(item)">
             </app-validated-input>
           </td>
+          <td class="text-center">{{ item.activeValue }}</td>
           <td class="text-center">{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
             <button #deleteBtn class="btn-delete bg-white" type="button" (click)="deleteRow(item, deleteBtn); onClickItem(item)">
