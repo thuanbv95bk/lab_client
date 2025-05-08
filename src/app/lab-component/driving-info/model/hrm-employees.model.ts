@@ -9,7 +9,7 @@ export const messageConfirm = 'Tồn tại dữ liệu đã có thay đổi, b�
 /** Class Cho danh sách lái xe
  * @Author thuan.bv
  * @Created 25/04/2025
- * @Modified date - user - description
+ * @Modified 08/05/2024 - thuan.bv - bổ sung thêm trường set hiệu lực: isActive
  */
 export class HrmEmployees {
   /** Id lái xe */
@@ -35,6 +35,9 @@ export class HrmEmployees {
   /** Ngày cập nhật */
   updatedDate: Date;
 
+  /** Hiệu lực */
+  activeValue: string;
+
   /** Trạng thái chỉnh sửa
    * true nếu row có ít nhất 1 field thay đổi */
   isEdit: boolean = false;
@@ -47,10 +50,32 @@ export class HrmEmployees {
    * được cập nhật từ ValidatedInputComponent qua output fieldStatusChange. */
   fieldStatus?: {
     [field: string]: {
+      /** đã được sửa */
       isEdited: boolean;
+      /** hợp lệ */
       isValid: boolean;
     };
   };
+  setActive(value: Date) {
+    // Tự động cập nhật isActive
+    const now = new Date();
+    console.log(value);
+
+    if (value >= now) this.activeValue = 'Còn hiệu lực';
+    else if (value < now) this.activeValue = 'Đã hết hạn';
+    else {
+      this.activeValue = '';
+    }
+  }
+
+  // get active(): boolean {
+  //   // Tự động cập nhật isActive
+  //   const now = new Date();
+  //   console.log('this.expireLicenseDate');
+  //   // console.log(this.expireLicenseDate);
+  //   this.activeValue = true;
+  //   return this.activeValue;
+  // }
 }
 /** Bộ lọc danh sách lái xe, kèm PagingFilter
  * @Author thuan.bv
@@ -64,6 +89,8 @@ export class HrmEmployeesFilter extends PagingModel {
   displayName: string;
   /** Giấy phép lái xe */
   driverLicense: string;
+  /** nơi cấp Giấy phép lái xe */
+  issueLicensePlace: string;
   /** loại bằng */
   licenseType: string;
   /** chuối id của danh sách lái xe cần tìm kiếm
@@ -81,6 +108,7 @@ export class HrmEmployeesFilter extends PagingModel {
     this.displayName = obj.displayName || '';
     this.driverLicense = obj.driverLicense || '';
     this.licenseType = obj.licenseType || '';
+    this.issueLicensePlace = obj.issueLicensePlace || '';
     this.listStringEmployeesId = obj.listStringEmployeesId || '';
     this.listStringLicenseTypesId = obj.listStringLicenseTypesId || '';
     this.option = obj.option || new SearchOption();
@@ -96,8 +124,9 @@ export class HrmEmployeesFilterExcel {
   driverLicense: string;
   /** loại bằng */
   licenseType: string;
-  /** chuối id của danh sách lái xe cần tìm kiếm
-   */
+  /** nơi cấp Giấy phép lái xe */
+  issueLicensePlace: string;
+  /** chuối id của danh sách lái xe cần tìm kiếm*/
   listStringEmployeesId: string;
   /** chuối tên của danh sách lái xe cần tìm kiếm
    * dùng để hiển thị danh sách filter
@@ -118,6 +147,7 @@ export class HrmEmployeesFilterExcel {
     this.displayName = obj.displayName || '';
     this.driverLicense = obj.driverLicense || '';
     this.licenseType = obj.licenseType || '';
+    this.issueLicensePlace = obj.issueLicensePlace || '';
     this.listStringEmployeesId = obj.listStringEmployeesId || '';
     this.listStringEmployeesName = obj.listStringEmployeesName || '';
     this.listStringLicenseTypesName = obj.listStringLicenseTypesName || '';
@@ -132,7 +162,9 @@ export class HrmEmployeesFilterExcel {
  */
 
 export class HrmEmployeesCbx {
+  /** Tên lái xe */
   displayName: string;
+  /** Số giấy phép lái xe */
   driverLicense: string;
 }
 
@@ -143,6 +175,10 @@ export class HrmEmployeesCbx {
  */
 
 export class SearchOption {
+  /** key */
   key: string = '';
+  /** giá trị */
   value: string = '';
+  /** tên hiển thị ở UI */
+  name: string = '';
 }

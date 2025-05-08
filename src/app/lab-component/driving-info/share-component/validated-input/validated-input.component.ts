@@ -15,13 +15,13 @@ import { NgbDateStruct, NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 import { BcaLicenseTypes } from '../../model/bca-license-types';
 import {
   convertInitialValue,
-  datePatternValidator,
   formatDate,
   isValidDateInput,
   isValidDateString,
   pad,
   parseDate,
 } from '../../../../utils/date-utils';
+import { datePatternValidator, phonePattern, textPattern } from '../../../../utils/pattern-utils';
 
 @Component({
   selector: 'app-validated-input',
@@ -202,7 +202,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
 
     if (this.inputType === 'text') {
       validators.push(
-        Validators.pattern(/^[^<>]*$/),
+        textPattern,
         ...(this.minLength ? [Validators.minLength(this.minLength)] : []),
         ...(this.maxLength ? [Validators.maxLength(this.maxLength)] : [])
       );
@@ -210,7 +210,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
       validators.push(datePatternValidator);
       validators.push(this.dateRangeValidator(this.minDate, this.maxDate));
     } else if (this.inputType === 'phone') {
-      validators.push(Validators.pattern(/^0\d{9}$/));
+      validators.push(phonePattern);
     }
 
     // KHỞI TẠO VỚI GIÁ TRỊ RỖNG, GIÁ TRỊ SẼ ĐƯỢC SET BỞI writeValue
@@ -446,7 +446,11 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    */
   onTextKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'text') return;
-    if (event.key === '<' || event.key === '>') {
+
+    const blockedChars = ['<', '>', "'", '"'];
+
+    if (blockedChars.includes(event.key)) {
+      // Ngăn không cho nhập
       event.preventDefault();
     }
   }
@@ -491,7 +495,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
         this.errorMessage = `Tối đa ${this.maxLength} ký tự`;
       } else if (errors?.['pattern']) {
         if (this.inputType === 'text') {
-          this.errorMessage = 'Không được nhập ký tự < hoặc >';
+          this.errorMessage = 'Không được chứa các ký tự <, >, \' hoặc "';
         } else if (this.inputType === 'date') {
           this.errorMessage = 'Định dạng ngày phải là dd/MM/yyyy';
         } else if (this.inputType === 'phone') {

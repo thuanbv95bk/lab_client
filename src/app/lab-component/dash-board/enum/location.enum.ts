@@ -19,9 +19,9 @@ export enum LocationEnum {
  */
 
 export enum TypeChartEnum {
-  bar = 'bar',
-  doughnut = 'doughnut',
-  vehicleWidget = 'VehicleWidget',
+  Bar = 'bar',
+  Doughnut = 'doughnut',
+  VehicleWidget = 'VehicleWidget',
 }
 
 /** các kích thước màn hình
@@ -31,8 +31,8 @@ export enum TypeChartEnum {
  */
 
 export enum SizeEnum {
-  auto = 'auto',
-  small = 'small',
-  medium = 'medium',
-  large = 'large',
+  Auto = 'auto',
+  Small = 'small',
+  Medium = 'medium',
+  Large = 'large',
 }

@@ -21,7 +21,9 @@
         [type]="inputType === 'date' ? 'text' : inputType === 'phone' ? 'tel' : 'text'"
         [class]="'form-control form-control-sm ' + borderClass + ' ' + inputClass"
         [title]="errorMessage"
-        (keydown)="inputType === 'date' ? onDateKeydown($event) : inputType === 'phone' ? onPhoneKeydown($event) : null"
+        (keydown)="
+          inputType === 'date' ? onDateKeydown($event) : inputType === 'phone' ? onPhoneKeydown($event) : onTextKeydown($event)
+        "
         (blur)="validate()"
         placeholder=" "
         [maxlength]="maxLength"

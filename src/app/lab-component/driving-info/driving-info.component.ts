@@ -12,7 +12,8 @@ import { BcaLicenseTypesService } from './service/bca-license-types.service';
 import { PageEvent, PagingModel, PagingResult } from '../../app-model/paging';
 import { CommonService } from '../../service/common.service';
 import { DialogConfirmService } from '../../app-dialog-component/dialog-confirm/dialog-confirm.service';
-import { toISODateString } from '../../utils/date-utils';
+import { isValidDateInput, toISODateString } from '../../utils/date-utils';
+import { ActiveEnum } from './enum/active.enum';
 
 @Component({
   selector: 'app-driving-info',
@@ -422,7 +423,25 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     const result = await this.dialogConfirm.confirm(`Bạn có chắc chắn muốn hủy bỏ các thay đỗi?`);
     if (result) {
       await this.reloadPagingToEdit();
-      // this.commonService.showSuccess('Xóa thành công');
+    }
+  }
+  /** kiểm tra trạng thái hiệu lực/ hết hạn của giấy phép lái xe
+   * @Author thuan.bv
+   * @Created 08/05/2025
+   * @Modified date - user - description
+   */
+  changeExpireLicenseDate(item: HrmEmployees) {
+    if (!item.expireLicenseDate || !isValidDateInput(item.expireLicenseDate)) {
+      item.activeValue = ActiveEnum.Null;
+      return;
+    }
+    const now = new Date();
+    const expireLicenseDate = new Date(toISODateString(item.expireLicenseDate.toString()));
+
+    if (expireLicenseDate >= now) item.activeValue = ActiveEnum.HieuLuc;
+    else if (!expireLicenseDate) item.activeValue = ActiveEnum.Null;
+    else {
+      item.activeValue = ActiveEnum.HetHan;
     }
   }
 

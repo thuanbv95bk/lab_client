@@ -31,7 +31,7 @@ export class Widget {
     this.chartType = obj?.chartType!;
     this.location = obj?.location!;
     this.dataModel = obj?.dataModel || [];
-    this.currentSize = obj?.currentSize || SizeEnum.auto;
+    this.currentSize = obj?.currentSize || SizeEnum.Auto;
     // Nếu có vehicleService, lắng nghe filteredVehicles$
     if (this.updateDataService) {
       this.subscription = this.updateDataService.filteredVehicles$.subscribe((vehicles) => {
@@ -95,11 +95,11 @@ export class WidgetSizeConfig {
    */
 
   private static currentSize: Record<LocationEnum, SizeEnum> = {
-    [LocationEnum.TongQuan]: SizeEnum.auto,
-    [LocationEnum.CuaKhau]: SizeEnum.auto,
-    [LocationEnum.TrenDuong]: SizeEnum.auto,
-    [LocationEnum.NhaMay]: SizeEnum.auto,
-    [LocationEnum.TaiCang]: SizeEnum.auto,
+    [LocationEnum.TongQuan]: SizeEnum.Auto,
+    [LocationEnum.CuaKhau]: SizeEnum.Auto,
+    [LocationEnum.TrenDuong]: SizeEnum.Auto,
+    [LocationEnum.NhaMay]: SizeEnum.Auto,
+    [LocationEnum.TaiCang]: SizeEnum.Auto,
   };
 
   /** Lấy class theo `currentSize` của một location
@@ -109,7 +109,7 @@ export class WidgetSizeConfig {
    */
 
   static getClass(location: LocationEnum): string {
-    const size = this.currentSize[location] ?? SizeEnum.auto;
+    const size = this.currentSize[location] ?? SizeEnum.Auto;
     return this.sizeConfig[location]?.[size];
   }
 

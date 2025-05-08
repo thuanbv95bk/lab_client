@@ -1,7 +1,5 @@
 import { Validators } from '@angular/forms';
 
-// Validators.pattern
-export const datePatternValidator = Validators.pattern(/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/);
 /** chuyển date về định dạng chuẩn
  * @Author thuan.bv
  * @Created 26/04/2025
