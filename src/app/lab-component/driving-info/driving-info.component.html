@@ -66,7 +66,7 @@
         <tr
           *ngFor="let item of listEmployeesGrid; let i = index"
           id="{{ item.pkEmployeeId }}"
-          [ngClass]="{ 'selected-row': selectedId && item == selectedId }">
+          [ngClass]="{ 'selected-row': selectedId && item == selectedId, 'bg-warning': item.isWarning }">
           <td class="text-center">{{ i + 1 + filterEmployeesGrid.pageIndex * filterEmployeesGrid.pageSize }}</td>
           <td>
             <app-validated-input
@@ -152,7 +152,11 @@
           <td class="text-center">{{ item.activeValue }}</td>
           <td class="text-center">{{ item.updatedDate | date : 'HH:mm dd/MM/yyyy' }}</td>
           <td class="text-center">
-            <button #deleteBtn class="btn-delete bg-white" type="button" (click)="deleteRow(item, deleteBtn); onClickItem(item)">
+            <button
+              #deleteBtn
+              class="btn-delete bg-transparent"
+              type="button"
+              (click)="deleteRow(item, deleteBtn); onClickItem(item)">
               <img src="../../../assets/image/icons-delete.svg" alt="delete" />
             </button>
           </td>

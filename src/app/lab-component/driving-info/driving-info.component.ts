@@ -346,6 +346,18 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
   saveChanges() {
     this.addOrEditList(this.getChangedValidRows());
   }
+  /** Hàm cập nhật nếu bị trùng khi update
+   * @Author thuan.bv
+   * @Created 09/05/2025
+   * @Modified date - user - description
+   */
+  updateIsWarringFlag(listItem: HrmEmployees[], listDuplicate: HrmEmployees[]) {
+    const duplicateIds = new Set(listDuplicate.map((x) => x.pkEmployeeId));
+
+    for (const item of listItem) {
+      item.isWarning = duplicateIds.has(item.pkEmployeeId);
+    }
+  }
 
   /** Hàm Gọi API ĐỂ lưu dữ liệu
    * @param listItem danh sách các dòng cần lưu
@@ -365,6 +377,11 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
         if (!res.isSuccess) {
           console.error(res);
           this.commonService.showError(res.errorMessage + ' errCode: ' + res.statusCode + ' )');
+          if (!res.data) {
+            return;
+          }
+          const listDuplicate = res.data as HrmEmployees[];
+          this.updateIsWarringFlag(this.listEmployeesGrid, listDuplicate);
           return;
         }
 
