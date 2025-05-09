@@ -28,10 +28,10 @@ import { ActiveEnum } from './enum/active.enum';
  * @Modified date - user - description
  */
 export class DrivingInfoComponent implements OnInit, AfterViewInit {
-  private static readonly DEFAULT_COMPANY_ID = 15076;
+  private static readonly companyId = 15076;
 
   /** Địa chỉ công ty mặc định */
-  fkCompanyID: number = DrivingInfoComponent.DEFAULT_COMPANY_ID;
+  fkCompanyID: number = DrivingInfoComponent.companyId;
 
   /** Danh sách lái xe ở combobox tìm kiếm */
   lstDriver: HrmEmployeesCbx[] = [];
