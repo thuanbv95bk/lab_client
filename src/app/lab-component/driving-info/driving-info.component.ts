@@ -205,7 +205,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   changeOptionFilter(event: SearchOption) {
-    console.log(event);
     this.filterEmployeesGrid.option = event;
   }
 
