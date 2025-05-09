@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SearchOption } from '../../model/hrm-employees.model';
 
 /** dùng để tạo menu chon các lựu chọn để tìm kiếm
@@ -29,7 +29,11 @@ interface DropdownItem {
 export class InputSearchOptionComponent {
   /** placeholder hiển thị */
   @Input() title: string = 'Tìm kiếm';
+  /** searchOption key-value */
   @Input() searchOption: SearchOption;
+  /** emit key-value */
+  @Output() outputEmit = new EventEmitter<SearchOption>();
+  /** placeholder mặc định */
   placeholder: string = 'Nhập tên lái xe';
 
   /** lưu lựa chọn của người dùng, khi click */
@@ -67,6 +71,16 @@ export class InputSearchOptionComponent {
     this.searchOption.key = 'displayName';
     this.searchOption.name = this.selectedOption.name;
     this.placeholder = this.selectedOption?.placeholder;
+    this.outputEmit.emit(this.searchOption);
+  }
+
+  /** Sự kiện người dùng thay đỗi giá trị ô input
+   * @Author thuan.bv
+   * @Created 09/05/2025
+   * @Modified date - user - description
+   */
+  changeInput() {
+    this.outputEmit.emit(this.searchOption);
   }
 
   /** Sự kiện người dùng chọn option
@@ -76,15 +90,10 @@ export class InputSearchOptionComponent {
    */
   selectOption(item: DropdownItem): void {
     this.selectedOption = item;
-    this.searchOption.key = this.selectedOption.code;
-    this.searchOption.name = this.selectedOption.name;
-    this.searchOption.value = this.searchOption.value;
+    this.searchOption.key = item.code;
+    this.searchOption.name = item.name;
     this.placeholder = this.selectedOption?.placeholder;
 
-    if (!this.searchOption.value) {
-      this.searchOption.key = '';
-      this.searchOption.value = '';
-      this.searchOption.name = '';
-    }
+    this.outputEmit.emit(this.searchOption);
   }
 }

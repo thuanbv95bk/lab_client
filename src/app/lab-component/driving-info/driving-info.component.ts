@@ -6,6 +6,7 @@ import {
   HrmEmployeesFilter,
   HrmEmployeesFilterExcel,
   messageConfirm,
+  SearchOption,
 } from './model/hrm-employees.model';
 import { BcaLicenseTypes } from './model/bca-license-types';
 import { BcaLicenseTypesService } from './service/bca-license-types.service';
@@ -197,6 +198,14 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
     this.filterEmployeesGrid.pageIndex = event.pageIndex;
     this.filterEmployeesGrid.pageSize = event.pageSize;
     this.getPagingToEdit();
+  }
+  /** event - cập nhật lại OptionFilter khi có thay đỗi
+   * @Author thuan.bv
+   * @Created 09/05/2025
+   * @Modified date - user - description
+   */
+  changeOptionFilter(event: SearchOption) {
+    this.filterEmployeesGrid.option = event;
   }
 
   /**event Nút reload dữ liệu
