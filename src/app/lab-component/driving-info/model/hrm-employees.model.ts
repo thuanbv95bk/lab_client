@@ -56,26 +56,9 @@ export class HrmEmployees {
       isValid: boolean;
     };
   };
-  setActive(value: Date) {
-    // Tự động cập nhật isActive
-    const now = new Date();
-    console.log(value);
 
-    if (value >= now) this.activeValue = 'Còn hiệu lực';
-    else if (value < now) this.activeValue = 'Đã hết hạn';
-    else {
-      this.activeValue = '';
-    }
-  }
-
-  // get active(): boolean {
-  //   // Tự động cập nhật isActive
-  //   const now = new Date();
-  //   console.log('this.expireLicenseDate');
-  //   // console.log(this.expireLicenseDate);
-  //   this.activeValue = true;
-  //   return this.activeValue;
-  // }
+  /** Cảnh báo nếu trùng */
+  isWarning: boolean = false;
 }
 /** Bộ lọc danh sách lái xe, kèm PagingFilter
  * @Author thuan.bv
