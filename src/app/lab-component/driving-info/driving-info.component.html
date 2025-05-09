@@ -2,7 +2,10 @@
   <h6 class="driving-form-title">THÔNG TIN LÁI XE</h6>
   <div class="container-fluid row p-0 m-0 justify-content-between" (keyup.enter)="searchPagingToEdit()">
     <div class="col pl-0">
-      <app-input-search-option [title]="'Tìm kiếm'" [searchOption]="filterEmployeesGrid.option"></app-input-search-option>
+      <app-input-search-option
+        [title]="'Tìm kiếm'"
+        [searchOption]="filterEmployeesGrid.option"
+        (outputEmit)="changeOptionFilter($event)"></app-input-search-option>
     </div>
     <div class="col p-0">
       <app-multi-select-dropdown

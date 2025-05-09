@@ -6,7 +6,8 @@
         type="text"
         class="form-control form-control-sm"
         [placeholder]="selectedOption.placeholder"
-        [(ngModel)]="searchOption.value" />
+        [(ngModel)]="searchOption.value"
+        (ngModelChange)="changeInput()" />
       <div class="input-group-append">
         <span *ngIf="searchOption.value" class="input-group-text cancel-icon"
           ><i class="fa fa-times" (click)="searchOption.value = ''"></i
