@@ -15,6 +15,9 @@ import { messageConfirm } from '../../model/hrm-employees.model';
  * @Modified date - user - description
  */
 export class PaginationComponent implements OnChanges {
+  /** Hằng sô set mặc định số item có mặt ở phân trang */
+  private static readonly MAX_VISIBLE_PAGES = 5;
+
   /** PagingModel lưu các giá trị của phân trang */
   @Input() pagingModel: PagingModel;
 
@@ -43,11 +46,21 @@ export class PaginationComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['pagingModel']) {
-      this.pageEvent.pageSize = this.pagingModel.pageSize;
-      this.pageEvent.pageIndex = this.pagingModel.pageIndex;
-      this.totalPages;
-      this.itemRange;
+      this.updatePageEvent();
     }
+  }
+
+  /** cập nhật sự kiện
+   * @Author thuan.bv
+   * @Created 24/04/2025
+   * @Modified date - user - description
+   */
+
+  private updatePageEvent(): void {
+    this.pageEvent.pageSize = this.pagingModel.pageSize;
+    this.pageEvent.pageIndex = this.pagingModel.pageIndex;
+    this.totalPages;
+    this.itemRange;
   }
 
   /** Tính toán Tổng số page
@@ -117,9 +130,7 @@ export class PaginationComponent implements OnChanges {
     // Chỉ hiển thị trang 1 nếu chỉ có 1 trang */
     if (totalPages <= 1) return [1];
     const pages: (number | string)[] = [];
-    // Luôn set mặc định 5 trang trên 1 dòng
-    const maxVisiblePages = 5;
-    const halfVisible = Math.floor(maxVisiblePages / 2);
+    const halfVisible = Math.floor(PaginationComponent.MAX_VISIBLE_PAGES / 2);
 
     // Luôn hiển thị trang đầu
     if (this.pagingModel.pageIndex < 5) pages.push(1);
@@ -130,9 +141,9 @@ export class PaginationComponent implements OnChanges {
 
     // Đảm bảo luôn hiển thị đủ 5 trang (nếu đủ)
     if (this.pagingModel.pageIndex <= halfVisible + 1) {
-      endPage = Math.min(maxVisiblePages, this.totalPages - 1);
+      endPage = Math.min(PaginationComponent.MAX_VISIBLE_PAGES, this.totalPages - 1);
     } else if (this.pagingModel.pageIndex >= this.totalPages - halfVisible) {
-      startPage = Math.max(2, this.totalPages - maxVisiblePages + 1);
+      startPage = Math.max(2, this.totalPages - PaginationComponent.MAX_VISIBLE_PAGES + 1);
     }
 
     //Thêm dấu ... nếu cần
@@ -143,7 +154,7 @@ export class PaginationComponent implements OnChanges {
 
     // Thêm các trang trong khoảng
     for (let i = startPage; i <= endPage; i++) {
-      if (pages.length >= 5) break;
+      if (pages.length >= PaginationComponent.MAX_VISIBLE_PAGES) break;
       else pages.push(i);
     }
 
@@ -153,7 +164,7 @@ export class PaginationComponent implements OnChanges {
     }
 
     //  Luôn hiển thị trang cuối (nếu có nhiều hơn 1 trang)
-    if (this.totalPages - startPage <= 5) {
+    if (this.totalPages - startPage <= PaginationComponent.MAX_VISIBLE_PAGES) {
       pages.push(this.totalPages);
     }
 
