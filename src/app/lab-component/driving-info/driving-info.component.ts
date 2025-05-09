@@ -436,11 +436,14 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
       return;
     }
     const now = new Date();
-    const expireLicenseDate = new Date(toISODateString(item.expireLicenseDate.toString()));
+    // So sánh chỉ ngày
+    now.setHours(0, 0, 0, 0);
 
-    if (expireLicenseDate >= now) item.activeValue = ActiveEnum.HieuLuc;
-    else if (!expireLicenseDate) item.activeValue = ActiveEnum.Null;
-    else {
+    const expireLicenseDate = new Date(toISODateString(item.expireLicenseDate.toString()));
+    // So sánh chỉ ngày
+    if (expireLicenseDate >= now) {
+      item.activeValue = ActiveEnum.HieuLuc;
+    } else {
       item.activeValue = ActiveEnum.HetHan;
     }
   }
