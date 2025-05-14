@@ -43,6 +43,15 @@ import { datePatternValidator, phonePattern, textPattern } from '../../../../uti
  * @Modified date - user - description
  */
 export class ValidatedInputComponent implements OnInit, OnChanges {
+  /**  hằng số cho các phím số */
+  private static readonly NumericKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+  /** phím điều hướng */
+  private static readonly NavigationKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'];
+  /** phím điều khiển */
+  private static readonly CtrlAllowedKeys = ['a', 'c', 'v', 'x'];
+  /** ký tự bị chặn */
+  private static readonly BlockedChars = ['<', '>', "'", '"'];
+
   /** input required */
   @Input() required: boolean = false;
   /** độ dài min của dữ liệu */
@@ -284,36 +293,18 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
   onDateKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'date') return;
 
-    const allowedKeys = [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      'Backspace',
-      'Delete',
-      'ArrowLeft',
-      'ArrowRight',
-      'Tab',
-    ];
-
+    const allowedKeys = [...ValidatedInputComponent.NumericKeys, ...ValidatedInputComponent.NavigationKeys];
     const isCtrlOrMeta = event.ctrlKey || event.metaKey;
-    const ctrlAllowed = ['a', 'c', 'v', 'x'];
+    const ctrlAllowed = ValidatedInputComponent.CtrlAllowedKeys;
 
     if (allowedKeys.includes(event.key) || (isCtrlOrMeta && ctrlAllowed.includes(event.key.toLowerCase()))) {
-      if (event.key >= '0' && event.key <= '9') {
+      if (ValidatedInputComponent.NumericKeys.includes(event.key)) {
         event.preventDefault();
         this.insertDateDigit(event.key);
       } else if (event.key === 'Backspace' || event.key === 'Delete') {
         event.preventDefault();
         this.deleteDateDigit(event.key as 'Backspace' | 'Delete');
       }
-      // Arrow keys/tab xử lý mặc định
     } else {
       event.preventDefault();
     }
@@ -416,24 +407,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    */
   onPhoneKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'phone') return;
-    //  Chỉ cho phép số, phím điều hướng, backspace, delete, tab
-    const allowedKeys = [
-      '0',
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      'Backspace',
-      'Delete',
-      'ArrowLeft',
-      'ArrowRight',
-      'Tab',
-    ];
+    const allowedKeys = [...ValidatedInputComponent.NumericKeys, ...ValidatedInputComponent.NavigationKeys];
     if (!allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
@@ -446,11 +420,7 @@ export class ValidatedInputComponent implements OnInit, OnChanges {
    */
   onTextKeydown(event: KeyboardEvent): void {
     if (this.inputType !== 'text') return;
-
-    const blockedChars = ['<', '>', "'", '"'];
-
-    if (blockedChars.includes(event.key)) {
-      // Ngăn không cho nhập
+    if (ValidatedInputComponent.BlockedChars.includes(event.key)) {
       event.preventDefault();
     }
   }

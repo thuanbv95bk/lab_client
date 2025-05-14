@@ -28,8 +28,10 @@ import { ActiveEnum } from './enum/active.enum';
  * @Modified date - user - description
  */
 export class DrivingInfoComponent implements OnInit, AfterViewInit {
+  private static readonly companyId = 15076;
+
   /** Địa chỉ công ty mặc định */
-  fkCompanyID: number = 15076;
+  fkCompanyID: number = DrivingInfoComponent.companyId;
 
   /** Danh sách lái xe ở combobox tìm kiếm */
   lstDriver: HrmEmployeesCbx[] = [];
@@ -72,14 +74,7 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   ngOnInit() {
-    // Lấy về danh sách lái xe to CBX
-    this.getListEmployeesToCbx();
-
-    // Lấy về danh sách giấy phép lái xe
-    this.getListLicenseTypes();
-
-    // Lấy về Paging của bảng chính- danh sách lái xe
-    this.getPagingToEdit();
+    this.initializeData();
   }
 
   /** set lại thông số phân trang
@@ -88,6 +83,26 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   ngAfterViewInit(): void {
+    this.initializePaging();
+  }
+
+  /** thiết lập trạng thái ban đầu, get các data, master data
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+  private initializeData(): void {
+    this.getListEmployeesToCbx();
+    this.getListLicenseTypes();
+    this.getPagingToEdit();
+  }
+
+  /** set lại thông số phân trang
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+  private initializePaging(): void {
     setTimeout(() => {
       this.pagingModel.pageSize = this.filterEmployeesGrid.pageSize;
       this.pagingModel.pageIndex = 1;
@@ -140,7 +155,6 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
    * @Modified date - user - description
    */
   getPagingToEdit() {
-    // gán id của công ty mặc định
     this.filterEmployeesGrid.fkCompanyId = this.fkCompanyID;
     this.employeesService.getPagingToEdit(this.filterEmployeesGrid, false).then(
       (res) => {
@@ -179,13 +193,20 @@ export class DrivingInfoComponent implements OnInit, AfterViewInit {
         return;
       }
     }
-    // set các thuộc tính của paging về mặc định
+    this.resetPaging();
+    this.getPagingToEdit();
+  }
+
+  /** Reset lại thông số phân trang
+   * @Author thuan.bv
+   * @Created 07/05/2025
+   * @Modified date - user - description
+   */
+  private resetPaging(): void {
     this.filterEmployeesGrid.pageIndex = 0;
     this.filterEmployeesGrid.pageSize = this.pagingModel.pageSize;
     this.pagingModel.length = 0;
     this.pagingModel.pageIndex = 1;
-    // gọi đến hàm call API
-    this.getPagingToEdit();
   }
 
   /** event - khi người dùng click phân trang

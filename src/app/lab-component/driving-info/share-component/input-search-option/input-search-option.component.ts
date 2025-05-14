@@ -96,4 +96,18 @@ export class InputSearchOptionComponent {
 
     this.outputEmit.emit(this.searchOption);
   }
+
+  ngAfterViewInit(): void {
+    // Initialize dropdown menu
+    // const dropdownToggle = document.querySelector('.dropdown-toggle');
+    // if (dropdownToggle) {
+    //   dropdownToggle.addEventListener('click', (event) => {
+    //     event.preventDefault();
+    //     const dropdownMenu = document.querySelector('.dropdown-menu');
+    //     if (dropdownMenu) {
+    //       dropdownMenu.classList.toggle('show');
+    //     }
+    //   });
+    // }
+  }
 }
